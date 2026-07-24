@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { WEEKLY_TIMETABLE, SUBJECT_INFO, WEEKDAY_TIMES, SAT_TIMES, DAY_LABELS, BREAK_CODES, ACTIVITY_CODES } from './timetable.data';
+	import { WEEKLY_TIMETABLE, SUBJECT_INFO, WEEKDAY_TIMES, SAT_TIMES, DAY_LABELS, BREAK_CODES, ACTIVITY_CODES, TEACHER_NAMES } from './timetable.data';
 
 	let activeClass = $state(0);
 	let showAll = $state(false);
@@ -19,7 +19,7 @@
 		<div class="text-center space-y-1">
 			<p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Karnataka Residential Educational Institutions Society</p>
 			<h1 class="text-xl font-bold text-slate-900">Morarji Desai Residential School (SC-32) Bahaddurghatta, Chitradurga</h1>
-			<h2 class="text-2xl font-bold text-primary-700">Master School Time Table 2026-27</h2>
+			<h2 class="text-2xl font-bold text-primary-700">Time Table 2026-27</h2>
 			<p class="text-sm text-slate-500">Monday – Friday: 10:00 AM – 4:20 PM &nbsp;|&nbsp; Saturday: 9:50 AM – 12:30 PM</p>
 		</div>
 
@@ -128,7 +128,7 @@
 												<div class="text-[11px]">{cell.name}</div>
 											{:else}
 												<div class="font-bold text-slate-800 text-xs">{cell.code}</div>
-												<div class="text-[10px] text-slate-600 leading-tight">{cell.name}</div>
+												<div class="text-[10px] text-slate-400 leading-tight">{TEACHER_NAMES[cell.code] || cell.name}</div>
 											{/if}
 										</td>
 									{/if}

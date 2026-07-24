@@ -3,6 +3,21 @@ export interface TimetableCell {
   name: string;
 }
 
+export const TEACHER_NAMES: Record<string, string> = {
+  KAN: '',
+  ENG: '',
+  HIN: '',
+  MAT: '',
+  SCI: '',
+  SOC: '',
+  CS: '',
+  DRW: '',
+  MUS: '',
+  PE: '',
+  LIB: '',
+  CUL: '',
+};
+
 export interface DaySchedule {
   label: string;
   periods: TimetableCell[];
