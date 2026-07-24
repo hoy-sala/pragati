@@ -4,7 +4,7 @@ services:
       context: ../backend
       dockerfile: ../docker/Dockerfile.api
     ports:
-      - "9090:5050"
+      - "9090:9090"
     env_file: ../.env
     environment:
       DATABASE_URL: postgres://pragati:pragati@db:5432/pragati?sslmode=disable
