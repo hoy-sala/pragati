@@ -33,7 +33,7 @@ export const SUBJECT_INFO: Record<string, { name: string; color: string }> = {
   BRF: { name: 'Breakfast', color: '#FFF7ED' },
 };
 
-export const BREAK_CODES = new Set(['BRK', 'LUN']);
+export const BREAK_CODES = new Set(['BRK', 'LUN', 'ASM']);
 export const ACTIVITY_CODES = new Set(['ASM', 'PTR', 'BRF']);
 
 export const BREAK_TIMES: Record<string, string> = {
