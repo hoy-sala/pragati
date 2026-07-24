@@ -96,7 +96,7 @@
 													<div class="text-[11px]">{cell.name}</div>
 												{:else}
 													<div class="font-bold text-slate-800 text-xs">{cell.code}</div>
-													<div class="text-[10px] text-slate-600 leading-tight">{cell.name}</div>
+													<div class="text-[10px] text-slate-400 leading-tight">{TEACHER_NAMES[cell.code] || cell.name}</div>
 												{/if}
 											</td>
 										{/if}
