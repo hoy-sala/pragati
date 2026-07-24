@@ -49,6 +49,9 @@
 				<thead>
 					<tr class="bg-slate-100">
 						<th class="sticky left-0 bg-slate-100 z-10 px-3 py-2.5 text-left font-semibold text-slate-700 border-r border-slate-200 w-20">Day</th>
+						{#if showAll}
+							<th class="sticky left-20 bg-slate-100 z-10 px-2 py-2.5 text-center font-semibold text-slate-700 border-r border-slate-200 w-12">Cls</th>
+						{/if}
 						{#each times as t, pi}
 							{@const refPeriods = showWeekday ? 0 : 5}
 							{@const cell = WEEKLY_TIMETABLE[0].days[refPeriods].periods[pi]}
@@ -73,27 +76,28 @@
 								{@const day = cls.days[di]}
 								<tr class="border-t border-slate-200">
 									{#if ci === 0}
-										<td class="sticky left-0 bg-white z-10 px-3 py-2 font-semibold text-slate-700 border-r border-slate-200 text-xs" rowspan="{classes}">{DAY_LABELS[di]}</td>
+										<td class="sticky left-0 bg-white z-10 px-3 py-2 font-semibold text-slate-700 border-r border-slate-200" rowspan="{classes}">{DAY_LABELS[di]}</td>
 									{/if}
+									<td class="sticky left-20 bg-white z-10 px-2 py-2 text-center font-semibold text-slate-600 border-r border-slate-200 text-xs">{ci + 6}</td>
 									{#each day.periods.slice(0, times.length) as cell, pi}
 										{@const info = SUBJECT_INFO[cell.code]}
 										{@const isBreak = BREAK_CODES.has(cell.code)}
 										{@const isActivity = ACTIVITY_CODES.has(cell.code)}
 										{#if isBreak}
 											{#if ci === 0}
-												<td class="px-2 py-2 text-center border-r border-slate-200 last:border-r-0 bg-slate-50 text-slate-400 italic text-[10px]" rowspan="{classes}">
-													<div>{cell.name}</div>
+												<td class="px-2 py-2 text-center border-r border-slate-200 last:border-r-0 bg-slate-50 text-slate-400 italic" rowspan="{classes}">
+													<div class="text-[11px]">{cell.name}</div>
 												</td>
 											{/if}
 										{:else}
-											<td class="px-2 py-1 text-center border-r border-slate-200 last:border-r-0 {isActivity ? 'bg-slate-50 text-slate-400 italic' : ''} text-[10px]"
+											<td class="px-2 py-2 text-center border-r border-slate-200 last:border-r-0 {isActivity ? 'bg-slate-50 text-slate-400 italic' : ''}"
 												style={isActivity ? '' : `background-color: ${info?.color || '#fff'}`}>
 												{#if isActivity}
-													<div>{cell.name}</div>
+													<div class="text-[11px]">{cell.name}</div>
 												{:else}
-													<div class="font-bold text-slate-800">{cell.code}</div>
+													<div class="font-bold text-slate-800 text-xs">{cell.code}</div>
+													<div class="text-[10px] text-slate-600 leading-tight">{cell.name}</div>
 												{/if}
-												<div class="text-[9px] text-slate-400 leading-tight">{ci + 6}</div>
 											</td>
 										{/if}
 									{/each}
