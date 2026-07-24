@@ -264,7 +264,6 @@ func (h *QuizHandler) ListQuestions(w http.ResponseWriter, r *http.Request) {
 // POST /api/v1/quizzes/{id}/questions
 func (h *QuizHandler) AddQuestions(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
-	claims := middleware.GetUserClaims(r.Context())
 	var req struct {
 		QuestionIDs []string `json:"question_ids"`
 	}

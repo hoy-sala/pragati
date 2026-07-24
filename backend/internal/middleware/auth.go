@@ -57,9 +57,9 @@ func (m *roleMiddleware) Authenticate(next http.Handler) http.Handler {
 	})
 }
 
-func (m *roleMiddleware) RequireRole(roles ...string) func(http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+func (m *roleMiddleware) RequireRole(roles ...string) func(http.HandlerFunc) http.HandlerFunc {
+	return func(next http.HandlerFunc) http.HandlerFunc {
+		return func(w http.ResponseWriter, r *http.Request) {
 			claims, ok := r.Context().Value(UserClaimsKey).(*models.TokenClaims)
 			if !ok {
 				http.Error(w, `{"error":{"code":"UNAUTHORIZED","message":"not authenticated"}}`, http.StatusUnauthorized)
@@ -68,13 +68,13 @@ func (m *roleMiddleware) RequireRole(roles ...string) func(http.Handler) http.Ha
 
 			for _, role := range roles {
 				if claims.Role == role {
-					next.ServeHTTP(w, r)
+					next(w, r)
 					return
 				}
 			}
 
 			http.Error(w, `{"error":{"code":"FORBIDDEN","message":"insufficient permissions"}}`, http.StatusForbidden)
-		})
+		}
 	}
 }
 
