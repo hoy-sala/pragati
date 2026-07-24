@@ -44,9 +44,11 @@
 				<thead>
 					<tr class="bg-slate-100">
 						<th class="sticky left-0 bg-slate-100 z-10 px-3 py-2.5 text-left font-semibold text-slate-700 border-r border-slate-200 w-20">Day</th>
-						<th class="sticky left-20 bg-slate-100 z-10 px-2 py-2.5 text-left font-semibold text-slate-700 border-r border-slate-200 w-28">Time</th>
-						{#each times as _, pi}
-							<th class="px-2 py-2.5 text-center font-semibold text-slate-700 border-r border-slate-200 last:border-r-0 w-20">P{pi + 1}</th>
+						{#each times as t, pi}
+							<th class="px-2 py-2.5 text-center font-semibold text-slate-700 border-r border-slate-200 last:border-r-0 w-20">
+								<div>P{pi + 1}</div>
+								<div class="text-[10px] font-normal text-slate-400">{t}</div>
+							</th>
 						{/each}
 					</tr>
 				</thead>
@@ -55,11 +57,6 @@
 						{@const day = schedule.days[di]}
 						<tr class="border-t border-slate-200">
 							<td class="sticky left-0 bg-white z-10 px-3 py-2 font-semibold text-slate-700 border-r border-slate-200">{DAY_LABELS[di]}</td>
-							<td class="sticky left-20 bg-white z-10 px-2 py-2 text-slate-500 border-r border-slate-200 font-mono text-[10px] leading-tight">
-								{#each times as t, pi}
-									{times[pi]}<br>
-								{/each}
-							</td>
 							{#each day.periods.slice(0, times.length) as cell, pi}
 								{@const info = SUBJECT_INFO[cell.code]}
 								<td class="px-2 py-2 text-center border-r border-slate-200 last:border-r-0 {pi === 3 && showWeekday ? 'border-b-2 border-amber-300' : ''} {pi === 5 && showWeekday ? 'border-b-2 border-amber-300' : ''}"
