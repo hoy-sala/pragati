@@ -1,6 +1,14 @@
 import type { APIResponse } from '$lib/types';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:9090';
+const API_PORT = '9090';
+const SSR_API_URL = 'http://api:5050';
+
+function getApiBase(): string {
+	if (typeof window !== 'undefined') {
+		return `http://${window.location.hostname}:${API_PORT}`;
+	}
+	return SSR_API_URL;
+}
 
 let accessToken: string | null = $state(null);
 let refreshToken: string | null = $state(null);
@@ -34,7 +42,7 @@ async function refreshAccessToken(): Promise<boolean> {
 	if (!refreshToken) return false;
 
 	try {
-		const res = await fetch(`${API_BASE}/api/v1/auth/refresh`, {
+		const res = await fetch(`${getApiBase()}/api/v1/auth/refresh`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ refresh_token: refreshToken })
@@ -56,7 +64,7 @@ export async function api<T = unknown>(
 	path: string,
 	body?: unknown
 ): Promise<APIResponse<T>> {
-	const url = `${API_BASE}/api/v1${path}`;
+	const url = `${getApiBase()}/api/v1${path}`;
 
 	const headers: Record<string, string> = {
 		'Content-Type': 'application/json'
@@ -88,5 +96,5 @@ export async function api<T = unknown>(
 }
 
 export function apiUrl(path: string): string {
-	return `${API_BASE}/api/v1${path}`;
+	return `${getApiBase()}/api/v1${path}`;
 }
