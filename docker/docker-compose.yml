@@ -4,12 +4,12 @@ services:
       context: ../backend
       dockerfile: ../docker/Dockerfile.api
     ports:
-      - "5050:5050"
+      - "9090:5050"
     env_file: ../.env
     environment:
       DATABASE_URL: postgres://pragati:pragati@db:5432/pragati?sslmode=disable
       REDIS_URL: redis://redis:6379/0
-      CORS_ORIGINS: http://localhost:3000,http://localhost:5050
+      CORS_ORIGINS: http://localhost:5050,http://localhost:9090
     depends_on:
       db:
         condition: service_healthy
@@ -24,9 +24,9 @@ services:
       context: ../frontend
       dockerfile: ../docker/Dockerfile.web
       args:
-        VITE_API_URL: http://localhost:5050
+        VITE_API_URL: http://localhost:9090
     ports:
-      - "3000:3000"
+      - "5050:3000"
     environment:
       VITE_API_URL: http://api:5050
       NODE_ENV: production

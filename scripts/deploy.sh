@@ -19,7 +19,7 @@ docker compose up -d --build
 
 echo "Waiting for API to be ready..."
 for i in $(seq 1 30); do
-  if curl -sf http://localhost:5050/health > /dev/null 2>&1; then
+  if curl -sf http://localhost:9090/health > /dev/null 2>&1; then
     echo "API is ready."
     break
   fi
@@ -31,7 +31,7 @@ docker compose exec api /server seed || true
 
 echo ""
 echo "Deployment complete!"
-echo "  API:  http://<server-ip>:5050"
-echo "  Web:  http://<server-ip>:3000"
+echo "  Web:  http://<server-ip>:5050"
+echo "  API:  http://<server-ip>:9090"
 echo ""
 echo "  Admin login: admin@pragati.edu / pragati123"

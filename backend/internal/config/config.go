@@ -28,7 +28,7 @@ func Load() *Config {
 		JWTIssuer:        getEnv("JWT_ISSUER", "pragati"),
 		JWTAccessExpiry:  getDuration("JWT_ACCESS_EXPIRY", 15*time.Minute),
 		JWTRefreshExpiry: getDuration("JWT_REFRESH_EXPIRY", 7*24*time.Hour),
-		Port:             getEnv("PORT", "5050"),
+		Port:             getEnv("PORT", "9090"),
 		LogLevel:         getEnv("LOG_LEVEL", "debug"),
 		CORSOrigins:      splitEnv("CORS_ORIGINS", "http://localhost:5173,http://localhost:5050"),
 		UploadDir:        getEnv("UPLOAD_DIR", "./uploads"),

@@ -1,6 +1,6 @@
 import type { APIResponse } from '$lib/types';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5050';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:9090';
 
 let accessToken: string | null = $state(null);
 let refreshToken: string | null = $state(null);
