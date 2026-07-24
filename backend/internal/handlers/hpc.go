@@ -217,7 +217,6 @@ func (h *HPCHandler) ImportLearningOutcomes(w http.ResponseWriter, r *http.Reque
 
 // GET /api/v1/hpc/grid?class_id=&term=&academic_year_id=
 func (h *HPCHandler) GetGrid(w http.ResponseWriter, r *http.Request) {
-	claims := middleware.GetUserClaims(r.Context())
 	classID := r.URL.Query().Get("class_id")
 	term := r.URL.Query().Get("term")
 	academicYearID := r.URL.Query().Get("academic_year_id")
@@ -379,7 +378,6 @@ func (h *HPCHandler) GetEntry(w http.ResponseWriter, r *http.Request) {
 
 // PUT /api/v1/hpc/entries
 func (h *HPCHandler) SaveEntry(w http.ResponseWriter, r *http.Request) {
-	claims := middleware.GetUserClaims(r.Context())
 	var req struct {
 		ID       string           `json:"id,omitempty"`
 		Entry    models.HPCEntryInput `json:"entry"`
@@ -695,7 +693,6 @@ func (h *HPCHandler) GeneratePDF(w http.ResponseWriter, r *http.Request) {
 
 // GET /api/v1/hpc/reports/class?class_id=&term=&academic_year_id=
 func (h *HPCHandler) GetClassReport(w http.ResponseWriter, r *http.Request) {
-	claims := middleware.GetUserClaims(r.Context())
 	classID := r.URL.Query().Get("class_id")
 	term := r.URL.Query().Get("term")
 	academicYearID := r.URL.Query().Get("academic_year_id")
@@ -763,10 +760,7 @@ func (h *HPCHandler) MigrateFromMarks(w http.ResponseWriter, r *http.Request) {
 	}
 	defer rows.Close()
 
-	type subjectMarks struct {
-		Scored, Max float64
-	}
-	studentMarks := make(map[string]map[string]subjectMarks)
+	studentMarks := make(map[string]map[string]struct{ Scored, Max float64 })
 
 	for rows.Next() {
 		var studentID, subjectID string
@@ -775,7 +769,7 @@ func (h *HPCHandler) MigrateFromMarks(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 		if studentMarks[studentID] == nil {
-			studentMarks[studentID] = make(map[string]subjectMarks)
+			studentMarks[studentID] = make(map[string]struct{ Scored, Max float64 })
 		}
 		sm := studentMarks[studentID][subjectID]
 		sm.Scored += scored
