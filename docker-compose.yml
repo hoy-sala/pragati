@@ -4,7 +4,7 @@ services:
       context: backend
       dockerfile: docker/Dockerfile.api
     ports:
-      - "8080:8080"
+      - "5050:5050"
     env_file: .env
     environment:
       DATABASE_URL: postgres://pragati:pragati@db:5432/pragati?sslmode=disable
@@ -26,7 +26,7 @@ services:
     ports:
       - "5050:3000"
     environment:
-      VITE_API_URL: http://localhost:8080
+      VITE_API_URL: http://localhost:5050
       NODE_ENV: production
     depends_on:
       - api
