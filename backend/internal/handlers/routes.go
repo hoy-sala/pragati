@@ -27,6 +27,7 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
 		ExposedHeaders:   []string{"Link"},
 		AllowCredentials: true,
 		MaxAge:           300,
+		AllowOriginFunc:  func(r *http.Request, origin string) bool { return true },
 	}))
 
 	authH := NewAuthHandler(db, jwtService, cfg)

@@ -21,10 +21,14 @@ export async function initAuth() {
 		return;
 	}
 
-	const res = await api<User>('GET', '/auth/me');
-	if (res.data) {
-		currentUser = res.data;
-	} else {
+	try {
+		const res = await api<User>('GET', '/auth/me');
+		if (res.data) {
+			currentUser = res.data;
+		} else {
+			clearTokens();
+		}
+	} catch {
 		clearTokens();
 	}
 	isLoading = false;
