@@ -38,7 +38,7 @@
 		<p class="text-xs text-slate-500">PRAGATI</p>
 	</div>
 
-	<nav class="flex-1 overflow-y-auto p-2 space-y-1">
+	<nav class="flex-1 overflow-y-auto p-2 space-y-1 scrollbar-none">
 		{#each visibleItems as item (item.href)}
 			<a
 				href={item.href}
