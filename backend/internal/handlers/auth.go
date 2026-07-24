@@ -42,7 +42,8 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	var user models.User
 	err := h.db.QueryRow(r.Context(),
-		`SELECT id, school_id, email, password_hash, name, role, phone, avatar_url, is_active
+		`SELECT id, school_id, email, password_hash, name, role,
+		        COALESCE(phone, ''), COALESCE(avatar_url, ''), is_active
 		 FROM users WHERE email = $1 AND is_active = true AND deleted_at IS NULL`,
 		req.Email,
 	).Scan(&user.ID, &user.SchoolID, &user.Email, &user.PasswordHash, &user.Name,
@@ -208,7 +209,8 @@ func (h *AuthHandler) Me(w http.ResponseWriter, r *http.Request) {
 
 	var user models.User
 	err := h.db.QueryRow(r.Context(),
-		`SELECT id, school_id, email, name, role, phone, avatar_url, is_active,
+		`SELECT id, school_id, email, name, role,
+		        COALESCE(phone, ''), COALESCE(avatar_url, ''), is_active,
 		        created_at, updated_at
 		 FROM users WHERE id = $1 AND deleted_at IS NULL`,
 		claims.UserID,
