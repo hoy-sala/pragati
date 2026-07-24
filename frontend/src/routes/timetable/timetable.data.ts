@@ -120,8 +120,10 @@ export const WEEKDAY_TIMES = [
   '10:00 – 10:40',
   '10:40 – 11:20',
   '11:20 – 12:00',
+  '12:00 – 12:10',
   '12:10 – 12:50',
   '12:50 – 1:30',
+  '1:30 – 2:20',
   '2:20 – 3:00',
   '3:00 – 3:40',
   '3:40 – 4:20',
@@ -138,28 +140,3 @@ export const SAT_TIMES = [
 ];
 
 export const DAY_LABELS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
-export interface TimetableSegment {
-  periods: TimetableCell[];
-  breakAfter: TimetableCell | null;
-  startCol: number;
-}
-
-export function getSegments(periods: TimetableCell[]): TimetableSegment[] {
-  const segments: TimetableSegment[] = [];
-  let current: TimetableCell[] = [];
-  let col = 0;
-  for (const p of periods) {
-    if (BREAK_CODES.has(p.code)) {
-      segments.push({ periods: current, breakAfter: p, startCol: col - current.length });
-      current = [];
-    } else {
-      current.push(p);
-      col++;
-    }
-  }
-  if (current.length > 0) {
-    segments.push({ periods: current, breakAfter: null, startCol: col - current.length });
-  }
-  return segments;
-}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { WEEKLY_TIMETABLE, SUBJECT_INFO, WEEKDAY_TIMES, SAT_TIMES, DAY_LABELS, BREAK_CODES, ACTIVITY_CODES, BREAK_TIMES, getSegments } from './timetable.data';
+	import { WEEKLY_TIMETABLE, SUBJECT_INFO, WEEKDAY_TIMES, SAT_TIMES, DAY_LABELS, BREAK_CODES, ACTIVITY_CODES } from './timetable.data';
 
 	let activeClass = $state(0);
 	let showWeekday = $state(true);
@@ -45,14 +45,14 @@
 					<tr class="bg-slate-100">
 						<th class="sticky left-0 bg-slate-100 z-10 px-3 py-2.5 text-left font-semibold text-slate-700 border-r border-slate-200 w-20">Day</th>
 						{#each times as t, pi}
-							{@const nonBreakPeriods = schedule.days[showWeekday ? 0 : 5].periods.filter(p => !BREAK_CODES.has(p.code))}
-							{@const cell = nonBreakPeriods[pi]}
+							{@const cell = schedule.days[showWeekday ? 0 : 5].periods[pi]}
+							{@const isBreak = BREAK_CODES.has(cell.code)}
 							{@const isActivity = ACTIVITY_CODES.has(cell.code)}
-							<th class="px-2 py-2.5 text-center font-semibold border-r border-slate-200 last:border-r-0 w-20 {isActivity ? 'text-slate-400' : 'text-slate-700'}">
-								{#if isActivity}
+							<th class="px-2 py-2.5 text-center font-semibold border-r border-slate-200 last:border-r-0 w-20 {isBreak || isActivity ? 'text-slate-400' : 'text-slate-700'}">
+								{#if isBreak || isActivity}
 									<div class="text-[11px]">{cell.name}</div>
 								{:else}
-									<div>P{nonBreakPeriods.slice(0, pi).filter(p => !ACTIVITY_CODES.has(p.code)).length + 1}</div>
+									<div>P{schedule.days[showWeekday ? 0 : 5].periods.slice(0, pi).filter(p => !BREAK_CODES.has(p.code) && !ACTIVITY_CODES.has(p.code)).length + 1}</div>
 								{/if}
 								<div class="text-[10px] font-normal text-slate-400">{t}</div>
 							</th>
@@ -60,23 +60,25 @@
 					</tr>
 				</thead>
 				<tbody>
-					{#each dayIndices as di}
+					{#each dayIndices as di, dayIdx}
 						{@const day = schedule.days[di]}
-						{@const segments = getSegments(day.periods)}
-						{@const totalCols = times.length}
-						{#each segments as segment, si}
-							<tr class="border-t border-slate-200">
-								{#if si === 0}
-									<td class="sticky left-0 bg-white z-10 px-3 py-2 font-semibold text-slate-700 border-r border-slate-200" rowspan="{segments.length}">{DAY_LABELS[di]}</td>
-								{/if}
-								{#if segment.startCol > 0}
-									<td colspan="{segment.startCol}"></td>
-								{/if}
-								{#each segment.periods as cell}
-									{@const info = SUBJECT_INFO[cell.code]}
-									{@const isActivity = ACTIVITY_CODES.has(cell.code)}
+						<tr class="border-t border-slate-200">
+							{#if dayIdx === 0}
+								<td class="sticky left-0 bg-white z-10 px-3 py-2 font-semibold text-slate-700 border-r border-slate-200" rowspan="{dayIndices.length}">{DAY_LABELS[di]}</td>
+							{/if}
+							{#each day.periods.slice(0, times.length) as cell, pi}
+								{@const info = SUBJECT_INFO[cell.code]}
+								{@const isBreak = BREAK_CODES.has(cell.code)}
+								{@const isActivity = ACTIVITY_CODES.has(cell.code)}
+								{#if isBreak}
+									{#if dayIdx === 0}
+										<td class="px-2 py-2 text-center border-r border-slate-200 last:border-r-0 bg-slate-50 text-slate-400 italic" rowspan="{dayIndices.length}">
+											<div class="text-[11px]">{cell.name}</div>
+										</td>
+									{/if}
+								{:else}
 									<td class="px-2 py-2 text-center border-r border-slate-200 last:border-r-0 {isActivity ? 'bg-slate-50 text-slate-400 italic' : ''}"
-										style="background-color: {isActivity ? '#F8FAFC' : (info?.color || '#fff')}">
+										style={isActivity ? '' : `background-color: ${info?.color || '#fff'}`}>
 										{#if isActivity}
 											<div class="text-[11px]">{cell.name}</div>
 										{:else}
@@ -84,21 +86,9 @@
 											<div class="text-[10px] text-slate-600 leading-tight">{cell.name}</div>
 										{/if}
 									</td>
-								{/each}
-									{#if totalCols - segment.startCol - segment.periods.length > 0}
-									<td colspan="{totalCols - segment.startCol - segment.periods.length}" class="border-r border-slate-200"></td>
 								{/if}
-							</tr>
-							{#if segment.breakAfter}
-								{@const bt = BREAK_TIMES[segment.breakAfter.code]}
-								<tr>
-									<td colspan="{totalCols}" class="bg-slate-50 px-3 py-2 text-center border-b border-slate-200">
-										<span class="font-medium text-slate-600 text-xs">{segment.breakAfter.name}</span>
-										<span class="ml-2 text-slate-400 text-[10px]">{bt}</span>
-									</td>
-								</tr>
-							{/if}
-						{/each}
+							{/each}
+						</tr>
 					{/each}
 				</tbody>
 			</table>
