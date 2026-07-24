@@ -44,67 +44,97 @@
 			{/each}
 		</div>
 
-		{#each showAll ? WEEKLY_TIMETABLE : [WEEKLY_TIMETABLE[activeClass]] as cls, idx}
-			<div class={showAll ? 'mb-8' : ''}>
-				{#if showAll}
-					<h3 class="text-sm font-bold text-slate-700 mb-2">Class {idx + 6}</h3>
-				{/if}
-				<div class="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
-					<table class="w-full text-xs">
-						<thead>
-							<tr class="bg-slate-100">
-								<th class="sticky left-0 bg-slate-100 z-10 px-3 py-2.5 text-left font-semibold text-slate-700 border-r border-slate-200 w-20">Day</th>
-								{#each times as t, pi}
-									{@const cell = cls.days[showWeekday ? 0 : 5].periods[pi]}
-									{@const isBreak = BREAK_CODES.has(cell.code)}
-									{@const isActivity = ACTIVITY_CODES.has(cell.code)}
-									<th class="px-2 py-2.5 text-center font-semibold border-r border-slate-200 last:border-r-0 w-20 {isBreak || isActivity ? 'text-slate-400' : 'text-slate-700'}">
-										{#if isBreak || isActivity}
-											<div class="text-[11px]">{cell.name}</div>
-										{:else}
-											<div>P{cls.days[showWeekday ? 0 : 5].periods.slice(0, pi).filter(p => !BREAK_CODES.has(p.code) && !ACTIVITY_CODES.has(p.code)).length + 1}</div>
-										{/if}
-										<div class="text-[10px] font-normal text-slate-400">{t}</div>
-									</th>
-								{/each}
-							</tr>
-						</thead>
-						<tbody>
-							{#each dayIndices as di, dayIdx}
+		<div class="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+			<table class="w-full text-xs">
+				<thead>
+					<tr class="bg-slate-100">
+						<th class="sticky left-0 bg-slate-100 z-10 px-3 py-2.5 text-left font-semibold text-slate-700 border-r border-slate-200 w-20">Day</th>
+						{#each times as t, pi}
+							{@const refPeriods = showWeekday ? 0 : 5}
+							{@const cell = WEEKLY_TIMETABLE[0].days[refPeriods].periods[pi]}
+							{@const isBreak = BREAK_CODES.has(cell.code)}
+							{@const isActivity = ACTIVITY_CODES.has(cell.code)}
+							<th class="px-2 py-2.5 text-center font-semibold border-r border-slate-200 last:border-r-0 w-20 {isBreak || isActivity ? 'text-slate-400' : 'text-slate-700'}">
+								{#if isBreak || isActivity}
+									<div class="text-[11px]">{cell.name}</div>
+								{:else}
+									<div>P{WEEKLY_TIMETABLE[0].days[refPeriods].periods.slice(0, pi).filter(p => !BREAK_CODES.has(p.code) && !ACTIVITY_CODES.has(p.code)).length + 1}</div>
+								{/if}
+								<div class="text-[10px] font-normal text-slate-400">{t}</div>
+							</th>
+						{/each}
+					</tr>
+				</thead>
+				<tbody>
+					{#if showAll}
+						{#each dayIndices as di}
+							{@const classes = WEEKLY_TIMETABLE.length}
+							{#each WEEKLY_TIMETABLE as cls, ci}
 								{@const day = cls.days[di]}
 								<tr class="border-t border-slate-200">
-									{#if dayIdx === 0}
-										<td class="sticky left-0 bg-white z-10 px-3 py-2 font-semibold text-slate-700 border-r border-slate-200" rowspan="{dayIndices.length}">{DAY_LABELS[di]}</td>
+									{#if ci === 0}
+										<td class="sticky left-0 bg-white z-10 px-3 py-2 font-semibold text-slate-700 border-r border-slate-200 text-xs" rowspan="{classes}">{DAY_LABELS[di]}</td>
 									{/if}
 									{#each day.periods.slice(0, times.length) as cell, pi}
 										{@const info = SUBJECT_INFO[cell.code]}
 										{@const isBreak = BREAK_CODES.has(cell.code)}
 										{@const isActivity = ACTIVITY_CODES.has(cell.code)}
 										{#if isBreak}
-											{#if dayIdx === 0}
-												<td class="px-2 py-2 text-center border-r border-slate-200 last:border-r-0 bg-slate-50 text-slate-400 italic" rowspan="{dayIndices.length}">
-													<div class="text-[11px]">{cell.name}</div>
+											{#if ci === 0}
+												<td class="px-2 py-2 text-center border-r border-slate-200 last:border-r-0 bg-slate-50 text-slate-400 italic text-[10px]" rowspan="{classes}">
+													<div>{cell.name}</div>
 												</td>
 											{/if}
 										{:else}
-											<td class="px-2 py-2 text-center border-r border-slate-200 last:border-r-0 {isActivity ? 'bg-slate-50 text-slate-400 italic' : ''}"
+											<td class="px-2 py-1 text-center border-r border-slate-200 last:border-r-0 {isActivity ? 'bg-slate-50 text-slate-400 italic' : ''} text-[10px]"
 												style={isActivity ? '' : `background-color: ${info?.color || '#fff'}`}>
 												{#if isActivity}
-													<div class="text-[11px]">{cell.name}</div>
+													<div>{cell.name}</div>
 												{:else}
-													<div class="font-bold text-slate-800 text-xs">{cell.code}</div>
-													<div class="text-[10px] text-slate-600 leading-tight">{cell.name}</div>
+													<div class="font-bold text-slate-800">{cell.code}</div>
 												{/if}
+												<div class="text-[9px] text-slate-400 leading-tight">{ci + 6}</div>
 											</td>
 										{/if}
 									{/each}
 								</tr>
 							{/each}
-						</tbody>
-					</table>
-				</div>
-			</div>
-		{/each}
+						{/each}
+					{:else}
+						{#each dayIndices as di, dayIdx}
+							{@const day = WEEKLY_TIMETABLE[activeClass].days[di]}
+							<tr class="border-t border-slate-200">
+								{#if dayIdx === 0}
+									<td class="sticky left-0 bg-white z-10 px-3 py-2 font-semibold text-slate-700 border-r border-slate-200" rowspan="{dayIndices.length}">{DAY_LABELS[di]}</td>
+								{/if}
+								{#each day.periods.slice(0, times.length) as cell, pi}
+									{@const info = SUBJECT_INFO[cell.code]}
+									{@const isBreak = BREAK_CODES.has(cell.code)}
+									{@const isActivity = ACTIVITY_CODES.has(cell.code)}
+									{#if isBreak}
+										{#if dayIdx === 0}
+											<td class="px-2 py-2 text-center border-r border-slate-200 last:border-r-0 bg-slate-50 text-slate-400 italic" rowspan="{dayIndices.length}">
+												<div class="text-[11px]">{cell.name}</div>
+											</td>
+										{/if}
+									{:else}
+										<td class="px-2 py-2 text-center border-r border-slate-200 last:border-r-0 {isActivity ? 'bg-slate-50 text-slate-400 italic' : ''}"
+											style={isActivity ? '' : `background-color: ${info?.color || '#fff'}`}>
+											{#if isActivity}
+												<div class="text-[11px]">{cell.name}</div>
+											{:else}
+												<div class="font-bold text-slate-800 text-xs">{cell.code}</div>
+												<div class="text-[10px] text-slate-600 leading-tight">{cell.name}</div>
+											{/if}
+										</td>
+									{/if}
+								{/each}
+							</tr>
+						{/each}
+					{/if}
+				</tbody>
+			</table>
+		</div>
 
 		<div class="bg-white rounded-xl border border-slate-200 p-4">
 			<h3 class="text-sm font-semibold text-slate-700 mb-2">Subject Legend</h3>
