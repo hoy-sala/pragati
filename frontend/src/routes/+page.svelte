@@ -2,18 +2,18 @@
 	import { getAuthState } from '$lib/stores/auth.svelte';
 	import { goto } from '$app/navigation';
 
-	const { isAuthenticated, isLoading } = getAuthState();
+	const auth = getAuthState();
 
 	$effect(() => {
-		if (!isLoading && !isAuthenticated) {
+		if (!auth.isLoading && !auth.isAuthenticated) {
 			goto('/login');
-		} else if (!isLoading && isAuthenticated) {
+		} else if (!auth.isLoading && auth.isAuthenticated) {
 			goto('/dashboard');
 		}
 	});
 </script>
 
-{#if isLoading}
+{#if auth.isLoading}
 	<div class="flex h-screen items-center justify-center">
 		<div class="text-slate-400 text-sm">Loading...</div>
 	</div>

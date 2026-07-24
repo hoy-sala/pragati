@@ -6,7 +6,7 @@
 	import { page } from '$app/stores';
 	import Sidebar from '$lib/components/layout/Sidebar.svelte';
 
-	const { isAuthenticated, isLoading } = getAuthState();
+	const auth = getAuthState();
 
 	const publicRoutes = ['/login', '/timetable'];
 
@@ -19,23 +19,23 @@
 	});
 
 	$effect(() => {
-		if (!isLoading && !isAuthenticated) {
+		if (!auth.isLoading && !auth.isAuthenticated) {
 			const path = $page.url.pathname;
 			if (!publicRoutes.includes(path) && path !== '/') {
 				goto('/login');
 			}
 		}
-		if (!isLoading && isAuthenticated && $page.url.pathname === '/login') {
+		if (!auth.isLoading && auth.isAuthenticated && $page.url.pathname === '/login') {
 			goto('/dashboard');
 		}
 	});
 </script>
 
-{#if isLoading}
+{#if auth.isLoading}
 	<div class="flex h-screen items-center justify-center">
 		<div class="text-slate-400 text-sm">Loading...</div>
 	</div>
-{:else if isAuthenticated}
+{:else if auth.isAuthenticated}
 	<div class="flex h-screen overflow-hidden">
 		{#if !isFullscreenRoute($page.url.pathname)}
 			<Sidebar />

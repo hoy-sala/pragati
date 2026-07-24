@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getAuthState } from '$lib/stores/auth.svelte';
 
-	const { currentUser } = getAuthState();
+	const auth = getAuthState();
 </script>
 
 <div class="space-y-6">
@@ -9,7 +9,7 @@
 		<div>
 			<h1 class="text-2xl font-bold text-slate-900">Dashboard</h1>
 			<p class="text-sm text-slate-500 mt-1">
-				Welcome back, {currentUser?.name}
+				Welcome back, {auth.currentUser?.name}
 			</p>
 		</div>
 	</div>

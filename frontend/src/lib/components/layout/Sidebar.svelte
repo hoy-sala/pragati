@@ -2,7 +2,7 @@
 	import { getAuthState, logout } from '$lib/stores/auth.svelte';
 	import { page } from '$app/stores';
 
-	const { currentUser } = getAuthState();
+	const auth = getAuthState();
 
 	const navItems = [
 		{ href: '/dashboard', label: 'Dashboard', icon: 'LayoutDashboard', roles: ['admin', 'principal', 'teacher', 'special_educator', 'student', 'parent'] },
@@ -24,7 +24,7 @@
 	];
 
 	let visibleItems = $derived(
-		navItems.filter(item => item.roles.includes(currentUser?.role ?? ''))
+		navItems.filter(item => item.roles.includes(auth.currentUser?.role ?? ''))
 	);
 
 	function isActive(href: string): boolean {
@@ -53,8 +53,8 @@
 	</nav>
 
 	<div class="p-4 border-t border-slate-200">
-		<div class="text-sm text-slate-700">{currentUser?.name}</div>
-		<div class="text-xs text-slate-400">{currentUser?.role}</div>
+		<div class="text-sm text-slate-700">{auth.currentUser?.name}</div>
+		<div class="text-xs text-slate-400">{auth.currentUser?.role}</div>
 		<button
 			onclick={logout}
 			class="mt-2 text-xs text-danger-600 hover:text-danger-700 transition-colors"
