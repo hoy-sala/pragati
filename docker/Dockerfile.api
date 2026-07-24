@@ -15,6 +15,6 @@ COPY --from=builder /server /server
 COPY --from=builder /app/migrations /migrations
 COPY --from=builder /app/templates /templates
 
-EXPOSE 8080
+EXPOSE 5050
 
 ENTRYPOINT ["/server"]
