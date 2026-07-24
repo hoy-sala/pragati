@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Anek+Kannada:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', 'Anek Kannada', sans-serif;
+    font-size: 10pt;
+    color: #1e293b;
+    line-height: 1.5;
+    padding: 0;
+  }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 15mm 12mm;
+    page-break-after: always;
+    position: relative;
+  }
+
+  .header {
+    text-align: center;
+    border-bottom: 2px solid #2563eb;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+  }
+  .header h1 { font-size: 16pt; color: #1e40af; margin-bottom: 2px; }
+  .header h2 { font-size: 11pt; color: #475569; font-weight: 500; }
+  .header .subtitle { font-size: 9pt; color: #94a3b8; margin-top: 2px; }
+
+  .student-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    font-size: 9pt;
+  }
+  .student-info .field { display: flex; gap: 4px; }
+  .student-info .label { color: #64748b; font-weight: 500; min-width: 60px; }
+  .student-info .value { color: #1e293b; font-weight: 600; }
+
+  .section-title {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #1e40af;
+    border-left: 4px solid #2563eb;
+    padding-left: 8px;
+    margin: 14px 0 8px 0;
+  }
+
+  table { width: 100%; border-collapse: collapse; font-size: 9pt; margin-bottom: 10px; }
+  th {
+    background: #1e40af;
+    color: #fff;
+    font-weight: 600;
+    padding: 5px 6px;
+    text-align: left;
+    font-size: 8.5pt;
+  }
+  td { padding: 4px 6px; border-bottom: 1px solid #e2e8f0; }
+  tr:nth-child(even) { background: #f8fafc; }
+
+  .grade-Aplus { background: #dcfce7; color: #166534; font-weight: 700; text-align: center; }
+  .grade-A { background: #dcfce7; color: #166534; font-weight: 600; text-align: center; }
+  .grade-Bplus { background: #fef9c3; color: #854d0e; font-weight: 600; text-align: center; }
+  .grade-B { background: #fef9c3; color: #854d0e; font-weight: 500; text-align: center; }
+  .grade-C { background: #fed7aa; color: #9a3412; font-weight: 500; text-align: center; }
+  .grade-D { background: #fecaca; color: #991b1b; font-weight: 500; text-align: center; }
+  .grade-E { background: #fecaca; color: #7f1d1d; font-weight: 500; text-align: center; }
+
+  .proficiency-4 { color: #166534; font-weight: 700; }
+  .proficiency-3 { color: #1e40af; font-weight: 600; }
+  .proficiency-2 { color: #9a3412; font-weight: 500; }
+  .proficiency-1 { color: #991b1b; font-weight: 500; }
+
+  .co-scholastic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+  .co-scholastic-grid .area { border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 8px; }
+  .co-scholastic-grid .area h4 { font-size: 9pt; color: #475569; margin-bottom: 4px; }
+  .co-scholastic-grid .area .item { display: flex; justify-content: space-between; padding: 2px 0; font-size: 8.5pt; }
+
+  .remarks-box {
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 10px;
+    min-height: 50px;
+    font-size: 9pt;
+    margin-bottom: 10px;
+  }
+
+  .feedback-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+  .feedback-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 8.5pt;
+  }
+  .feedback-card h4 { font-size: 9pt; color: #475569; margin-bottom: 4px; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; }
+
+  .footer {
+    position: absolute;
+    bottom: 10mm;
+    left: 12mm;
+    right: 12mm;
+    text-align: center;
+    font-size: 7.5pt;
+    color: #94a3b8;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 4px;
+  }
+
+  .attendance-bar {
+    display: flex; gap: 16px; align-items: center; font-size: 9pt;
+    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 12px;
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div class="header">
+      <h1>ಸಮಗ್ರ ಪ್ರಗತಿ ಪತ್ರ</h1>
+      <h2>Holistic Progress Card</h2>
+      <div class="subtitle">ಕರ್ನಾಟಕ ಸರ್ಕಾರದ ಶಾಲಾ ಶಿಕ್ಷಣ ಇಲಾಖೆ | Department of School Education, Karnataka</div>
+    </div>
+
+    <div class="student-info">
+      <div class="field"><span class="label">ಹೆಸರು / Name:</span><span class="value">{{.Name}}</span></div>
+      <div class="field"><span class="label">ವರ್ಗ / Class:</span><span class="value">{{.ClassName}}</span></div>
+      <div class="field"><span class="label">ವಿಭಾಗ / Section:</span><span class="value">{{.SectionName}}</span></div>
+      <div class="field"><span class="label">ರೋಲ್ ಸಂಖ್ಯೆ / Roll No:</span><span class="value">{{.RollNo}}</span></div>
+      <div class="field"><span class="label">SATS ಸಂಖ್ಯೆ / SATS No:</span><span class="value">{{.SATSNumber}}</span></div>
+      <div class="field"><span class="label">ಶೈಕ್ಷಣಿಕ ವರ್ಷ / Academic Year:</span><span class="value">{{.AcademicYear}}</span></div>
+      <div class="field"><span class="label">ಅವಧಿ / Term:</span><span class="value">{{.Term}}</span></div>
+    </div>
+
+    {{template "scholastic" .}}
+
+    {{template "co_scholastic" .}}
+
+    {{template "health_pe" .}}
+
+    {{template "attendance" .}}
+
+    {{template "self_assessment" .}}
+
+    {{template "teacher_remarks" .}}
+
+    {{template "parent_feedback" .}}
+
+    <div class="footer">
+      Holistic Progress Card — Pragati Platform | Generated on {{.GeneratedAt}}
+    </div>
+  </div>
+</body>
+</html>

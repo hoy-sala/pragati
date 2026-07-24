@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Anek+Kannada:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-slate-200;
+  }
+
+  body {
+    @apply font-sans text-slate-900 bg-slate-50;
+  }
+}
+
+.font-kannada {
+  font-family: 'Anek Kannada', system-ui, sans-serif;
+}
+
+@media print {
+  @page {
+    margin: 0.5in;
+  }
+  body {
+    background: white;
+    color: black;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+}

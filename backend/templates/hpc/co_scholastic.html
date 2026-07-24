@@ -1,0 +1,16 @@
+{{define "co_scholastic"}}
+<div class="section-title">ಸಹ-ಶೈಕ್ಷಣಿಕ ಕ್ಷೇತ್ರಗಳು / Co-Scholastic Areas</div>
+<div class="co-scholastic-grid">
+  {{range .CoScholasticSections}}
+  <div class="area">
+    <h4>{{.SectionLabel}}</h4>
+    {{range .Items}}
+    <div class="item">
+      <span>{{.Label}}</span>
+      <span style="font-weight:600;">{{.Grade}}</span>
+    </div>
+    {{end}}
+  </div>
+  {{end}}
+</div>
+{{end}}

@@ -1,0 +1,11 @@
+{{define "self_assessment"}}
+<div class="section-title">ವಿದ್ಯಾರ್ಥಿ ಸ್ವಯಂ ಮೌಲ್ಯಮಾಪನ / Student Self-Assessment</div>
+<div class="feedback-grid">
+  {{range .SelfAssessmentItems}}
+  <div class="feedback-card">
+    <h4>{{.Area}}</h4>
+    <p>{{.Response}}</p>
+  </div>
+  {{end}}
+</div>
+{{end}}

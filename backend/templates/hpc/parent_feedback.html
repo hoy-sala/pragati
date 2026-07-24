@@ -1,0 +1,11 @@
+{{define "parent_feedback"}}
+<div class="section-title">ಪೋಷಕರ ಪ್ರತಿಕ್ರಿಯೆ / Parent Feedback</div>
+<div class="feedback-grid">
+  {{range .ParentFeedbackItems}}
+  <div class="feedback-card">
+    <h4>{{.Area}}</h4>
+    <p>{{.Response}}</p>
+  </div>
+  {{end}}
+</div>
+{{end}}

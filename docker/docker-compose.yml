@@ -1,0 +1,63 @@
+services:
+  api:
+    build:
+      context: ../backend
+      dockerfile: ../docker/Dockerfile.api
+    ports:
+      - "8080:8080"
+    env_file: ../.env
+    environment:
+      DATABASE_URL: postgres://pragati:pragati@db:5432/pragati?sslmode=disable
+      REDIS_URL: redis://redis:6379/0
+      CORS_ORIGINS: http://localhost:5173,http://localhost:5050
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    volumes:
+      - uploads:/app/uploads
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ../frontend
+      dockerfile: ../docker/Dockerfile.web
+    ports:
+      - "5050:3000"
+    environment:
+      VITE_API_URL: http://localhost:8080
+      NODE_ENV: production
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: pragati
+      POSTGRES_USER: pragati
+      POSTGRES_PASSWORD: pragati
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pragati"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  redisdata:
+  uploads:

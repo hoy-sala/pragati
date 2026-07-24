@@ -1,0 +1,25 @@
+{{define "health_pe"}}
+<div class="section-title">ಆರೋಗ್ಯ ಮತ್ತು ದೈಹಿಕ ಶಿಕ್ಷಣ / Health & Physical Education</div>
+<table>
+  <thead>
+    <tr>
+      <th>ನಿಯತಾಂಕ / Parameter</th>
+      <th style="text-align:center; width:80px;">ಮೌಲ್ಯ / Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{range .HealthParams}}
+    <tr>
+      <td>{{.Label}}</td>
+      <td style="text-align:center;">{{.Value}}</td>
+    </tr>
+    {{end}}
+  </tbody>
+</table>
+{{if .PhysicalFitnessGrade}}
+<div style="margin-top:4px; font-size:9pt;">
+  <strong>ದೈಹಿಕ ಸಾಮರ್ಥ್ಯ ಶ್ರೇಣಿ / Physical Fitness Grade:</strong>
+  <span style="font-weight:700;">{{.PhysicalFitnessGrade}}</span>
+</div>
+{{end}}
+{{end}}

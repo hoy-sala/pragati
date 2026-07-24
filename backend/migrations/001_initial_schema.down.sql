@@ -1,0 +1,11 @@
+DROP TABLE IF EXISTS refresh_tokens;
+DROP TABLE IF EXISTS teacher_subjects;
+DROP TABLE IF EXISTS students;
+DROP TABLE IF EXISTS houses;
+DROP TABLE IF EXISTS class_subjects;
+DROP TABLE IF EXISTS subjects;
+DROP TABLE IF EXISTS sections;
+DROP TABLE IF EXISTS classes;
+DROP TABLE IF EXISTS academic_years;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS schools;

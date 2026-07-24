@@ -1,0 +1,10 @@
+{{define "teacher_remarks"}}
+<div class="section-title">ಶಿಕ್ಷಕರ ಅವಲೋಕನ / Teacher's Holistic Remarks</div>
+<div class="remarks-box">
+  {{if .TeacherRemarks}}
+    {{.TeacherRemarks}}
+  {{else}}
+    <span style="color:#94a3b8; font-style:italic;">No remarks recorded yet.</span>
+  {{end}}
+</div>
+{{end}}

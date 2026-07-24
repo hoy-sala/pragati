@@ -1,0 +1,8 @@
+{{define "attendance"}}
+<div class="section-title">ಹಾಜರಾತಿ / Attendance</div>
+<div class="attendance-bar">
+  <span><strong>ಹಾಜರಾದ ದಿನಗಳು / Days Present:</strong> {{.Attendance.Present}}</span>
+  <span><strong>ಒಟ್ಟು ದಿನಗಳು / Total Days:</strong> {{.Attendance.Total}}</span>
+  <span><strong>ಶೇಕಡಾವಾರು / Percentage:</strong> {{printf "%.1f" .Attendance.Percentage}}%</span>
+</div>
+{{end}}
