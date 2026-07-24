@@ -85,9 +85,8 @@
 										{/if}
 									</td>
 								{/each}
-								{@const remaining = totalCols - segment.startCol - segment.periods.length}
-								{#if remaining > 0}
-									<td colspan="{remaining}" class="border-r border-slate-200"></td>
+									{#if totalCols - segment.startCol - segment.periods.length > 0}
+									<td colspan="{totalCols - segment.startCol - segment.periods.length}" class="border-r border-slate-200"></td>
 								{/if}
 							</tr>
 							{#if segment.breakAfter}
