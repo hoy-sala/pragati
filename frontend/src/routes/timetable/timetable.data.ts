@@ -26,7 +26,14 @@ export const SUBJECT_INFO: Record<string, { name: string; color: string }> = {
   PE: { name: 'Physical Education', color: '#D1FAE5' },
   LIB: { name: 'Library & Reading', color: '#E2E8F0' },
   CUL: { name: 'Cultural Programme', color: '#DCFCE7' },
+  BRK: { name: 'Short Break', color: '#F1F5F9' },
+  LUN: { name: 'Lunch Break', color: '#F1F5F9' },
+  ASM: { name: 'Morning Assembly', color: '#FEF9C3' },
+  PTR: { name: 'Physical Training', color: '#D1FAE5' },
+  BRF: { name: 'Breakfast', color: '#FFF7ED' },
 };
+
+export const BREAK_CODES = new Set(['BRK', 'LUN', 'ASM', 'PTR', 'BRF']);
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const;
 
@@ -75,24 +82,49 @@ const RAW: Record<string, Record<string, string[]>> = {
 
 export const WEEKLY_TIMETABLE: ClassSchedule[] = Object.entries(RAW).map(([name, days]) => ({
   name,
-  days: DAYS.map(day => ({
-    label: day,
-    periods: days[day].map(code => ({ code, name: SUBJECT_INFO[code]?.name ?? code })),
-  })),
+  days: DAYS.map(day => {
+    const rawPeriods = days[day].map(code => ({ code, name: SUBJECT_INFO[code]?.name ?? code }));
+    if (day === 'Sat') {
+      return {
+        label: day,
+        periods: [
+          { code: 'ASM', name: SUBJECT_INFO['ASM'].name },
+          { code: 'PTR', name: SUBJECT_INFO['PTR'].name },
+          { code: 'BRF', name: SUBJECT_INFO['BRF'].name },
+          ...rawPeriods,
+        ],
+      };
+    }
+    return {
+      label: day,
+      periods: [
+        ...rawPeriods.slice(0, 3),
+        { code: 'BRK', name: SUBJECT_INFO['BRK'].name },
+        ...rawPeriods.slice(3, 5),
+        { code: 'LUN', name: SUBJECT_INFO['LUN'].name },
+        ...rawPeriods.slice(5),
+      ],
+    };
+  }),
 }));
 
 export const WEEKDAY_TIMES = [
   '10:00 – 10:40',
   '10:40 – 11:20',
   '11:20 – 12:00',
+  '12:00 – 12:10',
   '12:10 – 12:50',
   '12:50 – 1:30',
+  '1:30 – 2:20',
   '2:20 – 3:00',
   '3:00 – 3:40',
   '3:40 – 4:20',
 ];
 
 export const SAT_TIMES = [
+  '8:30 – 8:40',
+  '8:40 – 9:10',
+  '9:10 – 9:50',
   '9:50 – 10:30',
   '10:30 – 11:10',
   '11:10 – 11:50',
