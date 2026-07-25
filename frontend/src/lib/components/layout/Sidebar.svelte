@@ -6,6 +6,7 @@
 
 	const navItems = [
 		{ href: '/dashboard', label: 'Dashboard', icon: 'LayoutDashboard', roles: ['admin', 'principal', 'teacher', 'special_educator', 'student', 'parent'] },
+		{ href: '/teachers', label: 'Teachers', icon: 'Users', roles: ['admin', 'principal'] },
 		{ href: '/students', label: 'Students', icon: 'Users', roles: ['admin', 'principal', 'teacher'] },
 		{ href: '/classes', label: 'Classes', icon: 'GraduationCap', roles: ['admin', 'principal'] },
 		{ href: '/subjects', label: 'Subjects', icon: 'BookOpen', roles: ['admin', 'principal'] },

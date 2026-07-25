@@ -36,6 +36,7 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
 	subjectH := NewSubjectHandler(db)
 	academicYearH := NewAcademicYearHandler(db)
 	catH := NewCategoryHandler(db)
+	teacherH := NewTeacherHandler(db)
 	assessH := NewAssessmentHandler(db)
 	markH := NewMarkHandler(db)
 	questionH := NewQuestionHandler(db)
@@ -53,6 +54,17 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
 			r.Use(roleMw.Authenticate)
 			r.Post("/auth/logout", authH.Logout)
 			r.Get("/auth/me", authH.Me)
+		})
+
+		r.Route("/teachers", func(r chi.Router) {
+			r.Use(roleMw.Authenticate)
+			r.Get("/", teacherH.List)
+			r.Post("/", roleMw.RequireRole("admin")(http.HandlerFunc(teacherH.Create)))
+			r.Get("/{id}", teacherH.Get)
+			r.Put("/{id}", roleMw.RequireRole("admin")(http.HandlerFunc(teacherH.Update)))
+			r.Delete("/{id}", roleMw.RequireRole("admin")(http.HandlerFunc(teacherH.Delete)))
+			r.Get("/{id}/subjects", teacherH.ListSubjects)
+			r.Put("/{id}/subjects", roleMw.RequireRole("admin")(http.HandlerFunc(teacherH.SetSubjects)))
 		})
 
 		r.Route("/students", func(r chi.Router) {
