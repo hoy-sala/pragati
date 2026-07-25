@@ -276,7 +276,6 @@ func (h *TeacherHandler) ListSubjects(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *TeacherHandler) SetSubjects(w http.ResponseWriter, r *http.Request) {
-	claims := middleware.GetUserClaims(r.Context())
 	id := chi.URLParam(r, "id")
 
 	var req struct {
