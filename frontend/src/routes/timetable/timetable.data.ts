@@ -65,7 +65,7 @@ const RAW: Record<string, Record<string, string[]>> = {
     Wed: ['ENG', 'KAN', 'LIB', 'HIN', 'MAT', 'SOC', 'SCI', 'PE'],
     Thu: ['MUS', 'SCI', 'ENG', 'KAN', 'SOC', 'MAT', 'PE', 'HIN'],
     Fri: ['SCI', 'MAT', 'HIN', 'ENG', 'SOC', 'KAN', 'CUL', 'CUL'],
-    Sat: ['KAN', 'MUS', 'CS', 'ENG'],
+    Sat: ['KAN', 'PE', 'ENG', 'CS'],
   },
   'Class 7': {
     Mon: ['SOC', 'SCI', 'LIB', 'ENG', 'PE', 'HIN', 'KAN', 'MAT'],
@@ -73,7 +73,7 @@ const RAW: Record<string, Record<string, string[]>> = {
     Wed: ['SCI', 'HIN', 'MAT', 'SOC', 'MUS', 'KAN', 'CS', 'ENG'],
     Thu: ['SCI', 'MUS', 'HIN', 'MAT', 'KAN', 'DRW', 'ENG', 'SOC'],
     Fri: ['HIN', 'SOC', 'KAN', 'MAT', 'ENG', 'SCI', 'CUL', 'CUL'],
-    Sat: ['KAN', 'DRW', 'PE', 'ENG'],
+    Sat: ['ENG', 'LIB', 'CS', 'KAN'],
   },
   'Class 8': {
     Mon: ['PE', 'HIN', 'KAN', 'LIB', 'ENG', 'SOC', 'MAT', 'SCI'],
@@ -81,7 +81,7 @@ const RAW: Record<string, Record<string, string[]>> = {
     Wed: ['SOC', 'ENG', 'CS', 'SCI', 'KAN', 'MAT', 'HIN', 'MUS'],
     Thu: ['KAN', 'DRW', 'CS', 'SOC', 'HIN', 'ENG', 'SCI', 'MAT'],
     Fri: ['ENG', 'SCI', 'SOC', 'KAN', 'HIN', 'MAT', 'CUL', 'CUL'],
-    Sat: ['ENG', 'KAN', 'LIB', 'DRW'],
+    Sat: ['KAN', 'MUS', 'PE', 'ENG'],
   },
   'Class 9': {
     Mon: ['SCI', 'SOC', 'MAT', 'KAN', 'HIN', 'ENG', 'MUS', 'CS'],
@@ -89,7 +89,7 @@ const RAW: Record<string, Record<string, string[]>> = {
     Wed: ['KAN', 'SCI', 'HIN', 'ENG', 'SOC', 'PE', 'DRW', 'MAT'],
     Thu: ['MAT', 'ENG', 'SOC', 'HIN', 'PE', 'SCI', 'KAN', 'LIB'],
     Fri: ['MAT', 'HIN', 'ENG', 'SCI', 'KAN', 'SOC', 'CUL', 'CUL'],
-    Sat: ['LIB', 'KAN', 'ENG', 'CS'],
+    Sat: ['CS', 'KAN', 'ENG', 'MUS'],
   },
   'Class 10': {
     Mon: ['ENG', 'LIB', 'HIN', 'SOC', 'MAT', 'KAN', 'SCI', 'PE'],
@@ -97,7 +97,7 @@ const RAW: Record<string, Record<string, string[]>> = {
     Wed: ['MAT', 'SOC', 'MUS', 'CS', 'SCI', 'ENG', 'KAN', 'HIN'],
     Thu: ['SOC', 'MAT', 'KAN', 'SCI', 'ENG', 'HIN', 'CS', 'DRW'],
     Fri: ['KAN', 'ENG', 'MAT', 'SOC', 'SCI', 'HIN', 'CUL', 'CUL'],
-    Sat: ['DRW', 'KAN', 'ENG', 'LIB'],
+    Sat: ['MUS', 'KAN', 'LIB', 'ENG'],
   },
 };
 

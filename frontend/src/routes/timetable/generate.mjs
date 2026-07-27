@@ -89,12 +89,14 @@ function scheduleSat(assignments) {
         }
       }
 
+      const periodCount = {};
       const usedSubj5 = new Set();
       for (const cls of shuffle(CLASSES)) {
-        const cand = remain[cls].filter(s => (!SUBJ5.includes(s) || !usedSubj5.has(s)) && !forbidden.has(s));
+        const cand = remain[cls].filter(s => (!SUBJ5.includes(s) || !usedSubj5.has(s)) && !forbidden.has(s) && (periodCount[s] || 0) < 2);
         if (cand.length === 0) { valid = false; break; }
         const pick = cand[Math.floor(Math.random() * cand.length)];
         result[cls].push(pick);
+        periodCount[pick] = (periodCount[pick] || 0) + 1;
         if (SUBJ5.includes(pick)) usedSubj5.add(pick);
         remain[cls] = remain[cls].filter(x => x !== pick);
       }
