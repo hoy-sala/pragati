@@ -145,11 +145,11 @@ function solve() {
     }
     if (!valid) continue;
 
-    // Fri: 7 non-CUL subjects + CUL at P8; skip consecutive check
+    // Fri: 7 non-CUL subjects + CUL at P8
     {
       const assign = {};
       for (const cls of CLASSES) assign[cls] = [...dayAssign[cls]['Fri']];
-      const dr = scheduleDay(assign, new Set([0,1,2,3,4,5,6,7]));
+      const dr = scheduleDay(assign, new Set());
       if (!dr) { valid = false; continue; }
       for (const cls of CLASSES) result[cls]['Fri'] = [...dr[cls], 'CUL'];
     }
@@ -203,7 +203,7 @@ function validate(data) {
   }
   // No 3 consecutive periods for any teacher (Mon-Sat)
   const breakAfter = new Set([2, 4]);
-  for (const day of ['Mon', 'Tue', 'Wed', 'Thu']) {
+  for (const day of ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']) {
     for (let p = 2; p < 8; p++) {
       if (breakAfter.has(p - 1) || breakAfter.has(p - 2)) continue;
       for (const s of CLASSES.map(cls => data[cls][day][p])) {
