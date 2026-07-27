@@ -68,19 +68,22 @@ function scheduleDay(assignments, breakAfter = new Set([4])) {
 }
 
 function scheduleSat(assignments) {
+  // Classes 7-10: cyclic assignment guarantees no conflicts (4 subjects, 4 classes)
+  const core = CLASSES.filter(c => c !== 'Class 6');
+  const subs = assignments[core[0]]; // [KAN, MAT, SCI, SOC]
   for (let t = 0; t < 20000; t++) {
     const result = {};
-    for (const cls of CLASSES) result[cls] = shuffle(assignments[cls]);
-    // validate: no subject appears 3+ times in a period
-    // (2 is unavoidable with 5 classes and 4 subjects)
+    // Class 6: random permutation (ENG, HIN, CS, MUS — no overlap with core)
+    result['Class 6'] = shuffle(assignments['Class 6']);
+    for (let i = 0; i < core.length; i++) {
+      result[core[i]] = [];
+      for (let p = 0; p < 4; p++) result[core[i]].push(subs[(p + i) % 4]);
+    }
+    // Validate: no period conflicts (should always pass for this construction)
     let ok = true;
     for (let p = 0; p < 4; p++) {
-      const counts = {};
-      for (const cls of CLASSES) {
-        const s = result[cls][p];
-        counts[s] = (counts[s] || 0) + 1;
-      }
-      if (Object.values(counts).some(c => c > 2)) { ok = false; break; }
+      const ps = CLASSES.map(cls => result[cls][p]);
+      if (new Set(ps).size !== ps.length) { ok = false; break; }
     }
     if (!ok) continue;
     return result;
@@ -166,8 +169,8 @@ function solve() {
 }
 
 function validate(data) {
-  // No period conflicts (Mon-Fri); Sat has unavoidable doubling (5 classes, 4 subjects)
-  for (const day of ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']) {
+  // No period conflicts (Mon-Sat)
+  for (const day of ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']) {
     for (let p = 0; p < PERIODS[day]; p++) {
       const subjects = CLASSES.map(cls => data[cls][day][p]);
       const nonCUL = subjects.filter(s => s !== 'CUL');
