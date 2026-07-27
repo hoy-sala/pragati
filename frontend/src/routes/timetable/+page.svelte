@@ -63,23 +63,24 @@
 		.print-only { display: inline !important; }
 		.subject-print { page: portrait-page; }
 		.min-h-screen { min-height: auto !important; }
-		.max-w-7xl { max-width: 100% !important; margin: 0 !important; padding: 0 4px !important; }
-		.overflow-x-auto { overflow: visible !important; box-shadow: none !important; margin-bottom: 3px !important; }
-		table { font-size: 7px !important; width: 100% !important; }
-		th, td { padding: 1px 2px !important; }
-		.sticky { position: static !important; }
+		.max-w-7xl { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+		.overflow-x-auto { box-shadow: none !important; margin-bottom: 3px !important; }
+		table { font-size: 7.5px !important; width: 100% !important; }
+		th, td { padding: 1.5px 3px !important; }
 		.space-y-6 > :not(:last-child) { margin-bottom: 3px; }
 		h1 { font-size: 10pt !important; margin: 0 0 1px 0 !important; }
 		h2 { font-size: 10pt !important; margin: 0 0 1px 0 !important; }
-		.text-xs { font-size: 6px !important; }
-		.text-sm { font-size: 7px !important; }
-		.text-\[11px\] { font-size: 7px !important; }
-		.text-\[10px\] { font-size: 6.5px !important; }
-		.text-\[9px\] { font-size: 6px !important; }
+		.text-xs { font-size: 6.5px !important; }
+		.text-sm { font-size: 7.5px !important; }
+		.text-\[11px\] { font-size: 7.5px !important; }
+		.text-\[10px\] { font-size: 7px !important; }
+		.text-\[9px\] { font-size: 6.5px !important; }
 		.leading-tight { line-height: 1.1 !important; }
-		.w-16 { width: auto !important; min-width: 18px !important; }
-		.w-10 { width: auto !important; min-width: 10px !important; }
-		.w-14 { width: auto !important; min-width: 14px !important; padding-left: 1px !important; padding-right: 1px !important; }
+		.w-16 { width: auto !important; min-width: 22px !important; }
+		.w-10 { width: auto !important; min-width: 14px !important; }
+		.w-14 { width: auto !important; min-width: 18px !important; padding: 1px 2px !important; }
+		.sticky { position: static !important; }
+		.border-r { border-right-width: 1px !important; }
 	}
 </style>
 
