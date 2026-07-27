@@ -45,25 +45,25 @@
 		</div>
 
 		<div class="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
-			<table class="w-full text-xs">
+			<table class="w-full text-[11px]">
 				<thead>
 					<tr class="bg-slate-100">
-						<th class="sticky left-0 bg-slate-100 z-10 px-3 py-2.5 text-left font-semibold text-slate-700 border-r border-slate-200 w-20">Day</th>
+						<th class="sticky left-0 bg-slate-100 z-10 px-2 py-1.5 text-left font-semibold text-slate-700 border-r border-slate-200 w-16">Day</th>
 						{#if showAll}
-							<th class="sticky left-20 bg-slate-100 z-10 px-2 py-2.5 text-center font-semibold text-slate-700 border-r border-slate-200 w-12">Cls</th>
+							<th class="sticky left-16 bg-slate-100 z-10 px-1 py-1.5 text-center font-semibold text-slate-700 border-r border-slate-200 w-10">Cls</th>
 						{/if}
 						{#each times as t, pi}
 							{@const refPeriods = showWeekday ? 0 : 5}
 							{@const cell = WEEKLY_TIMETABLE[0].days[refPeriods].periods[pi]}
 							{@const isBreak = BREAK_CODES.has(cell.code)}
 							{@const isActivity = ACTIVITY_CODES.has(cell.code)}
-							<th class="px-2 py-2.5 text-center font-semibold border-r border-slate-200 last:border-r-0 w-20 {isBreak || isActivity ? 'text-slate-400' : 'text-slate-700'}">
+							<th class="px-1 py-1.5 text-center font-semibold border-r border-slate-200 last:border-r-0 w-16 {isBreak || isActivity ? 'text-slate-400' : 'text-slate-700'}">
 								{#if isBreak || isActivity}
-									<div class="text-[11px]">{cell.name}</div>
+									<div class="text-[10px]">{cell.name}</div>
 								{:else}
 									<div>P{WEEKLY_TIMETABLE[0].days[refPeriods].periods.slice(0, pi).filter(p => !BREAK_CODES.has(p.code) && !ACTIVITY_CODES.has(p.code)).length + 1}</div>
 								{/if}
-								<div class="text-[10px] font-normal text-slate-400">{t}</div>
+								<div class="text-[9px] font-normal text-slate-400">{t}</div>
 							</th>
 						{/each}
 					</tr>
@@ -76,27 +76,25 @@
 								{@const day = cls.days[di]}
 								<tr class="border-t border-slate-200">
 									{#if ci === 0}
-										<td class="sticky left-0 bg-white z-10 px-3 py-2 font-semibold text-slate-700 border-r border-slate-200" rowspan="{classes}">{DAY_LABELS[di]}</td>
+										<td class="sticky left-0 bg-white z-10 px-2 py-1 font-semibold text-slate-700 border-r border-slate-200" rowspan="{classes}">{DAY_LABELS[di]}</td>
 									{/if}
-									<td class="sticky left-20 bg-white z-10 px-2 py-2 text-center font-semibold text-slate-600 border-r border-slate-200 text-xs">{ci + 6}</td>
+									<td class="sticky left-16 bg-white z-10 px-1 py-1 text-center font-semibold text-slate-600 border-r border-slate-200 text-[11px]">{ci + 6}</td>
 									{#each day.periods.slice(0, times.length) as cell, pi}
 										{@const info = SUBJECT_INFO[cell.code]}
 										{@const isBreak = BREAK_CODES.has(cell.code)}
 										{@const isActivity = ACTIVITY_CODES.has(cell.code)}
 										{#if isBreak}
-											{#if ci === 0}
-												<td class="px-2 py-2 text-center border-r border-slate-200 last:border-r-0 bg-slate-50 text-slate-400 italic" rowspan="{classes}">
-													<div class="text-[11px]">{cell.name}</div>
-												</td>
-											{/if}
+											<td class="px-1 py-1 text-center border-r border-slate-200 last:border-r-0 bg-slate-50 text-slate-400 italic">
+												<div class="text-[10px]">{cell.name}</div>
+											</td>
 										{:else}
-											<td class="px-2 py-2 text-center border-r border-slate-200 last:border-r-0 {isActivity ? 'bg-slate-50 text-slate-400 italic' : ''}"
+											<td class="px-1 py-1 text-center border-r border-slate-200 last:border-r-0 {isActivity ? 'bg-slate-50 text-slate-400 italic' : ''}"
 												style={isActivity ? '' : `background-color: ${info?.color || '#fff'}`}>
 												{#if isActivity}
-													<div class="text-[11px]">{cell.name}</div>
+													<div class="text-[10px]">{cell.name}</div>
 												{:else}
-													<div class="font-bold text-slate-800 text-xs">{cell.code}</div>
-													<div class="text-[10px] text-slate-400 leading-tight">{TEACHER_NAMES[cell.code] || cell.name}</div>
+													<div class="font-bold text-slate-800 text-[11px]">{cell.code}</div>
+													<div class="text-[9px] text-slate-400 leading-tight truncate max-w-[70px]">{TEACHER_NAMES[cell.code] || cell.name}</div>
 												{/if}
 											</td>
 										{/if}
@@ -105,30 +103,26 @@
 							{/each}
 						{/each}
 					{:else}
-						{#each dayIndices as di, dayIdx}
+						{#each dayIndices as di}
 							{@const day = WEEKLY_TIMETABLE[activeClass].days[di]}
 							<tr class="border-t border-slate-200">
-								{#if dayIdx === 0}
-									<td class="sticky left-0 bg-white z-10 px-3 py-2 font-semibold text-slate-700 border-r border-slate-200" rowspan="{dayIndices.length}">{DAY_LABELS[di]}</td>
-								{/if}
+								<td class="sticky left-0 bg-white z-10 px-2 py-1 font-semibold text-slate-700 border-r border-slate-200">{DAY_LABELS[di]}</td>
 								{#each day.periods.slice(0, times.length) as cell, pi}
 									{@const info = SUBJECT_INFO[cell.code]}
 									{@const isBreak = BREAK_CODES.has(cell.code)}
 									{@const isActivity = ACTIVITY_CODES.has(cell.code)}
 									{#if isBreak}
-										{#if dayIdx === 0}
-											<td class="px-2 py-2 text-center border-r border-slate-200 last:border-r-0 bg-slate-50 text-slate-400 italic" rowspan="{dayIndices.length}">
-												<div class="text-[11px]">{cell.name}</div>
-											</td>
-										{/if}
+										<td class="px-1 py-1 text-center border-r border-slate-200 last:border-r-0 bg-slate-50 text-slate-400 italic">
+											<div class="text-[10px]">{cell.name}</div>
+										</td>
 									{:else}
-										<td class="px-2 py-2 text-center border-r border-slate-200 last:border-r-0 {isActivity ? 'bg-slate-50 text-slate-400 italic' : ''}"
+										<td class="px-1 py-1 text-center border-r border-slate-200 last:border-r-0 {isActivity ? 'bg-slate-50 text-slate-400 italic' : ''}"
 											style={isActivity ? '' : `background-color: ${info?.color || '#fff'}`}>
 											{#if isActivity}
-												<div class="text-[11px]">{cell.name}</div>
+												<div class="text-[10px]">{cell.name}</div>
 											{:else}
-												<div class="font-bold text-slate-800 text-xs">{cell.code}</div>
-												<div class="text-[10px] text-slate-400 leading-tight">{TEACHER_NAMES[cell.code] || cell.name}</div>
+												<div class="font-bold text-slate-800 text-[11px]">{cell.code}</div>
+												<div class="text-[9px] text-slate-400 leading-tight truncate max-w-[70px]">{TEACHER_NAMES[cell.code] || cell.name}</div>
 											{/if}
 										</td>
 									{/if}
