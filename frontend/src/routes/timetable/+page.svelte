@@ -45,7 +45,7 @@
 					<tr class="bg-slate-100">
 						<th class="sticky left-0 bg-slate-100 z-10 px-2 py-1.5 text-left font-semibold text-slate-700 border-r border-slate-200 w-16">Day</th>
 						{#if showAll}
-							<th class="sticky left-16 bg-slate-100 z-10 px-1 py-1.5 text-center font-semibold text-slate-700 border-r border-slate-200 w-10">Cls</th>
+							<th class="sticky left-16 bg-slate-100 z-10 px-1 py-1.5 text-center font-semibold text-slate-700 border-r border-slate-200 w-10">Class</th>
 						{/if}
 						{#each WEEKDAY_TIMES as t, pi}
 							{@const cell = WEEKLY_TIMETABLE[0].days[0].periods[pi]}
@@ -137,7 +137,7 @@
 					<tr class="bg-slate-100">
 						<th class="sticky left-0 bg-slate-100 z-10 px-2 py-1.5 text-left font-semibold text-slate-700 border-r border-slate-200 w-16">Day</th>
 						{#if showAll}
-							<th class="sticky left-16 bg-slate-100 z-10 px-1 py-1.5 text-center font-semibold text-slate-700 border-r border-slate-200 w-10">Cls</th>
+							<th class="sticky left-16 bg-slate-100 z-10 px-1 py-1.5 text-center font-semibold text-slate-700 border-r border-slate-200 w-10">Class</th>
 						{/if}
 						{#each SAT_TIMES as t, pi}
 							{@const cell = WEEKLY_TIMETABLE[0].days[5].periods[pi]}
