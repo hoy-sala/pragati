@@ -112,7 +112,9 @@ export const WEEKLY_TIMETABLE: ClassSchedule[] = Object.entries(RAW).map(([name,
           { code: 'ASM', name: SUBJECT_INFO['ASM'].name },
           { code: 'PTR', name: SUBJECT_INFO['PTR'].name },
           { code: 'BRF', name: SUBJECT_INFO['BRF'].name },
-          ...rawPeriods,
+          ...rawPeriods.slice(0, 2),
+          { code: 'BRK', name: SUBJECT_INFO['BRK'].name },
+          ...rawPeriods.slice(2),
         ],
       };
     }
@@ -147,9 +149,10 @@ export const WEEKDAY_TIMES = [
 export const SAT_TIMES = [
   '8:30 – 8:40',
   '8:40 – 9:10',
-  '9:10 – 9:50',
-  '9:50 – 10:30',
-  '10:30 – 11:10',
+  '9:10 – 9:40',
+  '9:40 – 10:20',
+  '10:20 – 11:00',
+  '11:00 – 11:10',
   '11:10 – 11:50',
   '11:50 – 12:30',
 ];
