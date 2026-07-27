@@ -52,8 +52,8 @@ export const BREAK_CODES = new Set(['BRK', 'LUN']);
 export const ACTIVITY_CODES = new Set(['ASM', 'PTR', 'BRF']);
 
 export const BREAK_TIMES: Record<string, string> = {
-  BRK: '12:00 – 12:10',
-  LUN: '1:30 – 2:20',
+  BRK: '12:00 - 12:10',
+  LUN: '1:30 - 2:20',
 };
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const;
@@ -133,28 +133,28 @@ export const WEEKLY_TIMETABLE: ClassSchedule[] = Object.entries(RAW).map(([name,
 }));
 
 export const WEEKDAY_TIMES = [
-  '9:40 – 10:00',
-  '10:00 – 10:40',
-  '10:40 – 11:20',
-  '11:20 – 12:00',
-  '12:00 – 12:10',
-  '12:10 – 12:50',
-  '12:50 – 1:30',
-  '1:30 – 2:20',
-  '2:20 – 3:00',
-  '3:00 – 3:40',
-  '3:40 – 4:20',
+  '9:40 - 10:00',
+  '10:00 - 10:40',
+  '10:40 - 11:20',
+  '11:20 - 12:00',
+  '12:00 - 12:10',
+  '12:10 - 12:50',
+  '12:50 - 1:30',
+  '1:30 - 2:20',
+  '2:20 - 3:00',
+  '3:00 - 3:40',
+  '3:40 - 4:20',
 ];
 
 export const SAT_TIMES = [
-  '8:30 – 8:40',
-  '8:40 – 9:10',
-  '9:10 – 9:40',
-  '9:40 – 10:20',
-  '10:20 – 11:00',
-  '11:00 – 11:10',
-  '11:10 – 11:50',
-  '11:50 – 12:30',
+  '8:30 - 8:40',
+  '8:40 - 9:10',
+  '9:10 - 9:40',
+  '9:40 - 10:20',
+  '10:20 - 11:00',
+  '11:00 - 11:10',
+  '11:10 - 11:50',
+  '11:50 - 12:30',
 ];
 
 export const DAY_LABELS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];

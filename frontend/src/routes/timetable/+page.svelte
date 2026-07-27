@@ -134,7 +134,7 @@
 		</div>
 
 		{#if viewMode === 'class'}
-		<!-- Mon–Fri Table -->
+		<!-- Mon-Fri Table -->
 		<div class="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
 			<table class="w-full text-[11px]">
 				<thead>
