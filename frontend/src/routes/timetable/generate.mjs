@@ -29,7 +29,7 @@ function findMatching(remain) {
   return result;
 }
 
-function scheduleDay(assignments, breakAfter = new Set([4])) {
+function scheduleDay(assignments, breakAfter = new Set([2, 4])) {
   const numPeriods = assignments[CLASSES[0]].length;
   for (let t = 0; t < 2000; t++) {
     const remain = {};
@@ -202,7 +202,7 @@ function validate(data) {
     }
   }
   // No 3 consecutive periods for any teacher (Mon-Sat)
-  const breakAfter = new Set([4]);
+  const breakAfter = new Set([2, 4]);
   for (const day of ['Mon', 'Tue', 'Wed', 'Thu']) {
     for (let p = 2; p < 8; p++) {
       if (breakAfter.has(p - 1) || breakAfter.has(p - 2)) continue;

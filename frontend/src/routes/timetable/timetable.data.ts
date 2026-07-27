@@ -41,16 +41,18 @@ export const SUBJECT_INFO: Record<string, { name: string; color: string }> = {
   PE: { name: 'Physical Education', color: '#D1FAE5' },
   LIB: { name: 'Library & Reading', color: '#E2E8F0' },
   CUL: { name: 'Cultural Programme', color: '#DCFCE7' },
+  BRK: { name: 'Short Break', color: '#F1F5F9' },
   LUN: { name: 'Lunch Break', color: '#F1F5F9' },
   ASM: { name: 'Morning Assembly', color: '#FEF9C3' },
   PTR: { name: 'Physical Training', color: '#D1FAE5' },
   BRF: { name: 'Breakfast', color: '#FFF7ED' },
 };
 
-export const BREAK_CODES = new Set(['LUN']);
+export const BREAK_CODES = new Set(['BRK', 'LUN']);
 export const ACTIVITY_CODES = new Set(['ASM', 'PTR', 'BRF']);
 
 export const BREAK_TIMES: Record<string, string> = {
+  BRK: '12:00 – 12:10',
   LUN: '1:30 – 2:20',
 };
 
@@ -118,25 +120,28 @@ export const WEEKLY_TIMETABLE: ClassSchedule[] = Object.entries(RAW).map(([name,
       label: day,
       periods: [
         { code: 'ASM', name: SUBJECT_INFO['ASM'].name },
-        ...rawPeriods.slice(0, 4),
+        ...rawPeriods.slice(0, 3),
+        { code: 'BRK', name: SUBJECT_INFO['BRK'].name },
+        ...rawPeriods.slice(3, 5),
         { code: 'LUN', name: SUBJECT_INFO['LUN'].name },
-        ...rawPeriods.slice(4),
+        ...rawPeriods.slice(5),
       ],
     };
   }),
 }));
 
 export const WEEKDAY_TIMES = [
-  '9:45 – 9:55',
+  '9:40 – 10:00',
   '10:00 – 10:40',
   '10:40 – 11:20',
   '11:20 – 12:00',
-  '12:00 – 12:40',
-  '12:40 – 1:30',
-  '1:30 – 2:10',
-  '2:10 – 2:50',
-  '2:50 – 3:30',
-  '3:30 – 4:10',
+  '12:00 – 12:10',
+  '12:10 – 12:50',
+  '12:50 – 1:30',
+  '1:30 – 2:20',
+  '2:20 – 3:00',
+  '3:00 – 3:40',
+  '3:40 – 4:20',
 ];
 
 export const SAT_TIMES = [
