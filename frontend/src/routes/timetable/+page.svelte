@@ -16,22 +16,27 @@
 
 <style>
 	@media print {
-		:global(body) { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+		@page { size: A4 landscape; margin: 5mm; }
+		:global(body) { -webkit-print-color-adjust: exact; print-color-adjust: exact; margin: 0; }
 		.no-print { display: none !important; }
 		.min-h-screen { min-height: auto !important; background: white !important; }
-		.max-w-7xl { max-width: 100% !important; margin: 0 !important; padding: 0 4px !important; }
-		.overflow-x-auto { overflow: visible !important; border: 1px solid #999 !important; border-radius: 0 !important; box-shadow: none !important; }
-		table { font-size: 7.5px !important; width: 100% !important; }
-		th, td { padding: 1px 3px !important; border-color: #999 !important; }
-		.shadow-sm { box-shadow: none !important; }
+		.max-w-7xl { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+		.overflow-x-auto { overflow: visible !important; border: 1px solid #999 !important; border-radius: 0 !important; box-shadow: none !important; margin-bottom: 3px !important; }
+		table { font-size: 6px !important; width: 100% !important; }
+		th, td { padding: 0.5px 2px !important; border-color: #999 !important; }
+		h1 { font-size: 8pt !important; margin: 0 0 1px 0 !important; }
+		h2 { font-size: 8pt !important; margin: 0 0 2px 0 !important; }
+		.space-y-6 > :not(:last-child) { margin-bottom: 2px; }
+		.space-y-1 { margin: 0 !important; }
 		.rounded-xl { border-radius: 0 !important; }
 		.bg-slate-50, .bg-slate-100 { background: #f5f5f5 !important; }
-		.text-\[11px\] { font-size: 7pt !important; }
-		.text-\[10px\] { font-size: 6.5pt !important; }
-		.text-\[9px\] { font-size: 6pt !important; }
-		h1 { font-size: 11pt !important; }
-		h2 { font-size: 10pt !important; }
-		.space-y-6 > :not(:last-child) { margin-bottom: 6px; }
+		.w-16 { width: 18px !important; min-width: 18px !important; }
+		.w-10 { width: 12px !important; min-width: 12px !important; }
+		.leading-tight { line-height: 1 !important; }
+		.text-\[11px\] { font-size: 6px !important; }
+		.text-\[10px\] { font-size: 5.5px !important; }
+		.text-\[9px\] { display: none !important; }
+		.truncate { display: none !important; }
 	}
 </style>
 
@@ -41,7 +46,6 @@
 			<p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Karnataka Residential Educational Institutions Society</p>
 			<h1 class="text-xl font-bold text-slate-900">Morarji Desai Residential School (SC-32) Bahaddurghatta, Chitradurga</h1>
 			<h2 class="text-2xl font-bold text-primary-700">Time Table 2026-27</h2>
-			<p class="text-sm text-slate-500">Monday – Friday: 9:40 AM – 4:20 PM &nbsp;|&nbsp; Saturday: 8:30 AM – 12:30 PM</p>
 		</div>
 
 		<div class="flex flex-wrap items-center justify-center gap-3 no-print">
