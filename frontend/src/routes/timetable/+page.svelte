@@ -353,7 +353,25 @@
 							{/each}
 						</tr>
 					{/each}
-					<tr class="border-t-2 border-slate-300 bg-amber-50">
+				</tbody>
+			</table>
+		</div>
+
+		<div class="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+			<table class="w-full text-[11px]">
+				<thead>
+					<tr class="bg-slate-100">
+						<th class="px-2 py-1.5 text-left font-semibold text-slate-700 border-r border-slate-200 w-16">Day</th>
+						{#each SAT_SLOT_LABELS as label, si}
+							<th class="px-1 py-1.5 text-center font-semibold text-slate-700 border-r border-slate-200 last:border-r-0 w-14">
+								<div>{label}</div>
+								<div class="text-[9px] font-normal text-slate-400">{SAT_TIMES[SAT_PERIOD_MAP[si]]}</div>
+							</th>
+						{/each}
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="border-t border-slate-200 bg-amber-50">
 						<td class="px-2 py-2 font-semibold text-slate-700 border-r border-slate-200">{DAY_LABELS[5]}</td>
 						{#each SAT_SLOT_LABELS as _, si}
 							{@const cls = grid['d5'][si]}
@@ -364,12 +382,6 @@
 									<span class="text-slate-300">&ndash;</span>
 								{/if}
 							</td>
-							{#if si === SAT_SLOT_LABELS.length - 1}
-								{@const remaining = WEEKDAY_SLOT_LABELS.length - SAT_SLOT_LABELS.length}
-								{#each Array(remaining) as _}
-									<td class="px-1 py-1 text-center border-r border-slate-200 last:border-r-0 bg-slate-100 text-slate-400 text-[10px]">Sat</td>
-								{/each}
-							{/if}
 						{/each}
 					</tr>
 				</tbody>
