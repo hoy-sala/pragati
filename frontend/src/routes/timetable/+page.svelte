@@ -54,20 +54,21 @@
 </svelte:head>
 
 <style>
+	.print-only { display: none; }
 	@media print {
 		@page { size: A4 landscape; margin: 6mm; }
 		:global(body) { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-		.no-print { display: none !important; }
+		.no-print, .legend-print { display: none !important; }
+		.print-only { display: block !important; }
 		.min-h-screen { min-height: auto !important; }
 		.max-w-7xl { max-width: 100% !important; margin: 0 !important; padding: 0 4px !important; }
-		.overflow-x-auto { overflow: visible !important; border-radius: 0 !important; box-shadow: none !important; margin-bottom: 3px !important; }
+		.overflow-x-auto { overflow: visible !important; box-shadow: none !important; margin-bottom: 3px !important; }
 		table { font-size: 7px !important; width: 100% !important; }
 		th, td { padding: 1px 2px !important; }
 		.sticky { position: static !important; }
-		.rounded-xl { border-radius: 0 !important; }
 		.space-y-6 > :not(:last-child) { margin-bottom: 3px; }
 		h1 { font-size: 10pt !important; margin: 0 0 1px 0 !important; }
-		h2 { font-size: 10pt !important; margin: 0 0 2px 0 !important; }
+		h2 { font-size: 10pt !important; margin: 0 0 1px 0 !important; }
 		.text-xs { font-size: 6px !important; }
 		.text-sm { font-size: 7px !important; }
 		.text-\[11px\] { font-size: 7px !important; }
@@ -86,6 +87,13 @@
 			<p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Karnataka Residential Educational Institutions Society</p>
 			<h1 class="text-xl font-bold text-slate-900">Morarji Desai Residential School (SC-32) Bahaddurghatta, Chitradurga</h1>
 			<h2 class="text-2xl font-bold text-primary-700">Time Table 2026-27</h2>
+			<p class="text-xs text-slate-400 print-only">
+				{#if viewMode === 'class'}
+					{showAll ? 'All Classes' : 'Class ' + (activeClass + 6)} &mdash; Class Wise
+				{:else}
+					{selectedSubject} &mdash; {SUBJECT_INFO[selectedSubject]?.name} &mdash; Subject Wise
+				{/if}
+			</p>
 		</div>
 
 		<div class="flex flex-wrap items-center justify-center gap-3 no-print">
@@ -386,7 +394,7 @@
 		</div>
 		{/if}
 
-		<div class="bg-white rounded-xl border border-slate-200 p-4 no-print">
+		<div class="bg-white rounded-xl border border-slate-200 p-4 legend-print">
 			<h3 class="text-sm font-semibold text-slate-700 mb-2">Subject Legend</h3>
 			<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-1.5">
 				{#each legend as [code, info]}
