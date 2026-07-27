@@ -340,12 +340,12 @@
 				<tbody>
 					{#each MON_FRI_INDICES as di}
 						<tr class="border-t border-slate-200 {DAY_BG[di]}">
-							<td class="px-2 py-1 font-semibold text-slate-700 border-r border-slate-200 {DAY_BG[di]}">{DAY_LABELS[di]}</td>
+							<td class="px-2 py-2 font-semibold text-slate-700 border-r border-slate-200 {DAY_BG[di]}">{DAY_LABELS[di]}</td>
 							{#each WEEKDAY_SLOT_LABELS as _, si}
 								{@const cls = grid['d' + di][si]}
-								<td class="px-1 py-1 text-center align-middle border-r border-slate-200 last:border-r-0" class:bg-slate-50={!cls}>
+								<td class="px-1 py-2 text-center align-middle border-r border-slate-200 last:border-r-0" class:bg-slate-50={!cls}>
 									{#if cls}
-										<span class="font-bold text-slate-800">{cls}</span>
+										<span class="font-bold text-slate-800 text-sm">{cls}</span>
 									{:else}
 										<span class="text-slate-300">&ndash;</span>
 									{/if}
@@ -354,12 +354,12 @@
 						</tr>
 					{/each}
 					<tr class="border-t-2 border-slate-300 bg-amber-50">
-						<td class="px-2 py-1 font-semibold text-slate-700 border-r border-slate-200">{DAY_LABELS[5]}</td>
+						<td class="px-2 py-2 font-semibold text-slate-700 border-r border-slate-200">{DAY_LABELS[5]}</td>
 						{#each SAT_SLOT_LABELS as _, si}
 							{@const cls = grid['d5'][si]}
-							<td class="px-1 py-1 text-center align-middle border-r border-slate-200 last:border-r-0" class:bg-slate-50={!cls}>
+							<td class="px-1 py-2 text-center align-middle border-r border-slate-200 last:border-r-0" class:bg-slate-50={!cls}>
 								{#if cls}
-									<span class="font-bold text-slate-800">{cls}</span>
+									<span class="font-bold text-slate-800 text-sm">{cls}</span>
 								{:else}
 									<span class="text-slate-300">&ndash;</span>
 								{/if}
