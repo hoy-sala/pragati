@@ -59,7 +59,7 @@
 		@page { size: A4 landscape; margin: 6mm; }
 		:global(body) { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 		.no-print, .legend-print { display: none !important; }
-		.print-only { display: block !important; }
+		.print-only { display: inline !important; }
 		.min-h-screen { min-height: auto !important; }
 		.max-w-7xl { max-width: 100% !important; margin: 0 !important; padding: 0 4px !important; }
 		.overflow-x-auto { overflow: visible !important; box-shadow: none !important; margin-bottom: 3px !important; }
@@ -86,7 +86,7 @@
 		<div class="text-center space-y-1">
 			<p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Karnataka Residential Educational Institutions Society</p>
 			<h1 class="text-xl font-bold text-slate-900">Morarji Desai Residential School (SC-32) Bahaddurghatta, Chitradurga</h1>
-			<h2 class="text-2xl font-bold text-primary-700">Time Table 2026-27 <span class="print-only text-slate-500 font-normal">
+			<h2 class="text-2xl font-bold text-primary-700">Time Table 2026-27 <span class="print-only text-slate-500 inline">
 				&mdash; {#if viewMode === 'class'}
 					{showAll ? 'All Classes' : 'Class ' + (activeClass + 6)} &mdash; Class Wise
 				{:else}
