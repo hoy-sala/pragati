@@ -76,9 +76,9 @@
 							{@const classes = WEEKLY_TIMETABLE.length}
 							{#each WEEKLY_TIMETABLE as cls, ci}
 								{@const day = cls.days[di]}
-								<tr class="border-t border-slate-200">
+								<tr class="border-t border-slate-200 {ci === classes - 1 ? 'border-b-2 border-slate-300' : ''}">
 									{#if ci === 0}
-										<td class="sticky left-0 bg-white z-10 px-2 py-1 font-semibold text-slate-700 border-r border-slate-200" rowspan="{classes}">{DAY_LABELS[di]}</td>
+										<td class="sticky left-0 z-10 px-2 py-1 font-semibold text-slate-700 border-r border-slate-200 {DAY_BG[di]}" rowspan="{classes}">{DAY_LABELS[di]}</td>
 									{/if}
 									<td class="sticky left-16 bg-white z-10 px-1 py-1 text-center font-semibold text-slate-600 border-r border-slate-200 text-[11px]">{ci + 6}</td>
 									{#each day.periods.slice(0, times.length) as cell, pi}
@@ -107,8 +107,8 @@
 					{:else}
 						{#each dayIndices as di}
 							{@const day = WEEKLY_TIMETABLE[activeClass].days[di]}
-							<tr class="border-t border-slate-200">
-								<td class="sticky left-0 bg-white z-10 px-2 py-1 font-semibold text-slate-700 border-r border-slate-200">{DAY_LABELS[di]}</td>
+							<tr class="border-t border-b border-slate-200 {DAY_BG[di]}">
+								<td class="sticky left-0 z-10 px-2 py-1 font-semibold text-slate-700 border-r border-slate-200 {DAY_BG[di]}">{DAY_LABELS[di]}</td>
 								{#each day.periods.slice(0, times.length) as cell, pi}
 									{@const info = SUBJECT_INFO[cell.code]}
 									{@const isBreak = BREAK_CODES.has(cell.code)}
