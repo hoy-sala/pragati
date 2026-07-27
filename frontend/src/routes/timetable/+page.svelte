@@ -8,6 +8,8 @@
 	const legend = Object.entries(SUBJECT_INFO);
 	let times = $derived(showWeekday ? WEEKDAY_TIMES : SAT_TIMES);
 	let dayIndices = $derived(showWeekday ? [0, 1, 2, 3, 4] : [5]);
+	const DAY_BG = ['bg-blue-50', 'bg-green-50', 'bg-amber-50', 'bg-purple-50', 'bg-pink-50'];
+	const DAY_BORDER = ['border-l-blue-300', 'border-l-green-300', 'border-l-amber-300', 'border-l-purple-300', 'border-l-pink-300'];
 </script>
 
 <svelte:head>
