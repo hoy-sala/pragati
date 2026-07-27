@@ -16,35 +16,22 @@
 
 <style>
 	@media print {
-		@page {
-			size: A4 landscape;
-			margin: 8mm;
-		}
-		body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+		:global(body) { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 		.no-print { display: none !important; }
 		.min-h-screen { min-height: auto !important; background: white !important; }
-		.max-w-7xl { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+		.max-w-7xl { max-width: 100% !important; margin: 0 !important; padding: 0 4px !important; }
 		.overflow-x-auto { overflow: visible !important; border: 1px solid #999 !important; border-radius: 0 !important; box-shadow: none !important; }
-		table { font-size: 8px !important; width: 100% !important; }
-		th, td { padding: 1px 2px !important; border-color: #999 !important; }
+		table { font-size: 7.5px !important; width: 100% !important; }
+		th, td { padding: 1px 3px !important; border-color: #999 !important; }
 		.shadow-sm { box-shadow: none !important; }
 		.rounded-xl { border-radius: 0 !important; }
 		.bg-slate-50, .bg-slate-100 { background: #f5f5f5 !important; }
-		.sticky { position: static !important; }
-		.space-y-6 > :not(:last-child) { margin-bottom: 4mm; }
-		.space-y-1 > :not(:last-child) { margin-bottom: 0; }
-		h1 { font-size: 11pt !important; }
-		h2 { font-size: 10pt !important; }
-		p { font-size: 8pt !important; }
-		.text-xs { font-size: 7pt !important; }
-		.text-sm { font-size: 8pt !important; }
 		.text-\[11px\] { font-size: 7pt !important; }
 		.text-\[10px\] { font-size: 6.5pt !important; }
 		.text-\[9px\] { font-size: 6pt !important; }
-		.leading-tight { line-height: 1.1 !important; }
-		.truncate { overflow: visible !important; max-width: none !important; }
-		.min-h-screen > div:last-child { display: none !important; }
-		table + div { display: none !important; }
+		h1 { font-size: 11pt !important; }
+		h2 { font-size: 10pt !important; }
+		.space-y-6 > :not(:last-child) { margin-bottom: 6px; }
 	}
 </style>
 
