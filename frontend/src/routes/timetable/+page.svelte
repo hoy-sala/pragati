@@ -342,7 +342,8 @@
 							<td class="px-2 py-2 font-semibold text-slate-700 border-r border-slate-200 {DAY_BG[di]}">{DAY_LABELS[di]}</td>
 							{#each WEEKDAY_SLOT_LABELS as _, si}
 								{@const cls = grid['d' + di][si]}
-								<td class="px-1 py-2 text-center align-middle border-r border-slate-200 last:border-r-0" class:bg-slate-50={!cls}>
+								<td class="px-1 py-2 text-center align-middle border-r border-slate-200 last:border-r-0"
+									style={cls ? `background-color: ${info?.color || '#fff'}` : ''}>
 									{#if cls}
 										<span class="font-bold text-slate-800 text-sm">{cls}</span>
 									{:else}
@@ -374,7 +375,8 @@
 						<td class="px-2 py-2 font-semibold text-slate-700 border-r border-slate-200">{DAY_LABELS[5]}</td>
 						{#each SAT_SLOT_LABELS as _, si}
 							{@const cls = grid['d5'][si]}
-							<td class="px-1 py-2 text-center align-middle border-r border-slate-200 last:border-r-0" class:bg-slate-50={!cls}>
+							<td class="px-1 py-2 text-center align-middle border-r border-slate-200 last:border-r-0"
+								style={cls ? `background-color: ${info?.color || '#fff'}` : ''}>
 								{#if cls}
 									<span class="font-bold text-slate-800 text-sm">{cls}</span>
 								{:else}
