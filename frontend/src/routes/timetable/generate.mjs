@@ -34,18 +34,33 @@ function findMatching(remain) {
   return result;
 }
 
-function scheduleDay(assignments) {
-  // Use random restart approach (simpler, faster)
-  for (let t = 0; t < 5000; t++) {
+function scheduleDay(assignments, breakAfter = new Set([2, 4])) {
+  const numPeriods = assignments[CLASSES[0]].length;
+  for (let t = 0; t < 2000; t++) {
     const remain = {};
     for (const cls of CLASSES) remain[cls] = shuffle(assignments[cls]);
     const result = {};
     for (const cls of CLASSES) result[cls] = [];
     let valid = true;
+    const periodSubjects = [];
 
-    for (let p = 0; p < assignments[CLASSES[0]].length; p++) {
-      const matching = findMatching(remain);
+    for (let p = 0; p < numPeriods; p++) {
+      const forbidden = new Set();
+      if (p >= 2 && !breakAfter.has(p - 1) && !breakAfter.has(p - 2)) {
+        for (const s of periodSubjects[p - 1]) {
+          if (periodSubjects[p - 2].has(s)) forbidden.add(s);
+        }
+      }
+
+      const filteredRemain = {};
+      for (const cls of CLASSES) {
+        filteredRemain[cls] = remain[cls].filter(s => !forbidden.has(s));
+      }
+
+      const matching = findMatching(filteredRemain);
       if (!matching) { valid = false; break; }
+      periodSubjects.push(new Set(Object.values(matching)));
+
       for (const cls of CLASSES) {
         const s = matching[cls];
         result[cls].push(s);
@@ -58,17 +73,25 @@ function scheduleDay(assignments) {
 }
 
 function scheduleSat(assignments) {
-  for (let t = 0; t < 5000; t++) {
+  for (let t = 0; t < 2000; t++) {
     const remain = {};
     for (const cls of CLASSES) remain[cls] = shuffle(assignments[cls]);
     const result = {};
     for (const cls of CLASSES) result[cls] = [];
     let valid = true;
+    const periodSubjects = [];
 
     for (let p = 0; p < 4; p++) {
+      const forbidden = new Set();
+      if (p >= 2) {
+        for (const s of periodSubjects[p - 1]) {
+          if (periodSubjects[p - 2].has(s)) forbidden.add(s);
+        }
+      }
+
       const usedSubj5 = new Set();
       for (const cls of shuffle(CLASSES)) {
-        const cand = remain[cls].filter(s => !SUBJ5.includes(s) || !usedSubj5.has(s));
+        const cand = remain[cls].filter(s => (!SUBJ5.includes(s) || !usedSubj5.has(s)) && !forbidden.has(s));
         if (cand.length === 0) { valid = false; break; }
         const pick = cand[Math.floor(Math.random() * cand.length)];
         result[cls].push(pick);
@@ -76,6 +99,7 @@ function scheduleSat(assignments) {
         remain[cls] = remain[cls].filter(x => x !== pick);
       }
       if (!valid) break;
+      periodSubjects.push(new Set(CLASSES.map(cls => result[cls][result[cls].length - 1])));
     }
     if (valid) return result;
   }
@@ -83,7 +107,7 @@ function scheduleSat(assignments) {
 }
 
 function solve() {
-  for (let attempt = 0; attempt < 500; attempt++) {
+  for (let attempt = 0; attempt < 2000; attempt++) {
     const dayAssign = {};
     for (const cls of CLASSES) {
       dayAssign[cls] = {};
@@ -110,11 +134,11 @@ function solve() {
     }
     if (!valid) continue;
 
-    // Fri: 6 core + 2 CUL
+    // Fri: 6 core + 2 CUL — skip consecutive constraint (only 6 subjects, impossible to satisfy)
     {
       const assign = {};
       for (const cls of CLASSES) assign[cls] = [...dayAssign[cls]['Fri']];
-      const dr = scheduleDay(assign);
+      const dr = scheduleDay(assign, new Set([0,1,2,3,4,5,6,7]));
       if (!dr) { valid = false; continue; }
       for (const cls of CLASSES) result[cls]['Fri'] = [...dr[cls], 'CUL', 'CUL'];
     }
@@ -134,6 +158,7 @@ function solve() {
 }
 
 function validate(data) {
+  // No period conflicts
   for (const day of ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']) {
     for (let p = 0; p < PERIODS[day]; p++) {
       const subjects = CLASSES.map(cls => data[cls][day][p]);
@@ -141,10 +166,12 @@ function validate(data) {
       if (new Set(nonCUL).size !== nonCUL.length) return false;
     }
   }
+  // Sat SUBJ5 uniqueness
   for (let p = 0; p < 4; p++) {
     const others = CLASSES.map(cls => data[cls]['Sat'][p]).filter(s => SUBJ5.includes(s));
     if (new Set(others).size !== others.length) return false;
   }
+  // No same-day subject repeats per class
   for (const cls of CLASSES) {
     for (const day of DAYS) {
       const dc = {};
@@ -152,13 +179,37 @@ function validate(data) {
       for (const [s, c] of Object.entries(dc)) if (c > 1 && s !== 'CUL') return false;
     }
   }
+  // Correct weekly totals
   for (const cls of CLASSES) {
     const counts = {};
     for (const day of DAYS) for (const s of data[cls][day]) counts[s] = (counts[s] || 0) + 1;
-    return (counts['KAN']===6 && counts['ENG']===6 && counts['HIN']===5 &&
+    if (!(counts['KAN']===6 && counts['ENG']===6 && counts['HIN']===5 &&
       counts['MAT']===5 && counts['SCI']===5 && counts['SOC']===5 &&
       counts['CS']===2 && counts['DRW']===2 && counts['MUS']===2 &&
-      counts['PE']===2 && counts['LIB']===2);
+      counts['PE']===2 && counts['LIB']===2)) return false;
+  }
+  // No 3 consecutive periods for any teacher (across all classes)
+  const breakAfter = new Set([2, 4]);
+  for (const day of ['Mon', 'Tue', 'Wed', 'Thu']) {
+    for (let p = 2; p < 8; p++) {
+      if (breakAfter.has(p - 1) || breakAfter.has(p - 2)) continue;
+      for (const s of CLASSES.map(cls => data[cls][day][p])) {
+        const inP1 = CLASSES.some(cls => data[cls][day][p - 1] === s);
+        const inP2 = CLASSES.some(cls => data[cls][day][p - 2] === s);
+        if (inP1 && inP2) return false;
+      }
+    }
+  }
+  // Fri — skip consecutive check; Fri only has 6 unique subjects and 2 CUL,
+  // making 3-consecutive impossible to avoid (overlap |P0∩P1| >= 4 → ≤2 subjects left for 5 classes).
+  // The 2 CUL periods at the end naturally break any chain.
+  // Sat (no breaks, all 4 periods consecutive)
+  for (let p = 2; p < 4; p++) {
+    for (const s of CLASSES.map(cls => data[cls]['Sat'][p])) {
+      const inP1 = CLASSES.some(cls => data[cls]['Sat'][p - 1] === s);
+      const inP2 = CLASSES.some(cls => data[cls]['Sat'][p - 2] === s);
+      if (inP1 && inP2) return false;
+    }
   }
   return true;
 }
