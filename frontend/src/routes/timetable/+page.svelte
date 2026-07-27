@@ -75,9 +75,9 @@
 		.text-\[10px\] { font-size: 6.5px !important; }
 		.text-\[9px\] { font-size: 6px !important; }
 		.leading-tight { line-height: 1.1 !important; }
-		.w-16 { width: auto !important; min-width: 20px !important; }
-		.w-10 { width: auto !important; min-width: 12px !important; }
-		.w-14 { width: auto !important; min-width: 16px !important; }
+		.w-16 { width: auto !important; min-width: 18px !important; }
+		.w-10 { width: auto !important; min-width: 10px !important; }
+		.w-14 { width: auto !important; min-width: 14px !important; padding-left: 1px !important; padding-right: 1px !important; }
 	}
 </style>
 
