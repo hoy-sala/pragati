@@ -86,14 +86,13 @@
 		<div class="text-center space-y-1">
 			<p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Karnataka Residential Educational Institutions Society</p>
 			<h1 class="text-xl font-bold text-slate-900">Morarji Desai Residential School (SC-32) Bahaddurghatta, Chitradurga</h1>
-			<h2 class="text-2xl font-bold text-primary-700">Time Table 2026-27</h2>
-			<p class="text-xs text-slate-400 print-only">
-				{#if viewMode === 'class'}
+			<h2 class="text-2xl font-bold text-primary-700">Time Table 2026-27 <span class="print-only text-slate-500 font-normal">
+				&mdash; {#if viewMode === 'class'}
 					{showAll ? 'All Classes' : 'Class ' + (activeClass + 6)} &mdash; Class Wise
 				{:else}
 					{SUBJECT_INFO[selectedSubject]?.name} &mdash; Subject Wise
 				{/if}
-			</p>
+			</span></h2>
 		</div>
 
 		<div class="flex flex-wrap items-center justify-center gap-3 no-print">
