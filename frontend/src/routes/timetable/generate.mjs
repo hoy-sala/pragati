@@ -73,11 +73,64 @@ function scheduleDay(assignments, breakAfter = new Set([2, 4])) {
 }
 
 function scheduleSat(assignments) {
-  for (let t = 0; t < 2000; t++) {
-    const remain = {};
-    for (const cls of CLASSES) remain[cls] = shuffle(assignments[cls]);
+  // 5 classes, 4 periods. Each class needs KAN, ENG, 2 SUBJ5.
+  // Consecutive constraint: a subject in P2 must not appear in both P0&P1;
+  //   a subject in P3 must not appear in both P1&P2.
+  // This forces KAN/ENG to skip either P1 or P2 entirely.
+  // Valid KAN/ENG patterns: appear in 3 periods (skip P1 or P2),
+  //   with distribution 2+2+1 across the 3 active periods.
+  for (let t = 0; t < 20000; t++) {
+    const skipPeriod = Math.random() < 0.5 ? 1 : 2;
+    const active = [0, 1, 2, 3].filter(p => p !== skipPeriod);
+
+    // KAN distribution: two periods with 2, one with 1
+    const singleK = Math.floor(Math.random() * 3);
+    const kanCounts = [2, 2, 2];
+    kanCounts[singleK] = 1;
+
+    const classes = shuffle(CLASSES);
+    const kanAssign = {};
+    let ci = 0;
+    for (let i = 0; i < 3; i++) {
+      const period = active[i];
+      for (let j = 0; j < kanCounts[i]; j++) {
+        kanAssign[classes[ci++]] = period;
+      }
+    }
+
+    // ENG distribution: two periods with 2, one with 1
+    // Put ENG single in a KAN double index so ENG×2 avoids KAN×2 periods
+    const kanDoubleIndices = [0, 1, 2].filter(i => kanCounts[i] === 2);
+    const singleE = kanDoubleIndices[Math.floor(Math.random() * kanDoubleIndices.length)];
+    const engCounts = [2, 2, 2];
+    engCounts[singleE] = 1;
+
+    const engAssign = {};
+    const remaining = shuffle(CLASSES);
+    for (let i = 0; i < 3; i++) {
+      const period = active[i];
+      let placed = 0;
+      while (placed < engCounts[i]) {
+        const idx = remaining.findIndex(cls => kanAssign[cls] !== period);
+        if (idx === -1) { ci = -1; break; }
+        engAssign[remaining[idx]] = period;
+        remaining.splice(idx, 1);
+        placed++;
+      }
+      if (ci === -1) break;
+    }
+    if (ci === -1) continue;
+
     const result = {};
     for (const cls of CLASSES) result[cls] = [];
+    for (const cls of CLASSES) {
+      result[cls][kanAssign[cls]] = 'KAN';
+      result[cls][engAssign[cls]] = 'ENG';
+    }
+
+    // Fill SUBJ5
+    const remain = {};
+    for (const cls of CLASSES) remain[cls] = shuffle(assignments[cls].filter(s => s !== 'KAN' && s !== 'ENG'));
     let valid = true;
     const periodSubjects = [];
 
@@ -89,19 +142,22 @@ function scheduleSat(assignments) {
         }
       }
 
-      const periodCount = {};
       const usedSubj5 = new Set();
+      periodSubjects[p] = new Set();
       for (const cls of shuffle(CLASSES)) {
-        const cand = remain[cls].filter(s => (!SUBJ5.includes(s) || !usedSubj5.has(s)) && !forbidden.has(s) && (periodCount[s] || 0) < 2);
+        if (result[cls][p] !== undefined) {
+          periodSubjects[p].add(result[cls][p]);
+          continue;
+        }
+        const cand = remain[cls].filter(s => !usedSubj5.has(s) && !forbidden.has(s));
         if (cand.length === 0) { valid = false; break; }
         const pick = cand[Math.floor(Math.random() * cand.length)];
-        result[cls].push(pick);
-        periodCount[pick] = (periodCount[pick] || 0) + 1;
-        if (SUBJ5.includes(pick)) usedSubj5.add(pick);
+        result[cls][p] = pick;
+        usedSubj5.add(pick);
         remain[cls] = remain[cls].filter(x => x !== pick);
+        periodSubjects[p].add(pick);
       }
       if (!valid) break;
-      periodSubjects.push(new Set(CLASSES.map(cls => result[cls][result[cls].length - 1])));
     }
     if (valid) return result;
   }
