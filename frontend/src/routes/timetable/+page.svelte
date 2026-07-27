@@ -14,6 +14,40 @@
 	<title>Master Timetable 2026-27 — Morarji Desai Residential School</title>
 </svelte:head>
 
+<style>
+	@media print {
+		@page {
+			size: A4 landscape;
+			margin: 8mm;
+		}
+		body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+		.no-print { display: none !important; }
+		.min-h-screen { min-height: auto !important; background: white !important; }
+		.max-w-7xl { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+		.overflow-x-auto { overflow: visible !important; border: 1px solid #999 !important; border-radius: 0 !important; box-shadow: none !important; }
+		table { font-size: 8px !important; width: 100% !important; }
+		th, td { padding: 1px 2px !important; border-color: #999 !important; }
+		.shadow-sm { box-shadow: none !important; }
+		.rounded-xl { border-radius: 0 !important; }
+		.bg-slate-50, .bg-slate-100 { background: #f5f5f5 !important; }
+		.sticky { position: static !important; }
+		.space-y-6 > :not(:last-child) { margin-bottom: 4mm; }
+		.space-y-1 > :not(:last-child) { margin-bottom: 0; }
+		h1 { font-size: 11pt !important; }
+		h2 { font-size: 10pt !important; }
+		p { font-size: 8pt !important; }
+		.text-xs { font-size: 7pt !important; }
+		.text-sm { font-size: 8pt !important; }
+		.text-\[11px\] { font-size: 7pt !important; }
+		.text-\[10px\] { font-size: 6.5pt !important; }
+		.text-\[9px\] { font-size: 6pt !important; }
+		.leading-tight { line-height: 1.1 !important; }
+		.truncate { overflow: visible !important; max-width: none !important; }
+		.min-h-screen > div:last-child { display: none !important; }
+		table + div { display: none !important; }
+	}
+</style>
+
 <div class="min-h-screen bg-slate-50">
 	<div class="max-w-7xl mx-auto px-4 py-6 space-y-6">
 		<div class="text-center space-y-1">
@@ -23,7 +57,7 @@
 			<p class="text-sm text-slate-500">Monday – Friday: 9:40 AM – 4:20 PM &nbsp;|&nbsp; Saturday: 8:30 AM – 12:30 PM</p>
 		</div>
 
-		<div class="flex flex-wrap items-center justify-center gap-3">
+		<div class="flex flex-wrap items-center justify-center gap-3 no-print">
 			<button onclick={() => showAll = true}
 				class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors
 					{showAll ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-slate-600 border-slate-200 hover:border-primary-300'}">
@@ -222,7 +256,7 @@
 			</table>
 		</div>
 
-		<div class="bg-white rounded-xl border border-slate-200 p-4">
+		<div class="bg-white rounded-xl border border-slate-200 p-4 no-print">
 			<h3 class="text-sm font-semibold text-slate-700 mb-2">Subject Legend</h3>
 			<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-1.5">
 				{#each legend as [code, info]}
