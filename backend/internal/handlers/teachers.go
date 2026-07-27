@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
@@ -63,15 +64,15 @@ func (h *TeacherHandler) List(w http.ResponseWriter, r *http.Request) {
 	defer rows.Close()
 
 	type TeacherItem struct {
-		ID        string `json:"id"`
-		SchoolID  string `json:"school_id"`
-		Email     string `json:"email"`
-		Name      string `json:"name"`
-		Role      string `json:"role"`
-		Phone     string `json:"phone"`
-		IsActive  bool   `json:"is_active"`
-		CreatedAt string `json:"created_at"`
-		UpdatedAt string `json:"updated_at"`
+		ID        string    `json:"id"`
+		SchoolID  string    `json:"school_id"`
+		Email     string    `json:"email"`
+		Name      string    `json:"name"`
+		Role      string    `json:"role"`
+		Phone     string    `json:"phone"`
+		IsActive  bool      `json:"is_active"`
+		CreatedAt time.Time `json:"created_at"`
+		UpdatedAt time.Time `json:"updated_at"`
 	}
 
 	teachers := []TeacherItem{}
@@ -92,15 +93,15 @@ func (h *TeacherHandler) Get(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
 	type TeacherDetail struct {
-		ID        string `json:"id"`
-		SchoolID  string `json:"school_id"`
-		Email     string `json:"email"`
-		Name      string `json:"name"`
-		Role      string `json:"role"`
-		Phone     string `json:"phone"`
-		IsActive  bool   `json:"is_active"`
-		CreatedAt string `json:"created_at"`
-		UpdatedAt string `json:"updated_at"`
+		ID        string    `json:"id"`
+		SchoolID  string    `json:"school_id"`
+		Email     string    `json:"email"`
+		Name      string    `json:"name"`
+		Role      string    `json:"role"`
+		Phone     string    `json:"phone"`
+		IsActive  bool      `json:"is_active"`
+		CreatedAt time.Time `json:"created_at"`
+		UpdatedAt time.Time `json:"updated_at"`
 	}
 
 	var t TeacherDetail
