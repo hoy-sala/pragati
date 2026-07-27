@@ -41,18 +41,16 @@ export const SUBJECT_INFO: Record<string, { name: string; color: string }> = {
   PE: { name: 'Physical Education', color: '#D1FAE5' },
   LIB: { name: 'Library & Reading', color: '#E2E8F0' },
   CUL: { name: 'Cultural Programme', color: '#DCFCE7' },
-  BRK: { name: 'Short Break', color: '#F1F5F9' },
   LUN: { name: 'Lunch Break', color: '#F1F5F9' },
   ASM: { name: 'Morning Assembly', color: '#FEF9C3' },
   PTR: { name: 'Physical Training', color: '#D1FAE5' },
   BRF: { name: 'Breakfast', color: '#FFF7ED' },
 };
 
-export const BREAK_CODES = new Set(['BRK', 'LUN', 'ASM']);
+export const BREAK_CODES = new Set(['LUN']);
 export const ACTIVITY_CODES = new Set(['ASM', 'PTR', 'BRF']);
 
 export const BREAK_TIMES: Record<string, string> = {
-  BRK: '12:00 – 12:10',
   LUN: '1:30 – 2:20',
 };
 
@@ -60,44 +58,44 @@ const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const;
 
 const RAW: Record<string, Record<string, string[]>> = {
   'Class 6': {
-    Mon: ['PE', 'MAT', 'HIN', 'KAN', 'SOC', 'ENG', 'MUS', 'SCI'],
-    Tue: ['MAT', 'SOC', 'MUS', 'KAN', 'SCI', 'ENG', 'HIN', 'DRW'],
-    Wed: ['DRW', 'SCI', 'LIB', 'HIN', 'KAN', 'ENG', 'SOC', 'MAT'],
-    Thu: ['MAT', 'SOC', 'SCI', 'ENG', 'KAN', 'LIB', 'HIN', 'CS'],
-    Fri: ['MAT', 'KAN', 'ENG', 'SOC', 'SCI', 'HIN', 'CUL', 'CUL'],
-    Sat: ['ENG', 'CS', 'PE', 'KAN'],
+    Mon: ['MAT', 'HIN', 'SOC', 'KAN', 'MUS', 'ENG', 'SCI', 'CS'],
+    Tue: ['MAT', 'KAN', 'SOC', 'LIB', 'SCI', 'HIN', 'ENG', 'PE'],
+    Wed: ['MAT', 'CS', 'KAN', 'HIN', 'SOC', 'ENG', 'DRW', 'SCI'],
+    Thu: ['MAT', 'LIB', 'SOC', 'MUS', 'ENG', 'HIN', 'SCI', 'KAN'],
+    Fri: ['KAN', 'SOC', 'PE', 'MAT', 'SCI', 'ENG', 'DRW', 'CUL'],
+    Sat: ['KAN', 'SOC', 'SCI', 'MAT'],
   },
   'Class 7': {
-    Mon: ['HIN', 'KAN', 'LIB', 'SCI', 'ENG', 'SOC', 'MAT', 'MUS'],
-    Tue: ['ENG', 'KAN', 'SOC', 'CS', 'HIN', 'MUS', 'MAT', 'SCI'],
-    Wed: ['MAT', 'SOC', 'CS', 'SCI', 'HIN', 'DRW', 'ENG', 'KAN'],
-    Thu: ['SOC', 'ENG', 'MAT', 'KAN', 'HIN', 'PE', 'DRW', 'SCI'],
-    Fri: ['SCI', 'SOC', 'MAT', 'HIN', 'ENG', 'KAN', 'CUL', 'CUL'],
-    Sat: ['KAN', 'PE', 'ENG', 'LIB'],
+    Mon: ['PE', 'ENG', 'DRW', 'SCI', 'MAT', 'SOC', 'HIN', 'KAN'],
+    Tue: ['ENG', 'LIB', 'DRW', 'SCI', 'MAT', 'KAN', 'HIN', 'SOC'],
+    Wed: ['CS', 'KAN', 'HIN', 'ENG', 'PE', 'MAT', 'SCI', 'SOC'],
+    Thu: ['SCI', 'ENG', 'KAN', 'LIB', 'SOC', 'MUS', 'MAT', 'HIN'],
+    Fri: ['MAT', 'KAN', 'CS', 'ENG', 'SOC', 'MUS', 'SCI', 'CUL'],
+    Sat: ['SOC', 'MAT', 'KAN', 'SCI'],
   },
   'Class 8': {
-    Mon: ['SOC', 'PE', 'ENG', 'MAT', 'DRW', 'HIN', 'SCI', 'KAN'],
-    Tue: ['KAN', 'ENG', 'CS', 'MAT', 'SOC', 'SCI', 'PE', 'HIN'],
-    Wed: ['ENG', 'MAT', 'HIN', 'CS', 'SOC', 'KAN', 'SCI', 'MUS'],
-    Thu: ['KAN', 'HIN', 'MUS', 'SCI', 'LIB', 'ENG', 'SOC', 'MAT'],
-    Fri: ['SOC', 'ENG', 'HIN', 'SCI', 'KAN', 'MAT', 'CUL', 'CUL'],
-    Sat: ['LIB', 'DRW', 'KAN', 'ENG'],
+    Mon: ['KAN', 'SOC', 'MUS', 'DRW', 'ENG', 'HIN', 'MAT', 'SCI'],
+    Tue: ['SCI', 'MUS', 'HIN', 'PE', 'ENG', 'SOC', 'KAN', 'MAT'],
+    Wed: ['ENG', 'SCI', 'SOC', 'CS', 'KAN', 'HIN', 'MAT', 'LIB'],
+    Thu: ['KAN', 'DRW', 'MAT', 'HIN', 'SCI', 'SOC', 'ENG', 'CS'],
+    Fri: ['SCI', 'LIB', 'KAN', 'SOC', 'MAT', 'PE', 'ENG', 'CUL'],
+    Sat: ['SOC', 'MAT', 'SCI', 'KAN'],
   },
   'Class 9': {
-    Mon: ['MAT', 'SCI', 'MUS', 'LIB', 'HIN', 'KAN', 'ENG', 'SOC'],
-    Tue: ['MUS', 'HIN', 'SCI', 'ENG', 'CS', 'KAN', 'SOC', 'MAT'],
-    Wed: ['SOC', 'ENG', 'PE', 'KAN', 'SCI', 'HIN', 'MAT', 'CS'],
-    Thu: ['PE', 'DRW', 'KAN', 'SOC', 'ENG', 'SCI', 'MAT', 'HIN'],
-    Fri: ['HIN', 'SCI', 'KAN', 'MAT', 'SOC', 'ENG', 'CUL', 'CUL'],
-    Sat: ['KAN', 'LIB', 'ENG', 'DRW'],
+    Mon: ['SCI', 'MAT', 'HIN', 'LIB', 'SOC', 'KAN', 'DRW', 'ENG'],
+    Tue: ['SOC', 'HIN', 'ENG', 'MAT', 'KAN', 'SCI', 'PE', 'CS'],
+    Wed: ['HIN', 'ENG', 'MUS', 'MAT', 'SCI', 'SOC', 'CS', 'KAN'],
+    Thu: ['HIN', 'SOC', 'ENG', 'DRW', 'PE', 'MAT', 'KAN', 'SCI'],
+    Fri: ['LIB', 'MAT', 'SOC', 'KAN', 'ENG', 'SCI', 'MUS', 'CUL'],
+    Sat: ['MAT', 'SCI', 'SOC', 'KAN'],
   },
   'Class 10': {
-    Mon: ['SCI', 'SOC', 'CS', 'ENG', 'KAN', 'MAT', 'HIN', 'DRW'],
-    Tue: ['HIN', 'MAT', 'LIB', 'SCI', 'ENG', 'CS', 'KAN', 'SOC'],
-    Wed: ['SCI', 'PE', 'KAN', 'ENG', 'MAT', 'SOC', 'LIB', 'HIN'],
-    Thu: ['ENG', 'PE', 'HIN', 'MAT', 'SCI', 'SOC', 'KAN', 'MUS'],
-    Fri: ['KAN', 'HIN', 'SCI', 'ENG', 'MAT', 'SOC', 'CUL', 'CUL'],
-    Sat: ['DRW', 'MUS', 'KAN', 'ENG'],
+    Mon: ['ENG', 'SCI', 'KAN', 'MAT', 'HIN', 'CS', 'SOC', 'PE'],
+    Tue: ['LIB', 'SCI', 'KAN', 'SOC', 'HIN', 'MAT', 'MUS', 'ENG'],
+    Wed: ['SCI', 'SOC', 'MAT', 'PE', 'CS', 'KAN', 'ENG', 'HIN'],
+    Thu: ['MUS', 'HIN', 'SCI', 'MAT', 'KAN', 'ENG', 'DRW', 'SOC'],
+    Fri: ['SOC', 'ENG', 'MAT', 'SCI', 'KAN', 'DRW', 'LIB', 'CUL'],
+    Sat: ['KAN', 'SOC', 'MAT', 'SCI'],
   },
 };
 
@@ -120,11 +118,9 @@ export const WEEKLY_TIMETABLE: ClassSchedule[] = Object.entries(RAW).map(([name,
       label: day,
       periods: [
         { code: 'ASM', name: SUBJECT_INFO['ASM'].name },
-        ...rawPeriods.slice(0, 3),
-        { code: 'BRK', name: SUBJECT_INFO['BRK'].name },
-        ...rawPeriods.slice(3, 5),
+        ...rawPeriods.slice(0, 4),
         { code: 'LUN', name: SUBJECT_INFO['LUN'].name },
-        ...rawPeriods.slice(5),
+        ...rawPeriods.slice(4),
       ],
     };
   }),
@@ -135,13 +131,12 @@ export const WEEKDAY_TIMES = [
   '10:00 – 10:40',
   '10:40 – 11:20',
   '11:20 – 12:00',
-  '12:00 – 12:10',
-  '12:10 – 12:50',
-  '12:50 – 1:30',
-  '1:30 – 2:20',
-  '2:20 – 3:00',
-  '3:00 – 3:40',
-  '3:40 – 4:20',
+  '12:00 – 12:40',
+  '12:40 – 1:30',
+  '1:30 – 2:10',
+  '2:10 – 2:50',
+  '2:50 – 3:30',
+  '3:30 – 4:10',
 ];
 
 export const SAT_TIMES = [
