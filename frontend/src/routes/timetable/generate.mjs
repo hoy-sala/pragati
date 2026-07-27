@@ -94,20 +94,39 @@ function solve() {
     for (const cls of CLASSES) {
       dayAssign[cls] = {};
 
-      // KAN×6, MAT×6, SCI×6, SOC×6 (Mon-Sat)
-      for (const day of DAYS) dayAssign[cls][day] = ['KAN', 'MAT', 'SCI', 'SOC'];
+      if (cls === 'Class 6') {
+        // KAN×5, MAT×5, SCI×5, SOC×5 (Mon-Fri only)
+        for (const day of ['Mon','Tue','Wed','Thu','Fri']) dayAssign[cls][day] = ['KAN', 'MAT', 'SCI', 'SOC'];
+        // Sat: ENG, HIN, CS, MUS
+        dayAssign[cls]['Sat'] = ['ENG', 'HIN', 'CS', 'MUS'];
 
-      // ENG×5 (Mon-Fri)
-      for (const day of ['Mon','Tue','Wed','Thu','Fri']) dayAssign[cls][day].push('ENG');
+        // ENG×5 (Mon-Fri)
+        for (const day of ['Mon','Tue','Wed','Thu','Fri']) dayAssign[cls][day].push('ENG');
 
-      // HIN×4 (Mon-Thu only)
-      for (const day of ['Mon','Tue','Wed','Thu']) dayAssign[cls][day].push('HIN');
+        // HIN×4 (Mon-Thu only)
+        for (const day of ['Mon','Tue','Wed','Thu']) dayAssign[cls][day].push('HIN');
 
-      // SUBJ5×2 each = 10 total: 2 per day Mon-Fri
-      const s5 = shuffle(SUBJ5);
-      const days5 = ['Mon','Tue','Wed','Thu','Fri','Mon','Tue','Wed','Thu','Fri'];
-      const s5alloc = shuffle([...SUBJ5, ...SUBJ5]);
-      for (let i = 0; i < 10; i++) dayAssign[cls][days5[i]].push(s5alloc[i]);
+        // SUBJ5×2 each = 10 total: 2 per day Mon-Fri
+        const s5 = shuffle(SUBJ5);
+        const days5 = ['Mon','Tue','Wed','Thu','Fri','Mon','Tue','Wed','Thu','Fri'];
+        const s5alloc = shuffle([...SUBJ5, ...SUBJ5]);
+        for (let i = 0; i < 10; i++) dayAssign[cls][days5[i]].push(s5alloc[i]);
+      } else {
+        // KAN×6, MAT×6, SCI×6, SOC×6 (Mon-Sat)
+        for (const day of DAYS) dayAssign[cls][day] = ['KAN', 'MAT', 'SCI', 'SOC'];
+
+        // ENG×5 (Mon-Fri)
+        for (const day of ['Mon','Tue','Wed','Thu','Fri']) dayAssign[cls][day].push('ENG');
+
+        // HIN×4 (Mon-Thu only)
+        for (const day of ['Mon','Tue','Wed','Thu']) dayAssign[cls][day].push('HIN');
+
+        // SUBJ5×2 each = 10 total: 2 per day Mon-Fri
+        const s5 = shuffle(SUBJ5);
+        const days5 = ['Mon','Tue','Wed','Thu','Fri','Mon','Tue','Wed','Thu','Fri'];
+        const s5alloc = shuffle([...SUBJ5, ...SUBJ5]);
+        for (let i = 0; i < 10; i++) dayAssign[cls][days5[i]].push(s5alloc[i]);
+      }
     }
 
     const result = {};
@@ -137,7 +156,7 @@ function solve() {
       const assign = {};
       for (const cls of CLASSES) assign[cls] = [...dayAssign[cls]['Sat']];
       const dr = scheduleSat(assign);
-      if (!dr) { if (attempt === 0) console.log('Sat failed on attempt 0'); valid = false; continue; }
+      if (!dr) { valid = false; continue; }
       for (const cls of CLASSES) result[cls]['Sat'] = dr[cls];
     }
 
@@ -167,10 +186,17 @@ function validate(data) {
   for (const cls of CLASSES) {
     const counts = {};
     for (const day of DAYS) for (const s of data[cls][day]) counts[s] = (counts[s] || 0) + 1;
-    if (!(counts['KAN']===6 && counts['ENG']===5 && counts['HIN']===4 &&
-      counts['MAT']===6 && counts['SCI']===6 && counts['SOC']===6 &&
-      counts['CS']===2 && counts['DRW']===2 && counts['MUS']===2 &&
-      counts['PE']===2 && counts['LIB']===2)) return false;
+    if (cls === 'Class 6') {
+      if (!(counts['KAN']===5 && counts['MAT']===5 && counts['SCI']===5 && counts['SOC']===5 &&
+        counts['ENG']===6 && counts['HIN']===5 &&
+        counts['CS']===3 && counts['DRW']===2 && counts['MUS']===3 &&
+        counts['PE']===2 && counts['LIB']===2)) return false;
+    } else {
+      if (!(counts['KAN']===6 && counts['ENG']===5 && counts['HIN']===4 &&
+        counts['MAT']===6 && counts['SCI']===6 && counts['SOC']===6 &&
+        counts['CS']===2 && counts['DRW']===2 && counts['MUS']===2 &&
+        counts['PE']===2 && counts['LIB']===2)) return false;
+    }
   }
   // No 3 consecutive periods for any teacher (Mon-Sat)
   const breakAfter = new Set([4]);
