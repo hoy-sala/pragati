@@ -2,7 +2,7 @@
 	import { WEEKLY_TIMETABLE, SUBJECT_INFO, WEEKDAY_TIMES, SAT_TIMES, DAY_LABELS, BREAK_CODES, ACTIVITY_CODES, TEACHER_NAMES } from './timetable.data';
 
 	let activeClass = $state(0);
-	let showAll = $state(false);
+	let showAll = $state(true);
 
 	const legend = Object.entries(SUBJECT_INFO);
 	const MON_FRI_INDICES = [0, 1, 2, 3, 4];
@@ -78,9 +78,11 @@
 										{@const isBreak = BREAK_CODES.has(cell.code)}
 										{@const isActivity = ACTIVITY_CODES.has(cell.code)}
 										{#if isBreak}
-											<td class="px-1 py-1 text-center border-r border-slate-200 last:border-r-0 bg-slate-50 text-slate-400 italic">
-												<div class="text-[10px]">{cell.name}</div>
-											</td>
+											{#if ci === 0}
+												<td class="px-1 py-1 text-center border-r border-slate-200 last:border-r-0 bg-slate-50 text-slate-400 italic" rowspan="{classes}">
+													<div class="text-[10px]">{cell.name}</div>
+												</td>
+											{/if}
 										{:else}
 											<td class="px-1 py-1 text-center align-middle border-r border-slate-200 last:border-r-0 {isActivity ? 'bg-slate-50 text-slate-400 italic' : ''}"
 												style={isActivity ? '' : `background-color: ${info?.color || '#fff'}`}>
@@ -172,9 +174,11 @@
 										{@const isBreak = BREAK_CODES.has(cell.code)}
 										{@const isActivity = ACTIVITY_CODES.has(cell.code)}
 										{#if isBreak}
-											<td class="px-1 py-1 text-center border-r border-slate-200 last:border-r-0 bg-slate-50 text-slate-400 italic">
-												<div class="text-[10px]">{cell.name}</div>
-											</td>
+											{#if ci === 0}
+												<td class="px-1 py-1 text-center border-r border-slate-200 last:border-r-0 bg-slate-50 text-slate-400 italic" rowspan="{classes}">
+													<div class="text-[10px]">{cell.name}</div>
+												</td>
+											{/if}
 										{:else}
 											<td class="px-1 py-1 text-center align-middle border-r border-slate-200 last:border-r-0 {isActivity ? 'bg-slate-50 text-slate-400 italic' : ''}"
 												style={isActivity ? '' : `background-color: ${info?.color || '#fff'}`}>
@@ -236,12 +240,6 @@
 					</div>
 				{/each}
 			</div>
-		</div>
-
-		<div class="text-center text-xs text-slate-400 pb-4">
-			<p class="font-medium text-slate-500 mb-1">Notes</p>
-			<p>Friday P7–P8 reserved for Cultural Programme (CUL).</p>
-			<p>P1 reserved for core academic subjects (Languages, Mathematics, Science, Social Studies).</p>
 		</div>
 	</div>
 </div>
