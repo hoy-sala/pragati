@@ -116,13 +116,15 @@
 											<div class="text-[10px]">{cell.name}</div>
 										</td>
 									{:else}
-										<td class="px-1 py-1 text-center border-r border-slate-200 last:border-r-0 {isActivity ? 'bg-slate-50 text-slate-400 italic' : ''}"
+										<td class="px-1 py-1 text-center align-middle border-r border-slate-200 last:border-r-0 {isActivity ? 'bg-slate-50 text-slate-400 italic' : ''}"
 											style={isActivity ? '' : `background-color: ${info?.color || '#fff'}`}>
 											{#if isActivity}
 												<div class="text-[10px]">{cell.name}</div>
 											{:else}
-												<div class="font-bold text-slate-800 text-[11px]">{cell.code}</div>
-												<div class="text-[9px] text-slate-400 leading-tight truncate max-w-[70px]">{TEACHER_NAMES[cell.code] || cell.name}</div>
+												<div class="flex flex-col items-center justify-center leading-tight">
+													<div class="font-bold text-slate-800 text-[11px]">{cell.code}</div>
+													<div class="text-[9px] text-slate-400 truncate max-w-[70px]">{TEACHER_NAMES[cell.code] || cell.name}</div>
+												</div>
 											{/if}
 										</td>
 									{/if}
