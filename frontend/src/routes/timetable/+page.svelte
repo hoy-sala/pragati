@@ -3,13 +3,11 @@
 
 	let activeClass = $state(0);
 	let showAll = $state(false);
-	let showWeekday = $state(true);
 
 	const legend = Object.entries(SUBJECT_INFO);
-	let times = $derived(showWeekday ? WEEKDAY_TIMES : SAT_TIMES);
-	let dayIndices = $derived(showWeekday ? [0, 1, 2, 3, 4] : [5]);
+	const MON_FRI_INDICES = [0, 1, 2, 3, 4];
+	const SAT_INDICES = [5];
 	const DAY_BG = ['bg-blue-50', 'bg-green-50', 'bg-amber-50', 'bg-purple-50', 'bg-pink-50'];
-	const DAY_BORDER = ['border-l-blue-300', 'border-l-green-300', 'border-l-amber-300', 'border-l-purple-300', 'border-l-pink-300'];
 </script>
 
 <svelte:head>
@@ -26,12 +24,6 @@
 		</div>
 
 		<div class="flex flex-wrap items-center justify-center gap-3">
-			<div class="flex rounded-lg border border-slate-200 overflow-hidden bg-white">
-				<button onclick={() => showWeekday = true}
-					class="px-4 py-1.5 text-xs font-medium transition-colors {showWeekday ? 'bg-primary-600 text-white' : 'text-slate-600 hover:bg-slate-50'}">Mon–Fri</button>
-				<button onclick={() => showWeekday = false}
-					class="px-4 py-1.5 text-xs font-medium transition-colors {!showWeekday ? 'bg-primary-600 text-white' : 'text-slate-600 hover:bg-slate-50'}">Saturday</button>
-			</div>
 			<button onclick={() => showAll = true}
 				class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors
 					{showAll ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-slate-600 border-slate-200 hover:border-primary-300'}">
@@ -46,6 +38,7 @@
 			{/each}
 		</div>
 
+		<!-- Mon–Fri Table -->
 		<div class="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
 			<table class="w-full text-[11px]">
 				<thead>
@@ -54,16 +47,15 @@
 						{#if showAll}
 							<th class="sticky left-16 bg-slate-100 z-10 px-1 py-1.5 text-center font-semibold text-slate-700 border-r border-slate-200 w-10">Cls</th>
 						{/if}
-						{#each times as t, pi}
-							{@const refPeriods = showWeekday ? 0 : 5}
-							{@const cell = WEEKLY_TIMETABLE[0].days[refPeriods].periods[pi]}
+						{#each WEEKDAY_TIMES as t, pi}
+							{@const cell = WEEKLY_TIMETABLE[0].days[0].periods[pi]}
 							{@const isBreak = BREAK_CODES.has(cell.code)}
 							{@const isActivity = ACTIVITY_CODES.has(cell.code)}
 							<th class="px-1 py-1.5 text-center font-semibold border-r border-slate-200 last:border-r-0 w-16 {isBreak || isActivity ? 'text-slate-400' : 'text-slate-700'}">
 								{#if isBreak || isActivity}
 									<div class="text-[10px]">{cell.name}</div>
 								{:else}
-									<div>P{WEEKLY_TIMETABLE[0].days[refPeriods].periods.slice(0, pi).filter(p => !BREAK_CODES.has(p.code) && !ACTIVITY_CODES.has(p.code)).length + 1}</div>
+									<div>P{WEEKLY_TIMETABLE[0].days[0].periods.slice(0, pi).filter(p => !BREAK_CODES.has(p.code) && !ACTIVITY_CODES.has(p.code)).length + 1}</div>
 								{/if}
 								<div class="text-[9px] font-normal text-slate-400">{t}</div>
 							</th>
@@ -72,7 +64,7 @@
 				</thead>
 				<tbody>
 					{#if showAll}
-						{#each dayIndices as di}
+						{#each MON_FRI_INDICES as di}
 							{@const classes = WEEKLY_TIMETABLE.length}
 							{#each WEEKLY_TIMETABLE as cls, ci}
 								{@const day = cls.days[di]}
@@ -81,7 +73,7 @@
 										<td class="sticky left-0 z-10 px-2 py-1 font-semibold text-slate-700 border-r border-slate-200 {DAY_BG[di]}" rowspan="{classes}">{DAY_LABELS[di]}</td>
 									{/if}
 									<td class="sticky left-16 bg-white z-10 px-1 py-1 text-center font-semibold text-slate-600 border-r border-slate-200 text-[11px]">{ci + 6}</td>
-									{#each day.periods.slice(0, times.length) as cell, pi}
+									{#each day.periods.slice(0, WEEKDAY_TIMES.length) as cell, pi}
 										{@const info = SUBJECT_INFO[cell.code]}
 										{@const isBreak = BREAK_CODES.has(cell.code)}
 										{@const isActivity = ACTIVITY_CODES.has(cell.code)}
@@ -107,11 +99,105 @@
 							{/each}
 						{/each}
 					{:else}
-						{#each dayIndices as di}
+						{#each MON_FRI_INDICES as di}
 							{@const day = WEEKLY_TIMETABLE[activeClass].days[di]}
 							<tr class="border-t border-b border-slate-200 {DAY_BG[di]}">
 								<td class="sticky left-0 z-10 px-2 py-1 font-semibold text-slate-700 border-r border-slate-200 {DAY_BG[di]}">{DAY_LABELS[di]}</td>
-								{#each day.periods.slice(0, times.length) as cell, pi}
+								{#each day.periods.slice(0, WEEKDAY_TIMES.length) as cell, pi}
+									{@const info = SUBJECT_INFO[cell.code]}
+									{@const isBreak = BREAK_CODES.has(cell.code)}
+									{@const isActivity = ACTIVITY_CODES.has(cell.code)}
+									{#if isBreak}
+										<td class="px-1 py-1 text-center border-r border-slate-200 last:border-r-0 bg-slate-50 text-slate-400 italic">
+											<div class="text-[10px]">{cell.name}</div>
+										</td>
+									{:else}
+										<td class="px-1 py-1 text-center align-middle border-r border-slate-200 last:border-r-0 {isActivity ? 'bg-slate-50 text-slate-400 italic' : ''}"
+											style={isActivity ? '' : `background-color: ${info?.color || '#fff'}`}>
+											{#if isActivity}
+												<div class="text-[10px]">{cell.name}</div>
+											{:else}
+												<div class="flex flex-col items-center justify-center leading-tight">
+													<div class="font-bold text-slate-800 text-[11px]">{cell.code}</div>
+													<div class="text-[9px] text-slate-400 truncate max-w-[70px]">{TEACHER_NAMES[cell.code] || cell.name}</div>
+												</div>
+											{/if}
+										</td>
+									{/if}
+								{/each}
+							</tr>
+						{/each}
+					{/if}
+				</tbody>
+			</table>
+		</div>
+
+		<!-- Saturday Table -->
+		<div class="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+			<table class="w-full text-[11px]">
+				<thead>
+					<tr class="bg-slate-100">
+						<th class="sticky left-0 bg-slate-100 z-10 px-2 py-1.5 text-left font-semibold text-slate-700 border-r border-slate-200 w-16">Day</th>
+						{#if showAll}
+							<th class="sticky left-16 bg-slate-100 z-10 px-1 py-1.5 text-center font-semibold text-slate-700 border-r border-slate-200 w-10">Cls</th>
+						{/if}
+						{#each SAT_TIMES as t, pi}
+							{@const cell = WEEKLY_TIMETABLE[0].days[5].periods[pi]}
+							{@const isBreak = BREAK_CODES.has(cell.code)}
+							{@const isActivity = ACTIVITY_CODES.has(cell.code)}
+							<th class="px-1 py-1.5 text-center font-semibold border-r border-slate-200 last:border-r-0 w-16 {isBreak || isActivity ? 'text-slate-400' : 'text-slate-700'}">
+								{#if isBreak || isActivity}
+									<div class="text-[10px]">{cell.name}</div>
+								{:else}
+									<div>P{WEEKLY_TIMETABLE[0].days[5].periods.slice(0, pi).filter(p => !BREAK_CODES.has(p.code) && !ACTIVITY_CODES.has(p.code)).length + 1}</div>
+								{/if}
+								<div class="text-[9px] font-normal text-slate-400">{t}</div>
+							</th>
+						{/each}
+					</tr>
+				</thead>
+				<tbody>
+					{#if showAll}
+						{#each SAT_INDICES as di}
+							{@const classes = WEEKLY_TIMETABLE.length}
+							{#each WEEKLY_TIMETABLE as cls, ci}
+								{@const day = cls.days[di]}
+								<tr class="border-t border-slate-200 {ci === classes - 1 ? 'border-b-2 border-slate-300' : ''}">
+									{#if ci === 0}
+										<td class="sticky left-0 z-10 px-2 py-1 font-semibold text-slate-700 border-r border-slate-200 {DAY_BG[di]}" rowspan="{classes}">{DAY_LABELS[di]}</td>
+									{/if}
+									<td class="sticky left-16 bg-white z-10 px-1 py-1 text-center font-semibold text-slate-600 border-r border-slate-200 text-[11px]">{ci + 6}</td>
+									{#each day.periods.slice(0, SAT_TIMES.length) as cell, pi}
+										{@const info = SUBJECT_INFO[cell.code]}
+										{@const isBreak = BREAK_CODES.has(cell.code)}
+										{@const isActivity = ACTIVITY_CODES.has(cell.code)}
+										{#if isBreak}
+											<td class="px-1 py-1 text-center border-r border-slate-200 last:border-r-0 bg-slate-50 text-slate-400 italic">
+												<div class="text-[10px]">{cell.name}</div>
+											</td>
+										{:else}
+											<td class="px-1 py-1 text-center align-middle border-r border-slate-200 last:border-r-0 {isActivity ? 'bg-slate-50 text-slate-400 italic' : ''}"
+												style={isActivity ? '' : `background-color: ${info?.color || '#fff'}`}>
+												{#if isActivity}
+													<div class="text-[10px]">{cell.name}</div>
+												{:else}
+													<div class="flex flex-col items-center justify-center leading-tight">
+														<div class="font-bold text-slate-800 text-[11px]">{cell.code}</div>
+														<div class="text-[9px] text-slate-400 truncate max-w-[70px]">{TEACHER_NAMES[cell.code] || cell.name}</div>
+													</div>
+												{/if}
+											</td>
+										{/if}
+									{/each}
+								</tr>
+							{/each}
+						{/each}
+					{:else}
+						{#each SAT_INDICES as di}
+							{@const day = WEEKLY_TIMETABLE[activeClass].days[di]}
+							<tr class="border-t border-b border-slate-200 {DAY_BG[di]}">
+								<td class="sticky left-0 z-10 px-2 py-1 font-semibold text-slate-700 border-r border-slate-200 {DAY_BG[di]}">{DAY_LABELS[di]}</td>
+								{#each day.periods.slice(0, SAT_TIMES.length) as cell, pi}
 									{@const info = SUBJECT_INFO[cell.code]}
 									{@const isBreak = BREAK_CODES.has(cell.code)}
 									{@const isActivity = ACTIVITY_CODES.has(cell.code)}
