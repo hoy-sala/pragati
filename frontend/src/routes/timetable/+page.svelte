@@ -9,7 +9,7 @@
 	const legend = Object.entries(SUBJECT_INFO);
 	const MON_FRI_INDICES = [0, 1, 2, 3, 4];
 	const SAT_INDICES = [5];
-	const DAY_BG = ['bg-blue-50', 'bg-green-50', 'bg-amber-50', 'bg-purple-50', 'bg-pink-50'];
+	const DAY_BG = ['bg-blue-50', 'bg-green-50', 'bg-amber-50', 'bg-purple-50', 'bg-pink-50', 'bg-orange-50'];
 
 	const ACADEMIC_SUBJECTS = Object.entries(SUBJECT_INFO).filter(([c]) => !BREAK_CODES.has(c) && !ACTIVITY_CODES.has(c));
 
@@ -371,8 +371,8 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr class="border-t border-slate-200 bg-amber-50">
-						<td class="px-2 py-2 font-semibold text-slate-700 border-r border-slate-200">{DAY_LABELS[5]}</td>
+					<tr class="border-t border-slate-200 {DAY_BG[5]}">
+						<td class="px-2 py-2 font-semibold text-slate-700 border-r border-slate-200 {DAY_BG[5]}">{DAY_LABELS[5]}</td>
 						{#each SAT_SLOT_LABELS as _, si}
 							{@const cls = grid['d5'][si]}
 							<td class="px-1 py-2 text-center align-middle border-r border-slate-200 last:border-r-0"
