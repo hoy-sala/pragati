@@ -11,7 +11,7 @@
 </script>
 
 <svelte:head>
-	<title>Master Timetable 2026-27 — Morarji Desai Residential School</title>
+	<title>Time Table 2026-27 — Morarji Desai Residential School</title>
 </svelte:head>
 
 <style>
