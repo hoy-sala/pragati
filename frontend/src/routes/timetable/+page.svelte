@@ -57,9 +57,11 @@
 	.print-only { display: none; }
 	@media print {
 		@page { size: A4 landscape; margin: 6mm; }
+		@page portrait-page { size: A4 portrait; margin: 5mm; }
 		:global(body) { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 		.no-print, .legend-print { display: none !important; }
 		.print-only { display: inline !important; }
+		.subject-print { page: portrait-page; }
 		.min-h-screen { min-height: auto !important; }
 		.max-w-7xl { max-width: 100% !important; margin: 0 !important; padding: 0 4px !important; }
 		.overflow-x-auto { overflow: visible !important; box-shadow: none !important; margin-bottom: 3px !important; }
@@ -82,7 +84,7 @@
 </style>
 
 <div class="min-h-screen bg-slate-50">
-	<div class="max-w-7xl mx-auto px-4 py-6 space-y-6">
+	<div class="max-w-7xl mx-auto px-4 py-6 space-y-6 {viewMode === 'subject' ? 'subject-print' : ''}">
 		<div class="text-center space-y-1">
 			<p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Karnataka Residential Educational Institutions Society</p>
 			<h1 class="text-xl font-bold text-slate-900">Morarji Desai Residential School (SC-32) Bahaddurghatta, Chitradurga</h1>
