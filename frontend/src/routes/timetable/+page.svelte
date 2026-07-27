@@ -16,27 +16,39 @@
 
 <style>
 	@media print {
-		@page { size: A4 landscape; margin: 5mm; }
-		:global(body) { -webkit-print-color-adjust: exact; print-color-adjust: exact; margin: 0; }
+		@page { size: A4 landscape; margin: 6mm; }
+		:global(body) { -webkit-print-color-adjust: exact; print-color-adjust: exact; margin: 0; font-family: 'Segoe UI', Arial, sans-serif !important; }
 		.no-print { display: none !important; }
 		.min-h-screen { min-height: auto !important; background: white !important; }
 		.max-w-7xl { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
-		.overflow-x-auto { overflow: visible !important; border: 1px solid #999 !important; border-radius: 0 !important; box-shadow: none !important; margin-bottom: 3px !important; }
-		table { font-size: 6px !important; width: 100% !important; }
-		th, td { padding: 0.5px 2px !important; border-color: #999 !important; }
-		h1 { font-size: 8pt !important; margin: 0 0 1px 0 !important; }
-		h2 { font-size: 8pt !important; margin: 0 0 2px 0 !important; }
-		.space-y-6 > :not(:last-child) { margin-bottom: 2px; }
+		.overflow-x-auto { overflow: visible !important; border: 1px solid #000 !important; border-radius: 0 !important; box-shadow: none !important; margin-bottom: 3px !important; }
+		table { font-size: 6.5px !important; width: 100% !important; border-collapse: collapse !important; }
+		th, td { padding: 1px 3px !important; border: 1px solid #000 !important; background: white !important; }
+		thead th { background: #f0f0f0 !important; font-weight: 700 !important; }
+		.space-y-6 > :not(:last-child) { margin-bottom: 3px; }
 		.space-y-1 { margin: 0 !important; }
 		.rounded-xl { border-radius: 0 !important; }
-		.bg-slate-50, .bg-slate-100 { background: #f5f5f5 !important; }
-		.w-16 { width: 18px !important; min-width: 18px !important; }
-		.w-10 { width: 12px !important; min-width: 12px !important; }
-		.leading-tight { line-height: 1 !important; }
-		.text-\[11px\] { font-size: 6px !important; }
-		.text-\[10px\] { font-size: 5.5px !important; }
-		.text-\[9px\] { display: none !important; }
-		.truncate { display: none !important; }
+		.w-16 { width: 22px !important; min-width: 22px !important; }
+		.w-10 { width: 14px !important; min-width: 14px !important; }
+		.leading-tight { line-height: 1.1 !important; }
+		h1 { font-size: 9pt !important; margin: 0 0 1px 0 !important; }
+		h2 { font-size: 9pt !important; margin: 0 0 3px 0 !important; }
+		[style*="background"] { background: white !important; }
+		td[style] { background: white !important; }
+		.text-\[11px\] { font-size: 6.5px !important; }
+		.text-\[10px\] { font-size: 6px !important; }
+		.text-\[9px\] { font-size: 5.5px !important; }
+		th .text-\[9px\] { font-weight: 400 !important; }
+		.text-slate-400 { color: #333 !important; }
+		.text-slate-500 { color: #333 !important; }
+		.text-slate-600 { color: #000 !important; }
+		.text-slate-700 { color: #000 !important; }
+		.text-slate-800 { color: #000 !important; }
+		.font-bold { font-weight: 700 !important; }
+		.bg-slate-50, .bg-slate-100 { background: #f0f0f0 !important; }
+		.sticky { position: static !important; }
+		tr.border-b-2 { border-bottom-width: 2px !important; }
+		.text-primary-700 { color: #000 !important; }
 	}
 </style>
 
