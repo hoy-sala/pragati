@@ -91,7 +91,7 @@
 				{#if viewMode === 'class'}
 					{showAll ? 'All Classes' : 'Class ' + (activeClass + 6)} &mdash; Class Wise
 				{:else}
-					{selectedSubject} &mdash; {SUBJECT_INFO[selectedSubject]?.name} &mdash; Subject Wise
+					{SUBJECT_INFO[selectedSubject]?.name} &mdash; Subject Wise
 				{/if}
 			</p>
 		</div>
