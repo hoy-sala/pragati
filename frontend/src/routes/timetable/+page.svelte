@@ -3,11 +3,50 @@
 
 	let activeClass = $state(0);
 	let showAll = $state(true);
+	let viewMode = $state<'class' | 'subject'>('class');
+	let selectedSubject = $state('KAN');
 
 	const legend = Object.entries(SUBJECT_INFO);
 	const MON_FRI_INDICES = [0, 1, 2, 3, 4];
 	const SAT_INDICES = [5];
 	const DAY_BG = ['bg-blue-50', 'bg-green-50', 'bg-amber-50', 'bg-purple-50', 'bg-pink-50'];
+
+	const ACADEMIC_SUBJECTS = Object.entries(SUBJECT_INFO).filter(([c]) => !BREAK_CODES.has(c) && !ACTIVITY_CODES.has(c));
+
+	const WEEKDAY_PERIOD_MAP = [1, 2, 3, 5, 6, 8, 9, 10];
+	const SAT_PERIOD_MAP = [3, 4, 6, 7];
+	const WEEKDAY_SLOT_LABELS = ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8'];
+	const SAT_SLOT_LABELS = ['P1', 'P2', 'P3', 'P4'];
+
+	type SubjectGrid = Record<string, (number | null)[]>;
+
+	function buildSubjectGrid(): Record<string, SubjectGrid> {
+		const grid: Record<string, SubjectGrid> = {};
+		const allCodes = new Set(Object.keys(SUBJECT_INFO));
+		for (const code of allCodes) {
+			if (BREAK_CODES.has(code) || ACTIVITY_CODES.has(code)) continue;
+			grid[code] = {};
+			for (let d = 0; d < 6; d++) {
+				const map = d < 5 ? WEEKDAY_PERIOD_MAP : SAT_PERIOD_MAP;
+				grid[code]['d' + d] = new Array(map.length).fill(null);
+			}
+		}
+		WEEKLY_TIMETABLE.forEach((cls, ci) => {
+			const classNum = ci + 6;
+			cls.days.forEach((day, di) => {
+				const map = di < 5 ? WEEKDAY_PERIOD_MAP : SAT_PERIOD_MAP;
+				map.forEach((pi, slot) => {
+					const cell = day.periods[pi];
+					if (cell && grid[cell.code]) {
+						grid[cell.code]['d' + di][slot] = classNum;
+					}
+				});
+			});
+		});
+		return grid;
+	}
+
+	const subjectGrid = buildSubjectGrid();
 </script>
 
 <svelte:head>
@@ -61,20 +100,41 @@
 		</div>
 
 		<div class="flex flex-wrap items-center justify-center gap-3 no-print">
-			<button onclick={() => showAll = true}
+			<button onclick={() => viewMode = 'class'}
 				class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors
-					{showAll ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-slate-600 border-slate-200 hover:border-primary-300'}">
-				All Classes
+					{viewMode === 'class' ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-slate-600 border-slate-200 hover:border-primary-300'}">
+				Class Wise
 			</button>
-			{#each WEEKLY_TIMETABLE as _, i}
-				<button onclick={() => { activeClass = i; showAll = false; }}
+			<button onclick={() => viewMode = 'subject'}
+				class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors
+					{viewMode === 'subject' ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-slate-600 border-slate-200 hover:border-primary-300'}">
+				Subject Wise
+			</button>
+			<span class="w-px h-5 bg-slate-300"></span>
+			{#if viewMode === 'class'}
+				<button onclick={() => showAll = true}
 					class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors
-						{!showAll && activeClass === i ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-slate-600 border-slate-200 hover:border-primary-300'}">
-					Class {i + 6}
+						{showAll ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-slate-600 border-slate-200 hover:border-primary-300'}">
+					All Classes
 				</button>
-			{/each}
+				{#each WEEKLY_TIMETABLE as _, i}
+					<button onclick={() => { activeClass = i; showAll = false; }}
+						class="px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors
+							{!showAll && activeClass === i ? 'bg-primary-600 text-white border-primary-600' : 'bg-white text-slate-600 border-slate-200 hover:border-primary-300'}">
+						Class {i + 6}
+					</button>
+				{/each}
+			{:else}
+				<select bind:value={selectedSubject}
+					class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-medium bg-white text-slate-700">
+					{#each ACADEMIC_SUBJECTS as [code, info]}
+						<option value={code}>{code} — {info.name}</option>
+					{/each}
+				</select>
+			{/if}
 		</div>
 
+		{#if viewMode === 'class'}
 		<!-- Mon–Fri Table -->
 		<div class="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
 			<table class="w-full text-[11px]">
@@ -258,6 +318,72 @@
 				</tbody>
 			</table>
 		</div>
+
+		{:else}
+		{@const grid = subjectGrid[selectedSubject]}
+		{@const info = SUBJECT_INFO[selectedSubject]}
+		{@const teacherName = TEACHER_NAMES[selectedSubject]}
+
+		<div class="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+			<table class="w-full text-[11px]">
+				<thead>
+					<tr class="bg-slate-100">
+						<th class="px-2 py-1.5 text-left font-semibold text-slate-700 border-r border-slate-200 w-16">Day</th>
+						{#each WEEKDAY_SLOT_LABELS as label, si}
+							<th class="px-1 py-1.5 text-center font-semibold text-slate-700 border-r border-slate-200 last:border-r-0 w-14">
+								<div>{label}</div>
+								<div class="text-[9px] font-normal text-slate-400">{WEEKDAY_TIMES[WEEKDAY_PERIOD_MAP[si]]}</div>
+							</th>
+						{/each}
+					</tr>
+				</thead>
+				<tbody>
+					{#each MON_FRI_INDICES as di}
+						<tr class="border-t border-slate-200 {DAY_BG[di]}">
+							<td class="px-2 py-1 font-semibold text-slate-700 border-r border-slate-200 {DAY_BG[di]}">{DAY_LABELS[di]}</td>
+							{#each WEEKDAY_SLOT_LABELS as _, si}
+								{@const cls = grid['d' + di][si]}
+								<td class="px-1 py-1 text-center align-middle border-r border-slate-200 last:border-r-0" class:bg-slate-50={!cls}>
+									{#if cls}
+										<span class="font-bold text-slate-800">{cls}</span>
+									{:else}
+										<span class="text-slate-300">&ndash;</span>
+									{/if}
+								</td>
+							{/each}
+						</tr>
+					{/each}
+					<tr class="border-t-2 border-slate-300 bg-amber-50">
+						<td class="px-2 py-1 font-semibold text-slate-700 border-r border-slate-200">{DAY_LABELS[5]}</td>
+						{#each SAT_SLOT_LABELS as _, si}
+							{@const cls = grid['d5'][si]}
+							<td class="px-1 py-1 text-center align-middle border-r border-slate-200 last:border-r-0" class:bg-slate-50={!cls}>
+								{#if cls}
+									<span class="font-bold text-slate-800">{cls}</span>
+								{:else}
+									<span class="text-slate-300">&ndash;</span>
+								{/if}
+							</td>
+							{#if si === SAT_SLOT_LABELS.length - 1}
+								{@const remaining = WEEKDAY_SLOT_LABELS.length - SAT_SLOT_LABELS.length}
+								{#each Array(remaining) as _}
+									<td class="px-1 py-1 text-center border-r border-slate-200 last:border-r-0 bg-slate-100 text-slate-400 text-[10px]">Sat</td>
+								{/each}
+							{/if}
+						{/each}
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="flex items-center gap-4 text-xs text-slate-500">
+			<span class="font-semibold text-slate-700">{selectedSubject}</span>
+			<span>{info?.name}</span>
+			{#if teacherName}
+				<span class="text-slate-400">Teacher: {teacherName}</span>
+			{/if}
+		</div>
+		{/if}
 
 		<div class="bg-white rounded-xl border border-slate-200 p-4 no-print">
 			<h3 class="text-sm font-semibold text-slate-700 mb-2">Subject Legend</h3>
