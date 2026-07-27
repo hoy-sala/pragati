@@ -4,17 +4,17 @@ export interface TimetableCell {
 }
 
 export const TEACHER_NAMES: Record<string, string> = {
-  KAN: '',
-  ENG: '',
-  HIN: '',
-  MAT: '',
-  SCI: '',
-  SOC: '',
-  CS: '',
-  DRW: '',
-  MUS: '',
-  PE: '',
-  LIB: '',
+  KAN: 'KAN Teacher',
+  ENG: 'ENG Teacher',
+  HIN: 'HIN Teacher',
+  MAT: 'MAT Teacher',
+  SCI: 'SCI Teacher',
+  SOC: 'SOC Teacher',
+  CS: 'CS Teacher',
+  DRW: 'DRW Teacher',
+  MUS: 'MUS Teacher',
+  PE: 'PE Teacher',
+  LIB: 'LIB Teacher',
   CUL: '',
 };
 
