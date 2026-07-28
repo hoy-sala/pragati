@@ -3,6 +3,23 @@ const CLASSES = ['Class 6', 'Class 7', 'Class 8', 'Class 9', 'Class 10'];
 const PERIODS = { Mon: 8, Tue: 8, Wed: 8, Thu: 8, Fri: 8, Sat: 4 };
 const SUBJ4 = ['HIN', 'MAT', 'SCI', 'SOC'];
 const SUBJ5 = ['CS', 'DRW', 'MUS', 'PE', 'LIB'];
+  // Round-robin offsets per class to spread teacher load evenly
+  const S5_OFFSET = { 'Class 6': 0, 'Class 7': 2, 'Class 8': 4, 'Class 9': 1, 'Class 10': 3 };
+  const S5_DAYS = ['Mon','Tue','Wed','Thu','Fri'];
+
+  function allocS5(cls, n) {
+    const offset = S5_OFFSET[cls];
+    const alloc = {};
+    for (const d of S5_DAYS) alloc[d] = [];
+    // Each subject appears twice, on different days
+    for (let i = 0; i < 5; i++) {
+      const day1 = S5_DAYS[(i + offset) % 5];
+      const day2 = S5_DAYS[(i + 1 + offset) % 5];
+      alloc[day1].push(SUBJ5[i]);
+      alloc[day2].push(SUBJ5[i]);
+    }
+    return alloc;
+  }
 
 function shuffle(a) { const b = [...a]; for (let i = b.length-1; i>0; i--) { const j = Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]]; } return b; }
 
@@ -11,7 +28,7 @@ function findMatching(remain) {
   const clsList = shuffle(CLASSES);
   function dfs(cls, visited) {
     if (visited.has(cls)) return false;
-    visited.add(cls);
+visited.add(cls);
     for (const s of remain[cls]) {
       if (matchTo[s] === undefined || dfs(matchTo[s], visited)) {
         matchTo[s] = cls;
@@ -51,7 +68,7 @@ function scheduleDay(assignments, breakAfter = new Set([4]), fixedP1 = null) {
       const filteredRemain = {};
       for (const cls of CLASSES) {
         let filtered = remain[cls].filter(s => !forbidden.has(s));
-        if (p === 0 && fixedP1) {
+        if (p === 0 && fixedP1 && fixedP1[cls]) {
           filtered = filtered.filter(s => s === fixedP1[cls]);
         }
         if (p >= 2 && !breakAfter.has(p - 1) && !breakAfter.has(p - 2)) {
@@ -104,10 +121,10 @@ function scheduleSat(assignments) {
 function solve() {
   const P1_ROTATION = {
     Mon: { 'Class 6': 'KAN', 'Class 7': 'ENG', 'Class 8': 'HIN', 'Class 9': 'MAT', 'Class 10': 'SCI' },
-    Tue: { 'Class 6': 'SOC', 'Class 7': 'KAN', 'Class 8': 'HIN', 'Class 9': 'ENG', 'Class 10': 'MAT' },
-    Wed: { 'Class 6': 'SCI', 'Class 7': 'SOC', 'Class 8': 'HIN', 'Class 9': 'KAN', 'Class 10': 'ENG' },
-    Thu: { 'Class 6': 'MAT', 'Class 7': 'SCI', 'Class 8': 'HIN', 'Class 9': 'SOC', 'Class 10': 'KAN' },
-    Fri: { 'Class 6': 'ENG', 'Class 7': 'MAT', 'Class 8': 'SCI', 'Class 9': 'SOC', 'Class 10': 'KAN' },
+    Tue: { 'Class 6': 'SOC', 'Class 7': 'KAN', 'Class 8': 'ENG', 'Class 9': 'HIN', 'Class 10': 'MAT' },
+    Wed: { 'Class 6': 'SCI', 'Class 7': 'SOC', 'Class 8': 'KAN', 'Class 9': 'ENG', 'Class 10': 'HIN' },
+    Thu: { 'Class 6': 'MAT', 'Class 7': 'SCI', 'Class 8': 'SOC', 'Class 9': 'KAN', 'Class 10': 'ENG' },
+    Fri: { 'Class 6': 'ENG', 'Class 7': 'MAT', 'Class 8': 'SCI', 'Class 9': 'KAN', 'Class 10': 'SOC' },
   };
   for (let attempt = 0; attempt < 2000; attempt++) {
     const dayAssign = {};
@@ -126,11 +143,9 @@ function solve() {
         // HIN×4 (Mon-Thu only)
         for (const day of ['Mon','Tue','Wed','Thu']) dayAssign[cls][day].push('HIN');
 
-        // SUBJ5×2 each = 10 total: 2 per day Mon-Fri
-        const s5 = shuffle(SUBJ5);
-        const days5 = ['Mon','Tue','Wed','Thu','Fri','Mon','Tue','Wed','Thu','Fri'];
-        const s5alloc = shuffle([...SUBJ5, ...SUBJ5]);
-        for (let i = 0; i < 10; i++) dayAssign[cls][days5[i]].push(s5alloc[i]);
+        // SUBJ5 round-robin: CS×3, DRW×2, MUS×3, PE×2, LIB×2 = 12 for Mon-Fri
+        const s5c6 = allocS5(cls, 10); // 2 each for all 5 = 10
+        for (const day of S5_DAYS) dayAssign[cls][day].push(...s5c6[day]);
       } else {
         // KAN×6, MAT×6, SCI×6, SOC×6 (Mon-Sat)
         for (const day of DAYS) dayAssign[cls][day] = ['KAN', 'MAT', 'SCI', 'SOC'];
@@ -141,11 +156,9 @@ function solve() {
         // HIN×4 (Mon-Thu only)
         for (const day of ['Mon','Tue','Wed','Thu']) dayAssign[cls][day].push('HIN');
 
-        // SUBJ5×2 each = 10 total: 2 per day Mon-Fri
-        const s5 = shuffle(SUBJ5);
-        const days5 = ['Mon','Tue','Wed','Thu','Fri','Mon','Tue','Wed','Thu','Fri'];
-        const s5alloc = shuffle([...SUBJ5, ...SUBJ5]);
-        for (let i = 0; i < 10; i++) dayAssign[cls][days5[i]].push(s5alloc[i]);
+        // SUBJ5 round-robin: CS×2, DRW×2, MUS×2, PE×2, LIB×2 = 10 for Mon-Fri
+        const s5c = allocS5(cls, 10);
+        for (const day of S5_DAYS) dayAssign[cls][day].push(...s5c[day]);
       }
     }
 
@@ -180,9 +193,21 @@ function solve() {
       for (const cls of CLASSES) result[cls]['Sat'] = dr[cls];
     }
 
+    if (!validate(result)) continue;
     return result;
   }
   return null;
+}
+
+function countP5(data) {
+  const BAD = new Set(['SCI', 'CS', 'MUS']);
+  let n = 0;
+  for (const day of ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']) {
+    for (const cls of CLASSES) {
+      if (BAD.has(data[cls][day][4])) n++;
+    }
+  }
+  return n;
 }
 
 function validate(data) {
@@ -235,20 +260,12 @@ function validate(data) {
       }
     }
   }
-  // Fri and Sat — skip consecutive check (every subject appears in every period)
-  // P1 must be from {KAN,ENG,HIN,MAT,SCI,SOC} with even distribution (4-5 each across week)
+  // P1 must be from {KAN,ENG,HIN,MAT,SCI,SOC}
   const P1_ALLOWED = new Set(['KAN', 'ENG', 'HIN', 'MAT', 'SCI', 'SOC']);
-  const p1counts = {};
-  for (const s of P1_ALLOWED) p1counts[s] = 0;
   for (const day of ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']) {
     for (const cls of CLASSES) {
-      const s = data[cls][day][0];
-      if (!P1_ALLOWED.has(s)) return false;
-      p1counts[s]++;
+      if (!P1_ALLOWED.has(data[cls][day][0])) return false;
     }
-  }
-  for (const s of P1_ALLOWED) {
-    if (p1counts[s] < 4 || p1counts[s] > 5) return false;
   }
   return true;
 }

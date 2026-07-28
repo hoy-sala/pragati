@@ -18,7 +18,7 @@
 	const WEEKDAY_SLOT_LABELS = ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8'];
 	const SAT_SLOT_LABELS = ['P1', 'P2', 'P3', 'P4'];
 
-	type SubjectGrid = Record<string, (number | null)[]>;
+	type SubjectGrid = Record<string, number[]>;
 
 	function buildSubjectGrid(): Record<string, SubjectGrid> {
 		const grid: Record<string, SubjectGrid> = {};
@@ -28,7 +28,7 @@
 			grid[code] = {};
 			for (let d = 0; d < 6; d++) {
 				const map = d < 5 ? WEEKDAY_PERIOD_MAP : SAT_PERIOD_MAP;
-				grid[code]['d' + d] = new Array(map.length).fill(null);
+				grid[code]['d' + d] = new Array(map.length).fill(0).map(() => []);
 			}
 		}
 		WEEKLY_TIMETABLE.forEach((cls, ci) => {
@@ -38,7 +38,7 @@
 				map.forEach((pi, slot) => {
 					const cell = day.periods[pi];
 					if (cell && grid[cell.code]) {
-						grid[cell.code]['d' + di][slot] = classNum;
+						grid[cell.code]['d' + di][slot].push(classNum);
 					}
 				});
 			});
@@ -54,40 +54,54 @@
 </svelte:head>
 
 <style>
+	:global(body) { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
 	.print-only { display: none; }
 	@media print {
-		@page { size: A4 landscape; margin: 6mm; }
-		@page portrait-page { size: A4 portrait; margin: 5mm; }
+		@page { size: A4 landscape; margin: 4mm; }
+		@page portrait-page { size: A4 portrait; margin: 4mm; }
 		:global(body) { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-		.no-print, .legend-print { display: none !important; }
+		.no-print, .no-print * { display: none !important; }
 		.print-only { display: inline !important; }
 		.subject-print { page: portrait-page; }
 		.min-h-screen { min-height: auto !important; }
 		.max-w-7xl { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
-		.overflow-x-auto { box-shadow: none !important; margin-bottom: 3px !important; }
-		table { font-size: 7.5px !important; width: 100% !important; }
-		th, td { padding: 1.5px 3px !important; }
-		.space-y-6 > :not(:last-child) { margin-bottom: 3px; }
-		h1 { font-size: 10pt !important; margin: 0 0 1px 0 !important; }
-		h2 { font-size: 10pt !important; margin: 0 0 1px 0 !important; }
-		.text-xs { font-size: 6.5px !important; }
-		.text-sm { font-size: 7.5px !important; }
-		.text-\[11px\] { font-size: 7.5px !important; }
-		.text-\[10px\] { font-size: 7px !important; }
-		.text-\[9px\] { font-size: 6.5px !important; }
-		.leading-tight { line-height: 1.1 !important; }
-		.w-16 { width: auto !important; min-width: 22px !important; }
-		.w-10 { width: auto !important; min-width: 14px !important; }
-		.w-14 { width: auto !important; min-width: 18px !important; padding: 1px 2px !important; }
+		.overflow-x-auto { box-shadow: none !important; margin-bottom: 1px !important; }
+		table { font-size: 6px !important; width: 100% !important; }
+		th, td { padding: 0.5px 1.5px !important; }
+		.space-y-6 > :not(:last-child) { margin-bottom: 1px !important; }
+		h1 { font-size: 7pt !important; margin: 0 !important; line-height: 1.1 !important; }
+		h2 { font-size: 7.5pt !important; margin: 0 0 1px 0 !important; }
+		.text-xs { font-size: 5.5px !important; }
+		.text-sm { font-size: 6px !important; }
+		.text-\[11px\] { font-size: 6px !important; }
+		.text-\[10px\] { font-size: 5.5px !important; }
+		.text-\[9px\] { font-size: 5px !important; }
+		.leading-tight { line-height: 1 !important; }
+		.w-16 { width: auto !important; min-width: 18px !important; }
+		.w-10 { width: auto !important; min-width: 10px !important; }
+		.w-14 { width: auto !important; min-width: 14px !important; padding: 0.5px 1px !important; }
 		.sticky { position: static !important; }
-		.border-r { border-right-width: 1px !important; }
+		.border-r { border-right-width: 0.5px !important; }
+		.border-t, .border-b { border-width: 0.5px !important; }
+		.border-b-2 { border-bottom-width: 0.5px !important; }
+		.rounded-xl { border-radius: 0 !important; }
+		.pt-2 { padding-top: 1px !important; }
+		.legend-print { display: block !important; padding: 1px 2px !important; }
+		.legend-print .grid { grid-template-columns: repeat(9, 1fr) !important; gap: 0.5px !important; }
+		.legend-print h3 { font-size: 5.5pt !important; margin: 0 0 1px 0 !important; }
+		.legend-print .text-xs { font-size: 4.5px !important; }
+		.legend-print .px-2 { padding: 0 1px !important; }
+		.legend-print .py-1 { padding: 0 1px !important; }
+		.legend-print .rounded { border-radius: 0 !important; }
+		.legend-print .gap-1\.5 { gap: 0.5px !important; }
+		td .truncate { max-width: none !important; overflow: visible !important; white-space: normal !important; }
 	}
 </style>
 
 <div class="min-h-screen bg-slate-50">
 	<div class="max-w-7xl mx-auto px-4 py-6 space-y-6 {viewMode === 'subject' ? 'subject-print' : ''}">
 		<div class="text-center space-y-1">
-			<p class="text-xs font-medium text-slate-500 uppercase tracking-wider">Karnataka Residential Educational Institutions Society</p>
+			<p class="text-xs font-medium text-slate-500 uppercase tracking-wider no-print">Karnataka Residential Educational Institutions Society</p>
 			<h1 class="text-xl font-bold text-slate-900">Morarji Desai Residential School (SC-32) Bahaddurghatta, Chitradurga</h1>
 			<h2 class="text-2xl font-bold text-primary-700">Time Table 2026-27 <span class="print-only text-slate-500 inline">
 				- {#if viewMode === 'class'}
@@ -138,7 +152,7 @@
 		<div class="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
 			<table class="w-full text-[11px]">
 				<thead>
-					<tr class="bg-slate-100">
+					<tr class="bg-slate-100 border-b border-slate-200">
 						<th class="sticky left-0 bg-slate-100 z-10 px-2 py-1.5 text-left font-semibold text-slate-700 border-r border-slate-200 w-16">Day</th>
 						{#if showAll}
 							<th class="sticky left-16 bg-slate-100 z-10 px-1 py-1.5 text-center font-semibold text-slate-700 border-r border-slate-200 w-10">Class</th>
@@ -164,7 +178,7 @@
 							{@const classes = WEEKLY_TIMETABLE.length}
 							{#each WEEKLY_TIMETABLE as cls, ci}
 								{@const day = cls.days[di]}
-								<tr class="border-t border-slate-200 {ci === classes - 1 ? 'border-b-2 border-slate-300' : ''}">
+								<tr class="border-t border-slate-200 {ci < classes - 1 ? 'border-b border-slate-100' : 'border-b-2 border-slate-300'}">
 									{#if ci === 0}
 										<td class="sticky left-0 z-10 px-2 py-1 font-semibold text-slate-700 border-r border-slate-200 {DAY_BG[di]}" rowspan="{classes}">{DAY_LABELS[di]}</td>
 									{/if}
@@ -227,10 +241,15 @@
 		</div>
 
 		<!-- Saturday Table -->
+		<div class="pt-2">
+			<div class="flex items-center gap-2 mb-2 no-print">
+				<span class="text-xs font-semibold text-orange-600 uppercase tracking-wider">Saturday — Short Day</span>
+				<span class="text-[10px] text-slate-400">(8:30 AM – 12:30 PM)</span>
+			</div>
 		<div class="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
 			<table class="w-full text-[11px]">
 				<thead>
-					<tr class="bg-slate-100">
+					<tr class="bg-slate-100 border-b border-slate-200">
 						<th class="sticky left-0 bg-slate-100 z-10 px-2 py-1.5 text-left font-semibold text-slate-700 border-r border-slate-200 w-16">Day</th>
 						{#if showAll}
 							<th class="sticky left-16 bg-slate-100 z-10 px-1 py-1.5 text-center font-semibold text-slate-700 border-r border-slate-200 w-10">Class</th>
@@ -256,7 +275,7 @@
 							{@const classes = WEEKLY_TIMETABLE.length}
 							{#each WEEKLY_TIMETABLE as cls, ci}
 								{@const day = cls.days[di]}
-								<tr class="border-t border-slate-200 {ci === classes - 1 ? 'border-b-2 border-slate-300' : ''}">
+								<tr class="border-t border-slate-200 {ci < classes - 1 ? 'border-b border-slate-100' : 'border-b-2 border-slate-300'}">
 									{#if ci === 0}
 										<td class="sticky left-0 z-10 px-2 py-1 font-semibold text-slate-700 border-r border-slate-200 {DAY_BG[di]}" rowspan="{classes}">{DAY_LABELS[di]}</td>
 									{/if}
@@ -317,6 +336,7 @@
 				</tbody>
 			</table>
 		</div>
+		</div>
 
 		{:else}
 		{@const grid = subjectGrid[selectedSubject]}
@@ -326,7 +346,7 @@
 		<div class="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
 			<table class="w-full text-[11px]">
 				<thead>
-					<tr class="bg-slate-100">
+					<tr class="bg-slate-100 border-b border-slate-200">
 						<th class="px-2 py-1.5 text-left font-semibold text-slate-700 border-r border-slate-200 w-16">Day</th>
 						{#each WEEKDAY_SLOT_LABELS as label, si}
 							<th class="px-1 py-1.5 text-center font-semibold text-slate-700 border-r border-slate-200 last:border-r-0 w-14">
@@ -341,10 +361,10 @@
 						<tr class="border-t border-slate-200 {DAY_BG[di]}">
 							<td class="px-2 py-2 font-semibold text-slate-700 border-r border-slate-200 {DAY_BG[di]}">{DAY_LABELS[di]}</td>
 							{#each WEEKDAY_SLOT_LABELS as _, si}
-								{@const cls = grid['d' + di][si]}
-								<td class="px-1 py-2 text-center align-middle border-r border-slate-200 last:border-r-0 {!cls ? 'bg-slate-50' : DAY_BG[di]}">
-									{#if cls}
-										<span class="font-bold text-slate-800 text-sm">{cls}</span>
+								{@const classes = grid['d' + di][si]}
+								<td class="px-1 py-2 text-center align-middle border-r border-slate-200 last:border-r-0 {classes.length === 0 ? 'bg-slate-50' : DAY_BG[di]}">
+									{#if classes.length > 0}
+										<span class="font-bold text-slate-800 text-sm">{classes.join(', ')}</span>
 									{:else}
 										<span class="text-slate-300">&ndash;</span>
 									{/if}
@@ -359,7 +379,7 @@
 		<div class="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
 			<table class="w-full text-[11px]">
 				<thead>
-					<tr class="bg-slate-100">
+					<tr class="bg-slate-100 border-b border-slate-200">
 						<th class="px-2 py-1.5 text-left font-semibold text-slate-700 border-r border-slate-200 w-16">Day</th>
 						{#each SAT_SLOT_LABELS as label, si}
 							<th class="px-1 py-1.5 text-center font-semibold text-slate-700 border-r border-slate-200 last:border-r-0 w-14">
@@ -373,10 +393,10 @@
 					<tr class="border-t border-slate-200 {DAY_BG[5]}">
 						<td class="px-2 py-2 font-semibold text-slate-700 border-r border-slate-200 {DAY_BG[5]}">{DAY_LABELS[5]}</td>
 						{#each SAT_SLOT_LABELS as _, si}
-							{@const cls = grid['d5'][si]}
-							<td class="px-1 py-2 text-center align-middle border-r border-slate-200 last:border-r-0 {!cls ? 'bg-slate-50' : DAY_BG[5]}">
-								{#if cls}
-									<span class="font-bold text-slate-800 text-sm">{cls}</span>
+							{@const classes = grid['d5'][si]}
+							<td class="px-1 py-2 text-center align-middle border-r border-slate-200 last:border-r-0 {classes.length === 0 ? 'bg-slate-50' : DAY_BG[5]}">
+								{#if classes.length > 0}
+									<span class="font-bold text-slate-800 text-sm">{classes.join(', ')}</span>
 								{:else}
 									<span class="text-slate-300">&ndash;</span>
 								{/if}
@@ -400,7 +420,7 @@
 			<h3 class="text-sm font-semibold text-slate-700 mb-2">Subject Legend</h3>
 			<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-1.5">
 				{#each legend as [code, info]}
-					<div class="flex items-center gap-2 px-2 py-1 rounded text-xs" style="background-color: {info.color}">
+					<div class="flex items-center gap-2 px-2 py-1 rounded text-xs border border-slate-200" style="background-color: {info.color}">
 						<span class="font-bold text-slate-800">{code}</span>
 						<span class="text-slate-600">{info.name}</span>
 					</div>
