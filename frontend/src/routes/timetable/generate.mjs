@@ -29,7 +29,7 @@ function findMatching(remain) {
   return result;
 }
 
-function scheduleDay(assignments, breakAfter = new Set([4])) {
+function scheduleDay(assignments, breakAfter = new Set([4]), fixedP1 = null) {
   const numPeriods = assignments[CLASSES[0]].length;
   for (let t = 0; t < 2000; t++) {
     const remain = {};
@@ -51,6 +51,9 @@ function scheduleDay(assignments, breakAfter = new Set([4])) {
       const filteredRemain = {};
       for (const cls of CLASSES) {
         let filtered = remain[cls].filter(s => !forbidden.has(s));
+        if (p === 0 && fixedP1) {
+          filtered = filtered.filter(s => s === fixedP1[cls]);
+        }
         if (p >= 2 && !breakAfter.has(p - 1) && !breakAfter.has(p - 2)) {
           if (CORE.has(result[cls][p - 1]) && CORE.has(result[cls][p - 2])) {
             filtered = filtered.filter(s => !CORE.has(s));
@@ -99,6 +102,13 @@ function scheduleSat(assignments) {
 }
 
 function solve() {
+  const P1_ROTATION = {
+    Mon: { 'Class 6': 'KAN', 'Class 7': 'ENG', 'Class 8': 'HIN', 'Class 9': 'MAT', 'Class 10': 'SCI' },
+    Tue: { 'Class 6': 'SOC', 'Class 7': 'KAN', 'Class 8': 'HIN', 'Class 9': 'ENG', 'Class 10': 'MAT' },
+    Wed: { 'Class 6': 'SCI', 'Class 7': 'SOC', 'Class 8': 'HIN', 'Class 9': 'KAN', 'Class 10': 'ENG' },
+    Thu: { 'Class 6': 'MAT', 'Class 7': 'SCI', 'Class 8': 'HIN', 'Class 9': 'SOC', 'Class 10': 'KAN' },
+    Fri: { 'Class 6': 'ENG', 'Class 7': 'MAT', 'Class 8': 'SCI', 'Class 9': 'SOC', 'Class 10': 'KAN' },
+  };
   for (let attempt = 0; attempt < 2000; attempt++) {
     const dayAssign = {};
     for (const cls of CLASSES) {
@@ -146,7 +156,7 @@ function solve() {
     for (const day of ['Mon', 'Tue', 'Wed', 'Thu']) {
       const assign = {};
       for (const cls of CLASSES) assign[cls] = [...dayAssign[cls][day]];
-      const dr = scheduleDay(assign);
+      const dr = scheduleDay(assign, new Set([4]), P1_ROTATION[day]);
       if (!dr) { valid = false; break; }
       for (const cls of CLASSES) result[cls][day] = dr[cls];
     }
@@ -156,7 +166,7 @@ function solve() {
     {
       const assign = {};
       for (const cls of CLASSES) assign[cls] = [...dayAssign[cls]['Fri']];
-      const dr = scheduleDay(assign, new Set());
+      const dr = scheduleDay(assign, new Set(), P1_ROTATION['Fri']);
       if (!dr) { valid = false; continue; }
       for (const cls of CLASSES) result[cls]['Fri'] = [...dr[cls], 'CUL'];
     }
@@ -226,6 +236,20 @@ function validate(data) {
     }
   }
   // Fri and Sat — skip consecutive check (every subject appears in every period)
+  // P1 must be from {KAN,ENG,HIN,MAT,SCI,SOC} with even distribution (4-5 each across week)
+  const P1_ALLOWED = new Set(['KAN', 'ENG', 'HIN', 'MAT', 'SCI', 'SOC']);
+  const p1counts = {};
+  for (const s of P1_ALLOWED) p1counts[s] = 0;
+  for (const day of ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']) {
+    for (const cls of CLASSES) {
+      const s = data[cls][day][0];
+      if (!P1_ALLOWED.has(s)) return false;
+      p1counts[s]++;
+    }
+  }
+  for (const s of P1_ALLOWED) {
+    if (p1counts[s] < 4 || p1counts[s] > 5) return false;
+  }
   return true;
 }
 
