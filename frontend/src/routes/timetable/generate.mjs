@@ -47,9 +47,16 @@ function scheduleDay(assignments, breakAfter = new Set([2, 4])) {
         }
       }
 
+      const CORE = new Set(['KAN', 'ENG', 'HIN', 'MAT']);
       const filteredRemain = {};
       for (const cls of CLASSES) {
-        filteredRemain[cls] = remain[cls].filter(s => !forbidden.has(s));
+        let filtered = remain[cls].filter(s => !forbidden.has(s));
+        if (p >= 2 && !breakAfter.has(p - 1) && !breakAfter.has(p - 2)) {
+          if (CORE.has(result[cls][p - 1]) && CORE.has(result[cls][p - 2])) {
+            filtered = filtered.filter(s => !CORE.has(s));
+          }
+        }
+        filteredRemain[cls] = filtered;
       }
 
       const matching = findMatching(filteredRemain);
@@ -203,6 +210,7 @@ function validate(data) {
   }
   // No 3 consecutive periods for any teacher (Mon-Sat)
   const breakAfter = new Set([2, 4]);
+  const CORE = new Set(['KAN', 'ENG', 'HIN', 'MAT']);
   for (const day of ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']) {
     for (let p = 2; p < 8; p++) {
       if (breakAfter.has(p - 1) || breakAfter.has(p - 2)) continue;
@@ -210,6 +218,10 @@ function validate(data) {
         const inP1 = CLASSES.some(cls => data[cls][day][p - 1] === s);
         const inP2 = CLASSES.some(cls => data[cls][day][p - 2] === s);
         if (inP1 && inP2) return false;
+      }
+      // No 3+ consecutive core subjects per class
+      for (const cls of CLASSES) {
+        if (CORE.has(data[cls][day][p - 1]) && CORE.has(data[cls][day][p - 2]) && CORE.has(data[cls][day][p])) return false;
       }
     }
   }
