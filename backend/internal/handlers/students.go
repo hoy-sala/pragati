@@ -70,9 +70,34 @@ func (h *StudentHandler) List(w http.ResponseWriter, r *http.Request) {
 		argIdx++
 	}
 
+	countQuery := "SELECT COUNT(*) FROM students s WHERE s.school_id = $1 AND s.deleted_at IS NULL"
+	countArgs := []interface{}{claims.SchoolID}
+	countArgIdx := 2
+
+	if classID := r.URL.Query().Get("class_id"); classID != "" {
+		countQuery += fmt.Sprintf(" AND s.class_id = $%d", countArgIdx)
+		countArgs = append(countArgs, classID)
+		countArgIdx++
+	}
+	if sectionID := r.URL.Query().Get("section_id"); sectionID != "" {
+		countQuery += fmt.Sprintf(" AND s.section_id = $%d", countArgIdx)
+		countArgs = append(countArgs, sectionID)
+		countArgIdx++
+	}
+	if search := r.URL.Query().Get("search"); search != "" {
+		countQuery += fmt.Sprintf(` AND (s.sats_number ILIKE $%d OR s.first_name ILIKE $%d OR s.last_name ILIKE $%d)`, countArgIdx, countArgIdx+1, countArgIdx+2)
+		searchPattern := "%" + search + "%"
+		countArgs = append(countArgs, searchPattern, searchPattern, searchPattern)
+		countArgIdx += 3
+	}
+	if academicYearID := r.URL.Query().Get("academic_year_id"); academicYearID != "" {
+		countQuery += fmt.Sprintf(" AND s.academic_year_id = $%d", countArgIdx)
+		countArgs = append(countArgs, academicYearID)
+		countArgIdx++
+	}
+
 	var total int
-	countQuery := strings.Replace(query, "SELECT s.id, s.school_id", "SELECT COUNT(*)", 1)
-	err := h.db.QueryRow(r.Context(), countQuery, args...).Scan(&total)
+	err := h.db.QueryRow(r.Context(), countQuery, countArgs...).Scan(&total)
 	if err != nil {
 		log.Error().Err(err).Msg("count students failed")
 		renderJSON(w, http.StatusInternalServerError, models.APIResponse{
