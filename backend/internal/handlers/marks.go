@@ -43,7 +43,7 @@ func (h *MarkHandler) GetGrid(w http.ResponseWriter, r *http.Request) {
 
 	rows, err := h.db.Query(r.Context(),
 		`SELECT s.id, s.sats_number, s.first_name, COALESCE(s.last_name, ''), s.roll_no,
-			m.id, m.assessment_id, COALESCE(m.marks_obtained::double precision, -1), COALESCE(m.is_absent, false), COALESCE(m.remarks, '')
+			COALESCE(m.id::text, ''), COALESCE(m.assessment_id::text, ''), COALESCE(m.marks_obtained::double precision, -1), COALESCE(m.is_absent, false), COALESCE(m.remarks, '')
 		FROM students s
 		LEFT JOIN marks m ON m.student_id = s.id AND m.assessment_id = $1
 		WHERE s.class_id = $2 AND s.deleted_at IS NULL AND s.is_active = true
