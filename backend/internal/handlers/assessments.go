@@ -63,7 +63,7 @@ func (h *AssessmentHandler) List(w http.ResponseWriter, r *http.Request) {
 	}
 
 	dataQuery := `SELECT a.id, a.school_id, a.category_id, a.subject_id, a.teacher_id,
-		a.class_id, a.section_id, COALESCE(a.name, ''), a.max_marks, a.weightage,
+		a.class_id, a.section_id, COALESCE(a.name, ''), a.max_marks::double precision, a.weightage,
 		COALESCE(a.date::text, ''), a.academic_year_id, a.is_published, a.is_locked, a.version,
 		a.created_at, a.updated_at
 		FROM assessments a ` + baseWhere + ` ORDER BY a.date DESC NULLS LAST, a.created_at DESC`

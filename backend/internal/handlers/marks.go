@@ -32,7 +32,7 @@ func (h *MarkHandler) GetGrid(w http.ResponseWriter, r *http.Request) {
 
 	var assessment models.Assessment
 	err := h.db.QueryRow(r.Context(),
-		`SELECT id, class_id, section_id, max_marks, is_locked, version
+		`SELECT id, class_id, section_id, max_marks::double precision, is_locked, version
 		 FROM assessments WHERE id = $1 AND school_id = $2 AND deleted_at IS NULL`,
 		assessmentID, claims.SchoolID,
 	).Scan(&assessment.ID, &assessment.ClassID, &assessment.SectionID, &assessment.MaxMarks, &assessment.IsLocked, &assessment.Version)
@@ -43,7 +43,7 @@ func (h *MarkHandler) GetGrid(w http.ResponseWriter, r *http.Request) {
 
 	rows, err := h.db.Query(r.Context(),
 		`SELECT s.id, s.sats_number, s.first_name, COALESCE(s.last_name, ''), s.roll_no,
-			m.id, m.assessment_id, COALESCE(m.marks_obtained, -1), COALESCE(m.is_absent, false), COALESCE(m.remarks, '')
+			m.id, m.assessment_id, COALESCE(m.marks_obtained::double precision, -1), COALESCE(m.is_absent, false), COALESCE(m.remarks, '')
 		FROM students s
 		LEFT JOIN marks m ON m.student_id = s.id AND m.assessment_id = $1
 		WHERE s.class_id = $2 AND s.deleted_at IS NULL AND s.is_active = true
@@ -135,7 +135,7 @@ func (h *MarkHandler) BatchSave(w http.ResponseWriter, r *http.Request) {
 
 	for _, m := range req.Marks {
 		var maxMarks float64
-		tx.QueryRow(r.Context(), "SELECT max_marks FROM assessments WHERE id = $1", req.AssessmentID).Scan(&maxMarks)
+		tx.QueryRow(r.Context(), "SELECT max_marks::double precision FROM assessments WHERE id = $1", req.AssessmentID).Scan(&maxMarks)
 
 		if m.MarksObtained > maxMarks {
 			errors = append(errors, map[string]interface{}{
