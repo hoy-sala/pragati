@@ -61,7 +61,7 @@ const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const;
 const RAW: Record<string, Record<string, string[]>> = {
   'Class 6': {
     Mon: ['KAN', 'CS', 'HIN', 'SCI', 'MAT', 'LIB', 'SOC', 'ENG'],
-    Tue: ['SOC', 'DRW', 'KAN', 'MAT', 'ENG', 'HIN', 'CS', 'SCI'],
+    Tue: ['SOC', 'DRW', 'KAN', 'MAT', 'SCI', 'HIN', 'CS', 'ENG'],
     Wed: ['SCI', 'MAT', 'DRW', 'ENG', 'HIN', 'SOC', 'MUS', 'KAN'],
     Thu: ['MAT', 'KAN', 'MUS', 'SCI', 'HIN', 'SOC', 'PE', 'ENG'],
     Fri: ['ENG', 'MAT', 'LIB', 'SCI', 'SOC', 'HIN', 'KAN', 'CUL'],
