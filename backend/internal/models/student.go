@@ -13,7 +13,7 @@ type Student struct {
 	LastName       string     `json:"last_name,omitempty" db:"last_name"`
 	DateOfBirth    *time.Time `json:"date_of_birth,omitempty" db:"date_of_birth"`
 	Gender         string     `json:"gender,omitempty" db:"gender"`
-	PhotoURL       string     `json:"photo_url,omitempty" db:"photo_url"`
+	PhotoURL       *string    `json:"photo_url,omitempty" db:"photo_url"`
 	BloodGroup     string     `json:"blood_group,omitempty" db:"blood_group"`
 	Address        string     `json:"address,omitempty" db:"address"`
 	Phone          string     `json:"phone,omitempty" db:"phone"`
