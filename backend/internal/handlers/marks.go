@@ -32,7 +32,7 @@ func (h *MarkHandler) GetGrid(w http.ResponseWriter, r *http.Request) {
 
 	var assessment models.Assessment
 	err := h.db.QueryRow(r.Context(),
-		`SELECT id, class_id, section_id, max_marks::double precision, is_locked, version
+		`SELECT id, class_id, COALESCE(section_id::text, ''), max_marks::double precision, is_locked, version
 		 FROM assessments WHERE id = $1 AND school_id = $2 AND deleted_at IS NULL`,
 		assessmentID, claims.SchoolID,
 	).Scan(&assessment.ID, &assessment.ClassID, &assessment.SectionID, &assessment.MaxMarks, &assessment.IsLocked, &assessment.Version)
