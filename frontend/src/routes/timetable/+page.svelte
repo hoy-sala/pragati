@@ -416,6 +416,7 @@
 		</div>
 		{/if}
 
+		{#if viewMode === 'class'}
 		<div class="bg-white rounded-xl border border-slate-200 p-4 legend-print">
 			<h3 class="text-sm font-semibold text-slate-700 mb-2">Subject Legend</h3>
 			<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-1.5">
@@ -427,5 +428,6 @@
 				{/each}
 			</div>
 		</div>
+		{/if}
 	</div>
 </div>
