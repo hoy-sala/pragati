@@ -242,7 +242,7 @@ func (h *AcademicYearHandler) List(w http.ResponseWriter, r *http.Request) {
 	}
 
 	rows, err := h.db.Query(r.Context(),
-		`SELECT id, school_id, name, start_date, end_date, is_current,
+		`SELECT id, school_id, name, start_date::text, end_date::text, is_current,
 		        created_at, updated_at
 		 FROM academic_years
 		 WHERE school_id = $1 AND deleted_at IS NULL
