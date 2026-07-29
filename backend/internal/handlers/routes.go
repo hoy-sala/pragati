@@ -112,7 +112,7 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
 			r.Post("/{id}/publish", roleMw.RequireRole("admin", "principal")(http.HandlerFunc(assessH.Publish)))
 		})
 
-		r.Get("/dashboard/stats", dashH.Stats)
+		r.With(roleMw.Authenticate).Get("/dashboard/stats", dashH.Stats)
 
 		r.Route("/questions", func(r chi.Router) {
 			r.Use(roleMw.Authenticate)
