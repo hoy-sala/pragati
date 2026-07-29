@@ -19,7 +19,7 @@ type Student struct {
 	Phone          string     `json:"phone,omitempty" db:"phone"`
 	Email          string     `json:"email,omitempty" db:"email"`
 	ClassID        string     `json:"class_id" db:"class_id"`
-	SectionID      string     `json:"section_id,omitempty" db:"section_id"`
+	SectionID      *string    `json:"section_id,omitempty" db:"section_id"`
 	HouseID        *string    `json:"house_id,omitempty" db:"house_id"`
 	AcademicYearID string     `json:"academic_year_id" db:"academic_year_id"`
 	ParentName     string     `json:"parent_name,omitempty" db:"parent_name"`
