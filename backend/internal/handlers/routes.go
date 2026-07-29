@@ -39,6 +39,7 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
 	teacherH := NewTeacherHandler(db)
 	assessH := NewAssessmentHandler(db)
 	markH := NewMarkHandler(db)
+	dashH := NewDashboardHandler(db)
 	questionH := NewQuestionHandler(db)
 	quizH := NewQuizHandler(db)
 	hpcH := NewHPCHandler(db)
@@ -110,6 +111,8 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
 			r.Post("/", roleMw.RequireRole("admin", "principal", "teacher")(http.HandlerFunc(assessH.Create)))
 			r.Post("/{id}/publish", roleMw.RequireRole("admin", "principal")(http.HandlerFunc(assessH.Publish)))
 		})
+
+		r.Get("/dashboard/stats", dashH.Stats)
 
 		r.Route("/questions", func(r chi.Router) {
 			r.Use(roleMw.Authenticate)

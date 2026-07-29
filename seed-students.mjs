@@ -1,4 +1,5 @@
 import fs from 'fs';
+
 const API = 'http://192.168.1.2:9090/api/v1';
 
 async function api(method, path, body, token) {
@@ -13,44 +14,27 @@ async function api(method, path, body, token) {
 	return res.json();
 }
 
-// 1. Login
-const loginRes = await api('POST', '/auth/login', {
-	email: 'admin@pragati.edu',
-	password: 'pragati123',
-});
-if (loginRes.error) { console.error('Login failed:', loginRes.error); process.exit(1); }
-const token = loginRes.data.access_token;
+const login = await api('POST', '/auth/login', { email: 'admin@pragati.edu', password: 'pragati123' });
+if (login.error) { console.error('Login failed:', login.error); process.exit(1); }
+const token = login.data.access_token;
 console.log('Logged in');
 
-// 2. Get classes and academic year
-const [classRes, yearRes] = await Promise.all([
-	api('GET', '/classes?limit=50', null, token),
-	api('GET', '/academic-years?limit=50', null, token),
-]);
-if (!classRes.data) { console.error('Failed to fetch classes'); process.exit(1); }
-const classes = classRes.data;
-const academicYear = yearRes.data?.find(y => y.is_current) || yearRes.data?.[0];
-console.log(`Found ${classes.length} classes, academic year: ${academicYear?.name}`);
-
-// Build class name -> id map
+const classRes = await api('GET', '/classes?limit=50', null, token);
+if (!classRes.data) { console.error('No classes returned'); process.exit(1); }
 const classMap = {};
-for (const c of classes) {
-	classMap[c.name] = c.id;
-}
+for (const c of classRes.data) classMap[c.name] = c.id;
+console.log('Classes:', JSON.stringify(classMap));
 
-// 3. Read CSV
+const yearId = 'b2586083-8c59-40d6-af5b-5c91cf6903a7';
+
 const csvText = fs.readFileSync('C:\\Users\\MDRS Bahaddurghatta\\Downloads\\student_list.csv', 'utf-8');
 const lines = csvText.trim().split('\n');
-const headers = lines[0].split(',').map(h => h.replace(/"/g, '').trim());
-console.log(`Headers: ${headers.join(', ')}`);
-
-// Find column indices
-const idxName = headers.findIndex(h => h === 'Student Name');
-const idxFather = headers.findIndex(h => h === 'Father Name');
-const idxSATS = headers.findIndex(h => h === 'Student Id');
-const idxDOB = headers.findIndex(h => h === 'DOB');
-const idxSex = headers.findIndex(h => h === 'Sex');
-const idxClass = headers.findIndex(h => h === 'Class Studying');
+const rawHeaders = lines[0].split(',').map(h => h.replace(/"/g, '').trim());
+const idxName = rawHeaders.indexOf('Student Name');
+const idxSATS = rawHeaders.indexOf('Student Id');
+const idxDOB = rawHeaders.indexOf('DOB');
+const idxSex = rawHeaders.indexOf('Sex');
+const idxClass = rawHeaders.indexOf('Class Studying');
 
 function parseCSVLine(line) {
 	const result = [];
@@ -66,69 +50,45 @@ function parseCSVLine(line) {
 	return result;
 }
 
-function normalizeClass(val) {
-	const m = val.match(/(\d+)/);
-	return m ? `Class ${m[1]}` : val;
-}
-
-function normalizeGender(val) {
-	if (!val) return '';
-	const upper = val.toUpperCase();
-	if (upper.includes('GIRL') || upper.includes('FEMALE') || val.startsWith('2')) return 'female';
-	return 'male';
-}
-
 let imported = 0;
 let errors = [];
 
 for (let i = 1; i < lines.length; i++) {
 	const cols = parseCSVLine(lines[i]);
-	if (cols.length < 2 || !cols[idxName]) continue;
+	if (!cols[idxName]) continue;
 
-	const studentId = cols[idxSATS]?.replace(/\s+/g, '') || '';
-	const name = cols[idxName] || '';
-	const fatherName = cols[idxFather] || '';
-	const className = normalizeClass(cols[idxClass] || '');
-	const gender = normalizeGender(cols[idxSex] || '');
-	const dob = cols[idxDOB] || '';
+	const studentId = (cols[idxSATS] || '').replace(/\s+/g, '');
+	const m = (cols[idxClass] || '').match(/(\d+)/);
+	const className = m ? 'Class ' + m[1] : '';
 	const classId = classMap[className];
-	const academicYearId = academicYear?.id;
 
 	if (!studentId || !classId) {
-		errors.push({ row: i, name, reason: !studentId ? 'missing SATS' : `unknown class: ${className}` });
+		errors.push({ row: i, name: cols[idxName], reason: !studentId ? 'missing SATS' : 'unknown class: ' + className });
 		continue;
 	}
 
-	// Split name into first and last (last word = last name)
-	const parts = name.trim().split(/\s+/);
-	const firstName = parts[0];
-	const lastName = parts.slice(1).join(' ') || undefined;
-
+	const parts = cols[idxName].trim().split(/\s+/);
 	const body = {
 		sats_number: studentId,
-		first_name: firstName,
-		last_name: lastName,
-		gender: gender || undefined,
-		date_of_birth: dob || undefined,
-		parent_name: fatherName || undefined,
+		first_name: parts[0],
+		last_name: parts.slice(1).join(' ') || undefined,
+		gender: (cols[idxSex] || '').startsWith('2') ? 'female' : 'male',
+		date_of_birth: cols[idxDOB] || undefined,
 		class_id: classId,
-		academic_year_id: academicYearId,
+		academic_year_id: yearId,
 	};
 
 	const res = await api('POST', '/students', body, token);
 	if (res.error) {
-		errors.push({ row: i, name, reason: res.error.message });
+		errors.push({ row: i, name: cols[idxName], reason: res.error.message });
 	} else {
 		imported++;
 	}
-
-	if (i % 50 === 0) console.log(`Progress: ${i}/${lines.length - 1} (${imported} imported, ${errors.length} errors)`);
+	if (i % 50 === 0) console.log('Progress:', i, '/', lines.length - 1);
 }
 
-console.log(`\nDone. Imported: ${imported}, Errors: ${errors.length}`);
-if (errors.length > 0) {
-	console.log('Errors:');
-	for (const e of errors.slice(0, 20)) {
-		console.log(`  Row ${e.row}: ${e.name} — ${e.reason}`);
-	}
+console.log('Done. Imported:', imported, 'Errors:', errors.length);
+if (errors.length) {
+	console.log('First errors:');
+	for (const e of errors.slice(0, 5)) console.log(`  Row ${e.row}: ${e.name} — ${e.reason}`);
 }
