@@ -285,9 +285,7 @@
 			<div class="w-48">
 				<Select bind:value={selectedAssessment} options={assessments} label="Assessment" icon={ClipboardCheck} placeholder="Select assessment" />
 			</div>
-			<div class="pb-0.5">
-				<Button onclick={resetForm} variant="secondary" size="sm" icon={X}>Clear</Button>
-			</div>
+			<Button onclick={resetForm} variant="ghost" class="px-3 py-2 text-sm rounded-lg border border-slate-300 hover:border-slate-400 bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50">Clear</Button>
 		</div>
 	</div>
 
