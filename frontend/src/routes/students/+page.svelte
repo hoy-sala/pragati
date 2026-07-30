@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { api } from '$lib/api/client.svelte';
-	import type { Student, Class, AcademicYear, Pagination } from '$lib/types';
+	import { Plus, Pencil, Trash2, User, Hash, Phone, Mail, MapPin, Calendar, Droplets, Users, Eye, EyeOff } from 'lucide-svelte';
+	import Button from '$lib/components/Button.svelte';
+	import Select from '$lib/components/Select.svelte';
+	import type { Student, Class, AcademicYear } from '$lib/types';
 	import { onMount } from 'svelte';
 
 	let students: Student[] = $state([]);
@@ -173,100 +176,193 @@
 	function yearName(id: string): string {
 		return academicYears.find(y => y.id === id)?.name ?? id;
 	}
+
+	function genderLabel(v: string): string {
+		if (v === 'male') return 'Male';
+		if (v === 'female') return 'Female';
+		return '—';
+	}
+
+	function genderBadge(v: string): string {
+		if (v === 'male') return 'bg-blue-100 text-blue-700';
+		if (v === 'female') return 'bg-pink-100 text-pink-700';
+		return 'bg-slate-100 text-slate-500';
+	}
 </script>
 
 <div class="space-y-6">
 	<div class="flex items-center justify-between">
 		<div>
 			<h1 class="text-2xl font-bold text-slate-900">Students</h1>
-			<p class="text-sm text-slate-500 mt-1">{students.length} students enrolled</p>
+			<p class="text-sm text-slate-500 mt-1">{students.length} student{students.length !== 1 ? 's' : ''} enrolled</p>
 		</div>
-		<button onclick={openCreate} class="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors">
-			Add Student
-		</button>
+		<Button onclick={openCreate} icon={Plus}>Add Student</Button>
 	</div>
 
 	{#if showForm}
-		<div class="bg-white rounded-xl border border-slate-200 p-4 space-y-3">
-			<h3 class="text-sm font-semibold text-slate-700">{editingId ? 'Edit Student' : 'New Student'}</h3>
-			<div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-				<input bind:value={formSATS} placeholder="SATS number (9 digits)" maxlength={9} class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
-				<input bind:value={formFirstName} placeholder="First name *" class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
-				<input bind:value={formLastName} placeholder="Last name" class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
-				<input bind:value={formRollNo} type="number" min="0" placeholder="Roll no" class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
-				<select bind:value={formGender} class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500">
-					<option value="">Gender</option>
-					<option value="male">Male</option>
-					<option value="female">Female</option>
-				</select>
-				<input bind:value={formDOB} type="date" placeholder="Date of birth" class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
-				<input bind:value={formBloodGroup} placeholder="Blood group" class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
-				<input bind:value={formPhone} placeholder="Phone" class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
-				<input bind:value={formEmail} type="email" placeholder="Email" class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
-			</div>
-			<div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-				<select bind:value={formClassId} class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500">
-					<option value="">Select class *</option>
-					{#each classes as c (c.id)}
-						<option value={c.id}>{c.name}</option>
-					{/each}
-				</select>
-				<select bind:value={formAcademicYearId} class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500">
-					<option value="">Academic year</option>
-					{#each academicYears as y (y.id)}
-						<option value={y.id}>{y.name}</option>
-					{/each}
-				</select>
-			</div>
-			<input bind:value={formAddress} placeholder="Address" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
-			<div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-				<input bind:value={formParentName} placeholder="Parent name" class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
-				<input bind:value={formParentPhone} placeholder="Parent phone" class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
-				<input bind:value={formParentEmail} type="email" placeholder="Parent email" class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
-			</div>
-			{#if error}
-				<div class="text-sm text-danger-600">{error}</div>
-			{/if}
-			<div class="flex items-center gap-2">
-				<button onclick={save} disabled={saving || !formSATS.trim() || !formFirstName.trim() || !formClassId} class="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 disabled:opacity-50 transition-colors">
-					{saving ? 'Saving...' : editingId ? 'Update' : 'Create'}
+		<div class="bg-white rounded-xl border border-slate-200 shadow-sm">
+			<div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
+				<h3 class="text-sm font-semibold text-slate-700 flex items-center gap-2">
+					<User size={16} class="text-primary-500" />
+					{editingId ? 'Edit Student' : 'New Student'}
+				</h3>
+				<button onclick={cancelForm} class="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-md hover:bg-slate-100">
+					<EyeOff size={16} />
 				</button>
-				<button onclick={cancelForm} class="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-300 transition-colors">Cancel</button>
+			</div>
+			<div class="p-4 space-y-4">
+				<div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+					<div>
+						<label class="block text-xs font-medium text-slate-500 mb-1">SATS Number *</label>
+						<div class="relative">
+							<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><Hash size={14} /></span>
+							<input bind:value={formSATS} placeholder="9-digit SATS number" maxlength={9} class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+						</div>
+					</div>
+					<div>
+						<label class="block text-xs font-medium text-slate-500 mb-1">First Name *</label>
+						<input bind:value={formFirstName} placeholder="First name" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+					</div>
+					<div>
+						<label class="block text-xs font-medium text-slate-500 mb-1">Last Name</label>
+						<input bind:value={formLastName} placeholder="Last name" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+					</div>
+				</div>
+
+				<div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+					<div>
+						<label class="block text-xs font-medium text-slate-500 mb-1">Roll No</label>
+						<input bind:value={formRollNo} type="number" min="0" placeholder="Roll number" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+					</div>
+					<div>
+						<label class="block text-xs font-medium text-slate-500 mb-1">Gender</label>
+						<Select bind:value={formGender} options={[{ id: 'male', name: 'Male' }, { id: 'female', name: 'Female' }]} placeholder="Select gender" icon={Users} />
+					</div>
+					<div>
+						<label class="block text-xs font-medium text-slate-500 mb-1">Date of Birth</label>
+						<div class="relative">
+							<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><Calendar size={14} /></span>
+							<input bind:value={formDOB} type="date" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+						</div>
+					</div>
+					<div>
+						<label class="block text-xs font-medium text-slate-500 mb-1">Blood Group</label>
+						<div class="relative">
+							<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><Droplets size={14} /></span>
+							<input bind:value={formBloodGroup} placeholder="e.g. O+" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+						</div>
+					</div>
+				</div>
+
+				<div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+					<div>
+						<label class="block text-xs font-medium text-slate-500 mb-1">Phone</label>
+						<div class="relative">
+							<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><Phone size={14} /></span>
+							<input bind:value={formPhone} placeholder="Phone number" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+						</div>
+					</div>
+					<div>
+						<label class="block text-xs font-medium text-slate-500 mb-1">Email</label>
+						<div class="relative">
+							<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><Mail size={14} /></span>
+							<input bind:value={formEmail} type="email" placeholder="Email address" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+						</div>
+					</div>
+					<div>
+						<label class="block text-xs font-medium text-slate-500 mb-1">Address</label>
+						<div class="relative">
+							<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><MapPin size={14} /></span>
+							<input bind:value={formAddress} placeholder="Address" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+						</div>
+					</div>
+				</div>
+
+				<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+					<Select bind:value={formClassId} label="Class *" options={classes} icon={Users} placeholder="Select class" />
+					<Select bind:value={formAcademicYearId} label="Academic Year" options={academicYears} icon={Calendar} placeholder="Select academic year" />
+				</div>
+
+				<div class="border-t border-slate-100 pt-4">
+					<p class="text-xs font-medium text-slate-500 mb-2 flex items-center gap-1.5"><Users size={12} /> Parent / Guardian</p>
+					<div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+						<input bind:value={formParentName} placeholder="Parent name" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+						<div class="relative">
+							<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><Phone size={14} /></span>
+							<input bind:value={formParentPhone} placeholder="Parent phone" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+						</div>
+						<div class="relative">
+							<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><Mail size={14} /></span>
+							<input bind:value={formParentEmail} type="email" placeholder="Parent email" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+						</div>
+					</div>
+				</div>
+
+				{#if error}
+					<div class="flex items-center gap-2 text-sm px-3 py-2 rounded-lg bg-red-50 text-danger-600 border border-red-200">
+						<span>{error}</span>
+					</div>
+				{/if}
+
+				<div class="flex items-center gap-2 pt-1">
+					<Button onclick={save} disabled={saving || !formSATS.trim() || !formFirstName.trim() || !formClassId} loading={saving}>
+						{editingId ? 'Update Student' : 'Create Student'}
+					</Button>
+					<Button onclick={cancelForm} variant="secondary">Cancel</Button>
+				</div>
 			</div>
 		</div>
 	{/if}
 
-	<div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
+	<div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
 		<table class="w-full text-sm">
 			<thead>
 				<tr class="bg-slate-50 text-slate-600">
-					<th class="text-left px-4 py-3 font-medium">SATS</th>
-					<th class="text-left px-4 py-3 font-medium">Name</th>
-					<th class="text-left px-4 py-3 font-medium">Class</th>
-					<th class="text-left px-4 py-3 font-medium">Roll No</th>
-					<th class="text-left px-4 py-3 font-medium">Gender</th>
-					<th class="text-left px-4 py-3 font-medium">Year</th>
-					<th class="text-left px-4 py-3 font-medium"></th>
+					<th class="text-left px-4 py-3 font-semibold text-xs uppercase tracking-wider">SATS</th>
+					<th class="text-left px-4 py-3 font-semibold text-xs uppercase tracking-wider">Name</th>
+					<th class="text-left px-4 py-3 font-semibold text-xs uppercase tracking-wider">Class</th>
+					<th class="text-left px-4 py-3 font-semibold text-xs uppercase tracking-wider">Roll No</th>
+					<th class="text-left px-4 py-3 font-semibold text-xs uppercase tracking-wider">Gender</th>
+					<th class="text-left px-4 py-3 font-semibold text-xs uppercase tracking-wider">Year</th>
+					<th class="text-right px-4 py-3 font-semibold text-xs uppercase tracking-wider">Actions</th>
 				</tr>
 			</thead>
 			<tbody>
 				{#if loading}
-					<tr><td colspan="7" class="px-4 py-8 text-center text-slate-400">Loading...</td></tr>
+					<tr><td colspan="7" class="px-4 py-12 text-center text-slate-400">Loading...</td></tr>
 				{:else if students.length === 0}
-					<tr><td colspan="7" class="px-4 py-8 text-center text-slate-400">No students yet. Add one above.</td></tr>
+					<tr><td colspan="7" class="px-4 py-12 text-center text-slate-400">No students yet.</td></tr>
 				{:else}
 					{#each students as s (s.id)}
-						<tr class="border-t border-slate-100 hover:bg-slate-50">
-							<td class="px-4 py-3 font-mono text-xs">{s.sats_number}</td>
-							<td class="px-4 py-3 font-medium">{s.first_name} {s.last_name}</td>
-							<td class="px-4 py-3 text-slate-500">{className(s.class_id)}</td>
-							<td class="px-4 py-3 text-slate-500">{s.roll_no ?? '—'}</td>
-							<td class="px-4 py-3 text-slate-500">{s.gender ? (s.gender === 'male' ? 'M' : 'F') : '—'}</td>
-							<td class="px-4 py-3 text-slate-500 text-xs">{yearName(s.academic_year_id)}</td>
-							<td class="px-4 py-3">
-								<div class="flex items-center gap-2">
-									<button onclick={() => openEdit(s)} class="text-xs text-primary-600 hover:text-primary-700 underline underline-offset-2">Edit</button>
-									<button onclick={() => removeStudent(s.id)} class="text-xs text-danger-600 hover:text-danger-700 underline underline-offset-2">Delete</button>
+						<tr class="border-t border-slate-100 hover:bg-slate-50 transition-colors">
+							<td class="px-4 py-3.5 font-mono text-xs text-slate-500">{s.sats_number}</td>
+							<td class="px-4 py-3.5 font-medium">
+								<div class="flex items-center gap-2.5">
+									<div class="w-8 h-8 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center text-xs font-bold uppercase shrink-0">
+										{s.first_name[0]}{s.last_name?.[0] ?? ''}
+									</div>
+									<div>
+										<div>{s.first_name} {s.last_name}</div>
+										{#if s.phone}
+											<div class="text-xs text-slate-400">{s.phone}</div>
+										{/if}
+									</div>
+								</div>
+							</td>
+							<td class="px-4 py-3.5"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-600">{className(s.class_id)}</span></td>
+							<td class="px-4 py-3.5 text-slate-500">{s.roll_no ?? '—'}</td>
+							<td class="px-4 py-3.5">
+								{#if s.gender}
+									<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {genderBadge(s.gender)}">{genderLabel(s.gender)}</span>
+								{:else}
+									<span class="text-slate-400">—</span>
+								{/if}
+							</td>
+							<td class="px-4 py-3.5 text-xs text-slate-500">{yearName(s.academic_year_id)}</td>
+							<td class="px-4 py-3.5 text-right">
+								<div class="flex items-center justify-end gap-1">
+									<Button onclick={() => openEdit(s)} variant="ghost" size="sm" icon={Pencil}>Edit</Button>
+									<Button onclick={() => removeStudent(s.id)} variant="ghost" size="sm" icon={Trash2}>Delete</Button>
 								</div>
 							</td>
 						</tr>
