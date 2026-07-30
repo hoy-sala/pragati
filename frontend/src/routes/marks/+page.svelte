@@ -5,6 +5,8 @@
 	import Select from '$lib/components/Select.svelte';
 	import type { Assessment, AssessmentCategory, Class, Subject, AcademicYear, MarkGridRow, MarkInput } from '$lib/types';
 	import { onMount } from 'svelte';
+	import { page } from '$app/state';
+	import { goto } from '$app/navigation';
 	import { TabulatorFull as Tabulator } from 'tabulator-tables';
 	import 'tabulator-tables/dist/css/tabulator.min.css';
 
@@ -14,10 +16,10 @@
 	let years = $state<AcademicYear[]>([]);
 	let assessments = $state<Assessment[]>([]);
 
-	let selectedCategory = $state('');
-	let selectedClass = $state('');
-	let selectedSubject = $state('');
-	let selectedAssessment = $state('');
+	let selectedCategory = $state($page.url.searchParams.get('category') ?? '');
+	let selectedClass = $state($page.url.searchParams.get('class') ?? '');
+	let selectedSubject = $state($page.url.searchParams.get('subject') ?? '');
+	let selectedAssessment = $state($page.url.searchParams.get('assessment') ?? '');
 
 	let students = $state<MarkGridRow[]>([]);
 	let maxMarks = $state(100);
@@ -60,6 +62,20 @@
 	$effect(() => {
 		if (tableEl && !table && students.length > 0) {
 			initTable();
+		}
+	});
+
+	let initialURL = $state($page.url.search);
+	$effect(() => {
+		const qs = new URLSearchParams();
+		if (selectedCategory) qs.set('category', selectedCategory);
+		if (selectedClass) qs.set('class', selectedClass);
+		if (selectedSubject) qs.set('subject', selectedSubject);
+		if (selectedAssessment) qs.set('assessment', selectedAssessment);
+		const newSearch = qs.toString() ? '?' + qs.toString() : '';
+		if (newSearch !== initialURL) {
+			initialURL = newSearch;
+			goto('/marks' + newSearch, { replaceState: true, keepFocus: true, noScroll: true });
 		}
 	});
 
