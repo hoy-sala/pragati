@@ -23,6 +23,8 @@ type Student struct {
 	HouseID        *string    `json:"house_id,omitempty" db:"house_id"`
 	AcademicYearID string     `json:"academic_year_id" db:"academic_year_id"`
 	ParentName     string     `json:"parent_name,omitempty" db:"parent_name"`
+	FatherName     string     `json:"father_name,omitempty" db:"father_name"`
+	MotherName     string     `json:"mother_name,omitempty" db:"mother_name"`
 	ParentPhone    string     `json:"parent_phone,omitempty" db:"parent_phone"`
 	ParentEmail    string     `json:"parent_email,omitempty" db:"parent_email"`
 	IsActive       bool       `json:"is_active" db:"is_active"`
@@ -46,6 +48,8 @@ type CreateStudentRequest struct {
 	HouseID        string  `json:"house_id"`
 	AcademicYearID string  `json:"academic_year_id" validate:"required"`
 	ParentName     string  `json:"parent_name"`
+	FatherName     string  `json:"father_name"`
+	MotherName     string  `json:"mother_name"`
 	ParentPhone    string  `json:"parent_phone"`
 	ParentEmail    string  `json:"parent_email"`
 }
@@ -66,6 +70,8 @@ type UpdateStudentRequest struct {
 	SectionID   *string `json:"section_id"`
 	HouseID     *string `json:"house_id"`
 	ParentName  *string `json:"parent_name"`
+	FatherName  *string `json:"father_name"`
+	MotherName  *string `json:"mother_name"`
 	ParentPhone *string `json:"parent_phone"`
 	ParentEmail *string `json:"parent_email"`
 	IsActive    *bool   `json:"is_active"`
@@ -84,6 +90,8 @@ type ImportStudentRow struct {
 	ClassCode      string `csv:"class" excel:"class"`
 	SectionName    string `csv:"section" excel:"section"`
 	AcademicYear   string `csv:"academic_year" excel:"academic_year"`
+	FatherName     string `csv:"father_name" excel:"father_name"`
+	MotherName     string `csv:"mother_name" excel:"mother_name"`
 	ParentName     string `csv:"parent_name" excel:"parent_name"`
 	ParentPhone    string `csv:"parent_phone" excel:"parent_phone"`
 	ParentEmail    string `csv:"parent_email" excel:"parent_email"`

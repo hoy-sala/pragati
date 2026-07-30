@@ -40,7 +40,7 @@ func (h *StudentHandler) List(w http.ResponseWriter, r *http.Request) {
 		s.roll_no, s.first_name, s.last_name, s.date_of_birth, s.gender,
 		s.photo_url, s.blood_group, s.address, s.phone, s.email,
 		s.class_id, s.section_id, s.house_id, s.academic_year_id,
-		s.parent_name, s.parent_phone, s.parent_email, s.is_active,
+		s.parent_name, s.father_name, s.mother_name, s.parent_phone, s.parent_email, s.is_active,
 		s.created_at, s.updated_at
 		FROM students s
 		WHERE s.school_id = $1 AND s.deleted_at IS NULL`
@@ -126,7 +126,7 @@ func (h *StudentHandler) List(w http.ResponseWriter, r *http.Request) {
 			&s.RollNo, &s.FirstName, &s.LastName, &s.DateOfBirth, &s.Gender,
 			&s.PhotoURL, &s.BloodGroup, &s.Address, &s.Phone, &s.Email,
 			&s.ClassID, &s.SectionID, &s.HouseID, &s.AcademicYearID,
-			&s.ParentName, &s.ParentPhone, &s.ParentEmail, &s.IsActive,
+			&s.ParentName, &s.FatherName, &s.MotherName, &s.ParentPhone, &s.ParentEmail, &s.IsActive,
 			&s.CreatedAt, &s.UpdatedAt)
 		if err != nil {
 			log.Error().Err(err).Msg("scan student row failed")
@@ -155,7 +155,7 @@ func (h *StudentHandler) Get(w http.ResponseWriter, r *http.Request) {
 			roll_no, first_name, last_name, date_of_birth, gender,
 			photo_url, blood_group, address, phone, email,
 			class_id, section_id, house_id, academic_year_id,
-			parent_name, parent_phone, parent_email, is_active,
+			parent_name, father_name, mother_name, parent_phone, parent_email, is_active,
 			created_at, updated_at
 		 FROM students WHERE id = $1 AND school_id = $2 AND deleted_at IS NULL`,
 		id, claims.SchoolID,
@@ -163,7 +163,7 @@ func (h *StudentHandler) Get(w http.ResponseWriter, r *http.Request) {
 		&s.RollNo, &s.FirstName, &s.LastName, &s.DateOfBirth, &s.Gender,
 		&s.PhotoURL, &s.BloodGroup, &s.Address, &s.Phone, &s.Email,
 		&s.ClassID, &s.SectionID, &s.HouseID, &s.AcademicYearID,
-		&s.ParentName, &s.ParentPhone, &s.ParentEmail, &s.IsActive,
+		&s.ParentName, &s.FatherName, &s.MotherName, &s.ParentPhone, &s.ParentEmail, &s.IsActive,
 		&s.CreatedAt, &s.UpdatedAt)
 	if err != nil {
 		renderJSON(w, http.StatusNotFound, models.APIResponse{
@@ -215,13 +215,13 @@ func (h *StudentHandler) Create(w http.ResponseWriter, r *http.Request) {
 		`INSERT INTO students (id, school_id, sats_number, admission_no, roll_no,
 			first_name, last_name, date_of_birth, gender, blood_group,
 			address, phone, email, class_id, section_id, house_id,
-			academic_year_id, parent_name, parent_phone, parent_email,
+			academic_year_id, parent_name, father_name, mother_name, parent_phone, parent_email,
 			is_active, created_at, updated_at)
-		 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,true,NOW(),NOW())`,
+		 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,true,NOW(),NOW())`,
 		id, claims.SchoolID, req.SATSNumber, req.AdmissionNo, req.RollNo,
 		req.FirstName, req.LastName, dob, req.Gender, req.BloodGroup,
 		req.Address, req.Phone, req.Email, req.ClassID, sectionID, houseID,
-		req.AcademicYearID, req.ParentName, req.ParentPhone, req.ParentEmail,
+		req.AcademicYearID, req.ParentName, req.FatherName, req.MotherName, req.ParentPhone, req.ParentEmail,
 	)
 	if err != nil {
 		if isDuplicateError(err) {
@@ -302,6 +302,12 @@ func (h *StudentHandler) Update(w http.ResponseWriter, r *http.Request) {
 	}
 	if req.ParentName != nil {
 		addField("parent_name", *req.ParentName)
+	}
+	if req.FatherName != nil {
+		addField("father_name", *req.FatherName)
+	}
+	if req.MotherName != nil {
+		addField("mother_name", *req.MotherName)
 	}
 	if req.ParentPhone != nil {
 		addField("parent_phone", *req.ParentPhone)
@@ -509,20 +515,22 @@ func (h *StudentHandler) ImportCSV(w http.ResponseWriter, r *http.Request) {
 			`INSERT INTO students (id, school_id, sats_number, admission_no, roll_no,
 				first_name, last_name, date_of_birth, gender, phone, email,
 				class_id, section_id, academic_year_id,
-				parent_name, parent_phone, parent_email,
+				parent_name, father_name, mother_name, parent_phone, parent_email,
 				is_active, created_at, updated_at)
-			 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,true,NOW(),NOW())
+			 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,true,NOW(),NOW())
 			 ON CONFLICT (sats_number) DO UPDATE SET
 				first_name = EXCLUDED.first_name,
 				last_name = EXCLUDED.last_name,
 				class_id = EXCLUDED.class_id,
 				section_id = EXCLUDED.section_id,
+				father_name = EXCLUDED.father_name,
+				mother_name = EXCLUDED.mother_name,
 				updated_at = NOW()`,
 			id, claims.SchoolID, satsNo, getCol("admission_no"), rollNo,
 			firstName, getCol("last_name"), dob, getCol("gender"),
 			getCol("phone"), getCol("email"),
 			classID, nullIfEmpty(sectionID), academicYearID,
-			getCol("parent_name"), getCol("parent_phone"), getCol("parent_email"),
+			getCol("parent_name"), getCol("father_name"), getCol("mother_name"), getCol("parent_phone"), getCol("parent_email"),
 		)
 		if err != nil {
 			result.Errors = append(result.Errors, models.ImportRowError{

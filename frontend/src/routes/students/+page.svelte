@@ -27,6 +27,8 @@
 	let formAddress = $state('');
 	let formClassId = $state('');
 	let formAcademicYearId = $state('');
+	let formFatherName = $state('');
+	let formMotherName = $state('');
 	let formParentName = $state('');
 	let formParentPhone = $state('');
 	let formParentEmail = $state('');
@@ -59,6 +61,8 @@
 		formEmail = '';
 		formAddress = '';
 		formClassId = '';
+		formFatherName = '';
+		formMotherName = '';
 		formParentName = '';
 		formParentPhone = '';
 		formParentEmail = '';
@@ -89,6 +93,8 @@
 		formAddress = s.address ?? '';
 		formClassId = s.class_id;
 		formAcademicYearId = s.academic_year_id;
+		formFatherName = s.father_name ?? '';
+		formMotherName = s.mother_name ?? '';
 		formParentName = s.parent_name ?? '';
 		formParentPhone = s.parent_phone ?? '';
 		formParentEmail = s.parent_email ?? '';
@@ -121,6 +127,8 @@
 			address: formAddress.trim() || undefined,
 			class_id: formClassId,
 			academic_year_id: formAcademicYearId,
+			father_name: formFatherName.trim() || undefined,
+			mother_name: formMotherName.trim() || undefined,
 			parent_name: formParentName.trim() || undefined,
 			parent_phone: formParentPhone.trim() || undefined,
 			parent_email: formParentEmail.trim() || undefined,
@@ -149,6 +157,8 @@
 				address: formAddress.trim() || undefined,
 				class_id: formClassId,
 				academic_year_id: formAcademicYearId,
+				father_name: formFatherName.trim() || undefined,
+				mother_name: formMotherName.trim() || undefined,
 				parent_name: formParentName.trim() || undefined,
 				parent_phone: formParentPhone.trim() || undefined,
 				parent_email: formParentEmail.trim() || undefined,
@@ -284,16 +294,20 @@
 				</div>
 
 				<div class="border-t border-slate-100 pt-4">
-					<p class="text-xs font-medium text-slate-500 mb-2 flex items-center gap-1.5"><Users size={12} /> Parent / Guardian</p>
-					<div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-						<input bind:value={formParentName} placeholder="Parent name" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+					<p class="text-xs font-medium text-slate-500 mb-2 flex items-center gap-1.5"><Users size={12} /> Parents / Guardian</p>
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+						<input bind:value={formFatherName} placeholder="Father name" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+						<input bind:value={formMotherName} placeholder="Mother name" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+					</div>
+					<div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3">
+						<input bind:value={formParentName} placeholder="Guardian name" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
 						<div class="relative">
 							<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><Phone size={14} /></span>
-							<input bind:value={formParentPhone} placeholder="Parent phone" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+							<input bind:value={formParentPhone} placeholder="Guardian phone" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
 						</div>
 						<div class="relative">
 							<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><Mail size={14} /></span>
-							<input bind:value={formParentEmail} type="email" placeholder="Parent email" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+							<input bind:value={formParentEmail} type="email" placeholder="Guardian email" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
 						</div>
 					</div>
 				</div>

@@ -111,7 +111,8 @@
 				{ title: '#', field: '_idx', width: 50, hozAlign: 'center' },
 				{ title: 'SATS', field: 'sats_number', width: 100 },
 				{ title: 'Student Name', field: 'name', minWidth: 180, widthGrow: 3 },
-				{ title: 'Father Name', field: 'parent_name', minWidth: 140, widthGrow: 2 },
+				{ title: 'Father Name', field: 'father_name', minWidth: 140, widthGrow: 2 },
+			{ title: 'Mother Name', field: 'mother_name', minWidth: 140, widthGrow: 2 },
 				{
 					title: 'Marks / ' + maxMarks,
 					field: '_marks',

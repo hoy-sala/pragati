@@ -34,6 +34,8 @@ export interface Student {
 	house_id?: string;
 	academic_year_id: string;
 	parent_name?: string;
+	father_name?: string;
+	mother_name?: string;
 	parent_phone?: string;
 	parent_email?: string;
 	is_active: boolean;
@@ -104,7 +106,8 @@ export interface MarkGridRow {
 	sats_number: string;
 	name: string;
 	roll_no: number;
-	parent_name: string;
+	father_name: string;
+	mother_name: string;
 	mark_id?: string;
 	marks_obtained: number;
 	is_absent: boolean;
