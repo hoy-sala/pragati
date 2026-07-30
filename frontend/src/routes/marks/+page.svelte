@@ -139,10 +139,10 @@
 			keybindings: {
 				navUp: true,
 				navDown: true,
-				navLeft: true,
-				navRight: true,
-				navPrev: true,
-				navNext: true,
+				navLeft: false,
+				navRight: false,
+				navPrev: false,
+				navNext: false,
 				undo: true,
 				redo: true,
 				clipboardCopy: true,
@@ -263,7 +263,7 @@
 			<div class="px-4 py-2 bg-slate-50 border-t border-slate-100 text-xs text-slate-400 flex gap-4 items-center">
 				<span>Type <kbd class="px-1 py-0.5 rounded bg-slate-200 text-slate-600 font-mono text-[10px]">a</kbd> to mark absent</span>
 				<span class="w-px h-3 bg-slate-300"></span>
-				<span>&larr; &rarr; Navigate</span>
+				<span>&uarr; &darr; Navigate rows</span>
 				<span class="ml-auto">{students.length} student{students.length !== 1 ? 's' : ''}</span>
 			</div>
 		{:else}
