@@ -96,8 +96,9 @@
 		if (!tableEl) return;
 
 		table = new Tabulator(tableEl, {
-			data: students.map(s => ({
+			data: students.map((s, i) => ({
 				...s,
+				_idx: i + 1,
 				_marks: s.is_absent ? '' : (s.marks_obtained >= 0 ? s.marks_obtained : ''),
 				_absent: s.is_absent
 			})),
@@ -106,20 +107,23 @@
 			selectable: false,
 			clipboard: true,
 			columns: [
-				{ title: '#', field: 'roll_no', width: 60, hozAlign: 'center', frozen: true },
+				{ title: '#', field: '_idx', width: 50, hozAlign: 'center', frozen: true },
 				{ title: 'SATS', field: 'sats_number', width: 100, frozen: true },
-				{ title: 'Name', field: 'name', width: 200, frozen: true },
+				{ title: 'Name', field: 'name', width: 180, frozen: true },
 				{
 					title: 'Marks / ' + maxMarks,
 					field: '_marks',
 					editor: 'input',
 					editorParams: { elementAttributes: { inputmode: 'decimal' } },
-					width: 120,
 					hozAlign: 'center',
 					cellEdited: (cell: any) => {
-						const val = cell.getValue();
-						const row = cell.getRow().getData();
-						cell.getRow().update({ is_absent: false, marks_obtained: val === '' ? 0 : parseFloat(val) || 0 });
+						const raw = String(cell.getValue() ?? '');
+						const upper = raw.toUpperCase();
+						if (upper === 'A' || upper === 'ABS') {
+							cell.getRow().update({ _absent: true, _marks: '' });
+						} else {
+							cell.getRow().update({ _absent: false, marks_obtained: raw === '' ? 0 : parseFloat(raw) || 0 });
+						}
 					},
 					formatter: (cell: any) => {
 						const data = cell.getRow().getData();
@@ -128,24 +132,6 @@
 						return v === '' || v === null || v === undefined ? '' : String(v);
 					}
 				},
-				{
-					title: 'Absent',
-					field: '_absent',
-					editor: 'tickCross',
-					width: 80,
-					hozAlign: 'center',
-					cellEdited: (cell: any) => {
-						const val = cell.getValue();
-						cell.getRow().update({ is_absent: val, marks_obtained: 0 });
-						if (val) cell.getRow().getCell('_marks').setValue('');
-					}
-				},
-				{
-					title: 'Remarks',
-					field: 'remarks',
-					editor: 'input',
-					width: 200
-				}
 			],
 			keybindings: {
 				navUp: true,
@@ -177,7 +163,7 @@
 			student_id: d.student_id,
 			marks_obtained: d._absent ? 0 : (parseFloat(d._marks) || 0),
 			is_absent: !!d._absent,
-			remarks: d.remarks || ''
+			remarks: ''
 		}));
 
 		const res = await api('PUT', '/marks/batch', {
@@ -272,11 +258,9 @@
 				{/if}
 			</div>
 			<div class="px-4 py-2 bg-slate-50 border-t border-slate-100 text-xs text-slate-400 flex gap-4 items-center">
-				<span>&larr; &rarr; &uarr; &darr; Navigate</span>
+				<span>Type <kbd class="px-1 py-0.5 rounded bg-slate-200 text-slate-600 font-mono text-[10px]">a</kbd> to mark absent</span>
 				<span class="w-px h-3 bg-slate-300"></span>
-				<span>Tab / Enter: Next cell</span>
-				<span class="w-px h-3 bg-slate-300"></span>
-				<span>Ctrl+C / Ctrl+V: Copy/Paste</span>
+				<span>&larr; &rarr; Navigate</span>
 				<span class="ml-auto">{students.length} student{students.length !== 1 ? 's' : ''}</span>
 			</div>
 		{:else}
@@ -289,9 +273,13 @@
 </div>
 
 <style>
+	:global(.marks-grid-container) {
+		width: 100%;
+	}
 	:global(.marks-grid-container .tabulator) {
 		border: none;
 		border-radius: 0;
+		width: 100% !important;
 	}
 	:global(.marks-grid-container .tabulator .tabulator-header) {
 		background: #f8fafc;
@@ -312,5 +300,11 @@
 	}
 	:global(.marks-grid-container .tabulator .tabulator-cell.tabulator-editing) {
 		border: 2px solid #2563eb !important;
+	}
+	:global(.marks-grid .tabulator-tableholder) {
+		width: 100% !important;
+	}
+	:global(.marks-grid .tabulator-table) {
+		width: 100% !important;
 	}
 </style>
