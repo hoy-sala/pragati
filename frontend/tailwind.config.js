@@ -5,6 +5,7 @@ export default {
 		extend: {
 			fontFamily: {
 				sans: ['Inter', 'system-ui', 'sans-serif'],
+				mono: ['JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', 'monospace'],
 				kannada: ['Anek Kannada', 'system-ui', 'sans-serif']
 			},
 			colors: {
