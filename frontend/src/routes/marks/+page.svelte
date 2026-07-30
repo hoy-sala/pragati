@@ -136,17 +136,11 @@
 					}
 				},
 			],
-			keybindings: {
-				navUp: true,
-				navDown: true,
-				navLeft: false,
-				navRight: false,
-				navPrev: false,
-				navNext: false,
-				undo: true,
-				redo: true,
-				clipboardCopy: true,
-				clipboardPaste: true,
+			editorNavigation: (cell: any, direction: string) => {
+				if (direction === 'left' || direction === 'right' || direction === 'prev' || direction === 'next') {
+					return false;
+				}
+				return true;
 			},
 			clipboardPasteParser: (clipboard: string) => {
 				const rows = clipboard.split('\n').filter(r => r.trim());
