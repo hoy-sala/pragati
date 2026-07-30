@@ -19,6 +19,17 @@
 	let selectedSubject = $state('');
 	let selectedAssessment = $state('');
 
+	let filteredClasses = $derived(
+		selectedCategory && categories.find(c => c.id === selectedCategory)?.code === 'KREIS'
+			? classes.filter(c => c.name === 'Class 10')
+			: classes
+	);
+	let filteredSubjects = $derived(
+		selectedCategory && categories.find(c => c.id === selectedCategory)?.code === 'KREIS'
+			? subjects.filter(s => ['KAN', 'ENG', 'HIN', 'MAT', 'SCI', 'SOC'].includes(s.code))
+			: subjects
+	);
+
 	let students = $state<MarkGridRow[]>([]);
 	let maxMarks = $state(100);
 	let gridVersion = $state(1);
@@ -82,6 +93,10 @@
 	let prevCls = $state('');
 	let prevSub = $state('');
 	$effect(() => {
+		if (selectedCategory !== prevCat) {
+			if (!filteredClasses.find(c => c.id === selectedClass)) selectedClass = '';
+			if (!filteredSubjects.find(s => s.id === selectedSubject)) selectedSubject = '';
+		}
 		if ((selectedCategory !== prevCat || selectedClass !== prevCls || selectedSubject !== prevSub) && prevSearch !== '') {
 			selectedAssessment = '';
 			prevAssessment = '';
@@ -262,10 +277,10 @@
 				<Select bind:value={selectedCategory} options={categories} label="Category" icon={ClipboardCheck} placeholder="All categories" />
 			</div>
 			<div class="w-44">
-				<Select bind:value={selectedClass} options={classes} label="Class" icon={Users} placeholder="All classes" />
+				<Select bind:value={selectedClass} options={filteredClasses} label="Class" icon={Users} placeholder="All classes" />
 			</div>
 			<div class="w-44">
-				<Select bind:value={selectedSubject} options={subjects} label="Subject" icon={BookOpen} placeholder="All subjects" />
+				<Select bind:value={selectedSubject} options={filteredSubjects} label="Subject" icon={BookOpen} placeholder="All subjects" />
 			</div>
 			<div class="w-48">
 				<Select bind:value={selectedAssessment} options={assessments} label="Assessment" icon={ClipboardCheck} placeholder="Select assessment" />
