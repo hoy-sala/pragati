@@ -66,7 +66,7 @@
 		}
 	});
 
-	let reqSeq = $state(0);
+	let reqSeq = 0;
 	async function loadAssessments() {
 		const seq = ++reqSeq;
 		const params = new URLSearchParams();
