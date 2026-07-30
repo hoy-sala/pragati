@@ -52,10 +52,6 @@
 		selectedAssessment = sp.get('assessment') ?? '';
 	});
 
-	$effect(() => {
-		loadAssessments();
-	});
-
 	let prevAssessment = $state('');
 	$effect(() => {
 		if (selectedAssessment && selectedAssessment !== prevAssessment) {
@@ -70,7 +66,34 @@
 		}
 	});
 
+	let reqSeq = $state(0);
+	async function loadAssessments() {
+		const seq = ++reqSeq;
+		const params = new URLSearchParams();
+		if (selectedCategory) params.set('category_id', selectedCategory);
+		if (selectedClass) params.set('class_id', selectedClass);
+		if (selectedSubject) params.set('subject_id', selectedSubject);
+		const res = await api<Assessment[]>('GET', '/assessments?' + params.toString());
+		if (res.data && seq === reqSeq) assessments = res.data;
+	}
+
 	let prevSearch = $state('');
+	let prevCat = $state('');
+	let prevCls = $state('');
+	let prevSub = $state('');
+	$effect(() => {
+		if ((selectedCategory !== prevCat || selectedClass !== prevCls || selectedSubject !== prevSub) && prevSearch !== '') {
+			selectedAssessment = '';
+			prevAssessment = '';
+			students = [];
+			if (table) { table.destroy(); table = null; }
+			statusMsg = '';
+		}
+		prevCat = selectedCategory;
+		prevCls = selectedClass;
+		prevSub = selectedSubject;
+	});
+
 	$effect(() => {
 		const qs = new URLSearchParams();
 		if (selectedCategory) qs.set('category', selectedCategory);
@@ -83,16 +106,8 @@
 			history.replaceState(null, '', newSearch);
 		}
 		if (prevSearch === '') prevSearch = newSearch;
+		if (prevSearch !== '') loadAssessments();
 	});
-
-	async function loadAssessments() {
-		const params = new URLSearchParams();
-		if (selectedCategory) params.set('category_id', selectedCategory);
-		if (selectedClass) params.set('class_id', selectedClass);
-		if (selectedSubject) params.set('subject_id', selectedSubject);
-		const res = await api<Assessment[]>('GET', '/assessments?' + params.toString());
-		if (res.data) assessments = res.data;
-	}
 
 	async function loadGrid() {
 		if (!selectedAssessment) return;
