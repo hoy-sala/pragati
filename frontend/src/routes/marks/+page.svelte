@@ -5,8 +5,6 @@
 	import Select from '$lib/components/Select.svelte';
 	import type { Assessment, AssessmentCategory, Class, Subject, AcademicYear, MarkGridRow, MarkInput } from '$lib/types';
 	import { onMount } from 'svelte';
-	import { page } from '$app/state';
-	import { goto } from '$app/navigation';
 	import { TabulatorFull as Tabulator } from 'tabulator-tables';
 	import 'tabulator-tables/dist/css/tabulator.min.css';
 
@@ -16,10 +14,10 @@
 	let years = $state<AcademicYear[]>([]);
 	let assessments = $state<Assessment[]>([]);
 
-	let selectedCategory = $state($page.url.searchParams.get('category') ?? '');
-	let selectedClass = $state($page.url.searchParams.get('class') ?? '');
-	let selectedSubject = $state($page.url.searchParams.get('subject') ?? '');
-	let selectedAssessment = $state($page.url.searchParams.get('assessment') ?? '');
+	let selectedCategory = $state('');
+	let selectedClass = $state('');
+	let selectedSubject = $state('');
+	let selectedAssessment = $state('');
 
 	let students = $state<MarkGridRow[]>([]);
 	let maxMarks = $state(100);
@@ -32,6 +30,10 @@
 	let table = $state<Tabulator | null>(null);
 
 	onMount(async () => {
+		const sp = new URLSearchParams(window.location.search);
+		selectedCategory = sp.get('category') ?? '';
+		selectedClass = sp.get('class') ?? '';
+
 		const [catRes, classRes, subRes, yrRes] = await Promise.all([
 			api<AssessmentCategory[]>('GET', '/assessment-categories'),
 			api<Class[]>('GET', '/classes'),
@@ -45,6 +47,9 @@
 			years = yrRes.data;
 			const current = yrRes.data.find(y => y.is_current);
 		}
+
+		selectedSubject = sp.get('subject') ?? '';
+		selectedAssessment = sp.get('assessment') ?? '';
 	});
 
 	$effect(() => {
@@ -65,18 +70,19 @@
 		}
 	});
 
-	let initialURL = $state($page.url.search);
+	let prevSearch = $state('');
 	$effect(() => {
 		const qs = new URLSearchParams();
 		if (selectedCategory) qs.set('category', selectedCategory);
 		if (selectedClass) qs.set('class', selectedClass);
 		if (selectedSubject) qs.set('subject', selectedSubject);
 		if (selectedAssessment) qs.set('assessment', selectedAssessment);
-		const newSearch = qs.toString() ? '?' + qs.toString() : '';
-		if (newSearch !== initialURL) {
-			initialURL = newSearch;
-			goto('/marks' + newSearch, { replaceState: true, keepFocus: true, noScroll: true });
+		const newSearch = qs.toString() ? '/marks?' + qs.toString() : '/marks';
+		if (newSearch !== prevSearch && prevSearch !== '') {
+			prevSearch = newSearch;
+			history.replaceState(null, '', newSearch);
 		}
+		if (prevSearch === '') prevSearch = newSearch;
 	});
 
 	async function loadAssessments() {
