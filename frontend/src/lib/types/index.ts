@@ -104,6 +104,7 @@ export interface MarkGridRow {
 	sats_number: string;
 	name: string;
 	roll_no: number;
+	parent_name: string;
 	mark_id?: string;
 	marks_obtained: number;
 	is_absent: boolean;

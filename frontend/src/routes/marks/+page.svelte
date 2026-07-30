@@ -104,17 +104,20 @@
 			})),
 			layout: 'fitColumns',
 			height: 'calc(100vh - 320px)',
+			width: '100%',
 			selectable: false,
 			clipboard: true,
 			columns: [
-				{ title: '#', field: '_idx', width: 50, hozAlign: 'center', frozen: true },
-				{ title: 'SATS', field: 'sats_number', width: 100, frozen: true },
-				{ title: 'Name', field: 'name', width: 180, frozen: true },
+				{ title: '#', field: '_idx', width: 50, hozAlign: 'center' },
+				{ title: 'SATS', field: 'sats_number', width: 100 },
+				{ title: 'Student Name', field: 'name', minWidth: 180, widthGrow: 3 },
+				{ title: 'Father Name', field: 'parent_name', minWidth: 140, widthGrow: 2 },
 				{
 					title: 'Marks / ' + maxMarks,
 					field: '_marks',
 					editor: 'input',
 					editorParams: { elementAttributes: { inputmode: 'decimal' } },
+					width: 120,
 					hozAlign: 'center',
 					cellEdited: (cell: any) => {
 						const raw = String(cell.getValue() ?? '');
@@ -248,7 +251,7 @@
 		</div>
 	{/if}
 
-	<div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+	<div class="bg-white rounded-xl border border-slate-200 shadow-sm w-full">
 		{#if selectedAssessment}
 			<div class="marks-grid-container">
 				{#if loading}
@@ -279,7 +282,6 @@
 	:global(.marks-grid-container .tabulator) {
 		border: none;
 		border-radius: 0;
-		width: 100% !important;
 	}
 	:global(.marks-grid-container .tabulator .tabulator-header) {
 		background: #f8fafc;
@@ -301,10 +303,7 @@
 	:global(.marks-grid-container .tabulator .tabulator-cell.tabulator-editing) {
 		border: 2px solid #2563eb !important;
 	}
-	:global(.marks-grid .tabulator-tableholder) {
-		width: 100% !important;
-	}
-	:global(.marks-grid .tabulator-table) {
-		width: 100% !important;
+	:global(.marks-grid-container .tabulator .tabulator-tableholder) {
+		overflow: auto !important;
 	}
 </style>

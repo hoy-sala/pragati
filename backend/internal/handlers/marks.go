@@ -42,7 +42,7 @@ func (h *MarkHandler) GetGrid(w http.ResponseWriter, r *http.Request) {
 	}
 
 	rows, err := h.db.Query(r.Context(),
-		`SELECT s.id, s.sats_number, s.first_name, COALESCE(s.last_name, ''), s.roll_no,
+		`SELECT s.id, s.sats_number, s.first_name, COALESCE(s.last_name, ''), s.roll_no, COALESCE(s.parent_name, ''),
 			COALESCE(m.id::text, ''), COALESCE(m.assessment_id::text, ''), COALESCE(m.marks_obtained::double precision, -1), COALESCE(m.is_absent, false), COALESCE(m.remarks, '')
 		FROM students s
 		LEFT JOIN marks m ON m.student_id = s.id AND m.assessment_id = $1
@@ -62,6 +62,7 @@ func (h *MarkHandler) GetGrid(w http.ResponseWriter, r *http.Request) {
 		SATSNumber    string  `json:"sats_number"`
 		Name          string  `json:"name"`
 		RollNo        int     `json:"roll_no"`
+		ParentName    string  `json:"parent_name"`
 		MarkID        string  `json:"mark_id,omitempty"`
 		MarksObtained float64 `json:"marks_obtained"`
 		IsAbsent      bool    `json:"is_absent"`
@@ -74,7 +75,7 @@ func (h *MarkHandler) GetGrid(w http.ResponseWriter, r *http.Request) {
 		var lastName, markID, remarks string
 		var marksObtained float64
 		var isAbsent bool
-		if err := rows.Scan(&r.StudentID, &r.SATSNumber, &r.Name, &lastName, &r.RollNo,
+		if err := rows.Scan(&r.StudentID, &r.SATSNumber, &r.Name, &lastName, &r.RollNo, &r.ParentName,
 			&markID, &r.MarkID, &marksObtained, &isAbsent, &remarks); err != nil {
 			log.Error().Err(err).Msg("scan marks row failed")
 			continue
