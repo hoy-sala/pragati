@@ -90,7 +90,7 @@ func (h *QuizHandler) List(w http.ResponseWriter, r *http.Request) {
 	h.db.QueryRow(r.Context(), "SELECT COUNT(*) "+query, args...).Scan(&total)
 
 	dataQuery := `SELECT qa.id, qa.school_id, qa.title, qa.description, qa.target_type,
-		COALESCE(qa.target_id, ''), qa.pass_pct, qa.max_attempts, qa.duration_min,
+		COALESCE(qa.target_id::text, ''), qa.pass_pct, qa.max_attempts, qa.duration_min,
 		qa.shuffle_questions, qa.shuffle_options, qa.show_result,
 		qa.start_at, qa.end_at, qa.is_published, qa.created_by, qa.is_active,
 		qa.created_at, qa.updated_at,
@@ -131,7 +131,7 @@ func (h *QuizHandler) Get(w http.ResponseWriter, r *http.Request) {
 
 	var q models.QuizAssignment
 	err := h.db.QueryRow(r.Context(),
-		`SELECT id, school_id, title, description, target_type, COALESCE(target_id, ''),
+		`SELECT id, school_id, title, description, target_type, COALESCE(target_id::text, ''),
 			pass_pct, max_attempts, duration_min, shuffle_questions, shuffle_options, show_result,
 			start_at, end_at, is_published, created_by, is_active, created_at, updated_at
 		 FROM quiz_assignments WHERE id = $1 AND school_id = $2 AND deleted_at IS NULL`,
@@ -226,7 +226,7 @@ func (h *QuizHandler) ListQuestions(w http.ResponseWriter, r *http.Request) {
 
 	rows, err := h.db.Query(r.Context(),
 		`SELECT qq.question_id, qq.sort_order, qq.marks,
-			q.question_text, q.question_type, q.options, q.answer, q.marks, q.difficulty
+			q.question_text, q.question_type, q.options, q.answer, q.difficulty
 		 FROM quiz_questions qq
 		 JOIN questions q ON q.id = qq.question_id AND q.school_id = $1
 		 WHERE qq.quiz_id = $2
@@ -253,7 +253,7 @@ func (h *QuizHandler) ListQuestions(w http.ResponseWriter, r *http.Request) {
 	for rows.Next() {
 		var q QuizQuestionDetail
 		if err := rows.Scan(&q.QuestionID, &q.SortOrder, &q.Marks,
-			&q.QuestionText, &q.QuestionType, &q.Options, &q.Answer, &q.Marks, &q.Difficulty); err != nil {
+			&q.QuestionText, &q.QuestionType, &q.Options, &q.Answer, &q.Difficulty); err != nil {
 			continue
 		}
 		questions = append(questions, q)
@@ -314,11 +314,16 @@ func (h *QuizHandler) GetAvailable(w http.ResponseWriter, r *http.Request) {
 		 WHERE qa.school_id = $2 AND qa.is_published = true AND qa.deleted_at IS NULL
 		 AND (qa.start_at IS NULL OR qa.start_at <= NOW())
 		 AND (qa.end_at IS NULL OR qa.end_at >= NOW())
-		 AND (qa.target_type = 'staff' OR (qa.target_type = 'student' AND qa.target_id IN (
-			SELECT class_id FROM students WHERE user_id = $1
-		 )))
+		 AND (
+			(qa.target_type = 'staff' AND $3::text <> 'student')
+			OR
+			(qa.target_type = 'student' AND (
+				qa.target_id IS NULL
+				OR qa.target_id IN (SELECT class_id FROM students WHERE user_id = $1)
+			))
+		 )
 		 ORDER BY qa.end_at ASC NULLS LAST, qa.created_at DESC`,
-		claims.UserID, claims.SchoolID,
+		claims.UserID, claims.SchoolID, claims.Role,
 	)
 	if err != nil {
 		log.Error().Err(err).Msg("fetch available quizzes failed")
@@ -557,7 +562,7 @@ func (h *QuizHandler) gradeAttempt(attemptID string) {
 	var quizID string
 	var totalMarks float64
 	h.db.QueryRow(context.Background(),
-		`SELECT qa.id, COALESCE(SUM(qq.marks), 0)::numeric(5,2)
+		`SELECT qa.quiz_id, COALESCE(SUM(qq.marks), 0)::numeric(5,2)
 		 FROM quiz_attempts qa
 		 JOIN quiz_questions qq ON qq.quiz_id = qa.quiz_id
 		 WHERE qa.id = $1
@@ -585,7 +590,9 @@ func (h *QuizHandler) gradeAttempt(attemptID string) {
 	}
 	defer rows.Close()
 
+	count := 0
 	for rows.Next() {
+		count++
 		var respID string
 		var selectedOpts []string
 		var textAnswer, qType, correctAnswer string
@@ -593,6 +600,7 @@ func (h *QuizHandler) gradeAttempt(attemptID string) {
 
 		if err := rows.Scan(&respID, &selectedOpts, &textAnswer,
 			&qType, &correctAnswer, &marksTotal); err != nil {
+			log.Error().Err(err).Str("attempt_id", attemptID).Msg("grade attempt: scan response failed")
 			continue
 		}
 
@@ -623,18 +631,23 @@ func (h *QuizHandler) gradeAttempt(attemptID string) {
 		}
 		awardedMarks += aw
 
-		h.db.Exec(context.Background(),
+		if _, err := h.db.Exec(context.Background(),
 			`UPDATE quiz_responses SET is_correct = $1, marks_awarded = $2, marks_total = $3, updated_at = NOW()
 			 WHERE id = $4`,
-			isCorrect, aw, marksTotal, respID)
+			isCorrect, aw, marksTotal, respID); err != nil {
+			log.Error().Err(err).Str("attempt_id", attemptID).Msg("grade attempt: update response failed")
+		}
 	}
 
 	pct := (awardedMarks / totalMarks) * 100
-	h.db.Exec(context.Background(),
-		`UPDATE quiz_attempts SET score = $1, percentage = $2, passed = (percentage >= (SELECT pass_pct FROM quiz_assignments WHERE id = $4)),
+	log.Info().Str("attempt_id", attemptID).Str("quiz_id", quizID).Int("responses", count).Float64("total", totalMarks).Float64("awarded", awardedMarks).Msg("grade attempt: done")
+	if _, err := h.db.Exec(context.Background(),
+		`UPDATE quiz_attempts SET score = $1, percentage = $2, passed = ($2 >= (SELECT pass_pct::numeric FROM quiz_assignments WHERE id = $4)),
 			graded_at = NOW(), updated_at = NOW()
 		 WHERE id = $3`,
-		awardedMarks, pct, attemptID, quizID)
+		awardedMarks, pct, attemptID, quizID); err != nil {
+		log.Error().Err(err).Str("attempt_id", attemptID).Msg("grade attempt: update attempt failed")
+	}
 }
 
 // GET /api/v1/quizzes/attempts/{attemptId}/result
@@ -668,7 +681,7 @@ func (h *QuizHandler) GetResult(w http.ResponseWriter, r *http.Request) {
 
 	respRows, err := h.db.Query(r.Context(),
 		`SELECT qr.id, qr.attempt_id, qr.question_id, qr.selected_options, qr.text_answer,
-			qr.is_correct, qr.marks_awarded, qr.marks_total, qr.graded_at, COALESCE(qr.graded_by, ''),
+			qr.is_correct, qr.marks_awarded, qr.marks_total, qr.graded_at, COALESCE(qr.graded_by::text, ''),
 			q.question_text, q.question_type, q.options, q.answer,
 			COALESCE(qr.marks_total, q.marks)
 		 FROM quiz_responses qr
@@ -751,7 +764,7 @@ func (h *QuizHandler) GradeShortAnswer(w http.ResponseWriter, r *http.Request) {
 	if totalMarks > 0 {
 		pct := (totalAwarded / totalMarks) * 100
 		h.db.Exec(r.Context(),
-			`UPDATE quiz_attempts SET score = $1, percentage = $2, passed = (percentage >= (SELECT pass_pct FROM quiz_assignments WHERE id = $4)),
+			`UPDATE quiz_attempts SET score = $1, percentage = $2, passed = ($2 >= (SELECT pass_pct::numeric FROM quiz_assignments WHERE id = $4)),
 				status = 'graded', graded_at = NOW(), updated_at = NOW()
 			 WHERE id = $3`,
 			totalAwarded, pct, attemptID, quizID)

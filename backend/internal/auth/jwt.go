@@ -21,13 +21,22 @@ func NewJWTService(cfg *config.Config) *JWTService {
 }
 
 func (s *JWTService) GenerateAccessToken(user *models.User) (string, int64, error) {
+	return s.GenerateToken(user.ID, user.SchoolID, user.Role, user.Email, "")
+}
+
+func (s *JWTService) GenerateStudentToken(studentID, schoolID, satsNumber string) (string, int64, error) {
+	return s.GenerateToken(studentID, schoolID, "student", satsNumber+"@student.pragati.edu", satsNumber)
+}
+
+func (s *JWTService) GenerateToken(userID, schoolID, role, email, satsNumber string) (string, int64, error) {
 	expiresAt := time.Now().Add(s.cfg.JWTAccessExpiry)
 	claims := models.TokenClaims{
-		UserID:    user.ID,
-		SchoolID:  user.SchoolID,
-		Role:      user.Role,
-		Email:     user.Email,
-		TokenType: "access",
+		UserID:     userID,
+		SchoolID:   schoolID,
+		Role:       role,
+		Email:      email,
+		SATSNumber: satsNumber,
+		TokenType:  "access",
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expiresAt),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),

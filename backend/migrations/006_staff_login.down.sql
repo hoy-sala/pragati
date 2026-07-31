@@ -1,0 +1,2 @@
+DROP INDEX IF EXISTS idx_users_mobile;
+ALTER TABLE users DROP COLUMN IF EXISTS mobile;

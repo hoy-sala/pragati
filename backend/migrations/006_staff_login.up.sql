@@ -1,0 +1,3 @@
+ALTER TABLE users ADD COLUMN IF NOT EXISTS mobile VARCHAR(10) UNIQUE;
+
+CREATE INDEX IF NOT EXISTS idx_users_mobile ON users(mobile);

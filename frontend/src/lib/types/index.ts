@@ -274,6 +274,23 @@ export interface APIError {
 	details?: unknown;
 }
 
+export interface StaffLoginRequest {
+	mobile: string;
+	password: string;
+}
+
+export interface StudentLoginRequest {
+	sats_number: string;
+	date_of_birth: string;
+}
+
+export interface StudentLoginResponse {
+	student: Student;
+	access_token: string;
+	refresh_token?: string;
+	expires_in: number;
+}
+
 export interface APIResponse<T = unknown> {
 	data?: T;
 	meta?: Pagination;

@@ -34,11 +34,28 @@ type LoginRequest struct {
 	Password string `json:"password" validate:"required,min=6"`
 }
 
+type StaffLoginRequest struct {
+	Mobile   string `json:"mobile"`
+	Password string `json:"password"`
+}
+
+type StudentLoginRequest struct {
+	SATSNumber  string `json:"sats_number"`
+	DateOfBirth string `json:"date_of_birth"`
+}
+
 type LoginResponse struct {
 	User           *User  `json:"user"`
 	AccessToken    string `json:"access_token"`
 	RefreshToken   string `json:"refresh_token"`
 	ExpiresIn      int64  `json:"expires_in"`
+}
+
+type StudentLoginResponse struct {
+	Student      *Student `json:"student"`
+	AccessToken  string   `json:"access_token"`
+	RefreshToken string   `json:"refresh_token"`
+	ExpiresIn    int64    `json:"expires_in"`
 }
 
 type CreateUserRequest struct {
@@ -54,6 +71,7 @@ type TokenClaims struct {
 	SchoolID    string   `json:"sid"`
 	Role        string   `json:"rol"`
 	Email       string   `json:"eml"`
+	SATSNumber  string   `json:"sns,omitempty"`
 	TokenType   string   `json:"ttp"`
 	Permissions []string `json:"prm,omitempty"`
 	jwt.RegisteredClaims

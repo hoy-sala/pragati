@@ -49,6 +49,8 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
 
 	r.Route("/api/v1", func(r chi.Router) {
 		r.With(loginLimiter.Limit).Post("/auth/login", authH.Login)
+		r.With(loginLimiter.Limit).Post("/auth/staff-login", authH.StaffLogin)
+		r.With(loginLimiter.Limit).Post("/auth/student-login", authH.StudentLogin)
 		r.Post("/auth/refresh", authH.Refresh)
 
 		r.Group(func(r chi.Router) {
@@ -113,6 +115,7 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
 		})
 
 		r.With(roleMw.Authenticate).Get("/dashboard/stats", dashH.Stats)
+		r.With(roleMw.Authenticate).Get("/dashboard/student", dashH.StudentInsights)
 
 		r.Route("/questions", func(r chi.Router) {
 			r.Use(roleMw.Authenticate)

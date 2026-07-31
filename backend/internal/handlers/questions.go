@@ -62,8 +62,8 @@ func (h *QuestionHandler) List(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	dataQuery := `SELECT id, school_id, subject_id, COALESCE(teacher_id, ''), question_type, question_text,
-		COALESCE(question_image, ''), options, answer, marks, difficulty, chapters, tags,
+	dataQuery := `SELECT id, school_id, subject_id, COALESCE(teacher_id::text, ''), question_type, question_text,
+		COALESCE(question_image, ''), options, answer, marks::double precision, difficulty, chapters, tags,
 		COALESCE(explanation, ''), is_active, created_at, updated_at
 		FROM questions ` + baseWhere + ` ORDER BY created_at DESC`
 	dataQuery += fmt.Sprintf(" LIMIT $%d OFFSET $%d", n, n+1)

@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -102,6 +103,144 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 			AccessToken:  accessToken,
 			RefreshToken: rawToken,
 			ExpiresIn:    expiresAt - time.Now().Unix(),
+		},
+	})
+}
+
+func (h *AuthHandler) StaffLogin(w http.ResponseWriter, r *http.Request) {
+	var req models.StaffLoginRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		renderJSON(w, http.StatusBadRequest, models.APIResponse{
+			Error: &models.APIError{Code: "INVALID_INPUT", Message: "invalid request body"},
+		})
+		return
+	}
+
+	if req.Mobile == "" || req.Password == "" {
+		renderJSON(w, http.StatusBadRequest, models.APIResponse{
+			Error: &models.APIError{Code: "VALIDATION_ERROR", Message: "mobile and password are required"},
+		})
+		return
+	}
+
+	if len(req.Mobile) != 10 {
+		renderJSON(w, http.StatusBadRequest, models.APIResponse{
+			Error: &models.APIError{Code: "VALIDATION_ERROR", Message: "mobile must be 10 digits"},
+		})
+		return
+	}
+
+	var user models.User
+	err := h.db.QueryRow(r.Context(),
+		`SELECT id, school_id, email, password_hash, name, role,
+		        COALESCE(phone, ''), COALESCE(avatar_url, ''), is_active
+		 FROM users WHERE mobile = $1 AND is_active = true AND deleted_at IS NULL`,
+		req.Mobile,
+	).Scan(&user.ID, &user.SchoolID, &user.Email, &user.PasswordHash, &user.Name,
+		&user.Role, &user.Phone, &user.AvatarURL, &user.IsActive)
+	if err != nil {
+		renderJSON(w, http.StatusUnauthorized, models.APIResponse{
+			Error: &models.APIError{Code: "INVALID_CREDENTIALS", Message: "invalid mobile or password"},
+		})
+		return
+	}
+
+	if !auth.CheckPassword(req.Password, user.PasswordHash) {
+		renderJSON(w, http.StatusUnauthorized, models.APIResponse{
+			Error: &models.APIError{Code: "INVALID_CREDENTIALS", Message: "invalid mobile or password"},
+		})
+		return
+	}
+
+	accessToken, expiresAt, err := h.jwtService.GenerateAccessToken(&user)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to generate access token")
+		renderJSON(w, http.StatusInternalServerError, models.APIResponse{
+			Error: &models.APIError{Code: "INTERNAL_ERROR", Message: "failed to generate token"},
+		})
+		return
+	}
+
+	rawToken, hashedToken, err := h.jwtService.GenerateRefreshToken()
+	if err != nil {
+		log.Error().Err(err).Msg("failed to generate refresh token")
+		renderJSON(w, http.StatusInternalServerError, models.APIResponse{
+			Error: &models.APIError{Code: "INTERNAL_ERROR", Message: "failed to generate refresh token"},
+		})
+		return
+	}
+
+	if _, err := h.db.Exec(r.Context(),
+		`INSERT INTO refresh_tokens (id, user_id, token_hash, expires_at, created_at)
+		 VALUES ($1, $2, $3, $4, $5)`,
+		uuid.New().String(), user.ID, hashedToken, time.Now().Add(h.jwtService.RefreshTokenExpiry()), time.Now(),
+	); err != nil {
+		log.Error().Err(err).Msg("failed to store refresh token")
+	}
+
+	if _, err := h.db.Exec(r.Context(),
+		`UPDATE users SET last_login_at = NOW() WHERE id = $1`, user.ID); err != nil {
+		log.Error().Err(err).Msg("failed to update last login")
+	}
+
+	user.PasswordHash = ""
+
+	renderJSON(w, http.StatusOK, models.APIResponse{
+		Data: models.LoginResponse{
+			User:         &user,
+			AccessToken:  accessToken,
+			RefreshToken: rawToken,
+			ExpiresIn:    expiresAt - time.Now().Unix(),
+		},
+	})
+}
+
+func (h *AuthHandler) StudentLogin(w http.ResponseWriter, r *http.Request) {
+	var req models.StudentLoginRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		renderJSON(w, http.StatusBadRequest, models.APIResponse{
+			Error: &models.APIError{Code: "INVALID_INPUT", Message: "invalid request body"},
+		})
+		return
+	}
+
+	if req.SATSNumber == "" || req.DateOfBirth == "" {
+		renderJSON(w, http.StatusBadRequest, models.APIResponse{
+			Error: &models.APIError{Code: "VALIDATION_ERROR", Message: "sats_number and date_of_birth are required"},
+		})
+		return
+	}
+
+	var student models.Student
+	err := h.db.QueryRow(r.Context(),
+		`SELECT id, school_id, sats_number, first_name, COALESCE(last_name, ''), class_id,
+		        COALESCE(section_id::text, ''), academic_year_id, is_active
+		 FROM students
+		 WHERE sats_number = $1 AND date_of_birth = $2 AND is_active = true AND deleted_at IS NULL`,
+		req.SATSNumber, parsedDOB(req.DateOfBirth),
+	).Scan(&student.ID, &student.SchoolID, &student.SATSNumber, &student.FirstName, &student.LastName,
+		&student.ClassID, &student.SectionID, &student.AcademicYearID, &student.IsActive)
+	if err != nil {
+		renderJSON(w, http.StatusUnauthorized, models.APIResponse{
+			Error: &models.APIError{Code: "INVALID_CREDENTIALS", Message: "invalid SATS number or date of birth"},
+		})
+		return
+	}
+
+	accessToken, expiresAt, err := h.jwtService.GenerateStudentToken(student.ID, student.SchoolID, student.SATSNumber)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to generate student access token")
+		renderJSON(w, http.StatusInternalServerError, models.APIResponse{
+			Error: &models.APIError{Code: "INTERNAL_ERROR", Message: "failed to generate token"},
+		})
+		return
+	}
+
+	renderJSON(w, http.StatusOK, models.APIResponse{
+		Data: models.StudentLoginResponse{
+			Student:     &student,
+			AccessToken: accessToken,
+			ExpiresIn:   expiresAt - time.Now().Unix(),
 		},
 	})
 }
@@ -207,6 +346,30 @@ func (h *AuthHandler) Me(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if claims.Role == "student" {
+		var s struct {
+			models.Student
+			DateOfBirthStr string `json:"date_of_birth"`
+		}
+		err := h.db.QueryRow(r.Context(),
+			`SELECT id, school_id, sats_number, first_name, COALESCE(last_name, ''),
+			        COALESCE(date_of_birth::text, ''), class_id, COALESCE(section_id::text, ''),
+			        academic_year_id, is_active, created_at, updated_at
+			 FROM students WHERE id = $1 AND deleted_at IS NULL`,
+			claims.UserID,
+		).Scan(&s.ID, &s.SchoolID, &s.SATSNumber, &s.FirstName, &s.LastName,
+			&s.DateOfBirthStr, &s.ClassID, &s.SectionID,
+			&s.AcademicYearID, &s.IsActive, &s.CreatedAt, &s.UpdatedAt)
+		if err != nil {
+			renderJSON(w, http.StatusNotFound, models.APIResponse{
+				Error: &models.APIError{Code: "NOT_FOUND", Message: "student not found"},
+			})
+			return
+		}
+		renderJSON(w, http.StatusOK, models.APIResponse{Data: s})
+		return
+	}
+
 	var user models.User
 	err := h.db.QueryRow(r.Context(),
 		`SELECT id, school_id, email, name, role,
@@ -224,6 +387,16 @@ func (h *AuthHandler) Me(w http.ResponseWriter, r *http.Request) {
 	}
 
 	renderJSON(w, http.StatusOK, models.APIResponse{Data: user})
+}
+
+func parsedDOB(s string) interface{} {
+	formats := []string{"2006-01-02", "02-01-2006", "02/01/2006", "01/02/2006", "2/1/2006", "2-1-2006"}
+	for _, f := range formats {
+		if t, err := time.Parse(f, strings.TrimSpace(s)); err == nil {
+			return t
+		}
+	}
+	return strings.TrimSpace(s)
 }
 
 

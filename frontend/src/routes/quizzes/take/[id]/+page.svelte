@@ -63,7 +63,7 @@
 	});
 
 	let currentQuestion = $derived(questions[currentIndex]);
-	let currentOptions = $derived<any[]>(currentQuestion?.options ? JSON.parse(currentQuestion.options) : []);
+	let currentOptions = $derived<any[]>(typeof currentQuestion?.options === 'string' ? JSON.parse(currentQuestion.options) : (currentQuestion?.options || []));
 
 	function selectOption(qid: string, optKey: string) {
 		if (!responses[qid]) responses[qid] = { text_answer: '' };
@@ -116,7 +116,7 @@
 
 	let questionStatus = $derived(
 		questions.map((q, i) => {
-			const r = responses[q.id];
+			const r = responses[q.question_id];
 			const answered = r && (r.text_answer || (r.selected_options && r.selected_options.length > 0));
 			return { index: i, answered: !!answered };
 		})
@@ -168,32 +168,32 @@
 			{#if currentQuestion.question_type === 'mcq'}
 				<div class="space-y-2">
 					{#each currentOptions as opt}
-						<div class="flex items-center gap-3 p-3 rounded-lg border {responses[currentQuestion.id]?.selected_options?.includes(opt.key) ? 'border-primary-400 bg-primary-50' : 'border-slate-200 hover:border-slate-300'} cursor-pointer transition-colors"
-							onclick={() => selectOption(currentQuestion.id, opt.key)}>
-							<input type="radio" name={currentQuestion.id}
-								checked={responses[currentQuestion.id]?.selected_options?.includes(opt.key)}
+						<div class="flex items-center gap-3 p-3 rounded-lg border {responses[currentQuestion.question_id]?.selected_options?.includes(opt.key) ? 'border-primary-400 bg-primary-50' : 'border-slate-200 hover:border-slate-300'} cursor-pointer transition-colors"
+							onclick={() => selectOption(currentQuestion.question_id, opt.key)}>
+							<input type="radio" name={currentQuestion.question_id}
+								checked={responses[currentQuestion.question_id]?.selected_options?.includes(opt.key)}
 								class="shrink-0"
-								onchange={() => selectOption(currentQuestion.id, opt.key)}>
+								onchange={() => selectOption(currentQuestion.question_id, opt.key)}>
 							<span class="text-sm text-slate-700">{opt.value}</span>
 						</div>
 					{/each}
 				</div>
 			{:else if currentQuestion.question_type === 'true_false'}
 				<div class="flex gap-4">
-					<button onclick={() => setText(currentQuestion.id, 'true')}
+					<button onclick={() => setText(currentQuestion.question_id, 'true')}
 						class="flex-1 p-3 rounded-lg border text-sm font-medium transition-colors
-							{responses[currentQuestion.id]?.text_answer === 'true' ? 'border-primary-400 bg-primary-50 text-primary-700' : 'border-slate-200 hover:border-slate-300'}">
+							{responses[currentQuestion.question_id]?.text_answer === 'true' ? 'border-primary-400 bg-primary-50 text-primary-700' : 'border-slate-200 hover:border-slate-300'}">
 						True
 					</button>
-					<button onclick={() => setText(currentQuestion.id, 'false')}
+					<button onclick={() => setText(currentQuestion.question_id, 'false')}
 						class="flex-1 p-3 rounded-lg border text-sm font-medium transition-colors
-							{responses[currentQuestion.id]?.text_answer === 'false' ? 'border-primary-400 bg-primary-50 text-primary-700' : 'border-slate-200 hover:border-slate-300'}">
+							{responses[currentQuestion.question_id]?.text_answer === 'false' ? 'border-primary-400 bg-primary-50 text-primary-700' : 'border-slate-200 hover:border-slate-300'}">
 						False
 					</button>
 				</div>
 			{:else if currentQuestion.question_type === 'fill_blank' || currentQuestion.question_type === 'short_answer'}
-				<textarea value={responses[currentQuestion.id]?.text_answer ?? ''}
-					oninput={(e) => setText(currentQuestion.id, (e.target as HTMLTextAreaElement).value)}
+				<textarea value={responses[currentQuestion.question_id]?.text_answer ?? ''}
+					oninput={(e) => setText(currentQuestion.question_id, (e.target as HTMLTextAreaElement).value)}
 					rows={3} placeholder="Type your answer..."
 					class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm resize-none"></textarea>
 			{/if}
