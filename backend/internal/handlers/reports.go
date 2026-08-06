@@ -138,7 +138,10 @@ func sortAssessments(a []MarkSheetAssessment) {
 			return ti < tj
 		}
 		si, sj := subjectOrder[a[i].SubjectCode], subjectOrder[a[j].SubjectCode]
-		return si < sj
+		if si != sj {
+			return si < sj
+		}
+		return a[i].Name < a[j].Name
 	})
 }
 type MarkSheetAssessment struct {
