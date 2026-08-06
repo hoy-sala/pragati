@@ -20,10 +20,10 @@
 	let err = $state('');
 
 	type MarkCell = { assessment_id: string; value: number; is_absent: boolean; has_mark: boolean };
-	type SubjectAgg = { subject_id: string; subject_code: string; subject_name: string; total: number; max_total: number; percentage: number; grade: string };
+	type SubjectAgg = { subject_id: string; subject_code: string; subject_name: string; subject_type: string; total: number; max_total: number; percentage: number; grade: string; grade_label?: string };
 	type MarkSheetStudent = { student_id: string; sats_number: string; name: string; roll_no: number; marks: MarkCell[]; total: number; max_total: number; percentage: number; grade: string; rank: number; subjects: SubjectAgg[] };
-	type MarkSheetAssessment = { id: string; name: string; subject_id: string; subject_code: string; subject_name: string; category_id: string; category_name: string; category_code: string; max_marks: number; date?: string; term: string };
-	type SubjectGroup = { subject_id: string; subject_code: string; subject_name: string; assessments: MarkSheetAssessment[] };
+	type MarkSheetAssessment = { id: string; name: string; subject_id: string; subject_code: string; subject_name: string; category_id: string; category_name: string; category_code: string; max_marks: number; date?: string; term: string; subject_type: string };
+	type SubjectGroup = { subject_id: string; subject_code: string; subject_name: string; subject_type?: string; assessments: MarkSheetAssessment[] };
 	type TermGroup = { term: string; subjects: SubjectGroup[] };
 
 	let markSheetData = $state<{
@@ -32,7 +32,7 @@
 	} | null>(null);
 
 	type ReportAssessment = { id: string; name: string; category: string; term: string; max: number; value: number; absent: boolean; has_mark: boolean };
-	type ReportSubject = { subject_id: string; subject_code: string; subject_name: string; assessments: ReportAssessment[]; total: number; max_max: number; percentage: number; grade: string };
+	type ReportSubject = { subject_id: string; subject_code: string; subject_name: string; subject_type: string; assessments: ReportAssessment[]; total: number; max_max: number; percentage: number; grade: string; grade_label?: string };
 	type ReportStudent = { name: string; class: string; section?: string; roll_no: number; sats_number: string; gender?: string; date_of_birth?: string };
 	type StudentReport = { student: ReportStudent; academic_year: string; term?: string; subjects: ReportSubject[]; grand_total: number; grand_max: number; percentage: number; grade: string; attendance?: { present: number; total: number; percentage: number }; remarks?: string };
 
@@ -66,8 +66,17 @@
 		if (grade === 'B+') return 'text-blue-700 bg-blue-50';
 		if (grade === 'B') return 'text-sky-700 bg-sky-50';
 		if (grade === 'C+') return 'text-amber-700 bg-amber-50';
-		return 'text-red-700 bg-red-50';
+		if (grade === 'C') return 'text-orange-700 bg-orange-50';
+		if (grade === 'D') return 'text-red-600 bg-red-50';
+		if (grade === 'F') return 'text-red-800 bg-red-100';
+		return 'text-slate-600 bg-slate-100';
 	}
+
+	function subjectTypeLabel(t: string): string {
+		return t === 'curricular' ? 'Curricular' : 'Co-curricular';
+	}
+
+	const curricularOrder = ['KAN', 'ENG', 'HIN', 'MAT', 'SCI', 'SOC'];
 
 	onMount(async () => {
 		const [cr, yr] = await Promise.all([
@@ -286,24 +295,56 @@
 				</table>
 			</div>
 
-			<div class="px-6 py-4 border-t border-slate-200">
-				<div class="flex flex-wrap gap-3">
-					{#each (ms.students[0]?.subjects || []) as sg}
-						<div class="border border-slate-200 rounded-lg p-3 min-w-40">
-							<div class="flex items-center justify-between mb-2">
-								<span class="text-xs font-semibold text-slate-700">{sg.subject_name}</span>
-								<span class="text-[10px] text-slate-400">{sg.subject_code}</span>
+			<div class="px-6 py-4 border-t border-slate-200 space-y-4">
+			{#if ms.students[0]?.subjects}
+			{@const curSubs = ms.students[0].subjects.filter(s => s.subject_type === 'curricular')}
+			{@const coSubs = ms.students[0].subjects.filter(s => s.subject_type !== 'curricular')}
+			{#if curSubs.length > 0}
+				<div>
+					<div class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Curricular</div>
+					<div class="flex flex-wrap gap-3">
+						{#each curSubs as sg}
+							<div class="border border-slate-200 rounded-lg p-3 min-w-40">
+								<div class="flex items-center justify-between mb-2">
+									<span class="text-xs font-semibold text-slate-700">{sg.subject_name}</span>
+									<span class="text-[10px] text-slate-400">{sg.subject_code}</span>
+								</div>
+								<div class="text-lg font-bold text-slate-800">{sg.total}<span class="text-xs text-slate-400 font-normal">/{sg.max_total}</span></div>
+								<div class="flex items-center justify-between mt-1">
+									<span class="text-xs text-slate-500">{sg.percentage.toFixed(1)}%</span>
+									<span class="text-xs font-bold px-1.5 py-0.5 rounded {gradeClass(sg.grade)}">{sg.grade}</span>
+								</div>
 							</div>
-							<div class="text-lg font-bold text-slate-800">{sg.total}<span class="text-xs text-slate-400 font-normal">/{sg.max_total}</span></div>
-							<div class="flex items-center justify-between mt-1">
-								<span class="text-xs text-slate-500">{sg.percentage.toFixed(1)}%</span>
-								<span class="text-xs font-bold px-1.5 py-0.5 rounded {gradeClass(sg.grade)}">{sg.grade}</span>
-							</div>
-						</div>
-					{/each}
+						{/each}
+					</div>
 				</div>
-			</div>
+				{/if}
+				{#if coSubs.length > 0}
+				<div>
+					<div class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Co-curricular</div>
+					<div class="flex flex-wrap gap-3">
+						{#each coSubs as sg}
+							<div class="border border-slate-200 rounded-lg p-3 min-w-44">
+								<div class="flex items-center justify-between mb-2">
+									<span class="text-xs font-semibold text-slate-700">{sg.subject_name}</span>
+									<span class="text-[10px] text-slate-400">{sg.subject_code}</span>
+								</div>
+								<div class="text-lg font-bold text-slate-800">{sg.total}<span class="text-xs text-slate-400 font-normal">/{sg.max_total}</span></div>
+								<div class="flex items-center justify-between mt-1">
+									<span class="text-xs text-slate-500">{sg.percentage.toFixed(1)}%</span>
+									<div class="flex flex-col items-end gap-0.5">
+										<span class="text-xs font-bold px-1.5 py-0.5 rounded {gradeClass(sg.grade)}">{sg.grade}</span>
+										{#if sg.grade_label}<span class="text-[10px] text-slate-500">{sg.grade_label}</span>{/if}
+									</div>
+								</div>
+							</div>
+						{/each}
+					</div>
+				</div>
+			{/if}
+			{/if}
 		</div>
+	</div>
 
 	{:else if activeTab === 'report' && studentReport}
 		{@const r = studentReport}
@@ -340,72 +381,110 @@
 				</div>
 			</div>
 
-			<div class="px-8 py-6">
-				<h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-3">Scholastic Areas</h3>
-				<table class="w-full text-sm">
-					<thead>
-						<tr class="bg-slate-50 border-b border-slate-200">
-							<th class="px-3 py-2 text-left font-semibold text-slate-600">Subject</th>
-							<th class="px-3 py-2 text-center font-semibold text-slate-600 w-20">Total</th>
-							<th class="px-3 py-2 text-center font-semibold text-slate-600 w-20">Max</th>
-							<th class="px-3 py-2 text-center font-semibold text-slate-600 w-20">%</th>
-							<th class="px-3 py-2 text-center font-semibold text-slate-600 w-20">Grade</th>
+		<div class="px-8 py-6">
+			{#if r.subjects}
+			{@const curSubs = r.subjects.filter(s => s.subject_type === 'curricular')}
+			{@const coSubs = r.subjects.filter(s => s.subject_type !== 'curricular')}
+
+			{#if curSubs.length > 0}
+			<h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-3">Scholastic Areas</h3>
+			<table class="w-full text-sm mb-6">
+				<thead>
+					<tr class="bg-slate-50 border-b border-slate-200">
+						<th class="px-3 py-2 text-left font-semibold text-slate-600">Subject</th>
+						<th class="px-3 py-2 text-center font-semibold text-slate-600 w-20">Total</th>
+						<th class="px-3 py-2 text-center font-semibold text-slate-600 w-20">Max</th>
+						<th class="px-3 py-2 text-center font-semibold text-slate-600 w-20">%</th>
+						<th class="px-3 py-2 text-center font-semibold text-slate-600 w-20">Grade</th>
+					</tr>
+				</thead>
+				<tbody>
+					{#each curSubs as sub}
+						<tr class="border-b border-slate-100">
+							<td class="px-3 py-2.5">
+								<div class="font-medium text-slate-800">{sub.subject_name}</div>
+								<div class="flex flex-wrap gap-1 mt-1">
+									{#each sub.assessments as a}
+										<span class="text-[10px] px-1.5 py-0.5 rounded {a.term === 'Term 1' ? 'bg-blue-50 text-blue-600' : 'bg-purple-50 text-purple-600'}" title="{a.name}">
+											{a.category}: {#if a.has_mark}{a.absent ? 'AB' : a.value}{:else}—{/if}/{a.max}
+										</span>
+									{/each}
+								</div>
+							</td>
+							<td class="px-3 py-2.5 text-center font-medium text-slate-800">{sub.total}</td>
+							<td class="px-3 py-2.5 text-center text-slate-500">{sub.max_max}</td>
+							<td class="px-3 py-2.5 text-center">
+								<span class="text-xs font-medium px-1.5 py-0.5 rounded {pctClass(sub.percentage)}">{sub.percentage.toFixed(1)}</span>
+							</td>
+							<td class="px-3 py-2.5 text-center">
+								<span class="text-xs font-bold px-2 py-0.5 rounded {gradeClass(sub.grade)}">{sub.grade}</span>
+							</td>
 						</tr>
-					</thead>
-					<tbody>
-						{#each r.subjects as sub}
-							<tr class="border-b border-slate-100">
-								<td class="px-3 py-2.5">
-									<div class="font-medium text-slate-800">{sub.subject_name}</div>
-									<div class="flex flex-wrap gap-1 mt-1">
-										{#each sub.assessments as a}
-											<span class="text-[10px] px-1.5 py-0.5 rounded {a.term === 'Term 1' ? 'bg-blue-50 text-blue-600' : a.term === 'Term 2' ? 'bg-purple-50 text-purple-600' : 'bg-slate-100 text-slate-500'}" title="{a.name}">
-												{a.category}: {#if a.has_mark}{a.absent ? 'AB' : a.value}{:else}—{/if}/{a.max}
-											</span>
-										{/each}
-									</div>
-								</td>
-								<td class="px-3 py-2.5 text-center font-medium text-slate-800">{sub.total}</td>
-								<td class="px-3 py-2.5 text-center text-slate-500">{sub.max_max}</td>
-								<td class="px-3 py-2.5 text-center">
-									<span class="text-xs font-medium px-1.5 py-0.5 rounded {pctClass(sub.percentage)}">{sub.percentage.toFixed(1)}</span>
-								</td>
-								<td class="px-3 py-2.5 text-center">
+					{/each}
+				</tbody>
+			</table>
+			{/if}
+
+			{#if coSubs.length > 0}
+			<h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-3">Co-Scholastic Areas</h3>
+			<table class="w-full text-sm mb-6">
+				<thead>
+					<tr class="bg-slate-50 border-b border-slate-200">
+						<th class="px-3 py-2 text-left font-semibold text-slate-600">Subject</th>
+						<th class="px-3 py-2 text-center font-semibold text-slate-600 w-20">Total</th>
+						<th class="px-3 py-2 text-center font-semibold text-slate-600 w-20">Max</th>
+						<th class="px-3 py-2 text-center font-semibold text-slate-600 w-20">%</th>
+						<th class="px-3 py-2 text-center font-semibold text-slate-600 w-24">Grade</th>
+					</tr>
+				</thead>
+				<tbody>
+					{#each coSubs as sub}
+						<tr class="border-b border-slate-100">
+							<td class="px-3 py-2.5">
+								<div class="font-medium text-slate-800">{sub.subject_name}</div>
+								<div class="flex flex-wrap gap-1 mt-1">
+									{#each sub.assessments as a}
+										<span class="text-[10px] px-1.5 py-0.5 rounded {a.term === 'Term 1' ? 'bg-blue-50 text-blue-600' : 'bg-purple-50 text-purple-600'}" title="{a.name}">
+											{a.category}: {#if a.has_mark}{a.absent ? 'AB' : a.value}{:else}—{/if}/{a.max}
+										</span>
+									{/each}
+								</div>
+							</td>
+							<td class="px-3 py-2.5 text-center font-medium text-slate-800">{sub.total}</td>
+							<td class="px-3 py-2.5 text-center text-slate-500">{sub.max_max}</td>
+							<td class="px-3 py-2.5 text-center">
+								<span class="text-xs font-medium px-1.5 py-0.5 rounded {pctClass(sub.percentage)}">{sub.percentage.toFixed(1)}</span>
+							</td>
+							<td class="px-3 py-2.5 text-center">
+								<div class="flex flex-col items-center gap-0.5">
 									<span class="text-xs font-bold px-2 py-0.5 rounded {gradeClass(sub.grade)}">{sub.grade}</span>
-								</td>
-							</tr>
-						{/each}
-					</tbody>
-					<tfoot>
-						<tr class="bg-slate-50 font-semibold">
-							<td class="px-3 py-2.5 text-slate-700">Grand Total</td>
-							<td class="px-3 py-2.5 text-center text-slate-800">{r.grand_total}</td>
-							<td class="px-3 py-2.5 text-center text-slate-600">{r.grand_max}</td>
-							<td class="px-3 py-2.5 text-center">
-								<span class="text-xs font-medium px-1.5 py-0.5 rounded {pctClass(r.percentage)}">{r.percentage.toFixed(1)}</span>
-							</td>
-							<td class="px-3 py-2.5 text-center">
-								<span class="text-sm font-bold px-2 py-0.5 rounded {gradeClass(r.grade)}">{r.grade}</span>
+									{#if sub.grade_label}
+										<span class="text-[10px] text-slate-500">{sub.grade_label}</span>
+									{/if}
+								</div>
 							</td>
 						</tr>
-					</tfoot>
-				</table>
+					{/each}
+				</tbody>
+			</table>
+			{/if}
 
-				{#if r.remarks}
-					<div class="mt-6 border border-slate-200 rounded-lg p-4">
-						<h4 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Teacher Remarks</h4>
-						<p class="text-sm text-slate-700">{r.remarks}</p>
-					</div>
-				{/if}
+			{#if r.remarks}
+			<div class="mt-2 border border-slate-200 rounded-lg p-4">
+				<h4 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Teacher Remarks</h4>
+				<p class="text-sm text-slate-700">{r.remarks}</p>
 			</div>
+			{/if}
+			{/if}
+		</div>
 
-			<div class="px-8 py-4 border-t border-slate-200 flex justify-between items-end">
-				<div class="text-xs text-slate-400">Generated on {new Date().toLocaleDateString()} • Pragati v1.0</div>
-				<div class="text-right">
-					<div class="border-t border-slate-400 pt-1 text-xs text-slate-500 w-40 text-center">Class Teacher</div>
-				</div>
+		<div class="px-8 py-4 border-t border-slate-200 flex justify-between items-end">
+			<div class="text-xs text-slate-400">Generated on {new Date().toLocaleDateString()} • Pragati v1.0</div>
+			<div class="text-right">
+				<div class="border-t border-slate-400 pt-1 text-xs text-slate-500 w-40 text-center">Class Teacher</div>
 			</div>
 		</div>
+	</div>
 
 	{:else if !loading}
 		<div class="bg-white rounded-xl border border-slate-200 p-12 text-center">
