@@ -215,10 +215,11 @@ type TermGroup struct {
 
 // SubjectGroup collects assessments by subject for column grouping.
 type SubjectGroup struct {
-	SubjectID   string              `json:"subject_id"`
-	SubjectCode string              `json:"subject_code"`
-	SubjectName string              `json:"subject_name"`
-	Assessments []MarkSheetAssessment `json:"assessments"`
+	SubjectID    string                `json:"subject_id"`
+	SubjectCode  string                `json:"subject_code"`
+	SubjectName  string                `json:"subject_name"`
+	SubjectType  string                `json:"subject_type"`
+	Assessments  []MarkSheetAssessment `json:"assessments"`
 }
 
 // GET /api/v1/reports/mark-sheet?class_id=&academic_year_id=
@@ -404,6 +405,7 @@ func (h *ReportsHandler) MarkSheet(w http.ResponseWriter, r *http.Request) {
 		if subjGroups[a.SubjectID] == nil {
 			subjGroups[a.SubjectID] = &SubjectGroup{
 				SubjectID: a.SubjectID, SubjectCode: a.SubjectCode, SubjectName: a.SubjectName,
+				SubjectType: a.SubjectType,
 			}
 			subjOrder = append(subjOrder, a.SubjectID)
 		}
