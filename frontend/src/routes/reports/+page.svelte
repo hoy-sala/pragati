@@ -22,15 +22,16 @@
 	type MarkCell = { assessment_id: string; value: number; is_absent: boolean; has_mark: boolean };
 	type SubjectAgg = { subject_id: string; subject_code: string; subject_name: string; total: number; max_total: number; percentage: number; grade: string };
 	type MarkSheetStudent = { student_id: string; sats_number: string; name: string; roll_no: number; marks: MarkCell[]; total: number; max_total: number; percentage: number; grade: string; rank: number; subjects: SubjectAgg[] };
-	type MarkSheetAssessment = { id: string; name: string; subject_id: string; subject_code: string; subject_name: string; category_id: string; category_name: string; max_marks: number; date?: string };
+	type MarkSheetAssessment = { id: string; name: string; subject_id: string; subject_code: string; subject_name: string; category_id: string; category_name: string; category_code: string; max_marks: number; date?: string; term: string };
 	type SubjectGroup = { subject_id: string; subject_code: string; subject_name: string; assessments: MarkSheetAssessment[] };
+	type TermGroup = { term: string; subjects: SubjectGroup[] };
 
 	let markSheetData = $state<{
-		class_id: string; class_name: string; academic_year: string;
-		subjects: SubjectGroup[]; assessments: MarkSheetAssessment[]; students: MarkSheetStudent[];
+		class_id: string; class_name: string; academic_year: string; term?: string;
+		subjects: SubjectGroup[]; terms: TermGroup[]; assessments: MarkSheetAssessment[]; students: MarkSheetStudent[];
 	} | null>(null);
 
-	type ReportAssessment = { id: string; name: string; category: string; max: number; value: number; absent: boolean; has_mark: boolean };
+	type ReportAssessment = { id: string; name: string; category: string; term: string; max: number; value: number; absent: boolean; has_mark: boolean };
 	type ReportSubject = { subject_id: string; subject_code: string; subject_name: string; assessments: ReportAssessment[]; total: number; max_max: number; percentage: number; grade: string };
 	type ReportStudent = { name: string; class: string; section?: string; roll_no: number; sats_number: string; gender?: string; date_of_birth?: string };
 	type StudentReport = { student: ReportStudent; academic_year: string; term?: string; subjects: ReportSubject[]; grand_total: number; grand_max: number; percentage: number; grade: string; attendance?: { present: number; total: number; percentage: number }; remarks?: string };
@@ -39,36 +40,33 @@
 	let reportStudents = $state<{ id: string; name: string; roll_no: number }[]>([]);
 
 	const termOptions = [
-		{ id: 'Term 1', name: 'Term 1' },
-		{ id: 'Term 2', name: 'Term 2' },
-		{ id: 'Term 3', name: 'Term 3' },
-		{ id: 'Term 4', name: 'Term 4' },
+		{ id: '', name: 'All Terms' },
+		{ id: 'Term 1', name: 'Term 1 (FA1, FA2, SA1)' },
+		{ id: 'Term 2', name: 'Term 2 (FA3, FA4, SA2)' },
 	];
+
+	let selectedTerm = $state('');
 
 	let studentOptions = $derived(
 		reportStudents.map(s => ({ id: s.id, name: `${s.name} (Roll ${s.roll_no})` }))
 	);
 
 	function pctClass(pct: number): string {
-		if (pct >= 91) return 'text-emerald-700 bg-emerald-50';
-		if (pct >= 81) return 'text-green-700 bg-green-50';
-		if (pct >= 71) return 'text-blue-700 bg-blue-50';
-		if (pct >= 61) return 'text-sky-700 bg-sky-50';
-		if (pct >= 51) return 'text-amber-700 bg-amber-50';
-		if (pct >= 41) return 'text-orange-700 bg-orange-50';
-		if (pct >= 33) return 'text-red-600 bg-red-50';
-		return 'text-red-800 bg-red-100';
+		if (pct >= 90) return 'text-emerald-700 bg-emerald-50';
+		if (pct >= 70) return 'text-green-700 bg-green-50';
+		if (pct >= 50) return 'text-blue-700 bg-blue-50';
+		if (pct >= 40) return 'text-sky-700 bg-sky-50';
+		if (pct >= 30) return 'text-amber-700 bg-amber-50';
+		return 'text-red-700 bg-red-50';
 	}
 
 	function gradeClass(grade: string): string {
-		if (grade === 'A1') return 'text-emerald-700 bg-emerald-50';
-		if (grade === 'A2') return 'text-green-700 bg-green-50';
-		if (grade === 'B1') return 'text-blue-700 bg-blue-50';
-		if (grade === 'B2') return 'text-sky-700 bg-sky-50';
-		if (grade === 'C1') return 'text-amber-700 bg-amber-50';
-		if (grade === 'C2') return 'text-orange-700 bg-orange-50';
-		if (grade === 'D') return 'text-red-600 bg-red-50';
-		return 'text-red-800 bg-red-100';
+		if (grade === 'A+') return 'text-emerald-700 bg-emerald-50';
+		if (grade === 'A') return 'text-green-700 bg-green-50';
+		if (grade === 'B+') return 'text-blue-700 bg-blue-50';
+		if (grade === 'B') return 'text-sky-700 bg-sky-50';
+		if (grade === 'C+') return 'text-amber-700 bg-amber-50';
+		return 'text-red-700 bg-red-50';
 	}
 
 	onMount(async () => {
@@ -90,6 +88,7 @@
 		try {
 			const params = new URLSearchParams({ class_id: selectedClass });
 			if (selectedYear) params.set('academic_year_id', selectedYear);
+			if (selectedTerm) params.set('term', selectedTerm);
 			const res = await api<typeof markSheetData>('GET', `/reports/mark-sheet?${params}`);
 			if (res.data) markSheetData = res.data;
 			else if (res.error) err = res.error.message;
@@ -114,6 +113,7 @@
 		try {
 			const params = new URLSearchParams({ student_id: selectedStudent });
 			if (selectedYear) params.set('academic_year_id', selectedYear);
+			if (selectedTerm) params.set('term', selectedTerm);
 			const res = await api<StudentReport>('GET', `/reports/student?${params}`);
 			if (res.data) studentReport = res.data;
 			else if (res.error) err = res.error.message;
@@ -126,6 +126,10 @@
 
 	$effect(() => {
 		if (selectedClass && activeTab === 'marksheet') loadMarkSheet();
+	});
+
+	$effect(() => {
+		if (selectedTerm && activeTab === 'marksheet' && selectedClass) loadMarkSheet();
 	});
 
 	$effect(() => {
@@ -159,6 +163,9 @@
 			</div>
 			<div class="w-44">
 				<Select bind:value={selectedYear} options={years.map(y => ({ id: y.id, name: y.name }))} placeholder="Academic year" />
+			</div>
+			<div class="w-48">
+				<Select bind:value={selectedTerm} options={termOptions} placeholder="All Terms" />
 			</div>
 
 			<div class="flex bg-slate-100 rounded-lg p-1 ml-2">
@@ -210,25 +217,36 @@
 				<table class="w-full text-sm">
 					<thead>
 						<tr class="bg-slate-50 border-b border-slate-200">
-							<th rowspan="2" class="px-3 py-2 text-left font-semibold text-slate-600 border-r border-slate-200 sticky left-0 bg-slate-50 z-10 w-8">#</th>
-							<th rowspan="2" class="px-3 py-2 text-left font-semibold text-slate-600 border-r border-slate-200 sticky left-8 bg-slate-50 z-10">Student</th>
-							{#each ms.subjects as sg}
-								<th colspan={sg.assessments.length} class="px-3 py-2 text-center font-semibold text-slate-700 border-r border-slate-200 border-b border-slate-100">
-									<div class="text-xs">{sg.subject_code}</div>
+							<th rowspan="3" class="px-3 py-2 text-left font-semibold text-slate-600 border-r border-slate-200 sticky left-0 bg-slate-50 z-10 w-8">#</th>
+							<th rowspan="3" class="px-3 py-2 text-left font-semibold text-slate-600 border-r border-slate-200 sticky left-8 bg-slate-50 z-10">Student</th>
+							{#each ms.terms as tg}
+								<th colspan={tg.subjects.reduce((n, s) => n + s.assessments.length, 0)} class="px-3 py-1.5 text-center font-bold text-primary-700 border-r border-slate-200 border-b border-slate-200 bg-primary-50/40">
+									{tg.term}
 								</th>
 							{/each}
-							<th rowspan="2" class="px-3 py-2 text-center font-semibold text-slate-700 border-r border-slate-200 w-16">Total</th>
-							<th rowspan="2" class="px-3 py-2 text-center font-semibold text-slate-700 border-r border-slate-200 w-14">%</th>
-							<th rowspan="2" class="px-3 py-2 text-center font-semibold text-slate-700 border-r border-slate-200 w-14">Grade</th>
-							<th rowspan="2" class="px-3 py-2 text-center font-semibold text-slate-700 w-12">Rank</th>
+							<th rowspan="3" class="px-3 py-2 text-center font-semibold text-slate-700 border-r border-slate-200 w-16">Total</th>
+							<th rowspan="3" class="px-3 py-2 text-center font-semibold text-slate-700 border-r border-slate-200 w-14">%</th>
+							<th rowspan="3" class="px-3 py-2 text-center font-semibold text-slate-700 border-r border-slate-200 w-14">Grade</th>
+							<th rowspan="3" class="px-3 py-2 text-center font-semibold text-slate-700 w-12">Rank</th>
 						</tr>
 						<tr class="bg-slate-50 border-b border-slate-200">
-							{#each ms.subjects as sg}
-								{#each sg.assessments as a}
-									<th class="px-2 py-1.5 text-center font-medium text-slate-500 border-r border-slate-200 text-[10px]">
-										<div>{a.category_name}</div>
-										<div class="text-[9px] text-slate-400">/{a.max_marks}</div>
+							{#each ms.terms as tg}
+								{#each tg.subjects as sg}
+									<th colspan={sg.assessments.length} class="px-3 py-1.5 text-center font-semibold text-slate-700 border-r border-slate-200 border-b border-slate-100">
+										<div class="text-xs">{sg.subject_code}</div>
 									</th>
+								{/each}
+							{/each}
+						</tr>
+						<tr class="bg-slate-50 border-b border-slate-200">
+							{#each ms.terms as tg}
+								{#each tg.subjects as sg}
+									{#each sg.assessments as a}
+										<th class="px-2 py-1.5 text-center font-medium text-slate-500 border-r border-slate-200 text-[10px]">
+											<div>{a.category_name}</div>
+											<div class="text-[9px] text-slate-400">/{a.max_marks}</div>
+										</th>
+									{/each}
 								{/each}
 							{/each}
 						</tr>
@@ -303,7 +321,7 @@
 					</div>
 					<div class="text-right">
 						<h2 class="text-lg font-bold text-primary-700">Student Report Card</h2>
-						<p class="text-xs text-slate-500">Year: {years.find(y => y.id === r.academic_year)?.name || '—'}</p>
+						<p class="text-xs text-slate-500">Year: {years.find(y => y.id === r.academic_year)?.name || '—'} {#if r.term} &middot; {r.term}{/if}</p>
 					</div>
 				</div>
 			</div>
@@ -341,7 +359,7 @@
 									<div class="font-medium text-slate-800">{sub.subject_name}</div>
 									<div class="flex flex-wrap gap-1 mt-1">
 										{#each sub.assessments as a}
-											<span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-500" title="{a.name} ({a.category})">
+											<span class="text-[10px] px-1.5 py-0.5 rounded {a.term === 'Term 1' ? 'bg-blue-50 text-blue-600' : a.term === 'Term 2' ? 'bg-purple-50 text-purple-600' : 'bg-slate-100 text-slate-500'}" title="{a.name}">
 												{a.category}: {#if a.has_mark}{a.absent ? 'AB' : a.value}{:else}—{/if}/{a.max}
 											</span>
 										{/each}
