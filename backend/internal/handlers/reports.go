@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -20,34 +21,90 @@ func NewReportsHandler(db *pgxpool.Pool) *ReportsHandler {
 	return &ReportsHandler{db: db}
 }
 
-type gradeBoundary struct {
-	grade string
-	max   float64
-	min   float64
+// subjectType classifies a subject by its code.
+// Curricular: Kannada, English, Hindi, Mathematics, Science, Social Science.
+// Co-curricular: Physical Education, Computer Science, Music, Drawing.
+type subjectType string
+
+const (
+	curricular    subjectType = "curricular"
+	coCurricular  subjectType = "co_curricular"
+)
+
+func classifySubject(code string) subjectType {
+	switch strings.ToUpper(code) {
+	case "KAN", "ENG", "HIN", "MAT", "SCI", "SOC":
+		return curricular
+	}
+	return coCurricular
 }
 
-// gradeForPct returns letter grade. isClass9 enables the C grade (below 30%).
-func gradeForPct(pct float64, isClass9 bool) string {
-	switch {
-	case pct >= 90 && pct <= 100:
-		return "A+"
-	case pct >= 70 && pct < 90:
-		return "A"
-	case pct >= 50 && pct < 70:
-		return "B+"
-	case pct >= 40 && pct < 50:
-		return "B"
-	case pct >= 30 && pct < 40:
-		return "C+"
-	case pct < 30 && isClass9:
-		return "C"
-	case pct < 40 && !isClass9:
-		return "B"
+// classNum extracts the numeric standard from a class name (e.g. "Class 9" → 9).
+func classNum(className string) int {
+	fields := strings.Fields(className)
+	for _, f := range fields {
+		if n, err := strconv.Atoi(f); err == nil {
+			return n
+		}
 	}
+	return 0
+}
+
+// gradeInfo holds a computed grade.
+type gradeInfo struct {
+	grade string
+	label string
+}
+
+// computeGrade returns the grade for a percentage given subject type and class number.
+func computeGrade(pct float64, st subjectType, class int) gradeInfo {
 	if pct > 100 {
-		return "A+"
+		pct = 100
 	}
-	return "B"
+	if st == coCurricular {
+		switch {
+		case pct >= 80:
+			return gradeInfo{"A", "Excellent"}
+		case pct >= 50:
+			return gradeInfo{"B", "Good"}
+		case pct >= 35:
+			return gradeInfo{"C", "Progressive"}
+		default:
+			return gradeInfo{"F", "Needs Improvement"}
+		}
+	}
+	// curricular
+	if class >= 9 {
+		switch {
+		case pct >= 90:
+			return gradeInfo{"A+", ""}
+		case pct >= 80:
+			return gradeInfo{"A", ""}
+		case pct >= 70:
+			return gradeInfo{"B+", ""}
+		case pct >= 60:
+			return gradeInfo{"B", ""}
+		case pct >= 50:
+			return gradeInfo{"C+", ""}
+		case pct >= 34:
+			return gradeInfo{"C", ""}
+		default:
+			return gradeInfo{"D", ""}
+		}
+	}
+	// classes 6-8
+	switch {
+	case pct >= 90:
+		return gradeInfo{"A+", ""}
+	case pct >= 70:
+		return gradeInfo{"A", ""}
+	case pct >= 50:
+		return gradeInfo{"B+", ""}
+	case pct >= 30:
+		return gradeInfo{"B", ""}
+	default:
+		return gradeInfo{"C", ""}
+	}
 }
 
 // assessmentTerm maps an assessment name (FA1, SA1, etc.) to its term.
@@ -59,12 +116,6 @@ func assessmentTerm(assessmentName string) string {
 		return "Term 2"
 	}
 	return ""
-}
-
-// isClass9 checks if a class name refers to 9th standard.
-func isClass9(className string) bool {
-	return className == "Class 9" || className == "9" || className == "9th" ||
-		className == "IX" || className == "Class IX"
 }
 
 // MarkSheetAssessment describes one assessment column.
@@ -80,6 +131,7 @@ type MarkSheetAssessment struct {
 	MaxMarks     float64 `json:"max_marks"`
 	Date         string  `json:"date,omitempty"`
 	Term         string  `json:"term"`
+	SubjectType  string  `json:"subject_type"`
 }
 
 // MarkSheetStudent is one student row.
@@ -107,13 +159,15 @@ type MarkCell struct {
 
 // SubjectAggregate rolls up a student's marks per subject.
 type SubjectAggregate struct {
-	SubjectID   string  `json:"subject_id"`
-	SubjectCode string  `json:"subject_code"`
-	SubjectName string  `json:"subject_name"`
-	Total       float64 `json:"total"`
-	MaxTotal    float64 `json:"max_total"`
-	Pct         float64 `json:"percentage"`
-	Grade       string  `json:"grade"`
+	SubjectID    string  `json:"subject_id"`
+	SubjectCode  string  `json:"subject_code"`
+	SubjectName  string  `json:"subject_name"`
+	SubjectType  string  `json:"subject_type"`
+	Total        float64 `json:"total"`
+	MaxTotal     float64 `json:"max_total"`
+	Pct          float64 `json:"percentage"`
+	Grade        string  `json:"grade"`
+	GradeLabel   string  `json:"grade_label,omitempty"`
 }
 
 // MarkSheetResponse is the full class mark sheet.
@@ -195,6 +249,7 @@ func (h *ReportsHandler) MarkSheet(w http.ResponseWriter, r *http.Request) {
 		}
 		a.CategoryCode = catCode
 		a.Term = assessmentTerm(a.Name)
+		a.SubjectType = string(classifySubject(a.SubjectCode))
 		if term != "" && a.Term != term {
 			continue
 		}
@@ -249,49 +304,53 @@ func (h *ReportsHandler) MarkSheet(w http.ResponseWriter, r *http.Request) {
 		marks[markKey{sid, aid}] = MarkCell{AssessmentID: aid, Value: val, IsAbsent: absent, HasMark: true}
 	}
 
-	students := make([]MarkSheetStudent, 0, len(rawStudents))
-	for _, rs := range rawStudents {
-		cells := make([]MarkCell, len(assessments))
-		var total, maxTotal float64
-		subAgg := map[string]*SubjectAggregate{}
-		for i, a := range assessments {
-			cell := MarkCell{AssessmentID: a.ID}
-			if m, ok := marks[markKey{rs.id, a.ID}]; ok {
-				cell = m
-				if !m.IsAbsent {
-					total += m.Value
+		cn := classNum(className)
+		students := make([]MarkSheetStudent, 0, len(rawStudents))
+		for _, rs := range rawStudents {
+			cells := make([]MarkCell, len(assessments))
+			var total, maxTotal float64
+			subAgg := map[string]*SubjectAggregate{}
+			for i, a := range assessments {
+				cell := MarkCell{AssessmentID: a.ID}
+				if m, ok := marks[markKey{rs.id, a.ID}]; ok {
+					cell = m
+					if !m.IsAbsent {
+						total += m.Value
+					}
+				}
+				maxTotal += a.MaxMarks
+				cells[i] = cell
+
+				if subAgg[a.SubjectID] == nil {
+					subAgg[a.SubjectID] = &SubjectAggregate{
+						SubjectID: a.SubjectID, SubjectCode: a.SubjectCode, SubjectName: a.SubjectName,
+						SubjectType: a.SubjectType,
+					}
+				}
+				sa := subAgg[a.SubjectID]
+				sa.MaxTotal += a.MaxMarks
+				if !cell.IsAbsent && cell.HasMark {
+					sa.Total += cell.Value
 				}
 			}
-			maxTotal += a.MaxMarks
-			cells[i] = cell
-
-			if subAgg[a.SubjectID] == nil {
-				subAgg[a.SubjectID] = &SubjectAggregate{
-					SubjectID: a.SubjectID, SubjectCode: a.SubjectCode, SubjectName: a.SubjectName,
+			subList := make([]SubjectAggregate, 0, len(subAgg))
+			for _, sa := range subAgg {
+				if sa.MaxTotal > 0 {
+					sa.Pct = (sa.Total / sa.MaxTotal) * 100
 				}
+				g := computeGrade(sa.Pct, subjectType(sa.SubjectType), cn)
+				sa.Grade = g.grade
+				sa.GradeLabel = g.label
+				subList = append(subList, *sa)
 			}
-			sa := subAgg[a.SubjectID]
-			sa.MaxTotal += a.MaxMarks
-			if !cell.IsAbsent && cell.HasMark {
-				sa.Total += cell.Value
-			}
-		}
-		subList := make([]SubjectAggregate, 0, len(subAgg))
-		for _, sa := range subAgg {
-			if sa.MaxTotal > 0 {
-				sa.Pct = (sa.Total / sa.MaxTotal) * 100
-			}
-			sa.Grade = gradeForPct(sa.Pct, isClass9(className))
-			subList = append(subList, *sa)
-		}
-		sort.Slice(subList, func(i, j int) bool { return subList[i].SubjectName < subList[j].SubjectName })
+			sort.Slice(subList, func(i, j int) bool { return subList[i].SubjectName < subList[j].SubjectName })
 
-		var pct float64
-		if maxTotal > 0 {
-			pct = (total / maxTotal) * 100
-		}
-		grade := gradeForPct(pct, isClass9(className))
-		students = append(students, MarkSheetStudent{
+			var pct float64
+			if maxTotal > 0 {
+				pct = (total / maxTotal) * 100
+			}
+			grade := computeGrade(pct, curricular, cn)
+			students = append(students, MarkSheetStudent{
 			StudentID: rs.id, SATSNumber: rs.sats,
 			Name: rs.first, RollNo: rs.roll, Marks: cells,
 			Total: total, MaxTotal: maxTotal, Pct: pct, Grade: grade, Subjects: subList,
@@ -392,14 +451,16 @@ type ReportStudent struct {
 }
 
 type ReportSubject struct {
-	SubjectID   string           `json:"subject_id"`
-	SubjectCode string           `json:"subject_code"`
-	SubjectName string           `json:"subject_name"`
-	Assessments []ReportAssessment `json:"assessments"`
-	Total       float64          `json:"total"`
-	MaxTotal    float64          `json:"max_max"`
-	Pct         float64          `json:"percentage"`
-	Grade       string           `json:"grade"`
+	SubjectID    string           `json:"subject_id"`
+	SubjectCode  string           `json:"subject_code"`
+	SubjectName  string           `json:"subject_name"`
+	SubjectType  string           `json:"subject_type"`
+	Assessments  []ReportAssessment `json:"assessments"`
+	Total        float64          `json:"total"`
+	MaxTotal     float64          `json:"max_max"`
+	Pct          float64          `json:"percentage"`
+	Grade        string           `json:"grade"`
+	GradeLabel   string           `json:"grade_label,omitempty"`
 }
 
 type ReportAssessment struct {
@@ -511,8 +572,12 @@ func (h *ReportsHandler) StudentReport(w http.ResponseWriter, r *http.Request) {
 		if term != "" && t != term {
 			continue
 		}
+		stype := classifySubject(a.scode)
 		if subjMap[a.sid] == nil {
-			subjMap[a.sid] = &ReportSubject{SubjectID: a.sid, SubjectCode: a.scode, SubjectName: a.sname}
+			subjMap[a.sid] = &ReportSubject{
+				SubjectID: a.sid, SubjectCode: a.scode, SubjectName: a.sname,
+				SubjectType: string(stype),
+			}
 			subjOrder = append(subjOrder, a.sid)
 		}
 		rs := subjMap[a.sid]
@@ -531,14 +596,16 @@ func (h *ReportsHandler) StudentReport(w http.ResponseWriter, r *http.Request) {
 		rs.Assessments = append(rs.Assessments, cell)
 	}
 
+	cn := classNum(st.Class)
 	subjects := make([]ReportSubject, 0, len(subjOrder))
-	cl9 := isClass9(st.Class)
 	for _, sid := range subjOrder {
 		rs := subjMap[sid]
 		if rs.MaxTotal > 0 {
 			rs.Pct = (rs.Total / rs.MaxTotal) * 100
 		}
-		rs.Grade = gradeForPct(rs.Pct, cl9)
+		g := computeGrade(rs.Pct, subjectType(rs.SubjectType), cn)
+		rs.Grade = g.grade
+		rs.GradeLabel = g.label
 		subjects = append(subjects, *rs)
 	}
 
@@ -546,7 +613,7 @@ func (h *ReportsHandler) StudentReport(w http.ResponseWriter, r *http.Request) {
 	if grandMax > 0 {
 		pct = (grandTotal / grandMax) * 100
 	}
-	grade := gradeForPct(pct, cl9)
+	grade := computeGrade(pct, curricular, cn)
 
 	resp := StudentReportResponse{
 		Student: st, AcademicYear: academicYearID, Term: term,
