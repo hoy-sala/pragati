@@ -138,7 +138,7 @@ func (h *ReportsHandler) MarkSheet(w http.ResponseWriter, r *http.Request) {
 		FROM assessments a
 		JOIN subjects s ON s.id = a.subject_id AND s.deleted_at IS NULL
 		JOIN assessment_categories c ON c.id = a.category_id
-		WHERE a.class_id = $1 AND a.deleted_at IS NULL AND a.is_published = true`
+		WHERE a.class_id = $1 AND a.deleted_at IS NULL`
 	assyArgs := []interface{}{classID}
 	n := 2
 	if academicYearID != "" {
@@ -193,7 +193,7 @@ func (h *ReportsHandler) MarkSheet(w http.ResponseWriter, r *http.Request) {
 	markQuery := `SELECT m.student_id, m.assessment_id, m.marks_obtained::double precision, m.is_absent
 		FROM marks m
 		JOIN assessments a ON a.id = m.assessment_id
-		WHERE a.class_id = $1 AND a.deleted_at IS NULL AND a.is_published = true`
+		WHERE a.class_id = $1 AND a.deleted_at IS NULL`
 	markRows, err := h.db.Query(r.Context(), markQuery, classID)
 	if err != nil {
 		log.Error().Err(err).Msg("mark sheet: query marks failed")
@@ -382,7 +382,7 @@ func (h *ReportsHandler) StudentReport(w http.ResponseWriter, r *http.Request) {
 		FROM assessments a
 		JOIN subjects s ON s.id = a.subject_id AND s.deleted_at IS NULL
 		JOIN assessment_categories c ON c.id = a.category_id
-		WHERE a.class_id = $1 AND a.deleted_at IS NULL AND a.is_published = true`
+		WHERE a.class_id = $1 AND a.deleted_at IS NULL`
 	assyArgs := []interface{}{classID}
 	n := 2
 	if academicYearID != "" {
@@ -414,7 +414,7 @@ func (h *ReportsHandler) StudentReport(w http.ResponseWriter, r *http.Request) {
 
 	marksQuery := `SELECT m.assessment_id, m.marks_obtained::double precision, m.is_absent
 		FROM marks m JOIN assessments a ON a.id = m.assessment_id
-		WHERE m.student_id = $1 AND a.class_id = $2 AND a.deleted_at IS NULL AND a.is_published = true`
+		WHERE m.student_id = $1 AND a.class_id = $2 AND a.deleted_at IS NULL`
 	mkRows, err := h.db.Query(r.Context(), marksQuery, studentID, classID)
 	if err != nil {
 		renderJSON(w, http.StatusInternalServerError, apiErr("INTERNAL_ERROR", "failed to fetch marks"))
