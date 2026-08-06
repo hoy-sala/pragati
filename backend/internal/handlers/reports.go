@@ -118,7 +118,29 @@ func assessmentTerm(assessmentName string) string {
 	return ""
 }
 
-// MarkSheetAssessment describes one assessment column.
+// subjectOrder defines the canonical display order for subjects.
+// Curricular first (by language sequence), then co-curricular.
+var subjectOrder = map[string]int{
+	"KAN": 0, "ENG": 1, "HIN": 2, "MAT": 3, "SCI": 4, "SOC": 5,
+	"PE": 10, "CS": 11, "MUS": 12, "DRW": 13,
+}
+
+// termOrder maps term name to a sort key.
+var termOrder = map[string]int{
+	"Term 1": 0, "Term 2": 1, "Term 3": 2, "Term 4": 3,
+}
+
+// sortAssessments orders assessments by term → canonical subject → category sort order.
+func sortAssessments(a []MarkSheetAssessment) {
+	sort.SliceStable(a, func(i, j int) int {
+		ti, tj := termOrder[a[i].Term], termOrder[a[j].Term]
+		if ti != tj {
+			return ti - tj
+		}
+		si, sj := subjectOrder[a[i].SubjectCode], subjectOrder[a[j].SubjectCode]
+		return si - sj
+	})
+}
 type MarkSheetAssessment struct {
 	ID           string  `json:"id"`
 	Name         string  `json:"name"`
@@ -255,6 +277,7 @@ func (h *ReportsHandler) MarkSheet(w http.ResponseWriter, r *http.Request) {
 		}
 		assessments = append(assessments, a)
 	}
+	sortAssessments(assessments)
 
 	studQuery := `SELECT id, sats_number, first_name, COALESCE(last_name,''), roll_no
 		FROM students WHERE class_id = $1 AND deleted_at IS NULL AND is_active = true
@@ -333,17 +356,19 @@ func (h *ReportsHandler) MarkSheet(w http.ResponseWriter, r *http.Request) {
 					sa.Total += cell.Value
 				}
 			}
-			subList := make([]SubjectAggregate, 0, len(subAgg))
-			for _, sa := range subAgg {
-				if sa.MaxTotal > 0 {
-					sa.Pct = (sa.Total / sa.MaxTotal) * 100
-				}
-				g := computeGrade(sa.Pct, subjectType(sa.SubjectType), cn)
-				sa.Grade = g.grade
-				sa.GradeLabel = g.label
-				subList = append(subList, *sa)
+	subList := make([]SubjectAggregate, 0, len(subAgg))
+		for _, sa := range subAgg {
+			if sa.MaxTotal > 0 {
+				sa.Pct = (sa.Total / sa.MaxTotal) * 100
 			}
-			sort.Slice(subList, func(i, j int) bool { return subList[i].SubjectName < subList[j].SubjectName })
+			g := computeGrade(sa.Pct, subjectType(sa.SubjectType), cn)
+			sa.Grade = g.grade
+			sa.GradeLabel = g.label
+			subList = append(subList, *sa)
+		}
+		sort.Slice(subList, func(i, j int) bool {
+			return subjectOrder[subList[i].SubjectCode] < subjectOrder[subList[j].SubjectCode]
+		})
 
 			var pct float64
 			if maxTotal > 0 {
@@ -398,12 +423,14 @@ func (h *ReportsHandler) MarkSheet(w http.ResponseWriter, r *http.Request) {
 func buildTermGroups(assessments []MarkSheetAssessment) []TermGroup {
 	termMap := map[string]map[string]*SubjectGroup{}
 	termOrder := []string{}
+	termSubjectOrder := map[string][]string{}
 	for _, a := range assessments {
 		if a.Term == "" {
 			continue
 		}
 		if termMap[a.Term] == nil {
 			termMap[a.Term] = map[string]*SubjectGroup{}
+			termSubjectOrder[a.Term] = []string{}
 			termOrder = append(termOrder, a.Term)
 		}
 		sm := termMap[a.Term]
@@ -411,16 +438,16 @@ func buildTermGroups(assessments []MarkSheetAssessment) []TermGroup {
 			sm[a.SubjectID] = &SubjectGroup{
 				SubjectID: a.SubjectID, SubjectCode: a.SubjectCode, SubjectName: a.SubjectName,
 			}
+			termSubjectOrder[a.Term] = append(termSubjectOrder[a.Term], a.SubjectID)
 		}
 		sm[a.SubjectID].Assessments = append(sm[a.SubjectID].Assessments, a)
 	}
 	groups := make([]TermGroup, 0, len(termOrder))
 	for _, t := range termOrder {
 		subjects := make([]SubjectGroup, 0, len(termMap[t]))
-		for _, sg := range termMap[t] {
-			subjects = append(subjects, *sg)
+		for _, sid := range termSubjectOrder[t] {
+			subjects = append(subjects, *termMap[t][sid])
 		}
-		sort.Slice(subjects, func(i, j int) bool { return subjects[i].SubjectName < subjects[j].SubjectName })
 		groups = append(groups, TermGroup{Term: t, Subjects: subjects})
 	}
 	return groups
