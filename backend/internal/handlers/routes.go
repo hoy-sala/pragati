@@ -43,6 +43,7 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
 	questionH := NewQuestionHandler(db)
 	quizH := NewQuizHandler(db)
 	hpcH := NewHPCHandler(db)
+	reportsH := NewReportsHandler(db)
 
 	roleMw := middleware.NewRoleMiddleware(jwtService)
 	loginLimiter := middleware.NewRateLimiter(10, time.Minute)
@@ -130,6 +131,12 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
 			r.Get("/grid", markH.GetGrid)
 			r.Put("/batch", roleMw.RequireRole("admin", "principal", "teacher")(http.HandlerFunc(markH.BatchSave)))
 			r.Post("/import/{id}", roleMw.RequireRole("admin", "teacher")(http.HandlerFunc(markH.ImportExcel)))
+		})
+
+		r.Route("/reports", func(r chi.Router) {
+			r.Use(roleMw.Authenticate)
+			r.Get("/mark-sheet", reportsH.MarkSheet)
+			r.Get("/student", reportsH.StudentReport)
 		})
 
 		r.Route("/quizzes", func(r chi.Router) {
