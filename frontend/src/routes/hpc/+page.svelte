@@ -2,6 +2,7 @@
 	import { api } from '$lib/api/client.svelte';
 	import type { Class, AcademicYear } from '$lib/types';
 	import { onMount } from 'svelte';
+	import Select from '$lib/components/Select.svelte';
 
 	interface HPCGridRow {
 		student_id: string;
@@ -24,6 +25,7 @@
 	let summary = $state({ total_students: 0, published_count: 0, draft_count: 0 });
 
 	const terms = ['Term1', 'Term2'];
+	const termOptions = terms.map(t => ({ id: t, name: t }));
 
 	onMount(async () => {
 		const [cRes, yRes] = await Promise.all([
@@ -96,28 +98,15 @@
 		<div class="flex flex-wrap gap-3 items-end">
 			<div>
 				<label class="block text-xs font-medium text-slate-600 mb-1">Class</label>
-				<select bind:value={selectedClass} class="px-3 py-1.5 rounded-lg border border-slate-300 text-sm">
-					<option value="">Select Class</option>
-					{#each classes as c}
-						<option value={c.id}>{c.name}</option>
-					{/each}
-				</select>
+				<Select bind:value={selectedClass} options={classes} placeholder="Select Class" />
 			</div>
 			<div>
 				<label class="block text-xs font-medium text-slate-600 mb-1">Academic Year</label>
-				<select bind:value={selectedYear} class="px-3 py-1.5 rounded-lg border border-slate-300 text-sm">
-					{#each years as y}
-						<option value={y.id}>{y.name}</option>
-					{/each}
-				</select>
+				<Select bind:value={selectedYear} options={years} />
 			</div>
 			<div>
 				<label class="block text-xs font-medium text-slate-600 mb-1">Term</label>
-				<select bind:value={selectedTerm} class="px-3 py-1.5 rounded-lg border border-slate-300 text-sm">
-					{#each terms as t}
-						<option value={t}>{t}</option>
-					{/each}
-				</select>
+				<Select bind:value={selectedTerm} options={termOptions} />
 			</div>
 			<button onclick={loadGrid}
 				class="px-4 py-1.5 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800 transition-colors">

@@ -2,6 +2,7 @@
 	import { api } from '$lib/api/client.svelte';
 	import type { Class, Subject } from '$lib/types';
 	import { onMount } from 'svelte';
+	import Select from '$lib/components/Select.svelte';
 
 	let classes = $state<Class[]>([]);
 	let subjects = $state<Subject[]>([]);
@@ -17,12 +18,13 @@
 	let statusMsg = $state('');
 
 	const terms = ['Term1', 'Term2'];
+	const termOptions = terms.map(t => ({ id: t, name: t }));
 	const proficiencyOptions = [
-		{ value: 0, label: '—' },
-		{ value: 1, label: '1-Beginning' },
-		{ value: 2, label: '2-Developing' },
-		{ value: 3, label: '3-Proficient' },
-		{ value: 4, label: '4-Advanced' },
+		{ id: '0', name: '—' },
+		{ id: '1', name: '1-Beginning' },
+		{ id: '2', name: '2-Developing' },
+		{ id: '3', name: '3-Proficient' },
+		{ id: '4', name: '4-Advanced' },
 	];
 
 	onMount(async () => {
@@ -107,29 +109,15 @@
 		<div class="flex flex-wrap gap-3 items-end">
 			<div>
 				<label class="block text-xs font-medium text-slate-600 mb-1">Class</label>
-				<select bind:value={selectedClass} class="px-3 py-1.5 rounded-lg border border-slate-300 text-sm">
-					<option value="">Select</option>
-					{#each classes as c}
-						<option value={c.id}>{c.name}</option>
-					{/each}
-				</select>
+				<Select bind:value={selectedClass} options={classes} placeholder="Select" />
 			</div>
 			<div>
 				<label class="block text-xs font-medium text-slate-600 mb-1">Subject</label>
-				<select bind:value={selectedSubject} class="px-3 py-1.5 rounded-lg border border-slate-300 text-sm">
-					<option value="">Select</option>
-					{#each subjects as s}
-						<option value={s.id}>{s.name}</option>
-					{/each}
-				</select>
+				<Select bind:value={selectedSubject} options={subjects} placeholder="Select" />
 			</div>
 			<div>
 				<label class="block text-xs font-medium text-slate-600 mb-1">Term</label>
-				<select bind:value={selectedTerm} class="px-3 py-1.5 rounded-lg border border-slate-300 text-sm">
-					{#each terms as t}
-						<option value={t}>{t}</option>
-					{/each}
-				</select>
+				<Select bind:value={selectedTerm} options={termOptions} />
 			</div>
 			<button onclick={loadGrid}
 				class="px-4 py-1.5 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800 transition-colors">
@@ -167,15 +155,14 @@
 						<tr class="border-t border-slate-100 hover:bg-slate-50">
 							<td class="sticky left-0 bg-white z-10 px-3 py-1.5 font-medium text-xs">{student.name}</td>
 							{#each loColumns as lo}
-								<td class="px-1 py-1.5 text-center">
-									<select class="text-xs px-1 py-0.5 border border-slate-300 rounded"
-										value={getCellValue(student.student_id, lo.id)}
-										onchange={(e) => { const el = e.target as HTMLSelectElement; updateCell(student.student_id, lo.id, parseInt(el.value)); }}>
-										{#each proficiencyOptions as opt}
-											<option value={opt.value}>{opt.label}</option>
-										{/each}
-									</select>
-								</td>
+							<td class="px-1 py-1.5 text-center">
+								<Select
+									value={String(getCellValue(student.student_id, lo.id))}
+									options={proficiencyOptions}
+									size="sm"
+									onselect={(v) => updateCell(student.student_id, lo.id, parseInt(v))}
+								/>
+							</td>
 							{/each}
 						</tr>
 					{/each}

@@ -2,6 +2,7 @@
 	import { api } from '$lib/api/client.svelte';
 	import type { Class } from '$lib/types';
 	import { onMount } from 'svelte';
+	import Select from '$lib/components/Select.svelte';
 
 	let classes = $state<Class[]>([]);
 	let selectedClass = $state('');
@@ -20,6 +21,7 @@
 		{ value: 'middle', label: 'Middle (Class 6-8)' },
 		{ value: 'secondary', label: 'Secondary (Class 9-10)' },
 	];
+	const stageOptions = stages.map(s => ({ id: s.value, name: s.label }));
 
 	onMount(async () => {
 		const cRes = await api<Class[]>('GET', '/classes?limit=100');
@@ -98,20 +100,11 @@
 		<div class="flex flex-wrap gap-3 items-end">
 			<div>
 				<label class="block text-xs font-medium text-slate-600 mb-1">Stage</label>
-				<select bind:value={selectedStage} class="px-3 py-1.5 rounded-lg border border-slate-300 text-sm">
-					{#each stages as s}
-						<option value={s.value}>{s.label}</option>
-					{/each}
-				</select>
+				<Select bind:value={selectedStage} options={stageOptions} />
 			</div>
 			<div>
 				<label class="block text-xs font-medium text-slate-600 mb-1">Class (optional)</label>
-				<select bind:value={selectedClass} class="px-3 py-1.5 rounded-lg border border-slate-300 text-sm">
-					<option value="">All Classes</option>
-					{#each classes as c}
-						<option value={c.id}>{c.name}</option>
-					{/each}
-				</select>
+				<Select bind:value={selectedClass} options={classes} placeholder="All Classes" />
 			</div>
 			<button onclick={loadConfig}
 				class="px-3 py-1.5 border border-slate-300 rounded-lg text-sm hover:bg-slate-50 transition-colors">

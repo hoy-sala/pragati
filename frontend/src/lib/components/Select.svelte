@@ -11,6 +11,8 @@
 		icon,
 		clearable = false,
 		disabled = false,
+		size = 'md',
+		onselect,
 		class: className = '',
 	}: {
 		value?: string;
@@ -22,6 +24,8 @@
 		icon?: import('svelte').ComponentType;
 		clearable?: boolean;
 		disabled?: boolean;
+		size?: 'sm' | 'md';
+		onselect?: (val: string) => void;
 		class?: string;
 	} = $props();
 
@@ -38,6 +42,7 @@
 	function select(val: string) {
 		value = val;
 		open = false;
+		onselect?.(val);
 	}
 
 	function clear(e: MouseEvent) {
@@ -68,7 +73,8 @@
 		disabled={disabled}
 		aria-haspopup="listbox"
 		aria-expanded={open}
-		class="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-lg border transition-all
+		class="w-full flex items-center gap-2 rounded-lg border transition-all
+			{size === 'sm' ? 'px-2 py-1 text-xs' : 'px-3 py-2 text-sm'}
 			{open
 				? 'border-primary-400 ring-2 ring-primary-100'
 				: 'border-slate-300 hover:border-slate-400'}
@@ -107,7 +113,8 @@
 						role="option"
 						aria-selected={isSelected}
 						onmousedown={() => select(opt[valueKey])}
-						class="px-3 py-2 text-sm cursor-pointer transition-colors flex items-center gap-2
+						class="cursor-pointer transition-colors flex items-center gap-2
+							{size === 'sm' ? 'px-2 py-1 text-xs' : 'px-3 py-2 text-sm'}
 							{isSelected
 								? 'bg-primary-50 text-primary-700 font-medium'
 								: 'text-slate-700 hover:bg-slate-100'}"

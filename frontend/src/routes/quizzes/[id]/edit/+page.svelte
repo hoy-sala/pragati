@@ -4,12 +4,18 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import Select from '$lib/components/Select.svelte';
 
 	const quizId = $page.params.id;
 
 	let subjects = $state<Subject[]>([]);
 	let questions = $state<Question[]>([]);
 	let saving = $state(false);
+
+	const targetOptions = [
+		{ id: 'student', name: 'Students' },
+		{ id: 'staff', name: 'Staff' },
+	];
 
 	let title = $state('');
 	let description = $state('');
@@ -119,10 +125,7 @@
 		<div class="grid grid-cols-2 gap-4">
 			<div>
 				<label class="block text-sm font-medium text-slate-700 mb-1">Target</label>
-				<select bind:value={target_type} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
-					<option value="student">Students</option>
-					<option value="staff">Staff</option>
-				</select>
+				<Select bind:value={target_type} options={targetOptions} />
 			</div>
 			<div>
 				<label class="block text-sm font-medium text-slate-700 mb-1">Target ID (optional)</label>
@@ -176,12 +179,7 @@
 		<h2 class="text-lg font-semibold text-slate-900">Questions</h2>
 
 		<div class="flex items-center gap-3">
-			<select bind:value={filterSubject} class="px-3 py-1.5 rounded-lg border border-slate-300 text-sm">
-				<option value="">All Subjects</option>
-				{#each subjects as s}
-					<option value={s.id}>{s.name}</option>
-				{/each}
-			</select>
+			<Select bind:value={filterSubject} options={subjects} placeholder="All Subjects" class="w-44" />
 			<span class="text-xs text-slate-400">{selectedQuestions.length} selected</span>
 		</div>
 

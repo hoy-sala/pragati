@@ -3,6 +3,7 @@
 	import type { Subject } from '$lib/types';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import Select from '$lib/components/Select.svelte';
 
 	let subjects = $state<Subject[]>([]);
 	let subjectId = $state('');
@@ -81,12 +82,7 @@ The capital of India is {=New Delhi ~Mumbai ~Kolkata}.`;
 		<div class="flex gap-4 items-end">
 			<div class="flex-1">
 				<label class="block text-sm font-medium text-slate-700 mb-1">Subject *</label>
-				<select bind:value={subjectId} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
-					<option value="">Select</option>
-					{#each subjects as s}
-						<option value={s.id}>{s.name}</option>
-					{/each}
-				</select>
+				<Select bind:value={subjectId} options={subjects} placeholder="Select" />
 			</div>
 			<div class="flex gap-1 bg-slate-100 rounded-lg p-1">
 				<button onclick={() => importMode = 'gift'}

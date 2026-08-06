@@ -2,6 +2,7 @@
 	import { api } from '$lib/api/client.svelte';
 	import type { Class, Subject } from '$lib/types';
 	import { onMount } from 'svelte';
+	import Select from '$lib/components/Select.svelte';
 
 	let classes = $state<Class[]>([]);
 	let subjects = $state<Subject[]>([]);
@@ -85,21 +86,11 @@ LA-6.2.1,Writes clear and coherent paragraphs,psychomotor,3,1`;
 		<div class="flex flex-wrap gap-3 items-end">
 			<div>
 				<label class="block text-xs font-medium text-slate-600 mb-1">Class</label>
-				<select bind:value={selectedClass} class="px-3 py-1.5 rounded-lg border border-slate-300 text-sm">
-					<option value="">Select</option>
-					{#each classes as c}
-						<option value={c.id}>{c.name}</option>
-					{/each}
-				</select>
+				<Select bind:value={selectedClass} options={classes} placeholder="Select" />
 			</div>
 			<div>
 				<label class="block text-xs font-medium text-slate-600 mb-1">Subject</label>
-				<select bind:value={selectedSubject} class="px-3 py-1.5 rounded-lg border border-slate-300 text-sm">
-					<option value="">Select</option>
-					{#each subjects as s}
-						<option value={s.id}>{s.name}</option>
-					{/each}
-				</select>
+				<Select bind:value={selectedSubject} options={subjects} placeholder="Select" />
 			</div>
 			<button onclick={importLO} disabled={importing || !selectedSubject || !loText.trim()}
 				class="px-4 py-1.5 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 disabled:opacity-50 transition-colors">

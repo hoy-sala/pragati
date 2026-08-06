@@ -2,6 +2,7 @@
 	import { api } from '$lib/api/client.svelte';
 	import type { Class, Subject } from '$lib/types';
 	import { onMount } from 'svelte';
+	import Select from '$lib/components/Select.svelte';
 
 	interface Teacher {
 		id: string;
@@ -199,18 +200,8 @@
 										{:else}
 											{#each editingSubjects as s, i (i)}
 												<div class="flex items-center gap-2">
-													<select bind:value={s.subject_id} class="flex-1 px-2 py-1.5 rounded border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-primary-500">
-														<option value="">Select subject</option>
-														{#each subjects as sub (sub.id)}
-															<option value={sub.id}>{sub.name}</option>
-														{/each}
-													</select>
-													<select bind:value={s.class_id} class="flex-1 px-2 py-1.5 rounded border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-primary-500">
-														<option value="">Select class</option>
-														{#each classes as c (c.id)}
-															<option value={c.id}>{c.name}</option>
-														{/each}
-													</select>
+													<Select bind:value={s.subject_id} options={subjects} placeholder="Select subject" size="sm" class="flex-1" />
+													<Select bind:value={s.class_id} options={classes} placeholder="Select class" size="sm" class="flex-1" />
 													<button onclick={() => removeSubjectRow(i)} class="px-2 py-1 text-xs text-danger-600 hover:text-danger-700">Remove</button>
 												</div>
 											{/each}

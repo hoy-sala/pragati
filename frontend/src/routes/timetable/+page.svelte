@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { WEEKLY_TIMETABLE, SUBJECT_INFO, WEEKDAY_TIMES, SAT_TIMES, DAY_LABELS, BREAK_CODES, ACTIVITY_CODES, TEACHER_NAMES } from './timetable.data';
+	import Select from '$lib/components/Select.svelte';
 
 	let activeClass = $state(0);
 	let showAll = $state(true);
@@ -12,6 +13,7 @@
 	const DAY_BG = ['bg-blue-50', 'bg-green-50', 'bg-amber-50', 'bg-purple-50', 'bg-pink-50', 'bg-orange-50'];
 
 	const ACADEMIC_SUBJECTS = Object.entries(SUBJECT_INFO).filter(([c]) => !BREAK_CODES.has(c) && !ACTIVITY_CODES.has(c));
+	const SUBJECT_OPTIONS = ACADEMIC_SUBJECTS.map(([code, info]) => ({ id: code, name: `${code} — ${info.name}` }));
 
 	const WEEKDAY_PERIOD_MAP = [1, 2, 3, 5, 6, 8, 9, 10];
 	const SAT_PERIOD_MAP = [3, 4, 6, 7];
@@ -138,12 +140,7 @@
 					</button>
 				{/each}
 			{:else}
-				<select bind:value={selectedSubject}
-					class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-medium bg-white text-slate-700">
-					{#each ACADEMIC_SUBJECTS as [code, info]}
-						<option value={code}>{code} — {info.name}</option>
-					{/each}
-				</select>
+				<Select bind:value={selectedSubject} options={SUBJECT_OPTIONS} size="sm" class="w-44" />
 			{/if}
 		</div>
 

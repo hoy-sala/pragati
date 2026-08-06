@@ -3,6 +3,7 @@
 	import type { Question, Subject } from '$lib/types';
 	import { typeColors, typeLabels } from '$lib/utils/questionUtils';
 	import { onMount } from 'svelte';
+	import Select from '$lib/components/Select.svelte';
 
 	let questions = $state<Question[]>([]);
 	let subjects = $state<Subject[]>([]);
@@ -32,6 +33,13 @@
 	function subjectName(id: string): string {
 		return subjects.find(s => s.id === id)?.name || id.slice(0, 8);
 	}
+
+	const typeOptions = [
+		{ id: 'mcq', name: 'MCQ' },
+		{ id: 'true_false', name: 'True/False' },
+		{ id: 'fill_blank', name: 'Fill Blank' },
+		{ id: 'short_answer', name: 'Short Answer' },
+	];
 </script>
 
 <div class="space-y-6">
@@ -52,19 +60,8 @@
 
 	<div class="bg-white rounded-xl border border-slate-200 p-4">
 		<div class="flex flex-wrap gap-3">
-			<select bind:value={filterSubject} onchange={loadQuestions} class="px-3 py-1.5 rounded-lg border border-slate-300 text-sm">
-				<option value="">All Subjects</option>
-				{#each subjects as s}
-					<option value={s.id}>{s.name}</option>
-				{/each}
-			</select>
-			<select bind:value={filterType} onchange={loadQuestions} class="px-3 py-1.5 rounded-lg border border-slate-300 text-sm">
-				<option value="">All Types</option>
-				<option value="mcq">MCQ</option>
-				<option value="true_false">True/False</option>
-				<option value="fill_blank">Fill Blank</option>
-				<option value="short_answer">Short Answer</option>
-			</select>
+			<Select bind:value={filterSubject} options={subjects} placeholder="All Subjects" onselect={loadQuestions} class="w-44" />
+			<Select bind:value={filterType} options={typeOptions} placeholder="All Types" onselect={loadQuestions} class="w-40" />
 			<input type="text" bind:value={search} placeholder="Search questions..." oninput={loadQuestions}
 				class="px-3 py-1.5 rounded-lg border border-slate-300 text-sm flex-1 min-w-[200px]">
 		</div>

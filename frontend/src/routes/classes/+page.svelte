@@ -2,6 +2,7 @@
 	import { api } from '$lib/api/client.svelte';
 	import type { Class, AcademicYear } from '$lib/types';
 	import { onMount } from 'svelte';
+	import Select from '$lib/components/Select.svelte';
 
 	let classes: Class[] = $state([]);
 	let academicYears: AcademicYear[] = $state([]);
@@ -14,6 +15,10 @@
 	let newCode = $state('');
 	let newSortOrder = $state(0);
 	let newAcademicYearId = $state('');
+
+	let academicYearOptions = $derived(
+		academicYears.map(y => ({ id: y.id, name: y.name + (y.is_current ? ' (current)' : '') }))
+	);
 
 	onMount(async () => {
 		const [classRes, yearRes] = await Promise.all([
@@ -76,12 +81,7 @@
 				<input bind:value={newName} placeholder="Class name (e.g. Class 6)" class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
 				<input bind:value={newCode} placeholder="Code (e.g. VI)" class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
 				<input bind:value={newSortOrder} type="number" placeholder="Sort order" class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
-				<select bind:value={newAcademicYearId} class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500">
-					<option value="">Select academic year</option>
-					{#each academicYears as y (y.id)}
-						<option value={y.id}>{y.name}{y.is_current ? ' (current)' : ''}</option>
-					{/each}
-				</select>
+				<Select bind:value={newAcademicYearId} options={academicYearOptions} placeholder="Select academic year" />
 			</div>
 			{#if error}
 				<div class="text-sm text-danger-600">{error}</div>

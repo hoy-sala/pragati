@@ -3,6 +3,7 @@
 	import type { Subject } from '$lib/types';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
+	import Select from '$lib/components/Select.svelte';
 
 	const studentId = $page.params.student_id;
 	const term = $page.url.searchParams.get('term') || 'Term1';
@@ -48,7 +49,7 @@
 
 	let teacherRemarks = $state('');
 
-	const gradeOptions = ['', 'A+', 'A', 'B+', 'B', 'C', 'D', 'E'];
+	const gradeOptions = ['', 'A+', 'A', 'B+', 'B', 'C', 'D', 'E'].map(g => ({ id: g, name: g || '—' }));
 
 	const coScholasticSections = $derived.by(() => ({
 		life_skills: { label: 'Life Skills', items: Object.keys(coScholastic.life_skills || {}).map(k => ({ key: k })) },
@@ -192,12 +193,7 @@
 						{#each section.items as item}
 							<div class="flex items-center justify-between px-3 py-1.5 bg-slate-50 rounded">
 								<span class="text-sm">{coScholastic[sectionKey][item.key].label}</span>
-								<select bind:value={coScholastic[sectionKey][item.key].grade}
-									class="text-xs px-2 py-0.5 border border-slate-300 rounded w-16 text-center">
-									{#each gradeOptions as g}
-										<option value={g}>{g || '—'}</option>
-									{/each}
-								</select>
+								<Select bind:value={coScholastic[sectionKey][item.key].grade} options={gradeOptions} size="sm" class="w-20" />
 							</div>
 						{/each}
 					</div>

@@ -3,6 +3,7 @@
 	import type { Subject } from '$lib/types';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import Select from '$lib/components/Select.svelte';
 
 	let subjects = $state<Subject[]>([]);
 	let questionType = $state('mcq');
@@ -12,6 +13,22 @@
 	let marks = $state(1);
 	let difficulty = $state('medium');
 	let chapters = $state('');
+
+	const typeOptions = [
+		{ id: 'mcq', name: 'Multiple Choice' },
+		{ id: 'true_false', name: 'True / False' },
+		{ id: 'fill_blank', name: 'Fill in the Blank' },
+		{ id: 'short_answer', name: 'Short Answer' },
+	];
+	const difficultyOptions = [
+		{ id: 'easy', name: 'Easy' },
+		{ id: 'medium', name: 'Medium' },
+		{ id: 'hard', name: 'Hard' },
+	];
+	const tfOptions = [
+		{ id: 'TRUE', name: 'TRUE' },
+		{ id: 'FALSE', name: 'FALSE' },
+	];
 
 	// MCQ fields
 	let options = $state([{ key: 'A', value: '', correct: false }, { key: 'B', value: '', correct: false }]);
@@ -81,21 +98,11 @@
 		<div class="grid grid-cols-2 gap-4">
 			<div>
 				<label class="block text-sm font-medium text-slate-700 mb-1">Subject *</label>
-				<select bind:value={subjectId} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
-					<option value="">Select</option>
-					{#each subjects as s}
-						<option value={s.id}>{s.name}</option>
-					{/each}
-				</select>
+				<Select bind:value={subjectId} options={subjects} placeholder="Select" />
 			</div>
 			<div>
 				<label class="block text-sm font-medium text-slate-700 mb-1">Type *</label>
-				<select bind:value={questionType} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
-					<option value="mcq">Multiple Choice</option>
-					<option value="true_false">True / False</option>
-					<option value="fill_blank">Fill in the Blank</option>
-					<option value="short_answer">Short Answer</option>
-				</select>
+				<Select bind:value={questionType} options={typeOptions} />
 			</div>
 			<div>
 				<label class="block text-sm font-medium text-slate-700 mb-1">Marks</label>
@@ -103,11 +110,7 @@
 			</div>
 			<div>
 				<label class="block text-sm font-medium text-slate-700 mb-1">Difficulty</label>
-				<select bind:value={difficulty} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
-					<option value="easy">Easy</option>
-					<option value="medium">Medium</option>
-					<option value="hard">Hard</option>
-				</select>
+				<Select bind:value={difficulty} options={difficultyOptions} />
 			</div>
 		</div>
 
@@ -151,11 +154,7 @@
 				{questionType === 'true_false' ? 'Answer *' : questionType === 'fill_blank' ? 'Correct Answer(s) *' : 'Answer *'}
 			</label>
 			{#if questionType === 'true_false'}
-				<select bind:value={answer} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
-					<option value="">Select</option>
-					<option value="TRUE">TRUE</option>
-					<option value="FALSE">FALSE</option>
-				</select>
+				<Select bind:value={answer} options={tfOptions} placeholder="Select" />
 			{:else}
 				<textarea bind:value={answer} rows="2" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm resize-none"></textarea>
 			{/if}
