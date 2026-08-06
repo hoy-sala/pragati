@@ -23,30 +23,47 @@ type gradeBoundary struct {
 	grade string
 	max   float64
 	min   float64
-	gp    float64
 }
 
-var defaultGrades = []gradeBoundary{
-	{"A1", 100, 91, 10},
-	{"A2", 90, 81, 9},
-	{"B1", 80, 71, 8},
-	{"B2", 70, 61, 7},
-	{"C1", 60, 51, 6},
-	{"C2", 50, 41, 5},
-	{"D", 40, 33, 4},
-	{"E", 32, 0, 0},
-}
-
-func gradeForPct(pct float64) (string, float64) {
-	for _, g := range defaultGrades {
-		if pct >= g.min && pct <= g.max {
-			return g.grade, g.gp
-		}
+// gradeForPct returns letter grade. isClass9 enables the C grade (below 30%).
+func gradeForPct(pct float64, isClass9 bool) string {
+	switch {
+	case pct >= 90 && pct <= 100:
+		return "A+"
+	case pct >= 70 && pct < 90:
+		return "A"
+	case pct >= 50 && pct < 70:
+		return "B+"
+	case pct >= 40 && pct < 50:
+		return "B"
+	case pct >= 30 && pct < 40:
+		return "C+"
+	case pct < 30 && isClass9:
+		return "C"
+	case pct < 40 && !isClass9:
+		return "B"
 	}
 	if pct > 100 {
-		return "A1", 10
+		return "A+"
 	}
-	return "E", 0
+	return "B"
+}
+
+// assessmentTerm maps a category code to its term.
+func assessmentTerm(categoryCode string) string {
+	switch categoryCode {
+	case "FA1", "FA2", "SA1":
+		return "Term 1"
+	case "FA3", "FA4", "SA2":
+		return "Term 2"
+	}
+	return ""
+}
+
+// isClass9 checks if a class name refers to 9th standard.
+func isClass9(className string) bool {
+	return className == "Class 9" || className == "9" || className == "9th" ||
+		className == "IX" || className == "Class IX"
 }
 
 // MarkSheetAssessment describes one assessment column.
@@ -58,8 +75,10 @@ type MarkSheetAssessment struct {
 	SubjectName  string  `json:"subject_name"`
 	CategoryID   string  `json:"category_id"`
 	CategoryName string  `json:"category_name"`
+	CategoryCode string  `json:"category_code"`
 	MaxMarks     float64 `json:"max_marks"`
 	Date         string  `json:"date,omitempty"`
+	Term         string  `json:"term"`
 }
 
 // MarkSheetStudent is one student row.
@@ -101,9 +120,17 @@ type MarkSheetResponse struct {
 	ClassID      string              `json:"class_id"`
 	ClassName    string              `json:"class_name"`
 	AcademicYear string              `json:"academic_year_id"`
+	Term         string              `json:"term,omitempty"`
 	Subjects     []SubjectGroup      `json:"subjects"`
+	Terms        []TermGroup         `json:"terms"`
 	Assessments  []MarkSheetAssessment `json:"assessments"`
 	Students     []MarkSheetStudent  `json:"students"`
+}
+
+// TermGroup collects assessments by term then subject.
+type TermGroup struct {
+	Term      string         `json:"term"`
+	Subjects  []SubjectGroup `json:"subjects"`
 }
 
 // SubjectGroup collects assessments by subject for column grouping.
@@ -123,6 +150,7 @@ func (h *ReportsHandler) MarkSheet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	academicYearID := r.URL.Query().Get("academic_year_id")
+	term := r.URL.Query().Get("term")
 
 	var className string
 	err := h.db.QueryRow(r.Context(),
@@ -134,7 +162,7 @@ func (h *ReportsHandler) MarkSheet(w http.ResponseWriter, r *http.Request) {
 	}
 
 	assyQuery := `SELECT a.id, COALESCE(a.name,''), a.subject_id, s.code, s.name,
-		a.category_id, c.name, a.max_marks::double precision, COALESCE(a.date::text,'')
+		a.category_id, c.name, c.code, a.max_marks::double precision, COALESCE(a.date::text,'')
 		FROM assessments a
 		JOIN subjects s ON s.id = a.subject_id AND s.deleted_at IS NULL
 		JOIN assessment_categories c ON c.id = a.category_id
@@ -159,8 +187,14 @@ func (h *ReportsHandler) MarkSheet(w http.ResponseWriter, r *http.Request) {
 	assessments := []MarkSheetAssessment{}
 	for rows.Next() {
 		var a MarkSheetAssessment
+		var catCode string
 		if err := rows.Scan(&a.ID, &a.Name, &a.SubjectID, &a.SubjectCode, &a.SubjectName,
-			&a.CategoryID, &a.CategoryName, &a.MaxMarks, &a.Date); err != nil {
+			&a.CategoryID, &a.CategoryName, &catCode, &a.MaxMarks, &a.Date); err != nil {
+			continue
+		}
+		a.CategoryCode = catCode
+		a.Term = assessmentTerm(catCode)
+		if term != "" && a.Term != term {
 			continue
 		}
 		assessments = append(assessments, a)
@@ -246,7 +280,7 @@ func (h *ReportsHandler) MarkSheet(w http.ResponseWriter, r *http.Request) {
 			if sa.MaxTotal > 0 {
 				sa.Pct = (sa.Total / sa.MaxTotal) * 100
 			}
-			sa.Grade, _ = gradeForPct(sa.Pct)
+			sa.Grade = gradeForPct(sa.Pct, isClass9(className))
 			subList = append(subList, *sa)
 		}
 		sort.Slice(subList, func(i, j int) bool { return subList[i].SubjectName < subList[j].SubjectName })
@@ -255,7 +289,7 @@ func (h *ReportsHandler) MarkSheet(w http.ResponseWriter, r *http.Request) {
 		if maxTotal > 0 {
 			pct = (total / maxTotal) * 100
 		}
-		grade, _ := gradeForPct(pct)
+		grade := gradeForPct(pct, isClass9(className))
 		students = append(students, MarkSheetStudent{
 			StudentID: rs.id, SATSNumber: rs.sats,
 			Name: rs.first, RollNo: rs.roll, Marks: cells,
@@ -292,10 +326,44 @@ func (h *ReportsHandler) MarkSheet(w http.ResponseWriter, r *http.Request) {
 		groups = append(groups, *subjGroups[sid])
 	}
 
+	termGroups := buildTermGroups(assessments)
+
 	renderJSON(w, http.StatusOK, apiOK(MarkSheetResponse{
-		ClassID: classID, ClassName: className, AcademicYear: academicYearID,
-		Subjects: groups, Assessments: assessments, Students: students,
+		ClassID: classID, ClassName: className, AcademicYear: academicYearID, Term: term,
+		Subjects: groups, Terms: termGroups, Assessments: assessments, Students: students,
 	}))
+}
+
+// buildTermGroups nests assessments under Term > Subject.
+func buildTermGroups(assessments []MarkSheetAssessment) []TermGroup {
+	termMap := map[string]map[string]*SubjectGroup{}
+	termOrder := []string{}
+	for _, a := range assessments {
+		if a.Term == "" {
+			continue
+		}
+		if termMap[a.Term] == nil {
+			termMap[a.Term] = map[string]*SubjectGroup{}
+			termOrder = append(termOrder, a.Term)
+		}
+		sm := termMap[a.Term]
+		if sm[a.SubjectID] == nil {
+			sm[a.SubjectID] = &SubjectGroup{
+				SubjectID: a.SubjectID, SubjectCode: a.SubjectCode, SubjectName: a.SubjectName,
+			}
+		}
+		sm[a.SubjectID].Assessments = append(sm[a.SubjectID].Assessments, a)
+	}
+	groups := make([]TermGroup, 0, len(termOrder))
+	for _, t := range termOrder {
+		subjects := make([]SubjectGroup, 0, len(termMap[t]))
+		for _, sg := range termMap[t] {
+			subjects = append(subjects, *sg)
+		}
+		sort.Slice(subjects, func(i, j int) bool { return subjects[i].SubjectName < subjects[j].SubjectName })
+		groups = append(groups, TermGroup{Term: t, Subjects: subjects})
+	}
+	return groups
 }
 
 // StudentReportResponse is an individual student's report card data.
@@ -337,6 +405,7 @@ type ReportAssessment struct {
 	ID      string  `json:"id"`
 	Name    string  `json:"name"`
 	Category string `json:"category"`
+	Term    string  `json:"term"`
 	Max     float64 `json:"max"`
 	Value   float64 `json:"value"`
 	Absent  bool    `json:"absent"`
@@ -378,7 +447,7 @@ func (h *ReportsHandler) StudentReport(w http.ResponseWriter, r *http.Request) {
 	st.DOB = dob
 
 	assyQuery := `SELECT a.id, COALESCE(a.name,''), a.subject_id, s.code, s.name,
-		c.name, a.max_marks::double precision
+		c.name, c.code, a.max_marks::double precision
 		FROM assessments a
 		JOIN subjects s ON s.id = a.subject_id AND s.deleted_at IS NULL
 		JOIN assessment_categories c ON c.id = a.category_id
@@ -400,13 +469,13 @@ func (h *ReportsHandler) StudentReport(w http.ResponseWriter, r *http.Request) {
 	defer rows.Close()
 
 	type rawAssy struct {
-		id, name, sid, scode, sname, cat string
-		max                              float64
+		id, name, sid, scode, sname, cat, catCode string
+		max                                       float64
 	}
 	allAssy := []rawAssy{}
 	for rows.Next() {
 		var a rawAssy
-		if err := rows.Scan(&a.id, &a.name, &a.sid, &a.scode, &a.sname, &a.cat, &a.max); err != nil {
+		if err := rows.Scan(&a.id, &a.name, &a.sid, &a.scode, &a.sname, &a.cat, &a.catCode, &a.max); err != nil {
 			continue
 		}
 		allAssy = append(allAssy, a)
@@ -437,12 +506,16 @@ func (h *ReportsHandler) StudentReport(w http.ResponseWriter, r *http.Request) {
 	subjOrder := []string{}
 	var grandTotal, grandMax float64
 	for _, a := range allAssy {
+		t := assessmentTerm(a.catCode)
+		if term != "" && t != term {
+			continue
+		}
 		if subjMap[a.sid] == nil {
 			subjMap[a.sid] = &ReportSubject{SubjectID: a.sid, SubjectCode: a.scode, SubjectName: a.sname}
 			subjOrder = append(subjOrder, a.sid)
 		}
 		rs := subjMap[a.sid]
-		cell := ReportAssessment{ID: a.id, Name: a.name, Category: a.cat, Max: a.max}
+		cell := ReportAssessment{ID: a.id, Name: a.name, Category: a.cat, Max: a.max, Term: t}
 		if m, ok := markMap[a.id]; ok {
 			cell.Value = m.Value
 			cell.Absent = m.IsAbsent
@@ -458,12 +531,13 @@ func (h *ReportsHandler) StudentReport(w http.ResponseWriter, r *http.Request) {
 	}
 
 	subjects := make([]ReportSubject, 0, len(subjOrder))
+	cl9 := isClass9(st.Class)
 	for _, sid := range subjOrder {
 		rs := subjMap[sid]
 		if rs.MaxTotal > 0 {
 			rs.Pct = (rs.Total / rs.MaxTotal) * 100
 		}
-		rs.Grade, _ = gradeForPct(rs.Pct)
+		rs.Grade = gradeForPct(rs.Pct, cl9)
 		subjects = append(subjects, *rs)
 	}
 
@@ -471,7 +545,7 @@ func (h *ReportsHandler) StudentReport(w http.ResponseWriter, r *http.Request) {
 	if grandMax > 0 {
 		pct = (grandTotal / grandMax) * 100
 	}
-	grade, _ := gradeForPct(pct)
+	grade := gradeForPct(pct, cl9)
 
 	resp := StudentReportResponse{
 		Student: st, AcademicYear: academicYearID, Term: term,
