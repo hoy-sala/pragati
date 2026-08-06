@@ -133,13 +133,13 @@ var termOrder = map[string]int{
 // sortAssessments orders assessments by term → canonical subject → category sort order.
 func sortAssessments(a []MarkSheetAssessment) {
 	sort.SliceStable(a, func(i, j int) bool {
-		ti, tj := termOrder[a[i].Term], termOrder[a[j].Term]
-		if ti != tj {
-			return ti < tj
-		}
 		si, sj := subjectOrder[a[i].SubjectCode], subjectOrder[a[j].SubjectCode]
 		if si != sj {
 			return si < sj
+		}
+		ti, tj := termOrder[a[i].Term], termOrder[a[j].Term]
+		if ti != tj {
+			return ti < tj
 		}
 		return a[i].Name < a[j].Name
 	})
