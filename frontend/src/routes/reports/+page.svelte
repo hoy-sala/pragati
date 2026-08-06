@@ -248,16 +248,16 @@
 							{/each}
 						</tr>
 						<tr class="bg-slate-50 border-b border-slate-200">
-							{#each ms.terms as tg}
-								{#each tg.subjects as sg}
-									{#each sg.assessments as a}
-										<th class="px-2 py-1.5 text-center font-medium text-slate-500 border-r border-slate-200 text-[10px]">
-											<div>{a.category_name}</div>
-											<div class="text-[9px] text-slate-400">/{a.max_marks}</div>
-										</th>
-									{/each}
+					{#each ms.terms as tg}
+							{#each tg.subjects as sg}
+								{#each sg.assessments as a}
+									<th class="px-2 py-1.5 text-center font-medium text-slate-500 border-r border-slate-200 text-[10px]">
+										<div>{a.name}</div>
+										<div class="text-[9px] text-slate-400">/{a.max_marks}</div>
+									</th>
 								{/each}
 							{/each}
+						{/each}
 						</tr>
 					</thead>
 					<tbody>
@@ -406,7 +406,7 @@
 								<div class="flex flex-wrap gap-1 mt-1">
 									{#each sub.assessments as a}
 										<span class="text-[10px] px-1.5 py-0.5 rounded {a.term === 'Term 1' ? 'bg-blue-50 text-blue-600' : 'bg-purple-50 text-purple-600'}" title="{a.name}">
-											{a.category}: {#if a.has_mark}{a.absent ? 'AB' : a.value}{:else}—{/if}/{a.max}
+											{a.name}: {#if a.has_mark}{a.absent ? 'AB' : a.value}{:else}—{/if}/{a.max}
 										</span>
 									{/each}
 								</div>
@@ -445,7 +445,7 @@
 								<div class="flex flex-wrap gap-1 mt-1">
 									{#each sub.assessments as a}
 										<span class="text-[10px] px-1.5 py-0.5 rounded {a.term === 'Term 1' ? 'bg-blue-50 text-blue-600' : 'bg-purple-50 text-purple-600'}" title="{a.name}">
-											{a.category}: {#if a.has_mark}{a.absent ? 'AB' : a.value}{:else}—{/if}/{a.max}
+											{a.name}: {#if a.has_mark}{a.absent ? 'AB' : a.value}{:else}—{/if}/{a.max}
 										</span>
 									{/each}
 								</div>
