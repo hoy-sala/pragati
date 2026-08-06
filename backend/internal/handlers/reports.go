@@ -353,7 +353,7 @@ func (h *ReportsHandler) MarkSheet(w http.ResponseWriter, r *http.Request) {
 			students = append(students, MarkSheetStudent{
 			StudentID: rs.id, SATSNumber: rs.sats,
 			Name: rs.first, RollNo: rs.roll, Marks: cells,
-			Total: total, MaxTotal: maxTotal, Pct: pct, Grade: grade, Subjects: subList,
+			Total: total, MaxTotal: maxTotal, Pct: pct, Grade: grade.grade, Subjects: subList,
 		})
 		if rs.last != "" {
 			students[len(students)-1].Name += " " + rs.last
@@ -617,7 +617,7 @@ func (h *ReportsHandler) StudentReport(w http.ResponseWriter, r *http.Request) {
 
 	resp := StudentReportResponse{
 		Student: st, AcademicYear: academicYearID, Term: term,
-		Subjects: subjects, GrandTotal: grandTotal, GrandMax: grandMax, Pct: pct, Grade: grade,
+		Subjects: subjects, GrandTotal: grandTotal, GrandMax: grandMax, Pct: pct, Grade: grade.grade,
 	}
 
 	if term != "" && academicYearID != "" {
