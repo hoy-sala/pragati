@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"sort"
+	"strings"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/pragati/backend/internal/middleware"
@@ -49,9 +50,9 @@ func gradeForPct(pct float64, isClass9 bool) string {
 	return "B"
 }
 
-// assessmentTerm maps a category code to its term.
-func assessmentTerm(categoryCode string) string {
-	switch categoryCode {
+// assessmentTerm maps an assessment name (FA1, SA1, etc.) to its term.
+func assessmentTerm(assessmentName string) string {
+	switch strings.ToUpper(strings.TrimSpace(assessmentName)) {
 	case "FA1", "FA2", "SA1":
 		return "Term 1"
 	case "FA3", "FA4", "SA2":
@@ -193,7 +194,7 @@ func (h *ReportsHandler) MarkSheet(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 		a.CategoryCode = catCode
-		a.Term = assessmentTerm(catCode)
+		a.Term = assessmentTerm(a.Name)
 		if term != "" && a.Term != term {
 			continue
 		}
@@ -506,7 +507,7 @@ func (h *ReportsHandler) StudentReport(w http.ResponseWriter, r *http.Request) {
 	subjOrder := []string{}
 	var grandTotal, grandMax float64
 	for _, a := range allAssy {
-		t := assessmentTerm(a.catCode)
+		t := assessmentTerm(a.name)
 		if term != "" && t != term {
 			continue
 		}
