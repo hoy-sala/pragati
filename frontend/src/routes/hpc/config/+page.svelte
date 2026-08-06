@@ -99,12 +99,12 @@
 	<div class="bg-white rounded-xl border border-slate-200 p-4 space-y-4">
 		<div class="flex flex-wrap gap-3 items-end">
 			<div>
-				<label class="block text-xs font-medium text-slate-600 mb-1">Stage</label>
-				<Select bind:value={selectedStage} options={stageOptions} />
+				<label for="config-stage" class="block text-xs font-medium text-slate-600 mb-1">Stage</label>
+				<Select id="config-stage" bind:value={selectedStage} options={stageOptions} />
 			</div>
 			<div>
-				<label class="block text-xs font-medium text-slate-600 mb-1">Class (optional)</label>
-				<Select bind:value={selectedClass} options={classes} placeholder="All Classes" />
+				<label for="config-class" class="block text-xs font-medium text-slate-600 mb-1">Class (optional)</label>
+				<Select id="config-class" bind:value={selectedClass} options={classes} placeholder="All Classes" />
 			</div>
 			<button onclick={loadConfig}
 				class="px-3 py-1.5 border border-slate-300 rounded-lg text-sm hover:bg-slate-50 transition-colors">

@@ -6,6 +6,8 @@
 	import { page } from '$app/stores';
 	import Sidebar from '$lib/components/layout/Sidebar.svelte';
 
+	let { children } = $props();
+
 	const auth = getAuthState();
 
 	const publicRoutes = ['/login', '/timetable'];
@@ -41,11 +43,11 @@
 			<Sidebar />
 		{/if}
 		<main class="flex-1 overflow-y-auto p-6" class:p-0={isFullscreenRoute($page.url.pathname)}>
-			<slot />
+			{@render children()}
 		</main>
 	</div>
 {:else}
 	<main class="min-h-screen">
-		<slot />
+		{@render children()}
 	</main>
 {/if}

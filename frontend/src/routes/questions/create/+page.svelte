@@ -97,37 +97,37 @@
 	<form class="bg-white rounded-xl border border-slate-200 p-6 space-y-4" onsubmit={handleSubmit}>
 		<div class="grid grid-cols-2 gap-4">
 			<div>
-				<label class="block text-sm font-medium text-slate-700 mb-1">Subject *</label>
-				<Select bind:value={subjectId} options={subjects} placeholder="Select" />
+				<label for="subject" class="block text-sm font-medium text-slate-700 mb-1">Subject *</label>
+				<Select id="subject" bind:value={subjectId} options={subjects} placeholder="Select" />
 			</div>
 			<div>
-				<label class="block text-sm font-medium text-slate-700 mb-1">Type *</label>
-				<Select bind:value={questionType} options={typeOptions} />
+				<label for="type" class="block text-sm font-medium text-slate-700 mb-1">Type *</label>
+				<Select id="type" bind:value={questionType} options={typeOptions} />
 			</div>
 			<div>
-				<label class="block text-sm font-medium text-slate-700 mb-1">Marks</label>
-				<input type="number" bind:value={marks} min="0.5" step="0.5" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
+				<label for="marks" class="block text-sm font-medium text-slate-700 mb-1">Marks</label>
+				<input id="marks" type="number" bind:value={marks} min="0.5" step="0.5" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
 			</div>
 			<div>
-				<label class="block text-sm font-medium text-slate-700 mb-1">Difficulty</label>
-				<Select bind:value={difficulty} options={difficultyOptions} />
+				<label for="difficulty" class="block text-sm font-medium text-slate-700 mb-1">Difficulty</label>
+				<Select id="difficulty" bind:value={difficulty} options={difficultyOptions} />
 			</div>
 		</div>
 
 		<div>
-			<label class="block text-sm font-medium text-slate-700 mb-1">Question *</label>
-			<textarea bind:value={questionText} rows="3" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm resize-none"></textarea>
+			<label for="question" class="block text-sm font-medium text-slate-700 mb-1">Question *</label>
+			<textarea id="question" bind:value={questionText} rows="3" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm resize-none"></textarea>
 		</div>
 
 		<div>
-			<label class="block text-sm font-medium text-slate-700 mb-1">Chapters</label>
-			<input type="text" bind:value={chapters} placeholder="separate with commas" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
+			<label for="chapters" class="block text-sm font-medium text-slate-700 mb-1">Chapters</label>
+			<input id="chapters" type="text" bind:value={chapters} placeholder="separate with commas" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
 		</div>
 
 		{#if questionType === 'mcq'}
 			<div class="space-y-3">
 				<div class="flex items-center justify-between">
-					<label class="text-sm font-medium text-slate-700">Options</label>
+					<span class="text-sm font-medium text-slate-700">Options</span>
 					<button type="button" onclick={addOption} class="text-xs text-primary-600 hover:text-primary-700">+ Add option</button>
 				</div>
 				{#each options as opt, i}
@@ -150,13 +150,13 @@
 		{/if}
 
 		<div>
-			<label class="block text-sm font-medium text-slate-700 mb-1">
+			<label for="answer" class="block text-sm font-medium text-slate-700 mb-1">
 				{questionType === 'true_false' ? 'Answer *' : questionType === 'fill_blank' ? 'Correct Answer(s) *' : 'Answer *'}
 			</label>
 			{#if questionType === 'true_false'}
-				<Select bind:value={answer} options={tfOptions} placeholder="Select" />
+				<Select id="answer" bind:value={answer} options={tfOptions} placeholder="Select" />
 			{:else}
-				<textarea bind:value={answer} rows="2" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm resize-none"></textarea>
+				<textarea id="answer" bind:value={answer} rows="2" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm resize-none"></textarea>
 			{/if}
 		</div>
 

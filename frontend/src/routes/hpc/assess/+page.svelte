@@ -108,16 +108,16 @@
 	<div class="bg-white rounded-xl border border-slate-200 p-4">
 		<div class="flex flex-wrap gap-3 items-end">
 			<div>
-				<label class="block text-xs font-medium text-slate-600 mb-1">Class</label>
-				<Select bind:value={selectedClass} options={classes} placeholder="Select" />
+				<label for="assess-class" class="block text-xs font-medium text-slate-600 mb-1">Class</label>
+				<Select id="assess-class" bind:value={selectedClass} options={classes} placeholder="Select" />
 			</div>
 			<div>
-				<label class="block text-xs font-medium text-slate-600 mb-1">Subject</label>
-				<Select bind:value={selectedSubject} options={subjects} placeholder="Select" />
+				<label for="assess-subject" class="block text-xs font-medium text-slate-600 mb-1">Subject</label>
+				<Select id="assess-subject" bind:value={selectedSubject} options={subjects} placeholder="Select" />
 			</div>
 			<div>
-				<label class="block text-xs font-medium text-slate-600 mb-1">Term</label>
-				<Select bind:value={selectedTerm} options={termOptions} />
+				<label for="assess-term" class="block text-xs font-medium text-slate-600 mb-1">Term</label>
+				<Select id="assess-term" bind:value={selectedTerm} options={termOptions} />
 			</div>
 			<button onclick={loadGrid}
 				class="px-4 py-1.5 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800 transition-colors">

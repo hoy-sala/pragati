@@ -113,38 +113,38 @@
 		<h2 class="text-lg font-semibold text-slate-900">Quiz Details</h2>
 
 		<div>
-			<label class="block text-sm font-medium text-slate-700 mb-1">Title</label>
-			<input type="text" bind:value={title} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm" required>
+			<label for="q-title" class="block text-sm font-medium text-slate-700 mb-1">Title</label>
+			<input id="q-title" type="text" bind:value={title} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm" required>
 		</div>
 
 		<div>
-			<label class="block text-sm font-medium text-slate-700 mb-1">Description</label>
-			<textarea bind:value={description} rows={2} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm"></textarea>
+			<label for="q-desc" class="block text-sm font-medium text-slate-700 mb-1">Description</label>
+			<textarea id="q-desc" bind:value={description} rows={2} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm"></textarea>
 		</div>
 
 		<div class="grid grid-cols-2 gap-4">
 			<div>
-				<label class="block text-sm font-medium text-slate-700 mb-1">Target</label>
-				<Select bind:value={target_type} options={targetOptions} />
+				<label for="q-target" class="block text-sm font-medium text-slate-700 mb-1">Target</label>
+				<Select id="q-target" bind:value={target_type} options={targetOptions} />
 			</div>
 			<div>
-				<label class="block text-sm font-medium text-slate-700 mb-1">Target ID (optional)</label>
-				<input type="text" bind:value={target_id} placeholder="Class ID or empty" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
+				<label for="q-target-id" class="block text-sm font-medium text-slate-700 mb-1">Target ID (optional)</label>
+				<input id="q-target-id" type="text" bind:value={target_id} placeholder="Class ID or empty" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
 			</div>
 		</div>
 
 		<div class="grid grid-cols-3 gap-4">
 			<div>
-				<label class="block text-sm font-medium text-slate-700 mb-1">Pass %</label>
-				<input type="number" bind:value={pass_pct} min="0" max="100" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
+				<label for="q-pass" class="block text-sm font-medium text-slate-700 mb-1">Pass %</label>
+				<input id="q-pass" type="number" bind:value={pass_pct} min="0" max="100" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
 			</div>
 			<div>
-				<label class="block text-sm font-medium text-slate-700 mb-1">Max Attempts</label>
-				<input type="number" bind:value={max_attempts} min="1" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
+				<label for="q-attempts" class="block text-sm font-medium text-slate-700 mb-1">Max Attempts</label>
+				<input id="q-attempts" type="number" bind:value={max_attempts} min="1" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
 			</div>
 			<div>
-				<label class="block text-sm font-medium text-slate-700 mb-1">Duration (min)</label>
-				<input type="number" bind:value={duration_min} min="0" placeholder="No limit" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
+				<label for="q-duration" class="block text-sm font-medium text-slate-700 mb-1">Duration (min)</label>
+				<input id="q-duration" type="number" bind:value={duration_min} min="0" placeholder="No limit" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
 			</div>
 		</div>
 
@@ -165,12 +165,12 @@
 
 		<div class="grid grid-cols-2 gap-4">
 			<div>
-				<label class="block text-sm font-medium text-slate-700 mb-1">Start At</label>
-				<input type="datetime-local" bind:value={start_at} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
+				<label for="q-start" class="block text-sm font-medium text-slate-700 mb-1">Start At</label>
+				<input id="q-start" type="datetime-local" bind:value={start_at} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
 			</div>
 			<div>
-				<label class="block text-sm font-medium text-slate-700 mb-1">End At</label>
-				<input type="datetime-local" bind:value={end_at} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
+				<label for="q-end" class="block text-sm font-medium text-slate-700 mb-1">End At</label>
+				<input id="q-end" type="datetime-local" bind:value={end_at} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
 			</div>
 		</div>
 	</div>

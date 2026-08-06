@@ -85,12 +85,12 @@ LA-6.2.1,Writes clear and coherent paragraphs,psychomotor,3,1`;
 	<div class="bg-white rounded-xl border border-slate-200 p-4">
 		<div class="flex flex-wrap gap-3 items-end">
 			<div>
-				<label class="block text-xs font-medium text-slate-600 mb-1">Class</label>
-				<Select bind:value={selectedClass} options={classes} placeholder="Select" />
+				<label for="lo-class" class="block text-xs font-medium text-slate-600 mb-1">Class</label>
+				<Select id="lo-class" bind:value={selectedClass} options={classes} placeholder="Select" />
 			</div>
 			<div>
-				<label class="block text-xs font-medium text-slate-600 mb-1">Subject</label>
-				<Select bind:value={selectedSubject} options={subjects} placeholder="Select" />
+				<label for="lo-subject" class="block text-xs font-medium text-slate-600 mb-1">Subject</label>
+				<Select id="lo-subject" bind:value={selectedSubject} options={subjects} placeholder="Select" />
 			</div>
 			<button onclick={importLO} disabled={importing || !selectedSubject || !loText.trim()}
 				class="px-4 py-1.5 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 disabled:opacity-50 transition-colors">
@@ -104,9 +104,9 @@ LA-6.2.1,Writes clear and coherent paragraphs,psychomotor,3,1`;
 	{/if}
 
 	<div class="bg-white rounded-xl border border-slate-200 p-4 space-y-2">
-		<label class="block text-sm font-medium text-slate-700">CSV Input</label>
+		<label for="lo-text" class="block text-sm font-medium text-slate-700">CSV Input</label>
 		<p class="text-xs text-slate-500">Paste CSV with columns: code, description, domain, expected_level, sort_order</p>
-		<textarea bind:value={loText} rows="10"
+		<textarea id="lo-text" bind:value={loText} rows="10"
 			class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-mono resize-none"
 			placeholder={sampleLO}></textarea>
 		<details class="text-xs text-slate-500">

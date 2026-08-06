@@ -51,7 +51,8 @@
 	{#if loading}
 		<LoaderCircle class="animate-spin" size={size === 'sm' ? 14 : size === 'lg' ? 20 : 16} />
 	{:else if icon}
-		<svelte:component this={icon} size={size === 'sm' ? 14 : size === 'lg' ? 20 : 16} />
+		{@const Icon = icon}
+		<Icon size={size === 'sm' ? 14 : size === 'lg' ? 20 : 16} />
 	{/if}
 	{@render children?.()}
 </button>

@@ -81,8 +81,8 @@ The capital of India is {=New Delhi ~Mumbai ~Kolkata}.`;
 	<div class="bg-white rounded-xl border border-slate-200 p-6 space-y-4">
 		<div class="flex gap-4 items-end">
 			<div class="flex-1">
-				<label class="block text-sm font-medium text-slate-700 mb-1">Subject *</label>
-				<Select bind:value={subjectId} options={subjects} placeholder="Select" />
+				<label for="qimp-subject" class="block text-sm font-medium text-slate-700 mb-1">Subject *</label>
+				<Select id="qimp-subject" bind:value={subjectId} options={subjects} placeholder="Select" />
 			</div>
 			<div class="flex gap-1 bg-slate-100 rounded-lg p-1">
 				<button onclick={() => importMode = 'gift'}
@@ -98,8 +98,8 @@ The capital of India is {=New Delhi ~Mumbai ~Kolkata}.`;
 
 		{#if importMode === 'gift'}
 			<div>
-				<label class="block text-sm font-medium text-slate-700 mb-1">GIFT Format Text</label>
-				<textarea bind:value={giftText} rows="12" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm font-mono resize-none" placeholder={sampleGIFT}></textarea>
+				<label for="qimp-gift" class="block text-sm font-medium text-slate-700 mb-1">GIFT Format Text</label>
+				<textarea id="qimp-gift" bind:value={giftText} rows="12" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm font-mono resize-none" placeholder={sampleGIFT}></textarea>
 			</div>
 			<details class="text-xs text-slate-500">
 				<summary class="cursor-pointer hover:text-slate-700">GIFT format reference</summary>
@@ -108,8 +108,8 @@ The capital of India is {=New Delhi ~Mumbai ~Kolkata}.`;
 			</details>
 		{:else}
 			<div>
-				<label class="block text-sm font-medium text-slate-700 mb-1">CSV File</label>
-				<input type="file" accept=".csv" onchange={(e: Event) => { const el = e.target as HTMLInputElement; csvFile = el.files?.[0] || null; }}
+				<label for="qimp-csv" class="block text-sm font-medium text-slate-700 mb-1">CSV File</label>
+				<input id="qimp-csv" type="file" accept=".csv" onchange={(e: Event) => { const el = e.target as HTMLInputElement; csvFile = el.files?.[0] || null; }}
 					class="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100">
 			</div>
 			<details class="text-xs text-slate-500">

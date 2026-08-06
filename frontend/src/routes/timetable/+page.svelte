@@ -20,7 +20,7 @@
 	const WEEKDAY_SLOT_LABELS = ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8'];
 	const SAT_SLOT_LABELS = ['P1', 'P2', 'P3', 'P4'];
 
-	type SubjectGrid = Record<string, number[]>;
+	type SubjectGrid = Record<string, number[][]>;
 
 	function buildSubjectGrid(): Record<string, SubjectGrid> {
 		const grid: Record<string, SubjectGrid> = {};

@@ -26,7 +26,7 @@
 	);
 	let filteredSubjects = $derived(
 		selectedCategory && categories.find(c => c.id === selectedCategory)?.code === 'KREIS'
-			? subjects.filter(s => ['KAN', 'ENG', 'HIN', 'MAT', 'SCI', 'SOC'].includes(s.code))
+			? subjects.filter(s => s.code && ['KAN', 'ENG', 'HIN', 'MAT', 'SCI', 'SOC'].includes(s.code))
 			: subjects
 	);
 

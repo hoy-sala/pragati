@@ -207,8 +207,8 @@
 				{#each Object.entries(healthPE) as [key, param] (key)}
 					{@const p = param as { label: string; value: string }}
 					<div>
-						<label class="block text-xs text-slate-500 mb-0.5">{p.label}</label>
-						<input type="text" bind:value={healthPE[key].value}
+						<label for={key} class="block text-xs text-slate-500 mb-0.5">{p.label}</label>
+						<input id={key} type="text" bind:value={healthPE[key].value}
 							class="w-full px-2 py-1 border border-slate-300 rounded text-sm" />
 					</div>
 				{/each}
@@ -218,13 +218,13 @@
 		<div class="bg-white rounded-xl border border-slate-200 p-4 space-y-3">
 			<h2 class="text-sm font-semibold text-slate-700 border-b pb-2">Work Education</h2>
 			<div>
-				<label class="block text-xs text-slate-500 mb-0.5">Activity</label>
-				<input type="text" bind:value={workEducation.activity}
+				<label for="we-activity" class="block text-xs text-slate-500 mb-0.5">Activity</label>
+				<input id="we-activity" type="text" bind:value={workEducation.activity}
 					class="w-full px-2 py-1 border border-slate-300 rounded text-sm" />
 			</div>
 			<div>
-				<label class="block text-xs text-slate-500 mb-0.5">Description</label>
-				<textarea bind:value={workEducation.description}
+				<label for="we-desc" class="block text-xs text-slate-500 mb-0.5">Description</label>
+				<textarea id="we-desc" bind:value={workEducation.description}
 					class="w-full px-2 py-1 border border-slate-300 rounded text-sm min-h-[60px]"></textarea>
 			</div>
 		</div>
@@ -233,13 +233,13 @@
 			<h2 class="text-sm font-semibold text-slate-700 border-b pb-2">Attendance</h2>
 			<div class="flex gap-6 items-center">
 				<div>
-					<label class="block text-xs text-slate-500">Days Present</label>
-					<input type="number" bind:value={attendance.present}
+					<label for="att-present" class="block text-xs text-slate-500">Days Present</label>
+					<input id="att-present" type="number" bind:value={attendance.present}
 						class="w-24 px-2 py-1 border border-slate-300 rounded text-sm" />
 				</div>
 				<div>
-					<label class="block text-xs text-slate-500">Total Days</label>
-					<input type="number" bind:value={attendance.total}
+					<label for="att-total" class="block text-xs text-slate-500">Total Days</label>
+					<input id="att-total" type="number" bind:value={attendance.total}
 						class="w-24 px-2 py-1 border border-slate-300 rounded text-sm" />
 				</div>
 				<div class="text-sm">
@@ -252,48 +252,48 @@
 			<div class="bg-white rounded-xl border border-slate-200 p-4 space-y-3">
 				<h2 class="text-sm font-semibold text-slate-700 border-b pb-2">Self Assessment</h2>
 				<div>
-					<label class="block text-xs text-slate-500 mb-0.5">Strong Areas</label>
-					<textarea bind:value={selfAssessment.strong_areas} class="w-full px-2 py-1 border border-slate-300 rounded text-sm min-h-[60px]"></textarea>
+					<label for="sa-strong" class="block text-xs text-slate-500 mb-0.5">Strong Areas</label>
+					<textarea id="sa-strong" bind:value={selfAssessment.strong_areas} class="w-full px-2 py-1 border border-slate-300 rounded text-sm min-h-[60px]"></textarea>
 				</div>
 				<div>
-					<label class="block text-xs text-slate-500 mb-0.5">Areas for Improvement</label>
-					<textarea bind:value={selfAssessment.areas_for_improvement} class="w-full px-2 py-1 border border-slate-300 rounded text-sm min-h-[60px]"></textarea>
+					<label for="sa-improve" class="block text-xs text-slate-500 mb-0.5">Areas for Improvement</label>
+					<textarea id="sa-improve" bind:value={selfAssessment.areas_for_improvement} class="w-full px-2 py-1 border border-slate-300 rounded text-sm min-h-[60px]"></textarea>
 				</div>
 				<div>
-					<label class="block text-xs text-slate-500 mb-0.5">Interests</label>
-					<textarea bind:value={selfAssessment.interests} class="w-full px-2 py-1 border border-slate-300 rounded text-sm min-h-[60px]"></textarea>
+					<label for="sa-interests" class="block text-xs text-slate-500 mb-0.5">Interests</label>
+					<textarea id="sa-interests" bind:value={selfAssessment.interests} class="w-full px-2 py-1 border border-slate-300 rounded text-sm min-h-[60px]"></textarea>
 				</div>
 			</div>
 
 			<div class="bg-white rounded-xl border border-slate-200 p-4 space-y-3">
 				<h2 class="text-sm font-semibold text-slate-700 border-b pb-2">Peer Assessment</h2>
 				<div>
-					<label class="block text-xs text-slate-500 mb-0.5">Teamwork</label>
-					<textarea bind:value={peerAssessment.teamwork} class="w-full px-2 py-1 border border-slate-300 rounded text-sm min-h-[60px]"></textarea>
+					<label for="pa-team" class="block text-xs text-slate-500 mb-0.5">Teamwork</label>
+					<textarea id="pa-team" bind:value={peerAssessment.teamwork} class="w-full px-2 py-1 border border-slate-300 rounded text-sm min-h-[60px]"></textarea>
 				</div>
 				<div>
-					<label class="block text-xs text-slate-500 mb-0.5">Behaviour</label>
-					<textarea bind:value={peerAssessment.behavior} class="w-full px-2 py-1 border border-slate-300 rounded text-sm min-h-[60px]"></textarea>
+					<label for="pa-behavior" class="block text-xs text-slate-500 mb-0.5">Behaviour</label>
+					<textarea id="pa-behavior" bind:value={peerAssessment.behavior} class="w-full px-2 py-1 border border-slate-300 rounded text-sm min-h-[60px]"></textarea>
 				</div>
 				<div>
-					<label class="block text-xs text-slate-500 mb-0.5">Helpfulness</label>
-					<textarea bind:value={peerAssessment.helpfulness} class="w-full px-2 py-1 border border-slate-300 rounded text-sm min-h-[60px]"></textarea>
+					<label for="pa-help" class="block text-xs text-slate-500 mb-0.5">Helpfulness</label>
+					<textarea id="pa-help" bind:value={peerAssessment.helpfulness} class="w-full px-2 py-1 border border-slate-300 rounded text-sm min-h-[60px]"></textarea>
 				</div>
 			</div>
 
 			<div class="bg-white rounded-xl border border-slate-200 p-4 space-y-3">
 				<h2 class="text-sm font-semibold text-slate-700 border-b pb-2">Parent Feedback</h2>
 				<div>
-					<label class="block text-xs text-slate-500 mb-0.5">Academic Progress</label>
-					<textarea bind:value={parentFeedback.academic_progress} class="w-full px-2 py-1 border border-slate-300 rounded text-sm min-h-[60px]"></textarea>
+					<label for="pf-academic" class="block text-xs text-slate-500 mb-0.5">Academic Progress</label>
+					<textarea id="pf-academic" bind:value={parentFeedback.academic_progress} class="w-full px-2 py-1 border border-slate-300 rounded text-sm min-h-[60px]"></textarea>
 				</div>
 				<div>
-					<label class="block text-xs text-slate-500 mb-0.5">Behaviour at Home</label>
-					<textarea bind:value={parentFeedback.behavior_at_home} class="w-full px-2 py-1 border border-slate-300 rounded text-sm min-h-[60px]"></textarea>
+					<label for="pf-behavior" class="block text-xs text-slate-500 mb-0.5">Behaviour at Home</label>
+					<textarea id="pf-behavior" bind:value={parentFeedback.behavior_at_home} class="w-full px-2 py-1 border border-slate-300 rounded text-sm min-h-[60px]"></textarea>
 				</div>
 				<div>
-					<label class="block text-xs text-slate-500 mb-0.5">Suggestions</label>
-					<textarea bind:value={parentFeedback.suggestions} class="w-full px-2 py-1 border border-slate-300 rounded text-sm min-h-[60px]"></textarea>
+					<label for="pf-suggestions" class="block text-xs text-slate-500 mb-0.5">Suggestions</label>
+					<textarea id="pf-suggestions" bind:value={parentFeedback.suggestions} class="w-full px-2 py-1 border border-slate-300 rounded text-sm min-h-[60px]"></textarea>
 				</div>
 			</div>
 		</div>

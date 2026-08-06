@@ -97,16 +97,16 @@
 	<div class="bg-white rounded-xl border border-slate-200 p-4">
 		<div class="flex flex-wrap gap-3 items-end">
 			<div>
-				<label class="block text-xs font-medium text-slate-600 mb-1">Class</label>
-				<Select bind:value={selectedClass} options={classes} placeholder="Select Class" />
+				<label for="hpc-class" class="block text-xs font-medium text-slate-600 mb-1">Class</label>
+				<Select id="hpc-class" bind:value={selectedClass} options={classes} placeholder="Select Class" />
 			</div>
 			<div>
-				<label class="block text-xs font-medium text-slate-600 mb-1">Academic Year</label>
-				<Select bind:value={selectedYear} options={years} />
+				<label for="hpc-year" class="block text-xs font-medium text-slate-600 mb-1">Academic Year</label>
+				<Select id="hpc-year" bind:value={selectedYear} options={years} />
 			</div>
 			<div>
-				<label class="block text-xs font-medium text-slate-600 mb-1">Term</label>
-				<Select bind:value={selectedTerm} options={termOptions} />
+				<label for="hpc-term" class="block text-xs font-medium text-slate-600 mb-1">Term</label>
+				<Select id="hpc-term" bind:value={selectedTerm} options={termOptions} />
 			</div>
 			<button onclick={loadGrid}
 				class="px-4 py-1.5 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800 transition-colors">

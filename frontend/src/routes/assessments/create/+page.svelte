@@ -87,47 +87,47 @@
 	<form class="bg-white rounded-xl border border-slate-200 p-6 space-y-4" onsubmit={handleSubmit}>
 		<div class="grid grid-cols-2 gap-4">
 			<div>
-				<label class="block text-sm font-medium text-slate-700 mb-1">Category *</label>
-				<Select bind:value={selectedCategory} options={categories} placeholder="Select" />
+				<label for="category" class="block text-sm font-medium text-slate-700 mb-1">Category *</label>
+				<Select id="category" bind:value={selectedCategory} options={categories} placeholder="Select" />
 			</div>
 			<div>
-				<label class="block text-sm font-medium text-slate-700 mb-1">Subject *</label>
-				<Select bind:value={selectedSubject} options={subjects} placeholder="Select" />
+				<label for="subject" class="block text-sm font-medium text-slate-700 mb-1">Subject *</label>
+				<Select id="subject" bind:value={selectedSubject} options={subjects} placeholder="Select" />
 			</div>
 			<div>
-				<label class="block text-sm font-medium text-slate-700 mb-1">Class *</label>
-				<Select bind:value={selectedClass} options={classes} placeholder="Select" />
+				<label for="class" class="block text-sm font-medium text-slate-700 mb-1">Class *</label>
+				<Select id="class" bind:value={selectedClass} options={classes} placeholder="Select" />
 			</div>
 			<div>
-				<label class="block text-sm font-medium text-slate-700 mb-1">Section</label>
-				<input type="text" bind:value={section} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm" placeholder="optional">
+				<label for="section" class="block text-sm font-medium text-slate-700 mb-1">Section</label>
+				<input id="section" type="text" bind:value={section} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm" placeholder="optional">
 			</div>
 			<div>
-				<label class="block text-sm font-medium text-slate-700 mb-1">Academic Year *</label>
-				<Select bind:value={selectedYear} options={years} placeholder="Select" />
+				<label for="year" class="block text-sm font-medium text-slate-700 mb-1">Academic Year *</label>
+				<Select id="year" bind:value={selectedYear} options={years} placeholder="Select" />
 			</div>
 			<div>
-				<label class="block text-sm font-medium text-slate-700 mb-1">Date</label>
-				<input type="date" bind:value={date} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
+				<label for="date" class="block text-sm font-medium text-slate-700 mb-1">Date</label>
+				<input id="date" type="date" bind:value={date} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
 			</div>
 			<div>
-				<label class="block text-sm font-medium text-slate-700 mb-1">Max Marks</label>
-				<input type="number" bind:value={maxMarks} min="1" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
+				<label for="max-marks" class="block text-sm font-medium text-slate-700 mb-1">Max Marks</label>
+				<input id="max-marks" type="number" bind:value={maxMarks} min="1" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
 			</div>
 			<div>
-				<label class="block text-sm font-medium text-slate-700 mb-1">Weightage %</label>
-				<input type="number" bind:value={weightage} min="0" max="100" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
+				<label for="weightage" class="block text-sm font-medium text-slate-700 mb-1">Weightage %</label>
+				<input id="weightage" type="number" bind:value={weightage} min="0" max="100" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
 			</div>
 		</div>
 
 		<div>
-			<label class="block text-sm font-medium text-slate-700 mb-1">Name</label>
-			<input type="text" bind:value={name} placeholder="Term Exam, Unit Test, etc." class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
+			<label for="name" class="block text-sm font-medium text-slate-700 mb-1">Name</label>
+			<input id="name" type="text" bind:value={name} placeholder="Term Exam, Unit Test, etc." class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
 		</div>
 
 		<div>
-			<label class="block text-sm font-medium text-slate-700 mb-1">Chapters</label>
-			<input type="text" bind:value={chapters} placeholder="separate with commas" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
+			<label for="chapters" class="block text-sm font-medium text-slate-700 mb-1">Chapters</label>
+			<input id="chapters" type="text" bind:value={chapters} placeholder="separate with commas" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
 		</div>
 
 		{#if error}

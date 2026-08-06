@@ -8,6 +8,7 @@
 		valueKey = 'id',
 		placeholder = 'Select...',
 		label = '',
+		id,
 		icon,
 		clearable = false,
 		disabled = false,
@@ -21,6 +22,7 @@
 		valueKey?: string;
 		placeholder?: string;
 		label?: string;
+		id?: string;
 		icon?: import('svelte').ComponentType;
 		clearable?: boolean;
 		disabled?: boolean;
@@ -33,7 +35,8 @@
 	let selectedLabel = $derived(
 		options.find((o) => o[valueKey] === value)?.[labelKey] ?? ''
 	);
-	let listId = $state('select-' + Math.random().toString(36).slice(2, 8));
+	let listId = $derived(id || 'select-' + Math.random().toString(36).slice(2, 8));
+	let listboxId = $derived(id ? id + '-listbox' : 'listbox-' + Math.random().toString(36).slice(2, 8));
 
 	function toggle() {
 		if (!disabled) open = !open;
@@ -45,7 +48,7 @@
 		onselect?.(val);
 	}
 
-	function clear(e: MouseEvent) {
+	function clear(e: Event) {
 		e.stopPropagation();
 		value = '';
 		open = false;
@@ -61,7 +64,7 @@
 	}
 </script>
 
-<div class="relative {className}" role="combobox" aria-expanded={open} aria-haspopup="listbox" tabindex="-1" onkeydown={handleKeydown}>
+<div class="relative {className}" role="combobox" aria-controls={listboxId} aria-expanded={open} aria-haspopup="listbox" tabindex="-1" onkeydown={handleKeydown}>
 	{#if label}
 		<label for={listId} class="block text-xs font-medium text-slate-500 mb-1.5">{label}</label>
 	{/if}
@@ -82,13 +85,14 @@
 			focus:outline-none"
 	>
 		{#if icon}
-			<svelte:component this={icon} size={16} class="text-slate-400 shrink-0" />
+			{@const Icon = icon}
+			<Icon size={16} class="text-slate-400 shrink-0" />
 		{/if}
 		<span class="flex-1 text-left truncate {selectedLabel ? '' : 'text-slate-400'}">
 			{selectedLabel || placeholder}
 		</span>
 		{#if clearable && value}
-			<span role="button" tabindex="-1" onclick={clear} class="p-0.5 rounded hover:bg-slate-200 text-slate-400 hover:text-slate-600 cursor-pointer">
+			<span role="button" tabindex="0" onclick={clear} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); clear(e); } }} class="p-0.5 rounded hover:bg-slate-200 text-slate-400 hover:text-slate-600 cursor-pointer" aria-label="Clear selection">
 				<X size={14} />
 			</span>
 		{/if}
@@ -100,6 +104,7 @@
 
 	{#if open}
 		<ul
+			id={listboxId}
 			role="listbox"
 			tabindex="-1"
 			class="absolute z-50 mt-1 w-full bg-white border border-slate-200 rounded-lg shadow-lg max-h-60 overflow-y-auto py-1"

@@ -168,14 +168,14 @@
 			{#if currentQuestion.question_type === 'mcq'}
 				<div class="space-y-2">
 					{#each currentOptions as opt}
-						<div class="flex items-center gap-3 p-3 rounded-lg border {responses[currentQuestion.question_id]?.selected_options?.includes(opt.key) ? 'border-primary-400 bg-primary-50' : 'border-slate-200 hover:border-slate-300'} cursor-pointer transition-colors"
-							onclick={() => selectOption(currentQuestion.question_id, opt.key)}>
+						<label class="flex items-center gap-3 p-3 rounded-lg border {responses[currentQuestion.question_id]?.selected_options?.includes(opt.key) ? 'border-primary-400 bg-primary-50' : 'border-slate-200 hover:border-slate-300'} cursor-pointer transition-colors"
+							>
 							<input type="radio" name={currentQuestion.question_id}
 								checked={responses[currentQuestion.question_id]?.selected_options?.includes(opt.key)}
 								class="shrink-0"
 								onchange={() => selectOption(currentQuestion.question_id, opt.key)}>
 							<span class="text-sm text-slate-700">{opt.value}</span>
-						</div>
+						</label>
 					{/each}
 				</div>
 			{:else if currentQuestion.question_type === 'true_false'}

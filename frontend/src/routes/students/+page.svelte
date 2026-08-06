@@ -223,67 +223,67 @@
 			<div class="p-4 space-y-4">
 				<div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
 					<div>
-						<label class="block text-xs font-medium text-slate-500 mb-1">SATS Number *</label>
+						<label for="st-sats" class="block text-xs font-medium text-slate-500 mb-1">SATS Number *</label>
 						<div class="relative">
 							<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><Hash size={14} /></span>
-							<input bind:value={formSATS} placeholder="9-digit SATS number" maxlength={9} class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+							<input id="st-sats" bind:value={formSATS} placeholder="9-digit SATS number" maxlength={9} class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
 						</div>
 					</div>
 					<div>
-						<label class="block text-xs font-medium text-slate-500 mb-1">First Name *</label>
-						<input bind:value={formFirstName} placeholder="First name" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+						<label for="st-first" class="block text-xs font-medium text-slate-500 mb-1">First Name *</label>
+						<input id="st-first" bind:value={formFirstName} placeholder="First name" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
 					</div>
 					<div>
-						<label class="block text-xs font-medium text-slate-500 mb-1">Last Name</label>
-						<input bind:value={formLastName} placeholder="Last name" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+						<label for="st-last" class="block text-xs font-medium text-slate-500 mb-1">Last Name</label>
+						<input id="st-last" bind:value={formLastName} placeholder="Last name" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
 					</div>
 				</div>
 
 				<div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
 					<div>
-						<label class="block text-xs font-medium text-slate-500 mb-1">Roll No</label>
-						<input bind:value={formRollNo} type="number" min="0" placeholder="Roll number" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+						<label for="st-roll" class="block text-xs font-medium text-slate-500 mb-1">Roll No</label>
+						<input id="st-roll" bind:value={formRollNo} type="number" min="0" placeholder="Roll number" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
 					</div>
 					<div>
-						<label class="block text-xs font-medium text-slate-500 mb-1">Gender</label>
-						<Select bind:value={formGender} options={[{ id: 'male', name: 'Male' }, { id: 'female', name: 'Female' }]} placeholder="Select gender" icon={Users} />
+						<label for="st-gender" class="block text-xs font-medium text-slate-500 mb-1">Gender</label>
+						<Select id="st-gender" bind:value={formGender} options={[{ id: 'male', name: 'Male' }, { id: 'female', name: 'Female' }]} placeholder="Select gender" icon={Users} />
 					</div>
 					<div>
-						<label class="block text-xs font-medium text-slate-500 mb-1">Date of Birth</label>
+						<label for="st-dob" class="block text-xs font-medium text-slate-500 mb-1">Date of Birth</label>
 						<div class="relative">
 							<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><Calendar size={14} /></span>
-							<input bind:value={formDOB} type="date" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+							<input id="st-dob" bind:value={formDOB} type="date" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
 						</div>
 					</div>
 					<div>
-						<label class="block text-xs font-medium text-slate-500 mb-1">Blood Group</label>
+						<label for="st-blood" class="block text-xs font-medium text-slate-500 mb-1">Blood Group</label>
 						<div class="relative">
 							<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><Droplets size={14} /></span>
-							<input bind:value={formBloodGroup} placeholder="e.g. O+" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+							<input id="st-blood" bind:value={formBloodGroup} placeholder="e.g. O+" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
 						</div>
 					</div>
 				</div>
 
 				<div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
 					<div>
-						<label class="block text-xs font-medium text-slate-500 mb-1">Phone</label>
+						<label for="st-phone" class="block text-xs font-medium text-slate-500 mb-1">Phone</label>
 						<div class="relative">
 							<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><Phone size={14} /></span>
-							<input bind:value={formPhone} placeholder="Phone number" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+							<input id="st-phone" bind:value={formPhone} placeholder="Phone number" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
 						</div>
 					</div>
 					<div>
-						<label class="block text-xs font-medium text-slate-500 mb-1">Email</label>
+						<label for="st-email" class="block text-xs font-medium text-slate-500 mb-1">Email</label>
 						<div class="relative">
 							<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><Mail size={14} /></span>
-							<input bind:value={formEmail} type="email" placeholder="Email address" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+							<input id="st-email" bind:value={formEmail} type="email" placeholder="Email address" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
 						</div>
 					</div>
 					<div>
-						<label class="block text-xs font-medium text-slate-500 mb-1">Address</label>
+						<label for="st-address" class="block text-xs font-medium text-slate-500 mb-1">Address</label>
 						<div class="relative">
 							<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400"><MapPin size={14} /></span>
-							<input bind:value={formAddress} placeholder="Address" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
+							<input id="st-address" bind:value={formAddress} placeholder="Address" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400" />
 						</div>
 					</div>
 				</div>
