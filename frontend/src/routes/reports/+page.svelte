@@ -242,7 +242,7 @@
 						<tr class="bg-slate-50 border-b border-slate-200">
 							{#each ms.subjects as sg}
 								{#each sg.assessments as a}
-									<th class="px-2 py-1.5 text-center font-medium text-slate-500 border-r border-slate-200 text-[10px]">
+									<th class="px-2 py-1.5 text-center font-medium border-r border-slate-200 text-[10px] {a.term === 'Term 1' ? 'text-blue-600 bg-blue-50/30' : 'text-purple-600 bg-purple-50/30'}">
 										<div>{a.name}</div>
 										<div class="text-[9px] text-slate-400">/{a.max_marks}</div>
 									</th>
