@@ -23,6 +23,7 @@ func NewUserHandler(db *pgxpool.Pool) *UserHandler {
 // GET /api/v1/users — list all users (admin only)
 func (h *UserHandler) List(w http.ResponseWriter, r *http.Request) {
 	claims := middleware.GetUserClaims(r.Context())
+	log.Info().Str("school_id", claims.SchoolID).Str("role", claims.Role).Msg("UserList called")
 
 	rows, err := h.db.Query(r.Context(),
 		`SELECT id, school_id, email, name, role, phone, is_active, created_at, updated_at
