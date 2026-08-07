@@ -99,6 +99,11 @@ export interface Assessment {
 	is_locked: boolean;
 	version: number;
 	created_at: string;
+	marks_count?: number;
+	student_count?: number;
+	subject_name?: string;
+	category_name?: string;
+	class_name?: string;
 }
 
 export interface MarkGridRow {

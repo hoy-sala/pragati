@@ -20,6 +20,11 @@ type Assessment struct {
 	Version        int       `json:"version" db:"version"`
 	CreatedAt      time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt      time.Time `json:"updated_at" db:"updated_at"`
+	MarksCount     int       `json:"marks_count" db:"-"`
+	StudentCount   int       `json:"student_count" db:"-"`
+	SubjectName    string    `json:"subject_name,omitempty" db:"-"`
+	CategoryName   string    `json:"category_name,omitempty" db:"-"`
+	ClassName      string    `json:"class_name,omitempty" db:"-"`
 }
 
 type AssessmentCategory struct {

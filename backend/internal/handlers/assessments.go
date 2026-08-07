@@ -65,8 +65,14 @@ func (h *AssessmentHandler) List(w http.ResponseWriter, r *http.Request) {
 	dataQuery := `SELECT a.id, a.school_id, a.category_id, a.subject_id, a.teacher_id,
 		a.class_id, COALESCE(a.section_id::text, ''), COALESCE(a.name, ''), a.max_marks::double precision, a.weightage,
 		COALESCE(a.date::text, ''), a.academic_year_id, a.is_published, a.is_locked, a.version,
-		a.created_at, a.updated_at
-		FROM assessments a ` + baseWhere + ` ORDER BY a.date DESC NULLS LAST, a.created_at DESC`
+		a.created_at, a.updated_at,
+		COALESCE(s.name, ''), COALESCE(c.name, ''), COALESCE(cl.name, ''),
+		(SELECT COUNT(*) FROM marks m WHERE m.assessment_id = a.id),
+		(SELECT COUNT(*) FROM students st WHERE st.class_id = a.class_id AND st.deleted_at IS NULL AND st.is_active = true)
+		FROM assessments a
+		LEFT JOIN subjects s ON s.id = a.subject_id AND s.deleted_at IS NULL
+		LEFT JOIN assessment_categories c ON c.id = a.category_id
+		LEFT JOIN classes cl ON cl.id = a.class_id AND cl.deleted_at IS NULL ` + baseWhere + ` ORDER BY a.date DESC NULLS LAST, a.created_at DESC`
 	dataQuery += fmt.Sprintf(" LIMIT $%d OFFSET $%d", n, n+1)
 	args = append(whereArgs, limit, offset)
 
@@ -85,7 +91,8 @@ func (h *AssessmentHandler) List(w http.ResponseWriter, r *http.Request) {
 		if err := rows.Scan(&a.ID, &a.SchoolID, &a.CategoryID, &a.SubjectID, &a.TeacherID,
 			&a.ClassID, &a.SectionID, &a.Name, &a.MaxMarks, &a.Weightage,
 			&dateStr, &a.AcademicYearID, &a.IsPublished, &a.IsLocked, &a.Version,
-			&a.CreatedAt, &a.UpdatedAt); err != nil {
+			&a.CreatedAt, &a.UpdatedAt,
+			&a.SubjectName, &a.CategoryName, &a.ClassName, &a.MarksCount, &a.StudentCount); err != nil {
 			log.Error().Err(err).Msg("scan assessment row failed")
 			continue
 		}
