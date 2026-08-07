@@ -48,6 +48,8 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
 	roleMw := middleware.NewRoleMiddleware(jwtService)
 	loginLimiter := middleware.NewRateLimiter(10, time.Minute)
 
+	userH := NewUserHandler(db)
+
 	r.Route("/api/v1", func(r chi.Router) {
 		r.With(loginLimiter.Limit).Post("/auth/login", authH.Login)
 		r.With(loginLimiter.Limit).Post("/auth/staff-login", authH.StaffLogin)
@@ -58,6 +60,14 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
 			r.Use(roleMw.Authenticate)
 			r.Post("/auth/logout", authH.Logout)
 			r.Get("/auth/me", authH.Me)
+		})
+
+		r.Route("/users", func(r chi.Router) {
+			r.Use(roleMw.Authenticate)
+			r.Get("/", roleMw.RequireRole("admin")(http.HandlerFunc(userH.List)))
+			r.Post("/", roleMw.RequireRole("admin")(http.HandlerFunc(userH.Create)))
+			r.Patch("/{id}/toggle", roleMw.RequireRole("admin")(http.HandlerFunc(userH.ToggleActive)))
+			r.Post("/{id}/reset-password", roleMw.RequireRole("admin")(http.HandlerFunc(userH.ResetPassword)))
 		})
 
 		r.Route("/teachers", func(r chi.Router) {
