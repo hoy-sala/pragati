@@ -2,8 +2,8 @@
 	import { getAuthState } from '$lib/stores/auth.svelte';
 	import { api } from '$lib/api/client.svelte';
 	import { onMount } from 'svelte';
-	import type { User, Student } from '$lib/types';
-	import { Sparkles, Trophy, Target, Flame, ArrowRight, PlayCircle, Award, CheckCircle2, BookOpen } from 'lucide-svelte';
+	import type { User, Student, AcademicYear } from '$lib/types';
+	import { Sparkles, Trophy, Target, Flame, ArrowRight, PlayCircle, Award, CheckCircle2, BookOpen, GraduationCap } from 'lucide-svelte';
 
 	const auth = getAuthState();
 
@@ -20,6 +20,7 @@
 	let firstName = $derived(fullName.split(' ')[0] || fullName);
 
 	let loading = $state(true);
+	let studentTab = $state<'quizzes' | 'marks'>('quizzes');
 
 	let insights = $state<{
 		student: { first_name: string; last_name: string; class_name: string };
@@ -35,6 +36,13 @@
 		}[];
 	} | null>(null);
 
+	let years = $state<AcademicYear[]>([]);
+	let selectedYear = $state('');
+	let marksReport = $state<{
+		subjects: { subject_code: string; subject_name: string; subject_type: string; total: number; max_max: number; percentage: number; grade: string; grade_label?: string; assessments: { name: string; category: string; max: number; value: number; absent: boolean; has_mark: boolean }[] }[];
+		grand_total: number; grand_max: number; percentage: number; grade: string;
+	} | null>(null);
+
 	let staffStats = $state<{
 		total_students: number;
 		total_teachers: number;
@@ -48,10 +56,33 @@
 		pending_assessments: { id: string; name: string; class_name: string; subject_name: string; max_marks: number; marks_count: number; student_count: number; due_date: string }[];
 	} | null>(null);
 
+	const gradeColors: Record<string, string> = {
+		'A+': '#10b981', 'A': '#22c55e', 'B+': '#3b82f6', 'B': '#0ea5e9',
+		'C+': '#f59e0b', 'C': '#f97316', 'D': '#ef4444', 'F': '#dc2626',
+	};
+
+	async function loadMarks() {
+		if (!selectedYear) { marksReport = null; return; }
+		const res = await api<typeof marksReport>('GET', `/reports/student-me?academic_year_id=${selectedYear}`);
+		if (res.data) marksReport = res.data;
+	}
+
+	$effect(() => {
+		if (selectedYear && isStudent && studentTab === 'marks') loadMarks();
+	});
+
 	onMount(async () => {
 		if (isStudent) {
-			const res = await api<typeof insights>('GET', '/dashboard/student');
-			if (res.data) insights = res.data;
+			const [quizRes, yrRes] = await Promise.all([
+				api<typeof insights>('GET', '/dashboard/student'),
+				api<AcademicYear[]>('GET', '/academic-years'),
+			]);
+			if (quizRes.data) insights = quizRes.data;
+			if (yrRes.data) {
+				years = yrRes.data;
+				const cur = yrRes.data.find(y => y.is_current);
+				if (cur) { selectedYear = cur.id; await loadMarks(); }
+			}
 		} else {
 			const [statsRes, dashRes] = await Promise.all([
 				api<typeof staffStats>('GET', '/dashboard/stats'),
@@ -107,6 +138,18 @@
 			</div>
 		</div>
 
+		<div class="flex gap-1 bg-slate-100 rounded-lg p-1 no-print">
+			<button onclick={() => studentTab = 'quizzes'}
+				class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md transition-colors {studentTab === 'quizzes' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}">
+				<BookOpen size={16} /> Quizzes
+			</button>
+			<button onclick={() => studentTab = 'marks'}
+				class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md transition-colors {studentTab === 'marks' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}">
+				<GraduationCap size={16} /> My Marks
+			</button>
+		</div>
+
+		{#if studentTab === 'quizzes'}
 		<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 			<div class="bg-white rounded-2xl border border-slate-200 p-5 flex items-center gap-4">
 				<div class="w-12 h-12 rounded-xl bg-primary-50 flex items-center justify-center">
@@ -202,6 +245,80 @@
 				{/if}
 			</div>
 		</div>
+		{/if}
+
+		{#if studentTab === 'marks'}
+		<div class="bg-white rounded-xl border border-slate-200 p-4 no-print">
+			<div class="w-56">
+				<select bind:value={selectedYear} onchange={() => loadMarks()} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
+					<option value="">Select academic year</option>
+					{#each years as y}
+						<option value={y.id}>{y.name}</option>
+					{/each}
+				</select>
+			</div>
+		</div>
+
+		{#if !marksReport}
+			<div class="bg-white rounded-xl border border-slate-200 p-12 text-center text-sm text-slate-400">
+				{#if !selectedYear}Select an academic year to view your marks{:else}No marks found for this year{/if}
+			</div>
+		{:else}
+			<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+				<div class="bg-white rounded-xl border border-slate-200 p-4 text-center">
+					<div class="text-2xl font-bold text-slate-900">{marksReport.grand_total}</div>
+					<div class="text-xs text-slate-500 mt-1">Total Marks</div>
+				</div>
+				<div class="bg-white rounded-xl border border-slate-200 p-4 text-center">
+					<div class="text-2xl font-bold text-slate-900">{marksReport.grand_max}</div>
+					<div class="text-xs text-slate-500 mt-1">Max Marks</div>
+				</div>
+				<div class="bg-white rounded-xl border border-slate-200 p-4 text-center">
+					<div class="text-2xl font-bold" style="color: {gradeColors[marksReport.grade]}">{marksReport.percentage.toFixed(1)}%</div>
+					<div class="text-xs text-slate-500 mt-1">Percentage</div>
+				</div>
+				<div class="bg-white rounded-xl border border-slate-200 p-4 text-center">
+					<div class="text-2xl font-bold" style="color: {gradeColors[marksReport.grade]}">{marksReport.grade}</div>
+					<div class="text-xs text-slate-500 mt-1">Grade</div>
+				</div>
+			</div>
+
+			<div class="bg-white rounded-xl border border-slate-200 mt-6">
+				<div class="px-6 py-4 border-b border-slate-200">
+					<h2 class="text-base font-semibold text-slate-900">Subject-wise Performance</h2>
+				</div>
+				<div class="divide-y divide-slate-100">
+					{#each marksReport.subjects as sub}
+						<div class="px-6 py-4">
+							<div class="flex items-center justify-between mb-2">
+								<div class="flex items-center gap-2">
+									<span class="text-sm font-medium text-slate-800">{sub.subject_name}</span>
+									<span class="text-xs text-slate-400">({sub.subject_code})</span>
+									{#if sub.subject_type === 'curricular'}
+										<span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-600">Curricular</span>
+									{:else}
+										<span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-50 text-purple-600">Co-curricular</span>
+									{/if}
+								</div>
+								<div class="flex items-center gap-3">
+									<span class="text-sm text-slate-600">{sub.total}/{sub.max_max}</span>
+									<span class="text-sm font-bold" style="color: {gradeColors[sub.grade]}">{sub.percentage.toFixed(1)}%</span>
+									<span class="text-sm font-bold px-2 py-0.5 rounded" style="color: {gradeColors[sub.grade]}; background: {gradeColors[sub.grade]}15">{sub.grade}</span>
+								</div>
+							</div>
+							<div class="flex flex-wrap gap-1.5">
+								{#each sub.assessments as a}
+									<span class="text-[11px] px-2 py-1 rounded border {a.absent ? 'bg-red-50 border-red-200 text-red-600' : a.has_mark ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-slate-50 border-slate-200 text-slate-400'}">
+										{a.category}: {#if a.absent}ABS{:else}{a.has_mark ? a.value : '—'}{/if}/{a.max}
+									</span>
+								{/each}
+							</div>
+						</div>
+					{/each}
+				</div>
+			</div>
+		{/if}
+		{/if}
 	</div>
 {:else}
 	<div class="space-y-6">
