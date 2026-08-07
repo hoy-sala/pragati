@@ -138,6 +138,7 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
 			r.Use(roleMw.Authenticate)
 			r.Get("/mark-sheet", reportsH.MarkSheet)
 			r.Get("/student", reportsH.StudentReport)
+			r.Get("/student-me", reportsH.StudentSelf)
 		})
 
 		r.Route("/quizzes", func(r chi.Router) {

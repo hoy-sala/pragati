@@ -672,6 +672,117 @@ func (h *ReportsHandler) StudentReport(w http.ResponseWriter, r *http.Request) {
 	renderJSON(w, http.StatusOK, apiOK(resp))
 }
 
+// GET /api/v1/reports/student-me — authenticated student's own report card
+func (h *ReportsHandler) StudentSelf(w http.ResponseWriter, r *http.Request) {
+	claims := middleware.GetUserClaims(r.Context())
+	studentID := claims.UserID
+	academicYearID := r.URL.Query().Get("academic_year_id")
+
+	var st ReportStudent
+	var classID, dob, gender string
+	err := h.db.QueryRow(r.Context(),
+		`SELECT s.first_name || ' ' || COALESCE(s.last_name,''),
+			c.name, COALESCE(s.section_id::text,''), s.roll_no, s.sats_number,
+			COALESCE(s.gender,''), COALESCE(s.date_of_birth::text,''), s.class_id
+		 FROM students s JOIN classes c ON c.id = s.class_id
+		 WHERE s.id = $1 AND s.school_id = $2 AND s.deleted_at IS NULL`,
+		studentID, claims.SchoolID,
+	).Scan(&st.Name, &st.Class, &st.Section, &st.RollNo, &st.SATSNumber, &gender, &dob, &classID)
+	if err != nil {
+		renderJSON(w, http.StatusNotFound, apiErr("NOT_FOUND", "student not found"))
+		return
+	}
+	st.Gender = gender
+	st.DOB = dob
+
+	assyQuery := `SELECT a.id, COALESCE(a.name,''), a.subject_id, s.code, s.name,
+		c.name, c.code, a.max_marks::double precision
+		FROM assessments a
+		JOIN subjects s ON s.id = a.subject_id AND s.deleted_at IS NULL
+		JOIN assessment_categories c ON c.id = a.category_id
+		WHERE a.class_id = $1 AND a.deleted_at IS NULL AND a.is_published = true`
+	assyArgs := []interface{}{classID}
+	n := 2
+	if academicYearID != "" {
+		assyQuery += fmt.Sprintf(" AND a.academic_year_id = $%d", n)
+		assyArgs = append(assyArgs, academicYearID)
+		n++
+	}
+	assyQuery += " ORDER BY s.name, c.sort_order NULLS LAST, a.created_at"
+
+	rows, err := h.db.Query(r.Context(), assyQuery, assyArgs...)
+	if err != nil {
+		renderJSON(w, http.StatusInternalServerError, apiErr("INTERNAL_ERROR", "failed to fetch assessments"))
+		return
+	}
+	defer rows.Close()
+
+	type rawAssy struct{ id, name, sid, scode, sname, cat, catCode string; max float64 }
+	allAssy := []rawAssy{}
+	for rows.Next() {
+		var a rawAssy
+		if err := rows.Scan(&a.id, &a.name, &a.sid, &a.scode, &a.sname, &a.cat, &a.catCode, &a.max); err != nil {
+			continue
+		}
+		allAssy = append(allAssy, a)
+	}
+
+	marksQuery := `SELECT m.assessment_id, m.marks_obtained::double precision, m.is_absent
+		FROM marks m JOIN assessments a ON a.id = m.assessment_id
+		WHERE m.student_id = $1 AND a.class_id = $2 AND a.deleted_at IS NULL AND a.is_published = true`
+	mkRows, err := h.db.Query(r.Context(), marksQuery, studentID, classID)
+	if err != nil {
+		renderJSON(w, http.StatusInternalServerError, apiErr("INTERNAL_ERROR", "failed to fetch marks"))
+		return
+	}
+	defer mkRows.Close()
+
+	markMap := map[string]MarkCell{}
+	for mkRows.Next() {
+		var aid string; var val float64; var absent bool
+		if err := mkRows.Scan(&aid, &val, &absent); err != nil { continue }
+		markMap[aid] = MarkCell{AssessmentID: aid, Value: val, IsAbsent: absent, HasMark: true}
+	}
+
+	subjMap := map[string]*ReportSubject{}
+	subjOrder := []string{}
+	var grandTotal, grandMax float64
+	for _, a := range allAssy {
+		atype := classifySubject(a.scode)
+		if subjMap[a.sid] == nil {
+			subjMap[a.sid] = &ReportSubject{SubjectID: a.sid, SubjectCode: a.scode, SubjectName: a.sname, SubjectType: string(atype)}
+			subjOrder = append(subjOrder, a.sid)
+		}
+		rs := subjMap[a.sid]
+		cell := ReportAssessment{ID: a.id, Name: a.name, Category: a.cat, Max: a.max}
+		if m, ok := markMap[a.id]; ok {
+			cell.Value = m.Value; cell.Absent = m.IsAbsent; cell.HasMark = true
+			if !m.IsAbsent { rs.Total += m.Value; grandTotal += m.Value }
+		}
+		rs.MaxTotal += a.max; grandMax += a.max
+		rs.Assessments = append(rs.Assessments, cell)
+	}
+
+	cn := classNum(st.Class)
+	subjects := make([]ReportSubject, 0, len(subjOrder))
+	for _, sid := range subjOrder {
+		rs := subjMap[sid]
+		if rs.MaxTotal > 0 { rs.Pct = (rs.Total / rs.MaxTotal) * 100 }
+		g := computeGrade(rs.Pct, subjectType(rs.SubjectType), cn)
+		rs.Grade = g.grade; rs.GradeLabel = g.label
+		subjects = append(subjects, *rs)
+	}
+
+	var pct float64
+	if grandMax > 0 { pct = (grandTotal / grandMax) * 100 }
+	grade := computeGrade(pct, curricular, cn)
+
+	renderJSON(w, http.StatusOK, apiOK(StudentReportResponse{
+		Student: st, AcademicYear: academicYearID, Subjects: subjects,
+		GrandTotal: grandTotal, GrandMax: grandMax, Pct: pct, Grade: grade.grade,
+	}))
+}
+
 func apiOK(data interface{}) map[string]interface{} {
 	return map[string]interface{}{"data": data}
 }
