@@ -267,15 +267,15 @@
 			<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
 				<div class="bg-white rounded-xl border border-slate-200 p-4 text-center">
 					<div class="text-2xl font-bold text-slate-900">{marksReport.grand_total}</div>
-					<div class="text-xs text-slate-500 mt-1">Total Marks</div>
+					<div class="text-xs text-slate-500 mt-1">Total Raw</div>
 				</div>
 				<div class="bg-white rounded-xl border border-slate-200 p-4 text-center">
-					<div class="text-2xl font-bold text-slate-900">{marksReport.grand_max}</div>
-					<div class="text-xs text-slate-500 mt-1">Max Marks</div>
+					<div class="text-lg font-bold text-blue-600">{marksReport.subjects[0]?.cce?.fa_converted ?? '—'}</div>
+					<div class="text-xs text-slate-500 mt-1">FA (Internal)</div>
 				</div>
 				<div class="bg-white rounded-xl border border-slate-200 p-4 text-center">
 					<div class="text-2xl font-bold" style="color: {gradeColors[marksReport.grade]}">{marksReport.percentage.toFixed(1)}%</div>
-					<div class="text-xs text-slate-500 mt-1">Percentage</div>
+					<div class="text-xs text-slate-500 mt-1">Final %</div>
 				</div>
 				<div class="bg-white rounded-xl border border-slate-200 p-4 text-center">
 					<div class="text-2xl font-bold" style="color: {gradeColors[marksReport.grade]}">{marksReport.grade}</div>
@@ -301,9 +301,15 @@
 									{/if}
 								</div>
 								<div class="flex items-center gap-3">
-									<span class="text-sm text-slate-600">{sub.total}/{sub.max_max}</span>
-									<span class="text-sm font-bold" style="color: {gradeColors[sub.grade]}">{sub.percentage.toFixed(1)}%</span>
-									<span class="text-sm font-bold px-2 py-0.5 rounded" style="color: {gradeColors[sub.grade]}; background: {gradeColors[sub.grade]}15">{sub.grade}</span>
+									{#if sub.cce}
+										<span class="text-xs text-slate-400">FA:{sub.cce.fa_converted} + SA:{sub.cce.sa_converted}</span>
+										<span class="text-sm font-bold" style="color: {gradeColors[sub.grade]}">{sub.cce.final_marks}</span>
+										<span class="text-sm font-bold px-2 py-0.5 rounded" style="color: {gradeColors[sub.grade]}; background: {gradeColors[sub.grade]}15">{sub.grade}</span>
+									{:else}
+										<span class="text-sm text-slate-600">{sub.total}/{sub.max_max}</span>
+										<span class="text-sm font-bold" style="color: {gradeColors[sub.grade]}">{sub.percentage.toFixed(1)}%</span>
+										<span class="text-sm font-bold px-2 py-0.5 rounded" style="color: {gradeColors[sub.grade]}; background: {gradeColors[sub.grade]}15">{sub.grade}</span>
+									{/if}
 								</div>
 							</div>
 							<div class="flex flex-wrap gap-1.5">
