@@ -145,6 +145,59 @@ func (h *StudentHandler) List(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+func (h *StudentHandler) Search(w http.ResponseWriter, r *http.Request) {
+	claims := middleware.GetUserClaims(r.Context())
+	q := r.URL.Query().Get("q")
+	if q == "" {
+		renderJSON(w, http.StatusOK, models.APIResponse{Data: []interface{}{}})
+		return
+	}
+
+	searchSQL := `SELECT s.id, s.first_name || ' ' || COALESCE(s.last_name, ''), s.sats_number, COALESCE(cl.name, '')
+		FROM students s
+		LEFT JOIN classes cl ON cl.id = s.class_id
+		WHERE s.school_id = $1 AND s.deleted_at IS NULL AND s.is_active = true`
+
+	args := []interface{}{claims.SchoolID}
+	n := 2
+
+	if _, err := strconv.Atoi(q); err == nil {
+		searchSQL += fmt.Sprintf(" AND s.sats_number LIKE $%d", n)
+		args = append(args, q+"%")
+		n++
+	} else {
+		searchSQL += fmt.Sprintf(" AND (s.first_name ILIKE $%d OR s.last_name ILIKE $%d)", n, n+1)
+		args = append(args, "%"+q+"%", "%"+q+"%")
+		n += 2
+	}
+
+	searchSQL += " ORDER BY s.first_name LIMIT 10"
+
+	rows, err := h.db.Query(r.Context(), searchSQL, args...)
+	if err != nil {
+		log.Error().Err(err).Msg("student search failed")
+		renderJSON(w, http.StatusInternalServerError, models.APIResponse{Error: &models.APIError{Code: "INTERNAL_ERROR", Message: "search failed"}})
+		return
+	}
+	defer rows.Close()
+
+	type result struct {
+		ID          string `json:"id"`
+		Name        string `json:"name"`
+		SATSNumber  string `json:"sats_number"`
+		ClassName   string `json:"class_name"`
+	}
+	results := []result{}
+	for rows.Next() {
+		var res result
+		if err := rows.Scan(&res.ID, &res.Name, &res.SATSNumber, &res.ClassName); err != nil {
+			continue
+		}
+		results = append(results, res)
+	}
+	renderJSON(w, http.StatusOK, models.APIResponse{Data: results})
+}
+
 func (h *StudentHandler) Get(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	claims := middleware.GetUserClaims(r.Context())

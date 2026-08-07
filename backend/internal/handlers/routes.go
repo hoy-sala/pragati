@@ -73,6 +73,7 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
 
 		r.Route("/students", func(r chi.Router) {
 			r.Use(roleMw.Authenticate)
+			r.Get("/search", studentH.Search)
 			r.Get("/", studentH.List)
 			r.Post("/", roleMw.RequireRole("admin", "principal", "teacher")(http.HandlerFunc(studentH.Create)))
 			r.Post("/import", roleMw.RequireRole("admin")(http.HandlerFunc(studentH.ImportCSV)))

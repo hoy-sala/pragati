@@ -3,6 +3,7 @@
 	import { page } from '$app/stores';
 	import { LogOut, GraduationCap } from 'lucide-svelte';
 	import type { User, Student } from '$lib/types';
+	import Search from './Search.svelte';
 
 	const auth = getAuthState();
 
@@ -108,6 +109,8 @@
 			<p class="text-[11px] text-slate-400 italic leading-relaxed">Every Child Can Progress</p>
 		</div>
 	</div>
+
+	<Search />
 
 	<nav class="flex-1 overflow-y-auto p-2 space-y-1 scrollbar-none">
 		{#each visibleItems as item (item.href)}
