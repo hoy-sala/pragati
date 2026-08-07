@@ -804,23 +804,42 @@ func (h *ReportsHandler) StudentSelf(w http.ResponseWriter, r *http.Request) {
 		rs.Assessments = append(rs.Assessments, cell)
 	}
 
-	cn := classNum(st.Class)
+	classRange := cce.DetermineClassRange(st.Class)
 	subjects := make([]ReportSubject, 0, len(subjOrder))
 	for _, sid := range subjOrder {
 		rs := subjMap[sid]
 		if rs.MaxTotal > 0 { rs.Pct = (rs.Total / rs.MaxTotal) * 100 }
-		g := computeGrade(rs.Pct, subjectType(rs.SubjectType), cn)
-		rs.Grade = g.grade; rs.GradeLabel = g.label
+
+		isFL := cce.IsFirstLanguage(rs.SubjectCode)
+		subjType := cce.OtherSubject
+		if isFL { subjType = cce.FirstLanguage }
+
+		faMarks, saMarks := splitFASA(rs.Assessments)
+
+		var cceResult cce.ConversionResult
+		if classRange == cce.Class6to8 {
+			cceResult = cce.ConvertClasses68(faMarks, saMarks)
+		} else {
+			cceResult = cce.ConvertClasses910(faMarks, saMarks, subjType)
+		}
+		rs.CCE = &cceResult
+		rs.Grade = cceResult.FinalGrade
+		rs.GradeLabel = ""
 		subjects = append(subjects, *rs)
 	}
 
-	var pct float64
-	if grandMax > 0 { pct = (grandTotal / grandMax) * 100 }
-	grade := computeGrade(pct, curricular, cn)
+	var finalMarks float64
+	for _, s := range subjects {
+		if s.CCE != nil { finalMarks += s.CCE.FinalMarks }
+	}
+	count := float64(len(subjects))
+	if count == 0 { count = 1 }
+	overallPct := finalMarks / count
+	overallGrade := cce.GradeFromMarks(overallPct)
 
 	renderJSON(w, http.StatusOK, apiOK(StudentReportResponse{
 		Student: st, AcademicYear: academicYearID, Subjects: subjects,
-		GrandTotal: grandTotal, GrandMax: grandMax, Pct: pct, Grade: grade.grade,
+		GrandTotal: grandTotal, GrandMax: grandMax, Pct: overallPct, Grade: overallGrade,
 	}))
 }
 
