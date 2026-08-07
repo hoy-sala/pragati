@@ -646,7 +646,6 @@ func (h *ReportsHandler) StudentReport(w http.ResponseWriter, r *http.Request) {
 		rs.Assessments = append(rs.Assessments, cell)
 	}
 
-	cn := classNum(st.Class)
 	classRange := cce.DetermineClassRange(st.Class)
 	subjects := make([]ReportSubject, 0, len(subjOrder))
 
