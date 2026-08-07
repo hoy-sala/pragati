@@ -36,7 +36,6 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
 	subjectH := NewSubjectHandler(db)
 	academicYearH := NewAcademicYearHandler(db)
 	catH := NewCategoryHandler(db)
-	teacherH := NewTeacherHandler(db)
 	assessH := NewAssessmentHandler(db)
 	markH := NewMarkHandler(db)
 	dashH := NewDashboardHandler(db)

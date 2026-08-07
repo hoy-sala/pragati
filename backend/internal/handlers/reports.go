@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/pragati/backend/internal/cce"
 	"github.com/pragati/backend/internal/middleware"
 	"github.com/rs/zerolog/log"
 )
@@ -105,6 +106,22 @@ func computeGrade(pct float64, st subjectType, class int) gradeInfo {
 	default:
 		return gradeInfo{"C", ""}
 	}
+}
+
+// splitFASA separates assessment marks into FA and SA slices based on category code.
+func splitFASA(assessments []ReportAssessment) (fa []float64, sa []float64) {
+	for _, a := range assessments {
+		if !a.HasMark || a.Absent {
+			continue
+		}
+		code := strings.ToUpper(strings.TrimSpace(a.Category))
+		if strings.HasPrefix(code, "FA") {
+			fa = append(fa, a.Value)
+		} else if strings.HasPrefix(code, "SA") {
+			sa = append(sa, a.Value)
+		}
+	}
+	return
 }
 
 // assessmentTerm maps an assessment name (FA1, SA1, etc.) to its term.
@@ -493,6 +510,7 @@ type ReportSubject struct {
 	Pct          float64          `json:"percentage"`
 	Grade        string           `json:"grade"`
 	GradeLabel   string           `json:"grade_label,omitempty"`
+	CCE          *cce.ConversionResult `json:"cce,omitempty"`
 }
 
 type ReportAssessment struct {
@@ -629,27 +647,51 @@ func (h *ReportsHandler) StudentReport(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cn := classNum(st.Class)
+	classRange := cce.DetermineClassRange(st.Class)
 	subjects := make([]ReportSubject, 0, len(subjOrder))
+
 	for _, sid := range subjOrder {
 		rs := subjMap[sid]
 		if rs.MaxTotal > 0 {
 			rs.Pct = (rs.Total / rs.MaxTotal) * 100
 		}
-		g := computeGrade(rs.Pct, subjectType(rs.SubjectType), cn)
-		rs.Grade = g.grade
-		rs.GradeLabel = g.label
+
+		isFL := cce.IsFirstLanguage(rs.SubjectCode)
+		subjType := cce.OtherSubject
+		if isFL {
+			subjType = cce.FirstLanguage
+		}
+
+		faMarks, saMarks := splitFASA(rs.Assessments)
+
+		var cceResult cce.ConversionResult
+		if classRange == cce.Class6to8 {
+			cceResult = cce.ConvertClasses68(faMarks, saMarks)
+		} else {
+			cceResult = cce.ConvertClasses910(faMarks, saMarks, subjType)
+		}
+		rs.CCE = &cceResult
+		rs.Grade = cceResult.FinalGrade
+		rs.GradeLabel = ""
 		subjects = append(subjects, *rs)
 	}
 
-	var pct float64
-	if grandMax > 0 {
-		pct = (grandTotal / grandMax) * 100
+	var finalMarks float64
+	for _, s := range subjects {
+		if s.CCE != nil {
+			finalMarks += s.CCE.FinalMarks
+		}
 	}
-	grade := computeGrade(pct, curricular, cn)
+	count := float64(len(subjects))
+	if count == 0 {
+		count = 1
+	}
+	overallPct := finalMarks / count
+	overallGrade := cce.GradeFromMarks(overallPct)
 
 	resp := StudentReportResponse{
 		Student: st, AcademicYear: academicYearID, Term: term,
-		Subjects: subjects, GrandTotal: grandTotal, GrandMax: grandMax, Pct: pct, Grade: grade.grade,
+		Subjects: subjects, GrandTotal: grandTotal, GrandMax: grandMax, Pct: overallPct, Grade: overallGrade,
 	}
 
 	if term != "" && academicYearID != "" {
