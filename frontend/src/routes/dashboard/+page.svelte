@@ -145,7 +145,7 @@
 			</button>
 			<button onclick={() => studentTab = 'marks'}
 				class="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md transition-colors {studentTab === 'marks' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}">
-				<GraduationCap size={16} /> My Marks
+				<GraduationCap size={16} /> Report Card
 			</button>
 		</div>
 
