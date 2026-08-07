@@ -50,8 +50,9 @@ func (h *UserHandler) List(w http.ResponseWriter, r *http.Request) {
 	users := []userInfo{}
 	for rows.Next() {
 		var u userInfo
-		var schoolID string
-		if err := rows.Scan(&u.ID, &schoolID, &u.Email, &u.Name, &u.Role, &u.Phone, &u.IsActive, &u.CreatedAt); err != nil {
+		var schoolID, updatedAt string
+		if err := rows.Scan(&u.ID, &schoolID, &u.Email, &u.Name, &u.Role, &u.Phone, &u.IsActive, &u.CreatedAt, &updatedAt); err != nil {
+			log.Error().Err(err).Msg("scan user row failed")
 			continue
 		}
 		users = append(users, u)
