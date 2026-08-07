@@ -171,15 +171,17 @@
 					editorParams: { elementAttributes: { inputmode: 'decimal' } },
 					width: 120,
 					hozAlign: 'center',
-					cellEdited: (cell: any) => {
-						const raw = String(cell.getValue() ?? '');
-						const upper = raw.toUpperCase();
-						if (upper === 'A' || upper === 'ABS') {
-							cell.getRow().update({ _absent: true, _marks: '' });
-						} else {
-							cell.getRow().update({ _absent: false, marks_obtained: raw === '' ? 0 : parseFloat(raw) || 0 });
-						}
-					},
+				cellEdited: (cell: any) => {
+					const raw = String(cell.getValue() ?? '');
+					const upper = raw.toUpperCase();
+					if (upper === 'A' || upper === 'ABS') {
+						cell.getRow().update({ _absent: true, _marks: '' });
+					} else {
+						cell.getRow().update({ _absent: false, marks_obtained: raw === '' ? 0 : parseFloat(raw) || 0 });
+					}
+					validateCell(cell);
+					runValidation();
+				},
 					formatter: (cell: any) => {
 						const data = cell.getRow().getData();
 						if (data._absent) return 'ABS';
@@ -202,8 +204,57 @@
 		});
 	}
 
+	let validationErrors = $state<{ name: string; marks: number; max: number }[]>([]);
+
+	function validateCell(cell: any) {
+		const data = cell.getRow().getData();
+		if (data._absent) {
+			cell.getElement().style.backgroundColor = '';
+			cell.getElement().style.color = '';
+			return;
+		}
+		const raw = String(cell.getValue() ?? '');
+		const val = parseFloat(raw);
+		if (raw !== '' && !isNaN(val) && val > maxMarks) {
+			cell.getElement().style.backgroundColor = '#fef2f2';
+			cell.getElement().style.color = '#dc2626';
+		} else if (raw !== '' && !isNaN(val) && val < 0) {
+			cell.getElement().style.backgroundColor = '#fef2f2';
+			cell.getElement().style.color = '#dc2626';
+		} else {
+			cell.getElement().style.backgroundColor = '';
+			cell.getElement().style.color = '';
+		}
+	}
+
+	function runValidation(): { name: string; marks: number; max: number }[] {
+		if (!table) return [];
+		const data = table.getData() as any[];
+		const errs: { name: string; marks: number; max: number }[] = [];
+		for (const d of data) {
+			if (d._absent) continue;
+			const raw = String(d._marks ?? '');
+			if (raw === '') continue;
+			const val = parseFloat(raw);
+			if (isNaN(val)) continue;
+			if (val > maxMarks || val < 0) {
+				errs.push({ name: d.name, marks: val, max: maxMarks });
+			}
+		}
+		validationErrors = errs;
+		return errs;
+	}
+
 	async function saveMarks() {
 		if (!table || !selectedAssessment) return;
+
+		const errs = runValidation();
+		if (errs.length > 0) {
+			statusMsg = `Cannot save: ${errs.length} student${errs.length > 1 ? 's have' : ' has'} invalid marks (exceed max ${maxMarks} or negative). Highlighted in red.`;
+			statusType = 'error';
+			return;
+		}
+
 		saving = true;
 		statusMsg = '';
 
@@ -292,6 +343,19 @@
 	{#if statusMsg}
 		<div class="flex items-center gap-2 text-sm px-4 py-2.5 rounded-lg border {statusStyles[statusType]}">
 			<span>{statusMsg}</span>
+		</div>
+	{/if}
+
+	{#if validationErrors.length > 0}
+		<div class="bg-red-50 border border-red-200 rounded-lg p-4">
+			<h3 class="text-sm font-semibold text-red-700 mb-2">Validation Errors ({validationErrors.length})</h3>
+			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1.5">
+				{#each validationErrors as e}
+					<div class="text-xs text-red-600">
+						<span class="font-medium">{e.name}</span>: {e.marks} &gt; max {e.max}
+					</div>
+				{/each}
+			</div>
 		</div>
 	{/if}
 

@@ -120,12 +120,18 @@ func (h *MarkHandler) BatchSave(w http.ResponseWriter, r *http.Request) {
 	defer tx.Rollback(r.Context())
 
 	var currentVersion int
+	var isLocked bool
 	err = tx.QueryRow(r.Context(),
-		`SELECT version FROM assessments WHERE id = $1 AND school_id = $2 AND deleted_at IS NULL FOR UPDATE`,
+		`SELECT version, is_locked FROM assessments WHERE id = $1 AND school_id = $2 AND deleted_at IS NULL FOR UPDATE`,
 		req.AssessmentID, claims.SchoolID,
-	).Scan(&currentVersion)
+	).Scan(&currentVersion, &isLocked)
 	if err != nil {
 		renderJSON(w, http.StatusNotFound, models.APIResponse{Error: &models.APIError{Code: "NOT_FOUND", Message: "assessment not found"}})
+		return
+	}
+
+	if isLocked {
+		renderJSON(w, http.StatusForbidden, models.APIResponse{Error: &models.APIError{Code: "ASSESSMENT_LOCKED", Message: "this assessment is locked and cannot be edited"}})
 		return
 	}
 
@@ -138,6 +144,15 @@ func (h *MarkHandler) BatchSave(w http.ResponseWriter, r *http.Request) {
 	errors := []map[string]interface{}{}
 
 	for _, m := range req.Marks {
+		if m.MarksObtained < 0 {
+			errors = append(errors, map[string]interface{}{
+				"student_id":     m.StudentID,
+				"marks_obtained": m.MarksObtained,
+				"message":        "marks cannot be negative",
+			})
+			continue
+		}
+
 		var maxMarks float64
 		tx.QueryRow(r.Context(), "SELECT max_marks::double precision FROM assessments WHERE id = $1", req.AssessmentID).Scan(&maxMarks)
 
