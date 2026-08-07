@@ -146,3 +146,69 @@ func (h *UserHandler) ResetPassword(w http.ResponseWriter, r *http.Request) {
 	}
 	renderJSON(w, http.StatusOK, apiOK(map[string]bool{"success": true}))
 }
+
+// GET /api/v1/users/{id}/teacher-detail — teacher's subjects and class
+func (h *UserHandler) TeacherDetail(w http.ResponseWriter, r *http.Request) {
+	userID := chi.URLParam(r, "id")
+
+	rows, err := h.db.Query(r.Context(), `SELECT subject_id FROM teacher_subjects WHERE teacher_id = $1`, userID)
+	if err != nil {
+		renderJSON(w, http.StatusInternalServerError, apiErr("INTERNAL_ERROR", "failed to fetch teacher subjects"))
+		return
+	}
+	defer rows.Close()
+	type subj struct {
+		ID   string `json:"id"`
+		Name string `json:"name"`
+	}
+	var subjects []subj
+	for rows.Next() {
+		var sid string
+		if err := rows.Scan(&sid); err != nil { continue }
+		var sname string
+		h.db.QueryRow(r.Context(), `SELECT name FROM subjects WHERE id = $1 AND deleted_at IS NULL`, sid).Scan(&sname)
+		subjects = append(subjects, subj{ID: sid, Name: sname})
+	}
+
+	var classID string
+	h.db.QueryRow(r.Context(), `SELECT class_id FROM teacher_classes WHERE teacher_id = $1 LIMIT 1`, userID).Scan(&classID)
+
+	renderJSON(w, http.StatusOK, apiOK(map[string]interface{}{"subjects": subjects, "class_id": classID}))
+}
+
+// PUT /api/v1/users/{id}/teacher-detail — update teacher's subjects and class
+func (h *UserHandler) UpdateTeacherDetail(w http.ResponseWriter, r *http.Request) {
+	userID := chi.URLParam(r, "id")
+
+	var req struct {
+		SubjectIDs []string `json:"subject_ids"`
+		ClassID    string   `json:"class_id"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		renderJSON(w, http.StatusBadRequest, apiErr("INVALID_INPUT", "invalid request"))
+		return
+	}
+
+	tx, err := h.db.Begin(r.Context())
+	if err != nil {
+		renderJSON(w, http.StatusInternalServerError, apiErr("INTERNAL_ERROR", "failed to start transaction"))
+		return
+	}
+	defer tx.Rollback(r.Context())
+
+	tx.Exec(r.Context(), `DELETE FROM teacher_subjects WHERE teacher_id = $1`, userID)
+	for _, sid := range req.SubjectIDs {
+		tx.Exec(r.Context(), `INSERT INTO teacher_subjects (teacher_id, subject_id) VALUES ($1, $2) ON CONFLICT DO NOTHING`, userID, sid)
+	}
+
+	tx.Exec(r.Context(), `DELETE FROM teacher_classes WHERE teacher_id = $1`, userID)
+	if req.ClassID != "" {
+		tx.Exec(r.Context(), `INSERT INTO teacher_classes (teacher_id, class_id) VALUES ($1, $2) ON CONFLICT DO NOTHING`, userID, req.ClassID)
+	}
+
+	if err := tx.Commit(r.Context()); err != nil {
+		renderJSON(w, http.StatusInternalServerError, apiErr("INTERNAL_ERROR", "failed to update teacher detail"))
+		return
+	}
+	renderJSON(w, http.StatusOK, apiOK(map[string]bool{"success": true}))
+}

@@ -16,6 +16,9 @@
 
 	let showUserForm = $state(false);
 	let userForm = $state({ email: '', password: '', name: '', role: 'teacher', phone: '' });
+	let editingId = $state<string | null>(null);
+	let editSubjects = $state<{ id: string; name: string; selected: boolean }[]>([]);
+	let editClassId = $state('');
 	let resettingId = $state<string | null>(null);
 	let resetPassword = $state('');
 
@@ -68,6 +71,25 @@
 		if (!resetPassword || resetPassword.length < 6) { msg('Password must be at least 6 characters', 'error'); return; }
 		const res = await api<unknown>('POST', `/users/${id}/reset-password`, { password: resetPassword });
 		if (res.data) { msg('Password reset'); resettingId = null; resetPassword = ''; }
+		else if (res.error) msg(res.error.message, 'error');
+	}
+
+	async function loadTeacherDetail(id: string) {
+		editingId = id;
+		const res = await api<{ subjects: { id: string; name: string }[]; class_id: string }>('GET', `/users/${id}/teacher-detail`);
+		if (res.data) {
+			const allSubRes = await api<{ id: string; name: string }[]>('GET', '/subjects');
+			const teacherSubIds = (res.data.subjects || []).map(s => s.id);
+			editSubjects = (allSubRes.data || []).map(s => ({ ...s, selected: teacherSubIds.includes(s.id) }));
+			editClassId = res.data.class_id || '';
+		}
+	}
+
+	async function saveTeacherDetail() {
+		if (!editingId) return;
+		const subjectIds = editSubjects.filter(s => s.selected).map(s => s.id);
+		const res = await api<unknown>('PUT', `/users/${editingId}/teacher-detail`, { subject_ids: subjectIds, class_id: editClassId });
+		if (res.data) { msg('Teacher assignments updated'); editingId = null; loadUsers(); }
 		else if (res.error) msg(res.error.message, 'error');
 	}
 
@@ -263,16 +285,19 @@
 							{:else}
 								<span class="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-400">Inactive</span>
 							{/if}
-							{#if resettingId === u.id}
-								<div class="flex items-center gap-2">
-									<input type="password" bind:value={resetPassword} placeholder="New password" class="px-2 py-1 text-xs rounded border border-slate-300 w-32" />
-									<Button size="sm" onclick={() => resetPwd(u.id)}>Save</Button>
-									<Button size="sm" variant="ghost" onclick={() => { resettingId = null; resetPassword = ''; }}>Cancel</Button>
-								</div>
-							{:else}
-								<button onclick={() => { resettingId = u.id; resetPassword = ''; }} title="Reset password" class="p-1.5 rounded text-slate-400 hover:text-slate-600 hover:bg-slate-100"><RotateCw size={14} /></button>
-								<button onclick={() => toggleUser(u.id)} title={u.is_active ? 'Deactivate' : 'Activate'} class="p-1.5 rounded {u.is_active ? 'text-amber-500 hover:text-amber-600' : 'text-emerald-500 hover:text-emerald-600'} hover:bg-slate-100"><Power size={14} /></button>
-							{/if}
+						{#if resettingId === u.id}
+							<div class="flex items-center gap-2">
+								<input type="password" bind:value={resetPassword} placeholder="New password" class="px-2 py-1 text-xs rounded border border-slate-300 w-32" />
+								<Button size="sm" onclick={() => resetPwd(u.id)}>Save</Button>
+								<Button size="sm" variant="ghost" onclick={() => { resettingId = null; resetPassword = ''; }}>Cancel</Button>
+							</div>
+						{:else}
+							<button onclick={() => { resettingId = u.id; resetPassword = ''; }} title="Reset password" class="p-1.5 rounded text-slate-400 hover:text-slate-600 hover:bg-slate-100"><RotateCw size={14} /></button>
+							<button onclick={() => toggleUser(u.id)} title={u.is_active ? 'Deactivate' : 'Activate'} class="p-1.5 rounded {u.is_active ? 'text-amber-500 hover:text-amber-600' : 'text-emerald-500 hover:text-emerald-600'} hover:bg-slate-100"><Power size={14} /></button>
+						{/if}
+						{#if u.role === 'teacher' && editingId !== u.id}
+							<button onclick={() => loadTeacherDetail(u.id)} title="Assign subjects & class" class="p-1.5 rounded text-blue-500 hover:text-blue-600 hover:bg-blue-50"><BookOpen size={14} /></button>
+						{/if}
 						</div>
 					</div>
 				{:else}
@@ -280,6 +305,38 @@
 				{/each}
 			</div>
 		</div>
+
+		{#if editingId}
+			<div class="fixed inset-0 bg-black/40 flex items-center justify-center z-50" role="button" tabindex="0" onclick={() => editingId = null} onkeydown={(e) => { if (e.key === 'Escape') editingId = null; }}>
+				<div class="bg-white rounded-xl shadow-xl w-full max-w-md mx-4 p-6" role="dialog" onclick={(e) => e.stopPropagation()} onkeydown={(e) => e.stopPropagation()}>
+					<h3 class="text-base font-semibold text-slate-900 mb-4">Assign Subjects & Class</h3>
+					<div class="mb-4">
+						<label class="block text-xs font-medium text-slate-600 mb-2">Subjects</label>
+						<div class="flex flex-wrap gap-2">
+							{#each editSubjects as s}
+								<label class="flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg border cursor-pointer {s.selected ? 'bg-primary-50 border-primary-300 text-primary-700' : 'bg-slate-50 border-slate-200 text-slate-600'}">
+									<input type="checkbox" bind:checked={s.selected} class="hidden" />
+									{s.name}
+								</label>
+							{/each}
+						</div>
+					</div>
+					<div class="mb-6">
+						<label for="teach-class" class="block text-xs font-medium text-slate-600 mb-1">Class</label>
+						<select id="teach-class" bind:value={editClassId} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
+							<option value="">No class assigned</option>
+							{#each classes as c}
+								<option value={c.id}>{c.name}</option>
+							{/each}
+						</select>
+					</div>
+					<div class="flex justify-end gap-2">
+						<Button variant="ghost" onclick={() => editingId = null}>Cancel</Button>
+						<Button onclick={saveTeacherDetail}>Save</Button>
+					</div>
+				</div>
+			</div>
+		{/if}
 
 	{:else if activeTab === 'years'}
 		<div class="bg-white rounded-xl border border-slate-200">
