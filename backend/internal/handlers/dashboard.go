@@ -101,6 +101,75 @@ func (h *DashboardHandler) StudentInsights(w http.ResponseWriter, r *http.Reques
 	}})
 }
 
+func (h *DashboardHandler) StaffDashboard(w http.ResponseWriter, r *http.Request) {
+	claims := middleware.GetUserClaims(r.Context())
+
+	type assignment struct {
+		ClassName  string `json:"class_name"`
+		SubjectName string `json:"subject_name"`
+	}
+
+	var assignments []assignment
+	rows, err := h.db.Query(r.Context(),
+		`SELECT DISTINCT cl.name, s.name
+		 FROM assessments a
+		 JOIN classes cl ON cl.id = a.class_id
+		 JOIN subjects s ON s.id = a.subject_id
+		 WHERE a.teacher_id = $1 AND a.deleted_at IS NULL
+		 ORDER BY cl.sort_order, s.name`,
+		claims.UserID,
+	)
+	if err == nil {
+		defer rows.Close()
+		for rows.Next() {
+			var a assignment
+			if err := rows.Scan(&a.ClassName, &a.SubjectName); err == nil {
+				assignments = append(assignments, a)
+			}
+		}
+	}
+
+	type pending struct {
+		ID          string  `json:"id"`
+		Name        string  `json:"name"`
+		ClassName   string  `json:"class_name"`
+		SubjectName string  `json:"subject_name"`
+		MaxMarks    float64 `json:"max_marks"`
+		MarksCount  int     `json:"marks_count"`
+		StudentCount int    `json:"student_count"`
+		DueDate     string  `json:"due_date"`
+	}
+
+	var pendingAssessments []pending
+	pendingRows, err := h.db.Query(r.Context(),
+		`SELECT a.id, COALESCE(a.name, ''), cl.name, s.name, a.max_marks::double precision,
+			(SELECT COUNT(*) FROM marks m WHERE m.assessment_id = a.id),
+			(SELECT COUNT(*) FROM students st WHERE st.class_id = a.class_id AND st.deleted_at IS NULL AND st.is_active = true),
+			COALESCE(a.date::text, '')
+		 FROM assessments a
+		 JOIN classes cl ON cl.id = a.class_id
+		 JOIN subjects s ON s.id = a.subject_id
+		 WHERE a.teacher_id = $1 AND a.deleted_at IS NULL AND a.is_published = false
+		 ORDER BY a.date NULLS LAST, a.created_at DESC
+		 LIMIT 10`,
+		claims.UserID,
+	)
+	if err == nil {
+		defer pendingRows.Close()
+		for pendingRows.Next() {
+			var p pending
+			if err := pendingRows.Scan(&p.ID, &p.Name, &p.ClassName, &p.SubjectName, &p.MaxMarks, &p.MarksCount, &p.StudentCount, &p.DueDate); err == nil {
+				pendingAssessments = append(pendingAssessments, p)
+			}
+		}
+	}
+
+	renderJSON(w, http.StatusOK, models.APIResponse{Data: map[string]interface{}{
+		"assignments":        assignments,
+		"pending_assessments": pendingAssessments,
+	}})
+}
+
 func (h *DashboardHandler) Stats(w http.ResponseWriter, r *http.Request) {
 	claims := middleware.GetUserClaims(r.Context())
 

@@ -43,13 +43,22 @@
 		students_by_class: { class: string; count: number }[];
 	} | null>(null);
 
+	let staffDash = $state<{
+		assignments: { class_name: string; subject_name: string }[];
+		pending_assessments: { id: string; name: string; class_name: string; subject_name: string; max_marks: number; marks_count: number; student_count: number; due_date: string }[];
+	} | null>(null);
+
 	onMount(async () => {
 		if (isStudent) {
 			const res = await api<typeof insights>('GET', '/dashboard/student');
 			if (res.data) insights = res.data;
 		} else {
-			const res = await api<typeof staffStats>('GET', '/dashboard/stats');
-			if (res.data) staffStats = res.data;
+			const [statsRes, dashRes] = await Promise.all([
+				api<typeof staffStats>('GET', '/dashboard/stats'),
+				api<typeof staffDash>('GET', '/dashboard/staff'),
+			]);
+			if (statsRes.data) staffStats = statsRes.data;
+			if (dashRes.data) staffDash = dashRes.data;
 		}
 		loading = false;
 	});
@@ -219,6 +228,51 @@
 			<div class="bg-white rounded-xl border border-slate-200 p-4">
 				<div class="text-2xl font-bold text-primary-600">{loading ? '--' : staffStats?.total_assessments ?? 0}</div>
 				<div class="text-sm text-slate-500 mt-1">Assessments</div>
+			</div>
+		</div>
+
+		<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+			<!-- My Assignments -->
+			<div class="bg-white rounded-xl border border-slate-200 p-5">
+				<h2 class="text-base font-semibold text-slate-900 mb-3">My Classes & Subjects</h2>
+				{#if loading}
+					<div class="text-sm text-slate-400">Loading...</div>
+				{:else if staffDash?.assignments && staffDash.assignments.length > 0}
+					<div class="flex flex-wrap gap-2">
+						{#each staffDash.assignments as a}
+							<span class="text-xs px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700">
+								{a.class_name} · {a.subject_name}
+							</span>
+						{/each}
+					</div>
+				{:else}
+					<div class="text-sm text-slate-400">No class assignments yet</div>
+				{/if}
+			</div>
+
+			<!-- Pending Marks Entry -->
+			<div class="bg-white rounded-xl border border-slate-200 p-5">
+				<h2 class="text-base font-semibold text-slate-900 mb-3">Pending Marks Entry</h2>
+				{#if loading}
+					<div class="text-sm text-slate-400">Loading...</div>
+				{:else if staffDash?.pending_assessments && staffDash.pending_assessments.length > 0}
+					<div class="space-y-2">
+						{#each staffDash.pending_assessments as p}
+							<a href="/marks?assessment_id={p.id}" class="flex items-center gap-3 p-2.5 rounded-lg border border-slate-100 hover:bg-slate-50 transition-colors">
+								<div class="flex-1 min-w-0">
+									<div class="text-sm font-medium text-slate-800 truncate">{p.name || 'Untitled'}</div>
+									<div class="text-xs text-slate-400">{p.class_name} · {p.subject_name}</div>
+								</div>
+								<div class="text-right shrink-0">
+									<div class="text-xs font-medium {p.marks_count > 0 ? 'text-amber-600' : 'text-red-500'}">{p.marks_count}/{p.student_count}</div>
+									<div class="text-[10px] text-slate-400">marks</div>
+								</div>
+							</a>
+						{/each}
+					</div>
+				{:else}
+					<div class="text-sm text-slate-400">All caught up! No pending marks entry.</div>
+				{/if}
 			</div>
 		</div>
 

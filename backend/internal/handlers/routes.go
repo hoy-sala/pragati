@@ -116,6 +116,7 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
 		})
 
 		r.With(roleMw.Authenticate).Get("/dashboard/stats", dashH.Stats)
+		r.With(roleMw.Authenticate).Get("/dashboard/staff", dashH.StaffDashboard)
 		r.With(roleMw.Authenticate).Get("/dashboard/student", dashH.StudentInsights)
 
 		r.Route("/questions", func(r chi.Router) {
