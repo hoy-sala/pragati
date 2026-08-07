@@ -39,13 +39,13 @@ func (h *UserHandler) List(w http.ResponseWriter, r *http.Request) {
 	defer rows.Close()
 
 	type userInfo struct {
-		ID        string `json:"id"`
-		Email     string `json:"email"`
-		Name      string `json:"name"`
-		Role      string `json:"role"`
-		Phone     string `json:"phone"`
-		IsActive  bool   `json:"is_active"`
-		CreatedAt string `json:"created_at"`
+		ID        string  `json:"id"`
+		Email     *string `json:"email,omitempty"`
+		Name      string  `json:"name"`
+		Role      string  `json:"role"`
+		Phone     *string `json:"phone,omitempty"`
+		IsActive  bool    `json:"is_active"`
+		CreatedAt string  `json:"created_at"`
 	}
 
 	users := []userInfo{}
@@ -58,6 +58,7 @@ func (h *UserHandler) List(w http.ResponseWriter, r *http.Request) {
 		}
 		users = append(users, u)
 	}
+	log.Info().Int("count", len(users)).Msg("UserList result")
 	renderJSON(w, http.StatusOK, apiOK(users))
 }
 
