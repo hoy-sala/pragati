@@ -22,7 +22,6 @@ func NewMentorHandler(db *pgxpool.Pool) *MentorHandler {
 }
 
 func (h *MentorHandler) ListAssignments(w http.ResponseWriter, r *http.Request) {
-	claims := middleware.GetUserClaims(r.Context())
 	yearID := r.URL.Query().Get("academic_year_id")
 	if yearID == "" {
 		renderJSON(w, http.StatusBadRequest, apiErr("VALIDATION_ERROR", "academic_year_id is required"))
@@ -69,7 +68,6 @@ func (h *MentorHandler) ListAssignments(w http.ResponseWriter, r *http.Request) 
 }
 
 func (h *MentorHandler) CreateAssignment(w http.ResponseWriter, r *http.Request) {
-	claims := middleware.GetUserClaims(r.Context())
 	var req struct {
 		MentorID string `json:"mentor_id"`; StudentID string `json:"student_id"`; AcademicYearID string `json:"academic_year_id"`
 	}
@@ -110,7 +108,6 @@ func (h *MentorHandler) DeleteAssignment(w http.ResponseWriter, r *http.Request)
 }
 
 func (h *MentorHandler) Stats(w http.ResponseWriter, r *http.Request) {
-	claims := middleware.GetUserClaims(r.Context())
 	yearID := r.URL.Query().Get("academic_year_id")
 	if yearID == "" { renderJSON(w, http.StatusBadRequest, apiErr("VALIDATION_ERROR", "academic_year_id is required")); return }
 	classID := r.URL.Query().Get("class_id")
@@ -145,7 +142,6 @@ func (h *MentorHandler) Stats(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *MentorHandler) Roster(w http.ResponseWriter, r *http.Request) {
-	claims := middleware.GetUserClaims(r.Context())
 	mentorID := r.URL.Query().Get("mentor_id")
 	if mentorID == "" { mentorID = claims.UserID }
 	yearID := r.URL.Query().Get("academic_year_id")
@@ -178,7 +174,6 @@ func (h *MentorHandler) Roster(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *MentorHandler) GetAttendance(w http.ResponseWriter, r *http.Request) {
-	claims := middleware.GetUserClaims(r.Context())
 	mentorID := r.URL.Query().Get("mentor_id")
 	if mentorID == "" { mentorID = claims.UserID }
 	date := r.URL.Query().Get("date")
@@ -205,7 +200,6 @@ func (h *MentorHandler) GetAttendance(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *MentorHandler) SaveAttendance(w http.ResponseWriter, r *http.Request) {
-	claims := middleware.GetUserClaims(r.Context())
 	var req struct {
 		MentorID string `json:"mentor_id"`; Date string `json:"date"`; StudentID string `json:"student_id"`
 		Status string `json:"status"`; Remarks string `json:"remarks"`
@@ -227,7 +221,6 @@ func (h *MentorHandler) SaveAttendance(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *MentorHandler) ContactParent(w http.ResponseWriter, r *http.Request) {
-	claims := middleware.GetUserClaims(r.Context())
 	var req struct { MentorID string `json:"mentor_id"`; StudentID string `json:"student_id"`; Date string `json:"date"` }
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		renderJSON(w, http.StatusBadRequest, apiErr("INVALID_INPUT", "invalid request")); return
@@ -248,7 +241,6 @@ func (h *MentorHandler) ContactParent(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *MentorHandler) ListLogs(w http.ResponseWriter, r *http.Request) {
-	claims := middleware.GetUserClaims(r.Context())
 	mentorID := r.URL.Query().Get("mentor_id")
 	if mentorID == "" { mentorID = claims.UserID }
 	rows, err := h.db.Query(r.Context(),
@@ -272,7 +264,6 @@ func (h *MentorHandler) ListLogs(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *MentorHandler) CreateLog(w http.ResponseWriter, r *http.Request) {
-	claims := middleware.GetUserClaims(r.Context())
 	var req struct {
 		StudentID string `json:"student_id"`; Category string `json:"category"`
 		Severity string `json:"severity"`; Description string `json:"description"`
@@ -294,7 +285,6 @@ func (h *MentorHandler) CreateLog(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *MentorHandler) PrincipalAlerts(w http.ResponseWriter, r *http.Request) {
-	claims := middleware.GetUserClaims(r.Context())
 	rows, err := h.db.Query(r.Context(),
 		`SELECT ml.id, ml.student_id, s.first_name || ' ' || COALESCE(s.last_name,'') as student_name,
 			ml.log_date, ml.category, ml.severity, ml.description, ml.action_taken, ml.parent_informed,
@@ -319,7 +309,6 @@ func (h *MentorHandler) PrincipalAlerts(w http.ResponseWriter, r *http.Request) 
 }
 
 func (h *MentorHandler) ReviewLog(w http.ResponseWriter, r *http.Request) {
-	claims := middleware.GetUserClaims(r.Context())
 	id := chi.URLParam(r, "id")
 	var req struct { PrincipalNotes string `json:"principal_notes"` }
 	json.NewDecoder(r.Body).Decode(&req)
@@ -330,7 +319,6 @@ func (h *MentorHandler) ReviewLog(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *MentorHandler) MonthlySummary(w http.ResponseWriter, r *http.Request) {
-	claims := middleware.GetUserClaims(r.Context())
 	yearID := r.URL.Query().Get("academic_year_id")
 	if yearID == "" { renderJSON(w, http.StatusBadRequest, apiErr("VALIDATION_ERROR", "academic_year_id is required")); return }
 	rows, err := h.db.Query(r.Context(),
