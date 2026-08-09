@@ -64,8 +64,7 @@
 	let totalStudents = $derived(filteredStudents().length);
 
 	function onPageChange(p: number) { page = p; }
-
-	$effect(() => { page = 1; });
+	function resetPage() { page = 1; }
 
 	onMount(async () => {
 		const [sRes, cRes, yRes] = await Promise.all([
@@ -365,10 +364,10 @@
 	<div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
 		<div class="p-4 border-b border-slate-200 flex flex-wrap gap-3">
 			<div class="flex-1 min-w-48">
-				<SearchFilter bind:value={search} placeholder="Search by name or SATS..." onInput={() => page = 1} />
+				<SearchFilter bind:value={search} placeholder="Search by name or SATS..." onInput={resetPage} />
 			</div>
 			<div class="w-40">
-				<Select bind:value={filterClass} options={[{ id: '', name: 'All Classes' }, ...classes.map(c => ({ id: c.id, name: c.name }))]} placeholder="All Classes" />
+				<Select bind:value={filterClass} options={[{ id: '', name: 'All Classes' }, ...classes.map(c => ({ id: c.id, name: c.name }))]} placeholder="All Classes" onselect={resetPage} />
 			</div>
 		</div>
 		<table class="w-full text-sm">

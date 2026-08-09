@@ -32,7 +32,8 @@
 
 	let totalQuizzes = $derived(filteredQuizzes().length);
 
-	function onPageChange(p: number) { page = 1; page = p; }
+	function onPageChange(p: number) { page = p; }
+	function resetPage() { page = 1; }
 
 	onMount(loadQuizzes);
 
@@ -42,8 +43,6 @@
 		if (res.data) allQuizzes = res.data;
 		loading = false;
 	}
-
-	$effect(() => { page = 1; });
 
 	async function publish(id: string) {
 		const res = await api('POST', `/quizzes/${id}/publish`);
@@ -77,10 +76,10 @@
 	<div class="bg-white rounded-xl border border-slate-200">
 		<div class="p-4 border-b border-slate-200 flex flex-wrap gap-3">
 			<div class="flex-1 min-w-48">
-				<SearchFilter bind:value={search} placeholder="Search quizzes..." onInput={() => page = 1} />
+				<SearchFilter bind:value={search} placeholder="Search quizzes..." onInput={resetPage} />
 			</div>
 			<div class="w-36">
-				<select bind:value={filterStatus} onchange={() => page = 1} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
+				<select bind:value={filterStatus} onchange={resetPage} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
 					<option value="">All Status</option>
 					<option value="published">Published</option>
 					<option value="draft">Draft</option>

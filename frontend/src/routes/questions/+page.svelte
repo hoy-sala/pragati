@@ -36,8 +36,7 @@
 	let totalQuestions = $derived(filteredQuestions().length);
 
 	function onPageChange(p: number) { page = p; }
-
-	$effect(() => { page = 1; });
+	function resetPage() { page = 1; }
 
 	onMount(async () => {
 		const [subRes] = await Promise.all([api<Subject[]>('GET', '/subjects')]);
@@ -83,13 +82,13 @@
 	<div class="bg-white rounded-xl border border-slate-200 p-4">
 		<div class="flex flex-wrap gap-3">
 			<div class="flex-1 min-w-48">
-				<SearchFilter bind:value={search} placeholder="Search questions..." onInput={() => page = 1} />
+				<SearchFilter bind:value={search} placeholder="Search questions..." onInput={resetPage} />
 			</div>
 			<div class="w-40">
-				<Select bind:value={filterSubject} options={subjects} placeholder="All Subjects" onselect={() => page = 1} />
+				<Select bind:value={filterSubject} options={subjects} placeholder="All Subjects" onselect={resetPage} />
 			</div>
 			<div class="w-36">
-				<Select bind:value={filterType} options={typeOptions} placeholder="All Types" onselect={() => page = 1} />
+				<Select bind:value={filterType} options={typeOptions} placeholder="All Types" onselect={resetPage} />
 			</div>
 		</div>
 	</div>

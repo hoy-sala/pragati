@@ -48,8 +48,7 @@
 	let totalProgress = $derived(filteredProgress().length);
 
 	function onProgressPageChange(p: number) { progressPage = p; }
-
-	$effect(() => { progressPage = 1; });
+	function resetProgressPage() { progressPage = 1; }
 
 	let loading = $state(true);
 	let perfLoading = $state(false);
@@ -307,7 +306,7 @@
 					<Select bind:value={selectedClass} options={[{ id: '', name: 'All Classes' }, ...classes.map(c => ({ id: c.id, name: c.name }))]} placeholder="All Classes" />
 				</div>
 				<div class="flex-1 min-w-48">
-					<SearchFilter bind:value={progressSearch} placeholder="Search assessments..." onInput={() => progressPage = 1} />
+					<SearchFilter bind:value={progressSearch} placeholder="Search assessments..." onInput={resetProgressPage} />
 				</div>
 			</div>
 		</div>
