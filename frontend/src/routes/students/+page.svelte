@@ -41,25 +41,16 @@
 	let page = $state(1);
 	const pageSize = 20;
 
-	let filteredStudents = $derived.by(() => {
-		let result = allStudents;
-		if (filterClass) result = result.filter(s => s.class_id === filterClass);
-		if (search.trim()) {
-			const q = search.toLowerCase();
-			result = result.filter(s =>
-				s.first_name?.toLowerCase().includes(q) ||
-				s.last_name?.toLowerCase().includes(q) ||
-				s.sats_number?.includes(q)
-			);
-		}
-		return result;
-	});
+	let filteredStudents = $derived(allStudents.filter(s => {
+		if (filterClass && s.class_id !== filterClass) return false;
+		if (!search.trim()) return true;
+		const q = search.toLowerCase();
+		return s.first_name?.toLowerCase().includes(q) ||
+			s.last_name?.toLowerCase().includes(q) ||
+			s.sats_number?.includes(q);
+	}));
 
-	let paginatedStudents = $derived.by(() => {
-		const start = (page - 1) * pageSize;
-		return filteredStudents.slice(start, start + pageSize);
-	});
-
+	let paginatedStudents = $derived(filteredStudents.slice((page - 1) * pageSize, page * pageSize));
 	let totalStudents = $derived(filteredStudents.length);
 
 	function onPageChange(p: number) { page = p; }
