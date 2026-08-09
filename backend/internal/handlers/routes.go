@@ -40,9 +40,10 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
 	markH := NewMarkHandler(db)
 	dashH := NewDashboardHandler(db)
 	questionH := NewQuestionHandler(db)
-	quizH := NewQuizHandler(db)
-	hpcH := NewHPCHandler(db)
-	reportsH := NewReportsHandler(db)
+ 	quizH := NewQuizHandler(db)
+ 	hpcH := NewHPCHandler(db)
+ 	mentorH := NewMentorHandler(db)
+ 	reportsH := NewReportsHandler(db)
 
 	roleMw := middleware.NewRoleMiddleware(jwtService)
 	loginLimiter := middleware.NewRateLimiter(10, time.Minute)
