@@ -1,8 +1,8 @@
 <script lang="ts">
 	let {
-		page = $state(1),
-		total = $state(0),
-		pageSize = $state(20),
+		page: currentPage = 1,
+		total,
+		pageSize = 20,
 		onChange
 	}: {
 		page?: number;
@@ -12,29 +12,29 @@
 	} = $props();
 
 	let totalPages = $derived(Math.max(1, Math.ceil(total / pageSize)));
-	let startItem = $derived((page - 1) * pageSize + 1);
-	let endItem = $derived(Math.min(page * pageSize, total));
+	let startItem = $derived((currentPage - 1) * pageSize + 1);
+	let endItem = $derived(Math.min(currentPage * pageSize, total));
 
 	function goto(p: number) {
-		if (p < 1 || p > totalPages || p === page) return;
+		if (p < 1 || p > totalPages || p === currentPage) return;
 		onChange(p);
 	}
 
-	let pages = $derived(() => {
-		const result: (number | '...')[] = [];
+	function getPages(): (number | string)[] {
+		const result: (number | string)[] = [];
 		if (totalPages <= 7) {
 			for (let i = 1; i <= totalPages; i++) result.push(i);
 		} else {
 			result.push(1);
-			if (page > 3) result.push('...');
-			const start = Math.max(2, page - 1);
-			const end = Math.min(totalPages - 1, page + 1);
+			if (currentPage > 3) result.push('...');
+			const start = Math.max(2, currentPage - 1);
+			const end = Math.min(totalPages - 1, currentPage + 1);
 			for (let i = start; i <= end; i++) result.push(i);
-			if (page < totalPages - 2) result.push('...');
+			if (currentPage < totalPages - 2) result.push('...');
 			result.push(totalPages);
 		}
 		return result;
-	});
+	}
 </script>
 
 {#if total > pageSize}
@@ -47,7 +47,7 @@
 				class="px-2 py-1 text-xs rounded border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed">
 				Prev
 			</button>
-			{#each pages() as p}
+			{#each getPages() as p}
 				{#if p === '...'}
 					<span class="px-1 text-xs text-slate-400">...</span>
 				{:else}
