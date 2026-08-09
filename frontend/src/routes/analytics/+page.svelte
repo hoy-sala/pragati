@@ -339,11 +339,10 @@
 						</div>
 					{/each}
 				</div>
-				<Pagination total={totalProgress} pageSize={progressPageSize} page={progressPage} onChange={onProgressPageChange} />
-			</div>
-			</div>
+			<Pagination total={totalProgress} pageSize={progressPageSize} page={progressPage} onChange={onProgressPageChange} />
+		</div>
 
-			<!-- Summary stats -->
+		<!-- Summary stats -->
 			<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
 				<div class="bg-white rounded-xl border border-slate-200 p-5 text-center">
 					<div class="text-2xl font-bold text-emerald-600">{progressAssessments.filter(a => a.progress >= 80).length}</div>
