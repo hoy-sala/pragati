@@ -33,18 +33,13 @@
 	let progressPage = $state(1);
 	const progressPageSize = 15;
 
-	let filteredProgress = $derived.by(() => {
-		if (!progressSearch.trim()) return progressAssessments;
+	let filteredProgress = $derived(progressAssessments.filter(a => {
+		if (!progressSearch.trim()) return true;
 		const q = progressSearch.toLowerCase();
-		return progressAssessments.filter(a => a.name?.toLowerCase().includes(q) || a.subject_name?.toLowerCase().includes(q));
-	});
+		return a.name?.toLowerCase().includes(q) || a.subject_name?.toLowerCase().includes(q);
+	}));
 
-	let paginatedProgress = $derived.by(() => {
-		const filtered = filteredProgress;
-		const start = (progressPage - 1) * progressPageSize;
-		return filtered.slice(start, start + progressPageSize);
-	});
-
+	let paginatedProgress = $derived(filteredProgress.slice((progressPage - 1) * progressPageSize, progressPage * progressPageSize));
 	let totalProgress = $derived(filteredProgress.length);
 
 	function onProgressPageChange(p: number) { progressPage = p; }

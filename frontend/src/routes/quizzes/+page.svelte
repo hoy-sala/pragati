@@ -13,22 +13,15 @@
 	let page = $state(1);
 	const pageSize = 15;
 
-	let filteredQuizzes = $derived.by(() => {
-		let result = allQuizzes;
-		if (filterStatus === 'published') result = result.filter(q => q.is_published);
-		if (filterStatus === 'draft') result = result.filter(q => !q.is_published);
-		if (search.trim()) {
-			const q = search.toLowerCase();
-			result = result.filter(item => item.title?.toLowerCase().includes(q) || item.description?.toLowerCase().includes(q));
-		}
-		return result;
-	});
+	let filteredQuizzes = $derived(allQuizzes.filter(q => {
+		if (filterStatus === 'published' && !q.is_published) return false;
+		if (filterStatus === 'draft' && q.is_published) return false;
+		if (!search.trim()) return true;
+		const q2 = search.toLowerCase();
+		return q.title?.toLowerCase().includes(q2) || q.description?.toLowerCase().includes(q2);
+	}));
 
-	let paginatedQuizzes = $derived.by(() => {
-		const start = (page - 1) * pageSize;
-		return filteredQuizzes.slice(start, start + pageSize);
-	});
-
+	let paginatedQuizzes = $derived(filteredQuizzes.slice((page - 1) * pageSize, page * pageSize));
 	let totalQuizzes = $derived(filteredQuizzes.length);
 
 	function onPageChange(p: number) { page = p; }

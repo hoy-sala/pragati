@@ -16,22 +16,14 @@
 	let page = $state(1);
 	const pageSize = 20;
 
-	let filteredQuestions = $derived.by(() => {
-		let result = allQuestions;
-		if (filterSubject) result = result.filter(q => q.subject_id === filterSubject);
-		if (filterType) result = result.filter(q => q.question_type === filterType);
-		if (search.trim()) {
-			const q = search.toLowerCase();
-			result = result.filter(item => item.question_text?.toLowerCase().includes(q));
-		}
-		return result;
-	});
+	let filteredQuestions = $derived(allQuestions.filter(q => {
+		if (filterSubject && q.subject_id !== filterSubject) return false;
+		if (filterType && q.question_type !== filterType) return false;
+		if (!search.trim()) return true;
+		return q.question_text?.toLowerCase().includes(search.toLowerCase());
+	}));
 
-	let paginatedQuestions = $derived.by(() => {
-		const start = (page - 1) * pageSize;
-		return filteredQuestions.slice(start, start + pageSize);
-	});
-
+	let paginatedQuestions = $derived(filteredQuestions.slice((page - 1) * pageSize, page * pageSize));
 	let totalQuestions = $derived(filteredQuestions.length);
 
 	function onPageChange(p: number) { page = p; }
