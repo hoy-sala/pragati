@@ -22,7 +22,10 @@ export async function initAuth() {
 	}
 
 	try {
-		const res = await api<User | Student>('GET', '/auth/me');
+		const controller = new AbortController();
+		const timeout = setTimeout(() => controller.abort(), 10000);
+		const res = await api<User | Student>('GET', '/auth/me', undefined, controller.signal);
+		clearTimeout(timeout);
 		if (res.data) {
 			currentUser = res.data;
 		} else {

@@ -1,7 +1,7 @@
 import type { APIResponse } from '$lib/types';
 
 const API_PORT = '9090';
-const SSR_API_URL = 'http://api:5050';
+const SSR_API_URL = 'http://api:9090';
 
 function getApiBase(): string {
 	if (typeof window !== 'undefined') {
@@ -62,7 +62,8 @@ async function refreshAccessToken(): Promise<boolean> {
 export async function api<T = unknown>(
 	method: string,
 	path: string,
-	body?: unknown
+	body?: unknown,
+	signal?: AbortSignal
 ): Promise<APIResponse<T>> {
 	const url = `${getApiBase()}/api/v1${path}`;
 
@@ -77,7 +78,8 @@ export async function api<T = unknown>(
 	let res = await fetch(url, {
 		method,
 		headers,
-		body: body ? JSON.stringify(body) : undefined
+		body: body ? JSON.stringify(body) : undefined,
+		signal
 	});
 
 	if (res.status === 401 && refreshToken) {
