@@ -151,7 +151,7 @@ func (h *MentorHandler) Roster(w http.ResponseWriter, r *http.Request) {
 	yearID := r.URL.Query().Get("academic_year_id")
 	if yearID == "" { renderJSON(w, http.StatusBadRequest, apiErr("VALIDATION_ERROR", "academic_year_id is required")); return }
 	rows, err := h.db.Query(r.Context(),
-		`SELECT s.id, s.sats_number, s.first_name, COALESCE(s.last_name,''), s.roll_no, s.gender,
+		`SELECT s.id, s.sats_number, s.first_name || ' ' || COALESCE(s.last_name,'') as name, s.roll_no, s.gender,
 			COALESCE(s.father_name,''), COALESCE(s.mother_name,''), COALESCE(s.parent_phone,''), COALESCE(s.address,''),
 			s.class_id, c.name as class_name
 		 FROM mentor_assignments ma
@@ -170,7 +170,7 @@ func (h *MentorHandler) Roster(w http.ResponseWriter, r *http.Request) {
 	var students []rs
 	for rows.Next() {
 		var s rs
-		if err := rows.Scan(&s.ID, &s.SATSNumber, &s.Name, &s.LastName, &s.RollNo, &s.Gender,
+		if err := rows.Scan(&s.ID, &s.SATSNumber, &s.Name, &s.RollNo, &s.Gender,
 			&s.FatherName, &s.MotherName, &s.ParentPhone, &s.Address, &s.ClassID, &s.ClassName); err != nil { continue }
 		students = append(students, s)
 	}
