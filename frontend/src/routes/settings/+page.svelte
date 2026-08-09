@@ -340,56 +340,54 @@
 
 	{:else if activeTab === 'years'}
 		<div class="bg-white rounded-xl border border-slate-200">
-			<div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
-				<h2 class="text-base font-semibold text-slate-900">Academic Years</h2>
-				<Button icon={Plus} onclick={() => showYearForm = !showYearForm}>
-					{showYearForm ? 'Cancel' : 'New Year'}
-				</Button>
-			</div>
-
-			{#if showYearForm}
-				<div class="px-6 py-4 bg-slate-50 border-b border-slate-200">
-					<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-						<div>
-							<label for="yr-name" class="block text-xs font-medium text-slate-600 mb-1">Name *</label>
-							<input id="yr-name" bind:value={yearForm.name} placeholder="2026-27" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm" />
-						</div>
-						<div>
-							<label for="yr-start" class="block text-xs font-medium text-slate-600 mb-1">Start Date *</label>
-							<input id="yr-start" type="date" bind:value={yearForm.start_date} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm" />
-						</div>
-						<div>
-							<label for="yr-end" class="block text-xs font-medium text-slate-600 mb-1">End Date *</label>
-							<input id="yr-end" type="date" bind:value={yearForm.end_date} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm" />
-						</div>
-						<div class="flex items-end gap-3">
-							<label class="flex items-center gap-2 text-sm text-slate-700 pb-2">
-								<input type="checkbox" bind:checked={yearForm.is_current} class="rounded" />
-								Set as current
-							</label>
-							<Button onclick={createYear}>Create</Button>
-						</div>
-					</div>
+			<div class="px-5 py-4 border-b border-slate-200">
+				<div class="flex items-center justify-between mb-3">
+					<h2 class="text-base font-semibold text-slate-900">Academic Years</h2>
+					<Button size="sm" icon={Plus} onclick={() => showYearForm = !showYearForm}>
+						{showYearForm ? 'Cancel' : 'New'}
+					</Button>
 				</div>
-			{/if}
+				{#if showYearForm}
+					<div class="flex flex-wrap items-end gap-3 p-3 bg-slate-50 rounded-lg">
+						<div class="w-36">
+							<label for="yr-name" class="block text-xs font-medium text-slate-500 mb-1">Name</label>
+							<input id="yr-name" bind:value={yearForm.name} placeholder="2026-27" class="w-full px-2.5 py-1.5 rounded border border-slate-300 text-sm" />
+						</div>
+						<div class="w-32">
+							<label for="yr-start" class="block text-xs font-medium text-slate-500 mb-1">Start</label>
+							<input id="yr-start" type="date" bind:value={yearForm.start_date} class="w-full px-2.5 py-1.5 rounded border border-slate-300 text-sm" />
+						</div>
+						<div class="w-32">
+							<label for="yr-end" class="block text-xs font-medium text-slate-500 mb-1">End</label>
+							<input id="yr-end" type="date" bind:value={yearForm.end_date} class="w-full px-2.5 py-1.5 rounded border border-slate-300 text-sm" />
+						</div>
+						<label class="flex items-center gap-1.5 text-sm text-slate-600 pb-1.5">
+							<input type="checkbox" bind:checked={yearForm.is_current} class="rounded" />
+							Current
+						</label>
+						<Button size="sm" onclick={createYear}>Create</Button>
+					</div>
+				{/if}
+			</div>
 
 			<div class="divide-y divide-slate-100">
 				{#each years as y (y.id)}
-					<div class="px-6 py-3 flex items-center justify-between hover:bg-slate-50/50">
-						<div class="flex items-center gap-3">
-							{#if y.is_current}
-								<span class="text-xs font-medium px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 flex items-center gap-1"><Star size={10} /> Current</span>
-							{:else}
-								<button onclick={() => setCurrentYear(y.id)} class="text-xs font-medium px-2 py-0.5 rounded border border-slate-200 text-slate-500 hover:border-primary-300 hover:text-primary-600">
-									Set Current
-								</button>
-							{/if}
-							<span class="text-sm font-medium text-slate-800">{y.name}</span>
+					<div class="px-5 py-3 flex items-center gap-3">
+						{#if y.is_current}
+							<span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+						{:else}
+							<button onclick={() => setCurrentYear(y.id)} class="w-2 h-2 rounded-full bg-slate-300 hover:bg-emerald-400 shrink-0" title="Set as current"></button>
+						{/if}
+						<div class="flex-1 min-w-0">
+							<div class="text-sm font-medium text-slate-800">{y.name}</div>
+							<div class="text-xs text-slate-400">{y.start_date} &mdash; {y.end_date}</div>
 						</div>
-						<span class="text-xs text-slate-400">{y.start_date} &mdash; {y.end_date}</span>
+						{#if y.is_current}
+							<span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-emerald-50 text-emerald-600 uppercase tracking-wide">Current</span>
+						{/if}
 					</div>
 				{:else}
-					<div class="px-6 py-8 text-center text-sm text-slate-400">No academic years configured</div>
+					<div class="px-5 py-8 text-center text-sm text-slate-400">No academic years configured</div>
 				{/each}
 			</div>
 		</div>
