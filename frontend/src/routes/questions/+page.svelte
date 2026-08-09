@@ -4,13 +4,40 @@
 	import { typeColors, typeLabels } from '$lib/utils/questionUtils';
 	import { onMount } from 'svelte';
 	import Select from '$lib/components/Select.svelte';
+	import SearchFilter from '$lib/components/SearchFilter.svelte';
+	import Pagination from '$lib/components/Pagination.svelte';
 
-	let questions = $state<Question[]>([]);
+	let allQuestions = $state<Question[]>([]);
 	let subjects = $state<Subject[]>([]);
 	let loading = $state(true);
 	let filterSubject = $state('');
 	let filterType = $state('');
 	let search = $state('');
+	let page = $state(1);
+	const pageSize = 20;
+
+	let filteredQuestions = $derived(() => {
+		let result = allQuestions;
+		if (filterSubject) result = result.filter(q => q.subject_id === filterSubject);
+		if (filterType) result = result.filter(q => q.question_type === filterType);
+		if (search.trim()) {
+			const q = search.toLowerCase();
+			result = result.filter(item => item.question_text?.toLowerCase().includes(q));
+		}
+		return result;
+	});
+
+	let paginatedQuestions = $derived(() => {
+		const filtered = filteredQuestions();
+		const start = (page - 1) * pageSize;
+		return filtered.slice(start, start + pageSize);
+	});
+
+	let totalQuestions = $derived(filteredQuestions().length);
+
+	function onPageChange(p: number) { page = p; }
+
+	$effect(() => { page = 1; });
 
 	onMount(async () => {
 		const [subRes] = await Promise.all([api<Subject[]>('GET', '/subjects')]);
@@ -20,13 +47,8 @@
 
 	async function loadQuestions() {
 		loading = true;
-		const params = new URLSearchParams();
-		if (filterSubject) params.set('subject_id', filterSubject);
-		if (filterType) params.set('type', filterType);
-		if (search) params.set('search', search);
-
-		const res = await api<Question[]>('GET', '/questions?' + params.toString());
-		if (res.data) questions = res.data;
+		const res = await api<Question[]>('GET', '/questions?limit=500');
+		if (res.data) allQuestions = res.data;
 		loading = false;
 	}
 
@@ -60,20 +82,25 @@
 
 	<div class="bg-white rounded-xl border border-slate-200 p-4">
 		<div class="flex flex-wrap gap-3">
-			<Select bind:value={filterSubject} options={subjects} placeholder="All Subjects" onselect={loadQuestions} class="w-44" />
-			<Select bind:value={filterType} options={typeOptions} placeholder="All Types" onselect={loadQuestions} class="w-40" />
-			<input type="text" bind:value={search} placeholder="Search questions..." oninput={loadQuestions}
-				class="px-3 py-1.5 rounded-lg border border-slate-300 text-sm flex-1 min-w-[200px]">
+			<div class="flex-1 min-w-48">
+				<SearchFilter bind:value={search} placeholder="Search questions..." onInput={() => page = 1} />
+			</div>
+			<div class="w-40">
+				<Select bind:value={filterSubject} options={subjects} placeholder="All Subjects" onselect={() => page = 1} />
+			</div>
+			<div class="w-36">
+				<Select bind:value={filterType} options={typeOptions} placeholder="All Types" onselect={() => page = 1} />
+			</div>
 		</div>
 	</div>
 
 	<div class="bg-white rounded-xl border border-slate-200 divide-y divide-slate-100">
 		{#if loading}
 			<div class="p-8 text-center text-sm text-slate-400">Loading...</div>
-		{:else if questions.length === 0}
-			<div class="p-8 text-center text-sm text-slate-400">No questions yet. Create or import some.</div>
+		{:else if totalQuestions === 0}
+			<div class="p-8 text-center text-sm text-slate-400">No questions found.</div>
 		{:else}
-			{#each questions as q (q.id)}
+			{#each paginatedQuestions() as q (q.id)}
 				<div class="p-4 hover:bg-slate-50 transition-colors">
 					<div class="flex items-start justify-between gap-4">
 						<div class="flex-1 min-w-0">
@@ -94,5 +121,6 @@
 				</div>
 			{/each}
 		{/if}
+		<Pagination {total} pageSize={pageSize} {page} onChange={onPageChange} />
 	</div>
 </div>

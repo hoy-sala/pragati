@@ -2,19 +2,48 @@
 	import { api } from '$lib/api/client.svelte';
 	import type { QuizListItem } from '$lib/types';
 	import { onMount } from 'svelte';
+	import SearchFilter from '$lib/components/SearchFilter.svelte';
+	import Pagination from '$lib/components/Pagination.svelte';
 
-	let quizzes = $state<QuizListItem[]>([]);
+	let allQuizzes = $state<QuizListItem[]>([]);
 	let loading = $state(true);
 	let deleting = $state<string | null>(null);
+	let search = $state('');
+	let filterStatus = $state('');
+	let page = $state(1);
+	const pageSize = 15;
+
+	let filteredQuizzes = $derived(() => {
+		let result = allQuizzes;
+		if (filterStatus === 'published') result = result.filter(q => q.is_published);
+		if (filterStatus === 'draft') result = result.filter(q => !q.is_published);
+		if (search.trim()) {
+			const q = search.toLowerCase();
+			result = result.filter(item => item.title?.toLowerCase().includes(q) || item.description?.toLowerCase().includes(q));
+		}
+		return result;
+	});
+
+	let paginatedQuizzes = $derived(() => {
+		const filtered = filteredQuizzes();
+		const start = (page - 1) * pageSize;
+		return filtered.slice(start, start + pageSize);
+	});
+
+	let totalQuizzes = $derived(filteredQuizzes().length);
+
+	function onPageChange(p: number) { page = 1; page = p; }
 
 	onMount(loadQuizzes);
 
 	async function loadQuizzes() {
 		loading = true;
 		const res = await api<QuizListItem[]>('GET', '/quizzes');
-		if (res.data) quizzes = res.data;
+		if (res.data) allQuizzes = res.data;
 		loading = false;
 	}
+
+	$effect(() => { page = 1; });
 
 	async function publish(id: string) {
 		const res = await api('POST', `/quizzes/${id}/publish`);
@@ -38,20 +67,33 @@
 	<div class="flex items-center justify-between">
 		<div>
 			<h1 class="text-2xl font-bold text-slate-900">Quizzes</h1>
-			<p class="text-sm text-slate-500 mt-1">{quizzes.length} quizzes</p>
+			<p class="text-sm text-slate-500 mt-1">{totalQuizzes} quizzes</p>
 		</div>
 		<a href="/quizzes/create" class="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors">
 			Create Quiz
 		</a>
 	</div>
 
-	<div class="bg-white rounded-xl border border-slate-200 divide-y divide-slate-100">
-		{#if loading}
-			<div class="p-8 text-center text-sm text-slate-400">Loading...</div>
-		{:else if quizzes.length === 0}
-			<div class="p-8 text-center text-sm text-slate-400">No quizzes yet.</div>
-		{:else}
-			{#each quizzes as q (q.id)}
+	<div class="bg-white rounded-xl border border-slate-200">
+		<div class="p-4 border-b border-slate-200 flex flex-wrap gap-3">
+			<div class="flex-1 min-w-48">
+				<SearchFilter bind:value={search} placeholder="Search quizzes..." onInput={() => page = 1} />
+			</div>
+			<div class="w-36">
+				<select bind:value={filterStatus} onchange={() => page = 1} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
+					<option value="">All Status</option>
+					<option value="published">Published</option>
+					<option value="draft">Draft</option>
+				</select>
+			</div>
+		</div>
+		<div class="divide-y divide-slate-100">
+			{#if loading}
+				<div class="p-8 text-center text-sm text-slate-400">Loading...</div>
+			{:else if totalQuizzes === 0}
+				<div class="p-8 text-center text-sm text-slate-400">No quizzes found.</div>
+			{:else}
+				{#each paginatedQuizzes() as q (q.id)}
 				<div class="p-4 hover:bg-slate-50 transition-colors">
 					<div class="flex items-center justify-between gap-4">
 						<div class="flex-1 min-w-0">
@@ -90,5 +132,6 @@
 				</div>
 			{/each}
 		{/if}
+		<Pagination {total} pageSize={pageSize} {page} onChange={onPageChange} />
 	</div>
 </div>
