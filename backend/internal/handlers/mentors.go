@@ -10,7 +10,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/pragati/backend/internal/middleware"
-	"github.com/rs/zerolog/log"
 )
 
 type MentorHandler struct {
