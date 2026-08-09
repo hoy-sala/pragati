@@ -87,51 +87,53 @@
 				</select>
 			</div>
 		</div>
-		<div class="divide-y divide-slate-100">
-			{#if loading}
-				<div class="p-8 text-center text-sm text-slate-400">Loading...</div>
-			{:else if totalQuizzes === 0}
-				<div class="p-8 text-center text-sm text-slate-400">No quizzes found.</div>
-			{:else}
+
+		{#if loading}
+			<div class="p-8 text-center text-sm text-slate-400">Loading...</div>
+		{:else if totalQuizzes === 0}
+			<div class="p-8 text-center text-sm text-slate-400">No quizzes found.</div>
+		{:else}
+			<div class="divide-y divide-slate-100">
 				{#each paginatedQuizzes() as q (q.id)}
-				<div class="p-4 hover:bg-slate-50 transition-colors">
-					<div class="flex items-center justify-between gap-4">
-						<div class="flex-1 min-w-0">
-							<div class="flex items-center gap-2">
-								<h3 class="text-sm font-medium text-slate-900">{q.title}</h3>
-								<span class="text-xs px-2 py-0.5 rounded-full {q.is_published ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}">
-									{q.is_published ? 'Published' : 'Draft'}
-								</span>
+					<div class="p-4 hover:bg-slate-50 transition-colors">
+						<div class="flex items-center justify-between gap-4">
+							<div class="flex-1 min-w-0">
+								<div class="flex items-center gap-2">
+									<h3 class="text-sm font-medium text-slate-900">{q.title}</h3>
+									<span class="text-xs px-2 py-0.5 rounded-full {q.is_published ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}">
+										{q.is_published ? 'Published' : 'Draft'}
+									</span>
+								</div>
+								<p class="text-xs text-slate-500 mt-1 line-clamp-1">{q.description || 'No description'}</p>
+								<div class="flex flex-wrap gap-3 mt-1.5 text-xs text-slate-400">
+									<span>{targetLabel(q.target_type)}</span>
+									<span>{q.question_count} questions</span>
+									<span>{q.attempt_count} attempts</span>
+									<span>Pass: {q.pass_pct}%</span>
+									<span>by {q.created_by_name}</span>
+								</div>
 							</div>
-							<p class="text-xs text-slate-500 mt-1 line-clamp-1">{q.description || 'No description'}</p>
-							<div class="flex flex-wrap gap-3 mt-1.5 text-xs text-slate-400">
-								<span>{targetLabel(q.target_type)}</span>
-								<span>{q.question_count} questions</span>
-								<span>{q.attempt_count} attempts</span>
-								<span>Pass: {q.pass_pct}%</span>
-								<span>by {q.created_by_name}</span>
+							<div class="flex gap-1.5 shrink-0">
+								{#if !q.is_published}
+									<button onclick={() => publish(q.id)}
+										class="px-3 py-1.5 text-xs font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors">
+										Publish
+									</button>
+									<a href="/quizzes/{q.id}/edit"
+										class="px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors">
+										Edit
+									</a>
+									<button onclick={() => remove(q.id)}
+										class="px-3 py-1.5 text-xs font-medium text-danger-600 border border-danger-300 rounded-lg hover:bg-danger-50 transition-colors">
+										Delete
+									</button>
+								{/if}
 							</div>
-						</div>
-						<div class="flex gap-1.5 shrink-0">
-							{#if !q.is_published}
-								<button onclick={() => publish(q.id)}
-									class="px-3 py-1.5 text-xs font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors">
-									Publish
-								</button>
-								<a href="/quizzes/{q.id}/edit"
-									class="px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors">
-									Edit
-								</a>
-								<button onclick={() => remove(q.id)}
-									class="px-3 py-1.5 text-xs font-medium text-danger-600 border border-danger-300 rounded-lg hover:bg-danger-50 transition-colors">
-									Delete
-								</button>
-							{/if}
 						</div>
 					</div>
-				</div>
-			{/each}
+				{/each}
+			</div>
+			<Pagination {total} pageSize={pageSize} {page} onChange={onPageChange} />
 		{/if}
-		<Pagination {total} pageSize={pageSize} {page} onChange={onPageChange} />
 	</div>
 </div>
