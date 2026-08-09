@@ -352,69 +352,34 @@
 	{/if}
 
 	<div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
-		<div class="p-4 border-b border-slate-200 flex flex-wrap gap-3">
-			<div class="flex-1 min-w-48">
-				<SearchFilter bind:value={search} placeholder="Search by name or SATS..." onInput={resetPage} />
-			</div>
-			<div class="w-40">
-				<Select bind:value={filterClass} options={[{ id: '', name: 'All Classes' }, ...classes.map(c => ({ id: c.id, name: c.name }))]} placeholder="All Classes" onselect={resetPage} />
-			</div>
-		</div>
 		<table class="w-full text-sm">
 			<thead>
 				<tr class="bg-slate-50 text-slate-600">
 					<th class="text-left px-4 py-3 font-semibold text-xs uppercase tracking-wider">SATS</th>
 					<th class="text-left px-4 py-3 font-semibold text-xs uppercase tracking-wider">Name</th>
 					<th class="text-left px-4 py-3 font-semibold text-xs uppercase tracking-wider">Class</th>
-					<th class="text-left px-4 py-3 font-semibold text-xs uppercase tracking-wider">Roll No</th>
-					<th class="text-left px-4 py-3 font-semibold text-xs uppercase tracking-wider">Gender</th>
-					<th class="text-left px-4 py-3 font-semibold text-xs uppercase tracking-wider">Year</th>
 					<th class="text-right px-4 py-3 font-semibold text-xs uppercase tracking-wider">Actions</th>
 				</tr>
 			</thead>
 			<tbody>
 				{#if loading}
-					<tr><td colspan="7" class="px-4 py-12 text-center text-slate-400">Loading...</td></tr>
-				{:else if totalStudents === 0}
-					<tr><td colspan="7" class="px-4 py-12 text-center text-slate-400">No students found.</td></tr>
+					<tr><td colspan="4" class="px-4 py-12 text-center text-slate-400">Loading...</td></tr>
+				{:else if allStudents.length === 0}
+					<tr><td colspan="4" class="px-4 py-12 text-center text-slate-400">No students yet.</td></tr>
 				{:else}
-					{#each paginatedStudents as s (s.id)}
+					{#each allStudents.slice(0, 20) as s (s.id)}
 						<tr class="border-t border-slate-100 hover:bg-slate-50 transition-colors">
-							<td class="px-4 py-3.5 font-mono text-xs text-slate-500">{s.sats_number}</td>
-							<td class="px-4 py-3.5 font-medium">
-								<div class="flex items-center gap-2.5">
-									<div class="w-8 h-8 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center text-xs font-bold uppercase shrink-0">
-										{s.first_name[0]}{s.last_name?.[0] ?? ''}
-									</div>
-									<div>
-										<div>{s.first_name} {s.last_name}</div>
-										{#if s.phone}
-											<div class="text-xs text-slate-400">{s.phone}</div>
-										{/if}
-									</div>
-								</div>
-							</td>
-							<td class="px-4 py-3.5"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-600">{className(s.class_id)}</span></td>
-							<td class="px-4 py-3.5 text-slate-500">{s.roll_no ?? '—'}</td>
-							<td class="px-4 py-3.5">
-								{#if s.gender}
-									<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {genderBadge(s.gender)}">{genderLabel(s.gender)}</span>
-								{:else}
-									<span class="text-slate-400">—</span>
-								{/if}
-							</td>
-							<td class="px-4 py-3.5 text-xs text-slate-500">{yearName(s.academic_year_id)}</td>
-							<td class="px-4 py-3.5 text-right">
-								<div class="flex items-center justify-end gap-1">
-									<Button onclick={() => openEdit(s)} variant="ghost" size="sm" icon={Pencil}>Edit</Button>
-									<Button onclick={() => removeStudent(s.id)} variant="ghost" size="sm" icon={Trash2}>Delete</Button>
-								</div>
+							<td class="px-4 py-3 font-mono text-xs text-slate-500">{s.sats_number}</td>
+							<td class="px-4 py-3 font-medium">{s.first_name} {s.last_name}</td>
+							<td class="px-4 py-3">{className(s.class_id)}</td>
+							<td class="px-4 py-3 text-right">
+								<Button onclick={() => openEdit(s)} variant="ghost" size="sm" icon={Pencil}>Edit</Button>
+								<Button onclick={() => removeStudent(s.id)} variant="ghost" size="sm" icon={Trash2}>Delete</Button>
 							</td>
 						</tr>
 					{/each}
 				{/if}
 			</tbody>
 		</table>
-		<Pagination {total} pageSize={pageSize} {page} onChange={onPageChange} />
 	</div>
 </div>
