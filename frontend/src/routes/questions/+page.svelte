@@ -16,7 +16,7 @@
 	let page = $state(1);
 	const pageSize = 20;
 
-	let filteredQuestions = $derived(() => {
+	let filteredQuestions = $derived.by(() => {
 		let result = allQuestions;
 		if (filterSubject) result = result.filter(q => q.subject_id === filterSubject);
 		if (filterType) result = result.filter(q => q.question_type === filterType);
@@ -27,13 +27,12 @@
 		return result;
 	});
 
-	let paginatedQuestions = $derived(() => {
-		const filtered = filteredQuestions();
+	let paginatedQuestions = $derived.by(() => {
 		const start = (page - 1) * pageSize;
-		return filtered.slice(start, start + pageSize);
+		return filteredQuestions.slice(start, start + pageSize);
 	});
 
-	let totalQuestions = $derived(filteredQuestions().length);
+	let totalQuestions = $derived(filteredQuestions.length);
 
 	function onPageChange(p: number) { page = p; }
 	function resetPage() { page = 1; }
@@ -99,7 +98,7 @@
 		{:else if totalQuestions === 0}
 			<div class="p-8 text-center text-sm text-slate-400">No questions found.</div>
 		{:else}
-			{#each paginatedQuestions() as q (q.id)}
+			{#each paginatedQuestions as q (q.id)}
 				<div class="p-4 hover:bg-slate-50 transition-colors">
 					<div class="flex items-start justify-between gap-4">
 						<div class="flex-1 min-w-0">

@@ -33,19 +33,19 @@
 	let progressPage = $state(1);
 	const progressPageSize = 15;
 
-	let filteredProgress = $derived(() => {
+	let filteredProgress = $derived.by(() => {
 		if (!progressSearch.trim()) return progressAssessments;
 		const q = progressSearch.toLowerCase();
 		return progressAssessments.filter(a => a.name?.toLowerCase().includes(q) || a.subject_name?.toLowerCase().includes(q));
 	});
 
-	let paginatedProgress = $derived(() => {
-		const filtered = filteredProgress();
+	let paginatedProgress = $derived.by(() => {
+		const filtered = filteredProgress;
 		const start = (progressPage - 1) * progressPageSize;
 		return filtered.slice(start, start + progressPageSize);
 	});
 
-	let totalProgress = $derived(filteredProgress().length);
+	let totalProgress = $derived(filteredProgress.length);
 
 	function onProgressPageChange(p: number) { progressPage = p; }
 	function resetProgressPage() { progressPage = 1; }
@@ -319,7 +319,7 @@
 					<h2 class="text-base font-semibold text-slate-900">Marks Entry Progress</h2>
 				</div>
 				<div class="p-4 space-y-3">
-					{#each paginatedProgress() as a}
+					{#each paginatedProgress as a}
 						<div class="flex items-center gap-3">
 							<div class="flex-1 min-w-0">
 								<div class="flex items-center justify-between mb-1">

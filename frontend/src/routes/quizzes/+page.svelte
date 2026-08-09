@@ -13,7 +13,7 @@
 	let page = $state(1);
 	const pageSize = 15;
 
-	let filteredQuizzes = $derived(() => {
+	let filteredQuizzes = $derived.by(() => {
 		let result = allQuizzes;
 		if (filterStatus === 'published') result = result.filter(q => q.is_published);
 		if (filterStatus === 'draft') result = result.filter(q => !q.is_published);
@@ -24,13 +24,12 @@
 		return result;
 	});
 
-	let paginatedQuizzes = $derived(() => {
-		const filtered = filteredQuizzes();
+	let paginatedQuizzes = $derived.by(() => {
 		const start = (page - 1) * pageSize;
-		return filtered.slice(start, start + pageSize);
+		return filteredQuizzes.slice(start, start + pageSize);
 	});
 
-	let totalQuizzes = $derived(filteredQuizzes().length);
+	let totalQuizzes = $derived(filteredQuizzes.length);
 
 	function onPageChange(p: number) { page = p; }
 	function resetPage() { page = 1; }
@@ -93,7 +92,7 @@
 			<div class="p-8 text-center text-sm text-slate-400">No quizzes found.</div>
 		{:else}
 			<div class="divide-y divide-slate-100">
-				{#each paginatedQuizzes() as q (q.id)}
+				{#each paginatedQuizzes as q (q.id)}
 					<div class="p-4 hover:bg-slate-50 transition-colors">
 						<div class="flex items-center justify-between gap-4">
 							<div class="flex-1 min-w-0">

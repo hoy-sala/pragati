@@ -41,7 +41,7 @@
 	let page = $state(1);
 	const pageSize = 20;
 
-	let filteredStudents = $derived(() => {
+	let filteredStudents = $derived.by(() => {
 		let result = allStudents;
 		if (filterClass) result = result.filter(s => s.class_id === filterClass);
 		if (search.trim()) {
@@ -55,13 +55,12 @@
 		return result;
 	});
 
-	let paginatedStudents = $derived(() => {
-		const filtered = filteredStudents();
+	let paginatedStudents = $derived.by(() => {
 		const start = (page - 1) * pageSize;
-		return filtered.slice(start, start + pageSize);
+		return filteredStudents.slice(start, start + pageSize);
 	});
 
-	let totalStudents = $derived(filteredStudents().length);
+	let totalStudents = $derived(filteredStudents.length);
 
 	function onPageChange(p: number) { page = p; }
 	function resetPage() { page = 1; }
@@ -388,7 +387,7 @@
 				{:else if totalStudents === 0}
 					<tr><td colspan="7" class="px-4 py-12 text-center text-slate-400">No students found.</td></tr>
 				{:else}
-					{#each paginatedStudents() as s (s.id)}
+					{#each paginatedStudents as s (s.id)}
 						<tr class="border-t border-slate-100 hover:bg-slate-50 transition-colors">
 							<td class="px-4 py-3.5 font-mono text-xs text-slate-500">{s.sats_number}</td>
 							<td class="px-4 py-3.5 font-medium">
