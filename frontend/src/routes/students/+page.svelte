@@ -3,10 +3,12 @@
 	import { Plus, Pencil, Trash2, User, Hash, Phone, Mail, MapPin, Calendar, Droplets, Users, Eye, EyeOff } from 'lucide-svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Select from '$lib/components/Select.svelte';
+	import SearchFilter from '$lib/components/SearchFilter.svelte';
+	import Pagination from '$lib/components/Pagination.svelte';
 	import type { Student, Class, AcademicYear } from '$lib/types';
 	import { onMount } from 'svelte';
 
-	let students: Student[] = $state([]);
+	let allStudents: Student[] = $state([]);
 	let classes: Class[] = $state([]);
 	let academicYears: AcademicYear[] = $state([]);
 	let loading = $state(true);
@@ -33,13 +35,45 @@
 	let formParentPhone = $state('');
 	let formParentEmail = $state('');
 
+	// Search, filter, pagination
+	let search = $state('');
+	let filterClass = $state('');
+	let page = $state(1);
+	const pageSize = 20;
+
+	let filteredStudents = $derived(() => {
+		let result = allStudents;
+		if (filterClass) result = result.filter(s => s.class_id === filterClass);
+		if (search.trim()) {
+			const q = search.toLowerCase();
+			result = result.filter(s =>
+				s.first_name?.toLowerCase().includes(q) ||
+				s.last_name?.toLowerCase().includes(q) ||
+				s.sats_number?.includes(q)
+			);
+		}
+		return result;
+	});
+
+	let paginatedStudents = $derived(() => {
+		const filtered = filteredStudents();
+		const start = (page - 1) * pageSize;
+		return filtered.slice(start, start + pageSize);
+	});
+
+	let totalStudents = $derived(filteredStudents().length);
+
+	function onPageChange(p: number) { page = p; }
+
+	$effect(() => { page = 1; });
+
 	onMount(async () => {
 		const [sRes, cRes, yRes] = await Promise.all([
-			api<Student[]>('GET', '/students?limit=200'),
+			api<Student[]>('GET', '/students?limit=500'),
 			api<Class[]>('GET', '/classes?limit=50'),
 			api<AcademicYear[]>('GET', '/academic-years?limit=50')
 		]);
-		if (sRes.data) students = sRes.data;
+		if (sRes.data) allStudents = sRes.data;
 		if (cRes.data) classes = cRes.data;
 		if (yRes.data) {
 			academicYears = yRes.data;
@@ -329,6 +363,14 @@
 	{/if}
 
 	<div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+		<div class="p-4 border-b border-slate-200 flex flex-wrap gap-3">
+			<div class="flex-1 min-w-48">
+				<SearchFilter bind:value={search} placeholder="Search by name or SATS..." onInput={() => page = 1} />
+			</div>
+			<div class="w-40">
+				<Select bind:value={filterClass} options={[{ id: '', name: 'All Classes' }, ...classes.map(c => ({ id: c.id, name: c.name }))]} placeholder="All Classes" />
+			</div>
+		</div>
 		<table class="w-full text-sm">
 			<thead>
 				<tr class="bg-slate-50 text-slate-600">
@@ -344,10 +386,10 @@
 			<tbody>
 				{#if loading}
 					<tr><td colspan="7" class="px-4 py-12 text-center text-slate-400">Loading...</td></tr>
-				{:else if students.length === 0}
-					<tr><td colspan="7" class="px-4 py-12 text-center text-slate-400">No students yet.</td></tr>
+				{:else if totalStudents === 0}
+					<tr><td colspan="7" class="px-4 py-12 text-center text-slate-400">No students found.</td></tr>
 				{:else}
-					{#each students as s (s.id)}
+					{#each paginatedStudents() as s (s.id)}
 						<tr class="border-t border-slate-100 hover:bg-slate-50 transition-colors">
 							<td class="px-4 py-3.5 font-mono text-xs text-slate-500">{s.sats_number}</td>
 							<td class="px-4 py-3.5 font-medium">
@@ -384,5 +426,6 @@
 				{/if}
 			</tbody>
 		</table>
+		<Pagination {total} pageSize={pageSize} {page} onChange={onPageChange} />
 	</div>
 </div>
