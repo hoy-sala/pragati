@@ -3,6 +3,8 @@
 	import { onMount } from 'svelte';
 	import { BarChart3, Users, BookOpen, ClipboardCheck, TrendingUp, Award, AlertCircle } from 'lucide-svelte';
 	import Select from '$lib/components/Select.svelte';
+	import SearchFilter from '$lib/components/SearchFilter.svelte';
+	import Pagination from '$lib/components/Pagination.svelte';
 	import type { Class, Assessment } from '$lib/types';
 
 	type Tab = 'overview' | 'performance' | 'progress';
@@ -27,6 +29,27 @@
 
 	// Progress data
 	let progressAssessments = $state<(Assessment & { progress: number })[]>([]);
+	let progressSearch = $state('');
+	let progressPage = $state(1);
+	const progressPageSize = 15;
+
+	let filteredProgress = $derived(() => {
+		if (!progressSearch.trim()) return progressAssessments;
+		const q = progressSearch.toLowerCase();
+		return progressAssessments.filter(a => a.name?.toLowerCase().includes(q) || a.subject_name?.toLowerCase().includes(q));
+	});
+
+	let paginatedProgress = $derived(() => {
+		const filtered = filteredProgress();
+		const start = (progressPage - 1) * progressPageSize;
+		return filtered.slice(start, start + progressPageSize);
+	});
+
+	let totalProgress = $derived(filteredProgress().length);
+
+	function onProgressPageChange(p: number) { progressPage = p; }
+
+	$effect(() => { progressPage = 1; });
 
 	let loading = $state(true);
 	let perfLoading = $state(false);
@@ -279,18 +302,25 @@
 	{:else if activeTab === 'progress'}
 		<!-- Marks Progress -->
 		<div class="bg-white rounded-xl border border-slate-200 p-4 no-print">
-			<div class="w-56">
-				<Select bind:value={selectedClass} options={[{ id: '', name: 'All Classes' }, ...classes.map(c => ({ id: c.id, name: c.name }))]} placeholder="All Classes" />
+			<div class="flex flex-wrap gap-3">
+				<div class="w-44">
+					<Select bind:value={selectedClass} options={[{ id: '', name: 'All Classes' }, ...classes.map(c => ({ id: c.id, name: c.name }))]} placeholder="All Classes" />
+				</div>
+				<div class="flex-1 min-w-48">
+					<SearchFilter bind:value={progressSearch} placeholder="Search assessments..." onInput={() => progressPage = 1} />
+				</div>
 			</div>
 		</div>
 
-		{#if progressAssessments.length === 0}
+		{#if totalProgress === 0}
 			<div class="bg-white rounded-xl border border-slate-200 p-12 text-center text-sm text-slate-400">No assessments found</div>
 		{:else}
-			<div class="bg-white rounded-xl border border-slate-200 p-6">
-				<h2 class="text-base font-semibold text-slate-900 mb-4">Marks Entry Progress</h2>
-				<div class="space-y-3">
-					{#each progressAssessments as a}
+			<div class="bg-white rounded-xl border border-slate-200">
+				<div class="px-6 py-4 border-b border-slate-200">
+					<h2 class="text-base font-semibold text-slate-900">Marks Entry Progress</h2>
+				</div>
+				<div class="p-4 space-y-3">
+					{#each paginatedProgress() as a}
 						<div class="flex items-center gap-3">
 							<div class="flex-1 min-w-0">
 								<div class="flex items-center justify-between mb-1">
@@ -309,6 +339,8 @@
 						</div>
 					{/each}
 				</div>
+				<Pagination total={totalProgress} pageSize={progressPageSize} page={progressPage} onChange={onProgressPageChange} />
+			</div>
 			</div>
 
 			<!-- Summary stats -->
