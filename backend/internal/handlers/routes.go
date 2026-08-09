@@ -135,7 +135,7 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
 			r.Post("/import/{id}", roleMw.RequireRole("admin", "teacher")(http.HandlerFunc(markH.ImportExcel)))
 		})
 
-		r.Route("/reports", func(r chi.Router) {
+		r.Route("/mentors", func(r chi.Router) {`n			r.Use(roleMw.Authenticate)`n			r.Get("/assignments", mentorH.ListAssignments)`n			r.Post("/assignments", roleMw.RequireRole("admin")(http.HandlerFunc(mentorH.CreateAssignment)))`n			r.Delete("/assignments/{id}", roleMw.RequireRole("admin")(http.HandlerFunc(mentorH.DeleteAssignment)))`n			r.Get("/stats", mentorH.Stats)`n			r.Get("/roster", mentorH.Roster)`n			r.Get("/attendance", mentorH.GetAttendance)`n			r.Put("/attendance", mentorH.SaveAttendance)`n			r.Post("/contact-parent", mentorH.ContactParent)`n			r.Get("/logs", mentorH.ListLogs)`n			r.Post("/logs", mentorH.CreateLog)`n			r.Get("/principal/alerts", roleMw.RequireRole("admin","principal")(http.HandlerFunc(mentorH.PrincipalAlerts)))`n			r.Put("/logs/{id}/review", roleMw.RequireRole("admin","principal")(http.HandlerFunc(mentorH.ReviewLog)))`n			r.Get("/principal/summary", roleMw.RequireRole("admin","principal")(http.HandlerFunc(mentorH.MonthlySummary)))`n		})`n`n		r.Route("/reports", func(r chi.Router) {
 			r.Use(roleMw.Authenticate)
 			r.Get("/mark-sheet", reportsH.MarkSheet)
 			r.Get("/student", reportsH.StudentReport)
