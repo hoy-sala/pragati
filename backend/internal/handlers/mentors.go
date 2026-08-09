@@ -68,6 +68,7 @@ func (h *MentorHandler) ListAssignments(w http.ResponseWriter, r *http.Request) 
 }
 
 func (h *MentorHandler) CreateAssignment(w http.ResponseWriter, r *http.Request) {
+	claims := middleware.GetUserClaims(r.Context())
 	var req struct {
 		MentorID string `json:"mentor_id"`; StudentID string `json:"student_id"`; AcademicYearID string `json:"academic_year_id"`
 	}
@@ -142,6 +143,7 @@ func (h *MentorHandler) Stats(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *MentorHandler) Roster(w http.ResponseWriter, r *http.Request) {
+	claims := middleware.GetUserClaims(r.Context())
 	mentorID := r.URL.Query().Get("mentor_id")
 	if mentorID == "" { mentorID = claims.UserID }
 	yearID := r.URL.Query().Get("academic_year_id")
@@ -174,6 +176,7 @@ func (h *MentorHandler) Roster(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *MentorHandler) GetAttendance(w http.ResponseWriter, r *http.Request) {
+	claims := middleware.GetUserClaims(r.Context())
 	mentorID := r.URL.Query().Get("mentor_id")
 	if mentorID == "" { mentorID = claims.UserID }
 	date := r.URL.Query().Get("date")
@@ -241,6 +244,7 @@ func (h *MentorHandler) ContactParent(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *MentorHandler) ListLogs(w http.ResponseWriter, r *http.Request) {
+	claims := middleware.GetUserClaims(r.Context())
 	mentorID := r.URL.Query().Get("mentor_id")
 	if mentorID == "" { mentorID = claims.UserID }
 	rows, err := h.db.Query(r.Context(),
@@ -264,6 +268,7 @@ func (h *MentorHandler) ListLogs(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *MentorHandler) CreateLog(w http.ResponseWriter, r *http.Request) {
+	claims := middleware.GetUserClaims(r.Context())
 	var req struct {
 		StudentID string `json:"student_id"`; Category string `json:"category"`
 		Severity string `json:"severity"`; Description string `json:"description"`
