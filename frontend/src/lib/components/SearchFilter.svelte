@@ -4,7 +4,7 @@
 		placeholder = 'Search...',
 		onInput
 	}: {
-		value?: $bindable<string>;
+		value?: string;
 		placeholder?: string;
 		onInput?: (value: string) => void;
 	} = $props();

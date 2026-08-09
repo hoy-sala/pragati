@@ -43,7 +43,7 @@
 			{startItem}–{endItem} of {total}
 		</span>
 		<div class="flex items-center gap-1">
-			<button onclick={() => goto(page - 1)} disabled={page === 1}
+			<button onclick={() => goto(currentPage - 1)} disabled={currentPage === 1}
 				class="px-2 py-1 text-xs rounded border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed">
 				Prev
 			</button>
@@ -52,12 +52,12 @@
 					<span class="px-1 text-xs text-slate-400">...</span>
 				{:else}
 					<button onclick={() => goto(p)}
-						class="px-2.5 py-1 text-xs rounded {p === page ? 'bg-primary-600 text-white font-medium' : 'border border-slate-200 text-slate-600 hover:bg-slate-50'}">
+						class="px-2.5 py-1 text-xs rounded {p === currentPage ? 'bg-primary-600 text-white font-medium' : 'border border-slate-200 text-slate-600 hover:bg-slate-50'}">
 						{p}
 					</button>
 				{/if}
 			{/each}
-			<button onclick={() => goto(page + 1)} disabled={page === totalPages}
+			<button onclick={() => goto(currentPage + 1)} disabled={currentPage === totalPages}
 				class="px-2 py-1 text-xs rounded border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed">
 				Next
 			</button>

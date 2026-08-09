@@ -124,7 +124,7 @@
 					</div>
 				{/each}
 			</div>
-			<Pagination {total} pageSize={pageSize} {page} onChange={onPageChange} />
+			<Pagination total={totalQuizzes} pageSize={pageSize} page={page} onChange={onPageChange} />
 		{/if}
 	</div>
 </div>

@@ -58,7 +58,7 @@
 	<div class="flex items-center justify-between">
 		<div>
 			<h1 class="text-2xl font-bold text-slate-900">Question Bank</h1>
-			<p class="text-sm text-slate-500 mt-1">{questions.length} questions</p>
+			<p class="text-sm text-slate-500 mt-1">{totalQuestions} questions</p>
 		</div>
 		<div class="flex gap-2">
 			<a href="/questions/import" class="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 transition-colors">
@@ -111,6 +111,6 @@
 				</div>
 			{/each}
 		{/if}
-		<Pagination {total} pageSize={pageSize} {page} onChange={onPageChange} />
+		<Pagination total={totalQuestions} pageSize={pageSize} page={page} onChange={onPageChange} />
 	</div>
 </div>

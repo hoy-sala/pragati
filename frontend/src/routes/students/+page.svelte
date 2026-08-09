@@ -161,12 +161,12 @@
 			const res = await api<Student>('PUT', `/students/${editingId}`, body);
 			saving = false;
 			if (res.error) { error = res.error.message; return; }
-			students = students.map(s => s.id === editingId ? { ...s, ...body } : s);
+			allStudents = allStudents.map(s => s.id === editingId ? { ...s, ...body } : s);
 		} else {
 			const res = await api<{ id: string }>('POST', '/students', body);
 			saving = false;
 			if (res.error) { error = res.error.message; return; }
-			students = [...students, {
+			allStudents = [...allStudents, {
 				id: res.data!.id,
 				school_id: '',
 				sats_number: formSATS.trim(),
@@ -199,7 +199,7 @@
 		if (!confirm('Delete this student? This action cannot be undone.')) return;
 		const res = await api('DELETE', `/students/${id}`);
 		if (res.error) { error = res.error.message; return; }
-		students = students.filter(s => s.id !== id);
+		allStudents = allStudents.filter(s => s.id !== id);
 	}
 
 	function className(id: string): string {
@@ -227,7 +227,7 @@
 	<div class="flex items-center justify-between">
 		<div>
 			<h1 class="text-2xl font-bold text-slate-900">Students</h1>
-			<p class="text-sm text-slate-500 mt-1">{students.length} student{students.length !== 1 ? 's' : ''} enrolled</p>
+			<p class="text-sm text-slate-500 mt-1">{allStudents.length} student{allStudents.length !== 1 ? 's' : ''} enrolled</p>
 		</div>
 		<Button onclick={openCreate} icon={Plus}>Add Student</Button>
 	</div>
