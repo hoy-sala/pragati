@@ -86,7 +86,7 @@ const RAW: Record<string, Record<string, string[]>> = {
   'Class 9': {
     Mon: ['MAT', 'ENG', 'LIB', 'KAN', 'PE', 'SCI', 'HIN', 'SOC'],
     Tue: ['HIN', 'ENG', 'SCI', 'CS', 'LIB', 'KAN', 'SOC', 'MAT'],
-    Wed: ['ENG', 'SCI', 'DRW', 'SOC', 'MAT', 'CS', 'KAN', 'HIN'],
+    Wed: ['ENG', 'SCI', 'CS', 'SOC', 'MAT', 'DRW', 'KAN', 'HIN'],
     Thu: ['KAN', 'SOC', 'DRW', 'ENG', 'MAT', 'HIN', 'SCI', 'MUS'],
     Fri: ['KAN', 'SOC', 'SCI', 'ENG', 'PE', 'MUS', 'MAT', 'CUL'],
     Sat: ['SCI', 'SOC', 'KAN', 'MAT'],
