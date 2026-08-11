@@ -1,30 +1,34 @@
 package config
 
 import (
+	"crypto/rand"
+	"encoding/hex"
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/rs/zerolog/log"
 )
 
 type Config struct {
-	DatabaseURL       string
-	RedisURL          string
-	JWTSecret         string
-	JWTIssuer         string
-	JWTAccessExpiry   time.Duration
-	JWTRefreshExpiry  time.Duration
-	Port              string
-	LogLevel          string
-	CORSOrigins       []string
-	UploadDir         string
-	DefaultSchoolID   string
+	DatabaseURL      string
+	RedisURL         string
+	JWTSecret        string
+	JWTIssuer        string
+	JWTAccessExpiry  time.Duration
+	JWTRefreshExpiry time.Duration
+	Port             string
+	LogLevel         string
+	CORSOrigins      []string
+	UploadDir        string
+	DefaultSchoolID  string
 }
 
 func Load() *Config {
 	cfg := &Config{
 		DatabaseURL:      getEnv("DATABASE_URL", "postgres://pragati:pragati@localhost:5432/pragati?sslmode=disable"),
 		RedisURL:         getEnv("REDIS_URL", "redis://localhost:6379/0"),
-		JWTSecret:        getEnv("JWT_SECRET", "pragati-dev-secret-change-in-production"),
+		JWTSecret:        getEnv("JWT_SECRET", ""),
 		JWTIssuer:        getEnv("JWT_ISSUER", "pragati"),
 		JWTAccessExpiry:  getDuration("JWT_ACCESS_EXPIRY", 15*time.Minute),
 		JWTRefreshExpiry: getDuration("JWT_REFRESH_EXPIRY", 7*24*time.Hour),
@@ -34,7 +38,22 @@ func Load() *Config {
 		UploadDir:        getEnv("UPLOAD_DIR", "./uploads"),
 		DefaultSchoolID:  getEnv("DEFAULT_SCHOOL_ID", "00000000-0000-0000-0000-000000000001"),
 	}
+
+	if cfg.JWTSecret == "" {
+		cfg.JWTSecret = randomSecret()
+		log.Warn().Msg("JWT_SECRET not set; generated a random secret. Existing sessions will be invalidated on restart. Set JWT_SECRET in production.")
+	}
+
 	return cfg
+}
+
+// randomSecret returns a 32-byte cryptographically random hex string.
+func randomSecret() string {
+	buf := make([]byte, 32)
+	if _, err := rand.Read(buf); err != nil {
+		return "pragati-dev-secret-change-in-production"
+	}
+	return hex.EncodeToString(buf)
 }
 
 func getEnv(key, fallback string) string {

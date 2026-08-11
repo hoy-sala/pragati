@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"net/http"
 	"strings"
@@ -73,7 +75,7 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rawToken, hashedToken, err := h.jwtService.GenerateRefreshToken()
+	rawToken, hashedToken, lookupHash, err := h.jwtService.GenerateRefreshToken()
 	if err != nil {
 		log.Error().Err(err).Msg("failed to generate refresh token")
 		renderJSON(w, http.StatusInternalServerError, models.APIResponse{
@@ -83,9 +85,9 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if _, err := h.db.Exec(r.Context(),
-		`INSERT INTO refresh_tokens (id, user_id, token_hash, expires_at, created_at)
-		 VALUES ($1, $2, $3, $4, $5)`,
-		uuid.New().String(), user.ID, hashedToken, time.Now().Add(h.jwtService.RefreshTokenExpiry()), time.Now(),
+		`INSERT INTO refresh_tokens (id, user_id, token_hash, lookup_hash, expires_at, created_at)
+		 VALUES ($1, $2, $3, $4, $5, $6)`,
+		uuid.New().String(), user.ID, hashedToken, lookupHash, time.Now().Add(h.jwtService.RefreshTokenExpiry()), time.Now(),
 	); err != nil {
 		log.Error().Err(err).Msg("failed to store refresh token")
 	}
@@ -161,7 +163,7 @@ func (h *AuthHandler) StaffLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rawToken, hashedToken, err := h.jwtService.GenerateRefreshToken()
+	rawToken, hashedToken, lookupHash, err := h.jwtService.GenerateRefreshToken()
 	if err != nil {
 		log.Error().Err(err).Msg("failed to generate refresh token")
 		renderJSON(w, http.StatusInternalServerError, models.APIResponse{
@@ -171,9 +173,9 @@ func (h *AuthHandler) StaffLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if _, err := h.db.Exec(r.Context(),
-		`INSERT INTO refresh_tokens (id, user_id, token_hash, expires_at, created_at)
-		 VALUES ($1, $2, $3, $4, $5)`,
-		uuid.New().String(), user.ID, hashedToken, time.Now().Add(h.jwtService.RefreshTokenExpiry()), time.Now(),
+		`INSERT INTO refresh_tokens (id, user_id, token_hash, lookup_hash, expires_at, created_at)
+		 VALUES ($1, $2, $3, $4, $5, $6)`,
+		uuid.New().String(), user.ID, hashedToken, lookupHash, time.Now().Add(h.jwtService.RefreshTokenExpiry()), time.Now(),
 	); err != nil {
 		log.Error().Err(err).Msg("failed to store refresh token")
 	}
@@ -256,35 +258,20 @@ func (h *AuthHandler) Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rows, err := h.db.Query(r.Context(),
+	lookupBytes := sha256.Sum256([]byte(req.RefreshToken))
+	lookupHash := hex.EncodeToString(lookupBytes[:])
+
+	var tokenID, userID, tokenHash, schoolID, name, email, role string
+	var expiresAt time.Time
+	err := h.db.QueryRow(r.Context(),
 		`SELECT rt.id, rt.user_id, rt.token_hash, rt.expires_at,
 		        u.school_id, u.name, u.email, u.role
 		 FROM refresh_tokens rt
 		 JOIN users u ON u.id = rt.user_id
-		 WHERE rt.revoked_at IS NULL AND rt.expires_at > NOW()
-		 ORDER BY rt.expires_at DESC`)
-	if err != nil {
-		renderJSON(w, http.StatusInternalServerError, models.APIResponse{
-			Error: &models.APIError{Code: "INTERNAL_ERROR", Message: "failed to query refresh tokens"},
-		})
-		return
-	}
-	defer rows.Close()
-
-	var tokenID, userID, tokenHash, schoolID, name, email, role string
-	var expiresAt time.Time
-	matchFound := false
-	for rows.Next() {
-		if err := rows.Scan(&tokenID, &userID, &tokenHash, &expiresAt, &schoolID, &name, &email, &role); err != nil {
-			continue
-		}
-		if auth.CheckPassword(req.RefreshToken, tokenHash) {
-			matchFound = true
-			break
-		}
-	}
-
-	if !matchFound {
+		 WHERE rt.lookup_hash = $1 AND rt.revoked_at IS NULL AND rt.expires_at > NOW()`,
+		lookupHash,
+	).Scan(&tokenID, &userID, &tokenHash, &expiresAt, &schoolID, &name, &email, &role)
+	if err != nil || !auth.CheckPassword(req.RefreshToken, tokenHash) {
 		renderJSON(w, http.StatusUnauthorized, models.APIResponse{
 			Error: &models.APIError{Code: "INVALID_TOKEN", Message: "invalid refresh token"},
 		})
@@ -306,13 +293,13 @@ func (h *AuthHandler) Refresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rawNew, hashedNew, err := h.jwtService.GenerateRefreshToken()
+	rawNew, hashedNew, lookupHashNew, err := h.jwtService.GenerateRefreshToken()
 	if err != nil {
 		log.Error().Err(err).Msg("failed to generate new refresh token")
 	} else if _, err := h.db.Exec(r.Context(),
-		`INSERT INTO refresh_tokens (id, user_id, token_hash, expires_at, created_at)
-		 VALUES ($1, $2, $3, $4, $5)`,
-		uuid.New().String(), userID, hashedNew, time.Now().Add(h.jwtService.RefreshTokenExpiry()), time.Now(),
+		`INSERT INTO refresh_tokens (id, user_id, token_hash, lookup_hash, expires_at, created_at)
+		 VALUES ($1, $2, $3, $4, $5, $6)`,
+		uuid.New().String(), userID, hashedNew, lookupHashNew, time.Now().Add(h.jwtService.RefreshTokenExpiry()), time.Now(),
 	); err != nil {
 		log.Error().Err(err).Msg("failed to store new refresh token")
 	}

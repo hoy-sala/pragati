@@ -65,8 +65,11 @@ func (h *QuizHandler) Create(w http.ResponseWriter, r *http.Request) {
 func (h *QuizHandler) List(w http.ResponseWriter, r *http.Request) {
 	claims := middleware.GetUserClaims(r.Context())
 	limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
-	if limit <= 0 || limit > 100 {
+	if limit <= 0 {
 		limit = 50
+	}
+	if limit > 100 {
+		limit = 100
 	}
 	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
 	if page < 1 {
@@ -223,6 +226,7 @@ func (h *QuizHandler) Publish(w http.ResponseWriter, r *http.Request) {
 func (h *QuizHandler) ListQuestions(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	claims := middleware.GetUserClaims(r.Context())
+	staffRoles := map[string]bool{"admin": true, "principal": true, "teacher": true, "special_educator": true}
 
 	rows, err := h.db.Query(r.Context(),
 		`SELECT qq.question_id, qq.sort_order, qq.marks,
@@ -245,7 +249,7 @@ func (h *QuizHandler) ListQuestions(w http.ResponseWriter, r *http.Request) {
 		QuestionText string          `json:"question_text"`
 		QuestionType string          `json:"question_type"`
 		Options      json.RawMessage `json:"options"`
-		Answer       string          `json:"answer"`
+		Answer       string          `json:"answer,omitempty"`
 		Difficulty   string          `json:"difficulty"`
 	}
 
@@ -256,6 +260,9 @@ func (h *QuizHandler) ListQuestions(w http.ResponseWriter, r *http.Request) {
 			&q.QuestionText, &q.QuestionType, &q.Options, &q.Answer, &q.Difficulty); err != nil {
 			continue
 		}
+		if !staffRoles[claims.Role] {
+			q.Answer = ""
+		}
 		questions = append(questions, q)
 	}
 	renderJSON(w, http.StatusOK, models.APIResponse{Data: questions})
@@ -264,6 +271,7 @@ func (h *QuizHandler) ListQuestions(w http.ResponseWriter, r *http.Request) {
 // POST /api/v1/quizzes/{id}/questions
 func (h *QuizHandler) AddQuestions(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
+	claims := middleware.GetUserClaims(r.Context())
 	var req struct {
 		QuestionIDs []string `json:"question_ids"`
 	}
@@ -272,13 +280,25 @@ func (h *QuizHandler) AddQuestions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var quizSchool string
+	if err := h.db.QueryRow(r.Context(),
+		`SELECT school_id FROM quiz_assignments WHERE id = $1 AND deleted_at IS NULL`, id).Scan(&quizSchool); err != nil {
+		renderJSON(w, http.StatusNotFound, models.APIResponse{Error: &models.APIError{Code: "NOT_FOUND", Message: "quiz not found"}})
+		return
+	}
+	if quizSchool != claims.SchoolID {
+		renderJSON(w, http.StatusForbidden, models.APIResponse{Error: &models.APIError{Code: "FORBIDDEN", Message: "quiz must belong to your school"}})
+		return
+	}
+
 	added := 0
 	for i, qid := range req.QuestionIDs {
 		_, err := h.db.Exec(r.Context(),
 			`INSERT INTO quiz_questions (quiz_id, question_id, sort_order, marks)
-			 VALUES ($1,$2,$3, (SELECT marks FROM questions WHERE id = $2))
+			 SELECT $1, q.id, $3, q.marks FROM questions q
+			 WHERE q.id = $2 AND q.school_id = $4 AND q.deleted_at IS NULL
 			 ON CONFLICT DO NOTHING`,
-			id, qid, i)
+			id, qid, i, claims.SchoolID)
 		if err == nil {
 			added++
 		}
@@ -286,11 +306,17 @@ func (h *QuizHandler) AddQuestions(w http.ResponseWriter, r *http.Request) {
 	renderJSON(w, http.StatusOK, models.APIResponse{Data: map[string]int{"added": added}})
 }
 
-// DELETE /api/v1/quizzes/{id}/questions/{qid}
+// DELETE /api/v1/quizzes/{id}/questions/{questionId}
 func (h *QuizHandler) RemoveQuestion(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
-	qid := chi.URLParam(r, "qid")
-	_, err := h.db.Exec(r.Context(), `DELETE FROM quiz_questions WHERE quiz_id = $1 AND question_id = $2`, id, qid)
+	qid := chi.URLParam(r, "questionId")
+	claims := middleware.GetUserClaims(r.Context())
+	_, err := h.db.Exec(r.Context(),
+		`DELETE FROM quiz_questions qq
+		 USING quiz_assignments qa
+		 WHERE qq.quiz_id = qa.id AND qa.school_id = $1
+		   AND qq.quiz_id = $2 AND qq.question_id = $3`,
+		claims.SchoolID, id, qid)
 	if err != nil {
 		renderJSON(w, http.StatusInternalServerError, models.APIResponse{Error: &models.APIError{Code: "INTERNAL_ERROR", Message: "failed to remove question"}})
 		return
@@ -359,8 +385,8 @@ func (h *QuizHandler) StartAttempt(w http.ResponseWriter, r *http.Request) {
 
 	var maxAttempts int
 	h.db.QueryRow(r.Context(),
-		`SELECT max_attempts FROM quiz_assignments WHERE id = $1 AND is_published = true AND deleted_at IS NULL`,
-		id).Scan(&maxAttempts)
+		`SELECT max_attempts FROM quiz_assignments WHERE id = $1 AND school_id = $2 AND is_published = true AND deleted_at IS NULL`,
+		id, claims.SchoolID).Scan(&maxAttempts)
 	if maxAttempts == 0 {
 		renderJSON(w, http.StatusNotFound, models.APIResponse{Error: &models.APIError{Code: "NOT_FOUND", Message: "quiz not found or not published"}})
 		return

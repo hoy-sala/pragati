@@ -32,8 +32,11 @@ func (h *StudentHandler) List(w http.ResponseWriter, r *http.Request) {
 	claims := middleware.GetUserClaims(r.Context())
 	offset, _ := strconv.Atoi(r.URL.Query().Get("offset"))
 	limit, _ := strconv.Atoi(r.URL.Query().Get("limit"))
-	if limit <= 0 || limit > 100 {
+	if limit <= 0 {
 		limit = 50
+	}
+	if limit > 500 {
+		limit = 500
 	}
 
 	query := `SELECT s.id, s.school_id, s.user_id, s.sats_number, s.admission_no,
@@ -515,7 +518,8 @@ func (h *StudentHandler) ImportCSV(w http.ResponseWriter, r *http.Request) {
 		classCode := getCol("class")
 		var classID string
 		err := h.db.QueryRow(r.Context(),
-			`SELECT id FROM classes WHERE code = $1 OR name = $1 AND school_id = $2 AND deleted_at IS NULL`,
+			`SELECT id FROM classes
+			 WHERE (code = $1 OR name = $1) AND school_id = $2 AND deleted_at IS NULL`,
 			classCode, claims.SchoolID,
 		).Scan(&classID)
 		if err != nil {
@@ -571,7 +575,7 @@ func (h *StudentHandler) ImportCSV(w http.ResponseWriter, r *http.Request) {
 				parent_name, father_name, mother_name, parent_phone, parent_email,
 				is_active, created_at, updated_at)
 			 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,true,NOW(),NOW())
-			 ON CONFLICT (sats_number) DO UPDATE SET
+			 ON CONFLICT (sats_number) WHERE deleted_at IS NULL DO UPDATE SET
 				first_name = EXCLUDED.first_name,
 				last_name = EXCLUDED.last_name,
 				class_id = EXCLUDED.class_id,

@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -77,6 +78,23 @@ func (h *MentorHandler) CreateAssignment(w http.ResponseWriter, r *http.Request)
 	}
 	if req.MentorID == "" || req.StudentID == "" || req.AcademicYearID == "" {
 		renderJSON(w, http.StatusBadRequest, apiErr("VALIDATION_ERROR", "mentor_id, student_id, academic_year_id required"))
+		return
+	}
+	var mentorSchool, studentSchool, yearSchool string
+	if err := h.db.QueryRow(r.Context(),
+		`SELECT school_id FROM users WHERE id = $1 AND is_active = true AND deleted_at IS NULL`, req.MentorID).Scan(&mentorSchool); err != nil {
+		renderJSON(w, http.StatusBadRequest, apiErr("NOT_FOUND", "mentor not found")); return
+	}
+	if err := h.db.QueryRow(r.Context(),
+		`SELECT school_id FROM students WHERE id = $1 AND deleted_at IS NULL`, req.StudentID).Scan(&studentSchool); err != nil {
+		renderJSON(w, http.StatusBadRequest, apiErr("NOT_FOUND", "student not found")); return
+	}
+	if err := h.db.QueryRow(r.Context(),
+		`SELECT school_id FROM academic_years WHERE id = $1 AND deleted_at IS NULL`, req.AcademicYearID).Scan(&yearSchool); err != nil {
+		renderJSON(w, http.StatusBadRequest, apiErr("NOT_FOUND", "academic year not found")); return
+	}
+	if mentorSchool != claims.SchoolID || studentSchool != claims.SchoolID || yearSchool != claims.SchoolID {
+		renderJSON(w, http.StatusForbidden, apiErr("FORBIDDEN", "resources must belong to your school"))
 		return
 	}
 	var count int
@@ -213,6 +231,11 @@ func (h *MentorHandler) SaveAttendance(w http.ResponseWriter, r *http.Request) {
 		renderJSON(w, http.StatusBadRequest, apiErr("VALIDATION_ERROR", "mentor_id, student_id, status required")); return
 	}
 	if req.Date == "" { req.Date = time.Now().Format("2006-01-02") }
+	claims := middleware.GetUserClaims(r.Context())
+	if err := h.verifyMentorStudent(claims.SchoolID, req.MentorID, req.StudentID); err != nil {
+		renderJSON(w, http.StatusForbidden, apiErr("FORBIDDEN", err.Error()))
+		return
+	}
 	_, err := h.db.Exec(r.Context(),
 		`INSERT INTO mentor_attendance (id, mentor_id, student_id, date, status, remarks)
 		 VALUES (gen_random_uuid(), $1, $2, $3, $4, $5)
@@ -222,12 +245,31 @@ func (h *MentorHandler) SaveAttendance(w http.ResponseWriter, r *http.Request) {
 	renderJSON(w, http.StatusOK, apiOK(map[string]bool{"success": true}))
 }
 
+func (h *MentorHandler) verifyMentorStudent(schoolID, mentorID, studentID string) error {
+	var mentorSchool, studentSchool string
+	if err := h.db.QueryRow(context.Background(), `SELECT school_id FROM users WHERE id = $1 AND is_active = true AND deleted_at IS NULL`, mentorID).Scan(&mentorSchool); err != nil {
+		return fmt.Errorf("mentor not found")
+	}
+	if err := h.db.QueryRow(context.Background(), `SELECT school_id FROM students WHERE id = $1 AND deleted_at IS NULL`, studentID).Scan(&studentSchool); err != nil {
+		return fmt.Errorf("student not found")
+	}
+	if mentorSchool != schoolID || studentSchool != schoolID {
+		return fmt.Errorf("resources must belong to your school")
+	}
+	return nil
+}
+
 func (h *MentorHandler) ContactParent(w http.ResponseWriter, r *http.Request) {
 	var req struct { MentorID string `json:"mentor_id"`; StudentID string `json:"student_id"`; Date string `json:"date"` }
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		renderJSON(w, http.StatusBadRequest, apiErr("INVALID_INPUT", "invalid request")); return
 	}
 	if req.Date == "" { req.Date = time.Now().Format("2006-01-02") }
+	claims := middleware.GetUserClaims(r.Context())
+	if err := h.verifyMentorStudent(claims.SchoolID, req.MentorID, req.StudentID); err != nil {
+		renderJSON(w, http.StatusForbidden, apiErr("FORBIDDEN", err.Error()))
+		return
+	}
 	var id string
 	err := h.db.QueryRow(r.Context(),
 		`SELECT id FROM mentor_attendance WHERE mentor_id = $1 AND student_id = $2 AND date = $3`,
@@ -278,6 +320,14 @@ func (h *MentorHandler) CreateLog(w http.ResponseWriter, r *http.Request) {
 	}
 	if req.StudentID == "" || req.Category == "" || req.Description == "" {
 		renderJSON(w, http.StatusBadRequest, apiErr("VALIDATION_ERROR", "student_id, category, description required")); return
+	}
+	var studentSchool string
+	if err := h.db.QueryRow(r.Context(),
+		`SELECT school_id FROM students WHERE id = $1 AND deleted_at IS NULL`, req.StudentID).Scan(&studentSchool); err != nil {
+		renderJSON(w, http.StatusBadRequest, apiErr("NOT_FOUND", "student not found")); return
+	}
+	if studentSchool != claims.SchoolID {
+		renderJSON(w, http.StatusForbidden, apiErr("FORBIDDEN", "student must belong to your school")); return
 	}
 	id := uuid.New().String()
 	_, err := h.db.Exec(r.Context(),

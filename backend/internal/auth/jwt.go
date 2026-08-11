@@ -2,6 +2,7 @@ package auth
 
 import (
 	"crypto/rand"
+	"crypto/sha256"
 	"encoding/hex"
 	"time"
 
@@ -53,19 +54,22 @@ func (s *JWTService) GenerateToken(userID, schoolID, role, email, satsNumber str
 	return signed, expiresAt.Unix(), nil
 }
 
-func (s *JWTService) GenerateRefreshToken() (string, string, error) {
+func (s *JWTService) GenerateRefreshToken() (token string, hash string, lookupHash string, err error) {
 	bytes := make([]byte, 32)
 	if _, err := rand.Read(bytes); err != nil {
-		return "", "", err
+		return "", "", "", err
 	}
-	token := hex.EncodeToString(bytes)
+	token = hex.EncodeToString(bytes)
 
-	hash, err := bcrypt.GenerateFromPassword([]byte(token), bcrypt.DefaultCost)
+	hash, err = bcrypt.GenerateFromPassword([]byte(token), bcrypt.DefaultCost)
 	if err != nil {
-		return "", "", err
+		return "", "", "", err
 	}
 
-	return token, string(hash), nil
+	lookupBytes := sha256.Sum256([]byte(token))
+	lookupHash = hex.EncodeToString(lookupBytes[:])
+
+	return token, string(hash), lookupHash, nil
 }
 
 func (s *JWTService) ValidateToken(tokenString string) (*models.TokenClaims, error) {

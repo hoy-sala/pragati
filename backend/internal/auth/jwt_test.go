@@ -142,7 +142,7 @@ func TestGenerateRefreshToken(t *testing.T) {
 	cfg := &config.Config{JWTSecret: "test-secret"}
 	srv := NewJWTService(cfg)
 
-	raw, hashed, err := srv.GenerateRefreshToken()
+	raw, hashed, lookupHash, err := srv.GenerateRefreshToken()
 	if err != nil {
 		t.Fatalf("GenerateRefreshToken failed: %v", err)
 	}
@@ -151,6 +151,9 @@ func TestGenerateRefreshToken(t *testing.T) {
 	}
 	if hashed == "" {
 		t.Fatal("GenerateRefreshToken returned empty hash")
+	}
+	if len(lookupHash) != 64 {
+		t.Errorf("expected lookup hash length 64, got %d", len(lookupHash))
 	}
 	if !CheckPassword(raw, hashed) {
 		t.Fatal("bcrypt check of raw token against hash should succeed")

@@ -67,41 +67,14 @@
 		.subject-print { page: portrait-page; }
 		.min-h-screen { min-height: auto !important; }
 		.max-w-7xl { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
-		.overflow-x-auto { box-shadow: none !important; margin-bottom: 1px !important; }
-		table { font-size: 6px !important; width: 100% !important; }
-		th, td { padding: 0.5px 1.5px !important; }
-		.space-y-6 > :not(:last-child) { margin-bottom: 1px !important; }
-		h1 { font-size: 7pt !important; margin: 0 !important; line-height: 1.1 !important; }
-		h2 { font-size: 7.5pt !important; margin: 0 0 1px 0 !important; }
-		.text-xs { font-size: 5.5px !important; }
-		.text-sm { font-size: 6px !important; }
-		.text-\[11px\] { font-size: 6px !important; }
-		.text-\[10px\] { font-size: 5.5px !important; }
-		.text-\[9px\] { font-size: 5px !important; }
-		.leading-tight { line-height: 1 !important; }
-		.w-16 { width: auto !important; min-width: 18px !important; }
-		.w-10 { width: auto !important; min-width: 10px !important; }
-		.w-14 { width: auto !important; min-width: 14px !important; padding: 0.5px 1px !important; }
+		.overflow-x-auto { box-shadow: none !important; }
 		.sticky { position: static !important; }
-		.border-r { border-right-width: 0.5px !important; }
-		.border-t, .border-b { border-width: 0.5px !important; }
-		.border-b-2 { border-bottom-width: 0.5px !important; }
-		.rounded-xl { border-radius: 0 !important; }
-		.pt-2 { padding-top: 1px !important; }
-		.legend-print { display: block !important; padding: 1px 2px !important; }
-		.legend-print .grid { grid-template-columns: repeat(9, 1fr) !important; gap: 0.5px !important; }
-		.legend-print h3 { font-size: 5.5pt !important; margin: 0 0 1px 0 !important; }
-		.legend-print .text-xs { font-size: 4.5px !important; }
-		.legend-print .px-2 { padding: 0 1px !important; }
-		.legend-print .py-1 { padding: 0 1px !important; }
-		.legend-print .rounded { border-radius: 0 !important; }
-		.legend-print .gap-1\.5 { gap: 0.5px !important; }
-		td .truncate { max-width: none !important; overflow: visible !important; white-space: normal !important; }
+		:global(.print-scale) { zoom: 0.72; }
 	}
 </style>
 
 <div class="min-h-screen bg-slate-50">
-	<div class="max-w-7xl mx-auto px-4 py-6 space-y-6 {viewMode === 'subject' ? 'subject-print' : ''}">
+	<div class="max-w-7xl mx-auto px-4 py-6 space-y-6 print-scale {viewMode === 'subject' ? 'subject-print' : ''}">
 		<div class="text-center space-y-1">
 			<p class="text-xs font-medium text-slate-500 uppercase tracking-wider no-print">Karnataka Residential Educational Institutions Society</p>
 			<h1 class="text-xl font-bold text-slate-900">Morarji Desai Residential School (SC-32) Bahaddurghatta, Chitradurga</h1>
@@ -194,7 +167,7 @@
 											<td class="px-1 py-1 text-center align-middle border-r border-slate-200 last:border-r-0"
 												style={`background-color: ${info?.color || '#fff'}`}>
 												<div class="flex flex-col items-center justify-center leading-tight">
-													<div class="font-bold text-slate-800 text-[11px]">{cell.code}</div>
+													<div class="font-bold text-slate-800 text-[11px] leading-tight">{cell.code}</div>
 													<div class="text-[9px] text-slate-400 truncate max-w-[70px]">{TEACHER_NAMES[cell.code] || cell.name}</div>
 												</div>
 											</td>
@@ -223,7 +196,7 @@
 												<div class="text-[10px]">{cell.name}</div>
 											{:else}
 												<div class="flex flex-col items-center justify-center leading-tight">
-													<div class="font-bold text-slate-800 text-[11px]">{cell.code}</div>
+													<div class="font-bold text-slate-800 text-[11px] leading-tight">{cell.code}</div>
 													<div class="text-[9px] text-slate-400 truncate max-w-[70px]">{TEACHER_NAMES[cell.code] || cell.name}</div>
 												</div>
 											{/if}
@@ -291,7 +264,7 @@
 											<td class="px-1 py-1 text-center align-middle border-r border-slate-200 last:border-r-0"
 												style={`background-color: ${info?.color || '#fff'}`}>
 												<div class="flex flex-col items-center justify-center leading-tight">
-													<div class="font-bold text-slate-800 text-[11px]">{cell.code}</div>
+													<div class="font-bold text-slate-800 text-[11px] leading-tight">{cell.code}</div>
 													<div class="text-[9px] text-slate-400 truncate max-w-[70px]">{TEACHER_NAMES[cell.code] || cell.name}</div>
 												</div>
 											</td>
@@ -320,7 +293,7 @@
 												<div class="text-[10px]">{cell.name}</div>
 											{:else}
 												<div class="flex flex-col items-center justify-center leading-tight">
-													<div class="font-bold text-slate-800 text-[11px]">{cell.code}</div>
+													<div class="font-bold text-slate-800 text-[11px] leading-tight">{cell.code}</div>
 													<div class="text-[9px] text-slate-400 truncate max-w-[70px]">{TEACHER_NAMES[cell.code] || cell.name}</div>
 												</div>
 											{/if}

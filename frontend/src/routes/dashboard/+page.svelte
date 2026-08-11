@@ -39,7 +39,15 @@
 	let years = $state<AcademicYear[]>([]);
 	let selectedYear = $state('');
 	let marksReport = $state<{
-		subjects: { subject_code: string; subject_name: string; subject_type: string; total: number; max_max: number; percentage: number; grade: string; grade_label?: string; assessments: { name: string; category: string; max: number; value: number; absent: boolean; has_mark: boolean }[] }[];
+		subjects: {
+			subject_code: string; subject_name: string; subject_type: string; total: number; max_max: number;
+			percentage: number; grade: string; grade_label?: string;
+			assessments: { name: string; category: string; max: number; value: number; absent: boolean; has_mark: boolean }[];
+			cce?: {
+				fa_converted: number; sa_converted: number; final_marks: number; final_grade: string;
+				max_marks: number; fa_raw_total: number; sa_raw_total: number; fa_out_of: number; sa_out_of: number;
+			};
+		}[];
 		grand_total: number; grand_max: number; percentage: number; grade: string;
 	} | null>(null);
 
