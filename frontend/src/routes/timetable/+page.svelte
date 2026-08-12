@@ -15,9 +15,9 @@
 	const ACADEMIC_SUBJECTS = Object.entries(SUBJECT_INFO).filter(([c]) => !BREAK_CODES.has(c) && !ACTIVITY_CODES.has(c));
 	const SUBJECT_OPTIONS = ACADEMIC_SUBJECTS.map(([code, info]) => ({ id: code, name: `${code} — ${info.name}` }));
 
-	const WEEKDAY_PERIOD_MAP = [1, 2, 3, 5, 6, 8, 9, 10];
+	const WEEKDAY_PERIOD_MAP = [1, 2, 3, 5, 6, 7, 8, 9, 10];
 	const SAT_PERIOD_MAP = [3, 4, 6, 7];
-	const WEEKDAY_SLOT_LABELS = ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8'];
+	const WEEKDAY_SLOT_LABELS = ['P1', 'P2', 'P3', 'P4', 'P5', 'LUN', 'P6', 'P7', 'P8'];
 	const SAT_SLOT_LABELS = ['P1', 'P2', 'P3', 'P4'];
 
 	type SubjectGrid = Record<string, number[][]>;
@@ -58,33 +58,59 @@
 <style>
 	:global(body) { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
 	.print-only { display: none; }
+	thead tr { background-color: #eaf2fb; }
+	thead th { color: #334155; }
+	td:first-child, th:first-child { text-align: center; }
 	@media print {
-		@page { size: A4 landscape; margin: 4mm; }
-		@page portrait-page { size: A4 portrait; margin: 4mm; }
+		@page { size: A4 portrait; margin: 5mm; }
 		:global(body) { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 		.no-print, .no-print * { display: none !important; }
 		.print-only { display: inline !important; }
-		.subject-print { page: portrait-page; }
 		.min-h-screen { min-height: auto !important; }
 		.max-w-7xl { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
-		.overflow-x-auto { box-shadow: none !important; }
+
+		h1 { font-size: 13pt !important; margin: 0 0 2px 0 !important; color: #dc2626 !important; }
+		h2 { font-size: 12pt !important; margin: 0 0 8px 0 !important; color: #1d4ed8 !important; }
+		p { color: #0f172a !important; }
+
+		.overflow-x-auto { box-shadow: none !important; margin-bottom: 5px !important; border: 1px solid #94a3b8 !important; }
+		.overflow-x-auto table { page-break-inside: avoid !important; }
+		table { font-size: 8px !important; width: 100% !important; border-collapse: collapse !important; border-spacing: 0 !important; }
+		th, td { padding: 3px 2px !important; border: 0.5px solid #94a3b8 !important; }
+		thead th { background: #eaf2fb !important; border-bottom: 0.5px solid #64748b !important; font-size: 7px !important; }
+		td:first-child, th:first-child { background: #f8fafc !important; border-right: 0.5px solid #64748b !important; }
+		.border-b-2 { border-bottom-width: 0.5px !important; border-bottom-color: #475569 !important; }
+		.text-slate-400 { color: #64748b !important; }
+		.space-y-6 > :not(:last-child) { margin-bottom: 4px !important; }
+		.text-xs { font-size: 8px !important; }
+		.text-sm { font-size: 9px !important; }
+		.text-\[11px\] { font-size: 8px !important; }
+		.text-\[10px\] { font-size: 7.5px !important; }
+		.text-\[9px\] { font-size: 7px !important; }
+		.leading-tight { line-height: 1.15 !important; }
+		.w-16 { width: auto !important; min-width: 20px !important; }
+		.w-10 { width: auto !important; min-width: 12px !important; }
+		.w-14 { width: auto !important; min-width: 16px !important; padding: 2px 1px !important; }
 		.sticky { position: static !important; }
-		:global(.print-scale) { zoom: 0.72; }
+		.rounded-xl { border-radius: 0 !important; }
+		.pt-2 { padding-top: 2px !important; }
+		.legend-print { display: none !important; }
+		td .truncate { max-width: none !important; overflow: visible !important; white-space: normal !important; }
 	}
 </style>
 
 <div class="min-h-screen bg-slate-50">
-	<div class="max-w-7xl mx-auto px-4 py-6 space-y-6 print-scale {viewMode === 'subject' ? 'subject-print' : ''}">
+	<div class="max-w-7xl mx-auto px-4 py-6 space-y-6">
 		<div class="text-center space-y-1">
-			<p class="text-xs font-medium text-slate-500 uppercase tracking-wider no-print">Karnataka Residential Educational Institutions Society</p>
-			<h1 class="text-xl font-bold text-slate-900">Morarji Desai Residential School (SC-32) Bahaddurghatta, Chitradurga</h1>
-			<h2 class="text-2xl font-bold text-primary-700">Time Table 2026-27 <span class="print-only text-slate-500 inline">
-				- {#if viewMode === 'class'}
-					{showAll ? 'All Classes' : 'Class ' + (activeClass + 6)} - Class Wise
-				{:else}
-					{SUBJECT_INFO[selectedSubject]?.name} - Subject Wise
-				{/if}
-			</span></h2>
+			<p class="text-[11px] font-semibold text-slate-900 uppercase tracking-widest">Karnataka Residential Educational Institutions Society</p>
+			<h1 class="text-xl font-bold text-red-600">Morarji Desai Residential School (SC-32) Bahaddurghatta, Chitradurga</h1>
+			{#if viewMode === 'subject'}
+				<h2 class="text-2xl font-bold text-primary-700">{SUBJECT_INFO[selectedSubject]?.name} Subject Time Table 2026-27</h2>
+			{:else}
+				<h2 class="text-2xl font-bold text-primary-700">Time Table 2026-27 <span class="print-only text-primary-600 inline">
+					- {showAll ? 'All Classes' : 'Class ' + (activeClass + 6)} - Class Wise
+				</span></h2>
+			{/if}
 		</div>
 
 		<div class="flex flex-wrap items-center justify-center gap-3 no-print">
@@ -319,7 +345,7 @@
 					<tr class="bg-slate-100 border-b border-slate-200">
 						<th class="px-2 py-1.5 text-left font-semibold text-slate-700 border-r border-slate-200 w-16">Day</th>
 						{#each WEEKDAY_SLOT_LABELS as label, si}
-							<th class="px-1 py-1.5 text-center font-semibold text-slate-700 border-r border-slate-200 last:border-r-0 w-14">
+							<th class="px-1 py-1.5 text-center font-semibold border-r border-slate-200 last:border-r-0 w-14 {label === 'LUN' ? 'text-slate-400 italic' : 'text-slate-700'}">
 								<div>{label}</div>
 								<div class="text-[9px] font-normal text-slate-400">{WEEKDAY_TIMES[WEEKDAY_PERIOD_MAP[si]]}</div>
 							</th>
@@ -328,17 +354,27 @@
 				</thead>
 				<tbody>
 					{#each MON_FRI_INDICES as di}
+						{@const classes = grid['d' + di]}
 						<tr class="border-t border-slate-200 {DAY_BG[di]}">
 							<td class="px-2 py-2 font-semibold text-slate-700 border-r border-slate-200 {DAY_BG[di]}">{DAY_LABELS[di]}</td>
-							{#each WEEKDAY_SLOT_LABELS as _, si}
-								{@const classes = grid['d' + di][si]}
-								<td class="px-1 py-2 text-center align-middle border-r border-slate-200 last:border-r-0 {classes.length === 0 ? 'bg-slate-50' : DAY_BG[di]}">
-									{#if classes.length > 0}
-										<span class="font-bold text-slate-800 text-sm">{classes.join(', ')}</span>
-									{:else}
-										<span class="text-slate-300">&ndash;</span>
+							{#each WEEKDAY_SLOT_LABELS as label, si}
+								{@const slotClasses = classes[si]}
+								{#if label === 'LUN'}
+									{#if di === 0}
+										<td class="px-1 py-2 text-center border-r border-slate-200 last:border-r-0 bg-slate-50 text-slate-400 italic" rowspan="{MON_FRI_INDICES.length}">
+											<div class="text-[10px]">Lunch Break</div>
+										</td>
 									{/if}
-								</td>
+								{:else}
+									<td class="px-1 py-2 text-center align-middle border-r border-slate-200 last:border-r-0 {slotClasses.length === 0 ? 'bg-slate-50' : ''}"
+										style={slotClasses.length > 0 ? `background-color: ${info.color}` : ''}>
+										{#if slotClasses.length > 0}
+											<span class="font-bold text-slate-800 text-sm">{slotClasses.join(', ')}</span>
+										{:else}
+											<span class="text-slate-300">&ndash;</span>
+										{/if}
+									</td>
+								{/if}
 							{/each}
 						</tr>
 					{/each}
@@ -364,7 +400,8 @@
 						<td class="px-2 py-2 font-semibold text-slate-700 border-r border-slate-200 {DAY_BG[5]}">{DAY_LABELS[5]}</td>
 						{#each SAT_SLOT_LABELS as _, si}
 							{@const classes = grid['d5'][si]}
-							<td class="px-1 py-2 text-center align-middle border-r border-slate-200 last:border-r-0 {classes.length === 0 ? 'bg-slate-50' : DAY_BG[5]}">
+							<td class="px-1 py-2 text-center align-middle border-r border-slate-200 last:border-r-0 {classes.length === 0 ? 'bg-slate-50' : ''}"
+								style={classes.length > 0 ? `background-color: ${info.color}` : ''}>
 								{#if classes.length > 0}
 									<span class="font-bold text-slate-800 text-sm">{classes.join(', ')}</span>
 								{:else}
@@ -375,14 +412,6 @@
 					</tr>
 				</tbody>
 			</table>
-		</div>
-
-		<div class="flex items-center gap-4 text-xs text-slate-500">
-			<span class="font-semibold text-slate-700">{selectedSubject}</span>
-			<span>{info?.name}</span>
-			{#if teacherName}
-				<span class="text-slate-400">Teacher: {teacherName}</span>
-			{/if}
 		</div>
 		{/if}
 

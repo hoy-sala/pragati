@@ -29,23 +29,23 @@ export interface ClassSchedule {
 }
 
 export const SUBJECT_INFO: Record<string, { name: string; color: string }> = {
-  KAN: { name: 'Kannada', color: '#DBEAFE' },
-  ENG: { name: 'English', color: '#E0E7FF' },
-  HIN: { name: 'Hindi', color: '#F3E8FF' },
-  MAT: { name: 'Mathematics', color: '#FFF3E0' },
-  SCI: { name: 'Science', color: '#FFF9C4' },
-  SOC: { name: 'Social Studies', color: '#FFE0B2' },
-  CS: { name: 'Computer Science', color: '#B2EBF2' },
-  DRW: { name: 'Drawing & Visual Arts', color: '#FCE4EC' },
-  MUS: { name: 'Music & Performing Arts', color: '#FFE0E0' },
-  PE: { name: 'Physical Education', color: '#C8E6C9' },
-  LIB: { name: 'Library & Reading', color: '#E0E0E0' },
-  CUL: { name: 'Cultural Programme', color: '#D4EDDA' },
+  KAN: { name: 'Kannada', color: '#FECACA' },
+  ENG: { name: 'English', color: '#BFDBFE' },
+  HIN: { name: 'Hindi', color: '#BBF7D0' },
+  MAT: { name: 'Mathematics', color: '#FEF08A' },
+  SCI: { name: 'Science', color: '#E9D5FF' },
+  SOC: { name: 'Social Studies', color: '#A5F3FC' },
+  CS: { name: 'Computer Science', color: '#FBCFE8' },
+  DRW: { name: 'Drawing & Visual Arts', color: '#FED7AA' },
+  MUS: { name: 'Music & Performing Arts', color: '#99F6E4' },
+  PE: { name: 'Physical Education', color: '#ECFCCB' },
+  LIB: { name: 'Library & Reading', color: '#BAE6FD' },
+  CUL: { name: 'Cultural Programme', color: '#C7D2FE' },
   BRK: { name: 'Short Break', color: '#F1F5F9' },
   LUN: { name: 'Lunch Break', color: '#F1F5F9' },
-  ASM: { name: 'Morning Assembly', color: '#FFF9C4' },
-  PTR: { name: 'Physical Training', color: '#C8E6C9' },
-  BRF: { name: 'Breakfast', color: '#FFE0B2' },
+  ASM: { name: 'Morning Assembly', color: '#FEF9C3' },
+  PTR: { name: 'Physical Training', color: '#DCFCE7' },
+  BRF: { name: 'Breakfast', color: '#FEF3C7' },
 };
 
 export const BREAK_CODES = new Set(['BRK', 'LUN']);
