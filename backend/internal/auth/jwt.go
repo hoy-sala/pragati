@@ -61,15 +61,16 @@ func (s *JWTService) GenerateRefreshToken() (token string, hash string, lookupHa
 	}
 	token = hex.EncodeToString(bytes)
 
-	hash, err = bcrypt.GenerateFromPassword([]byte(token), bcrypt.DefaultCost)
+	hashBytes, err := bcrypt.GenerateFromPassword([]byte(token), bcrypt.DefaultCost)
 	if err != nil {
 		return "", "", "", err
 	}
+	hash = string(hashBytes)
 
 	lookupBytes := sha256.Sum256([]byte(token))
 	lookupHash = hex.EncodeToString(lookupBytes[:])
 
-	return token, string(hash), lookupHash, nil
+	return token, hash, lookupHash, nil
 }
 
 func (s *JWTService) ValidateToken(tokenString string) (*models.TokenClaims, error) {
