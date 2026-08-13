@@ -9,7 +9,7 @@ services:
     environment:
       DATABASE_URL: postgres://${POSTGRES_USER:-pragati}:${POSTGRES_PASSWORD:-pragati-dev-secret}@db:5432/${POSTGRES_DB:-pragati}?sslmode=disable
       REDIS_URL: redis://redis:6379/0
-      CORS_ORIGINS: http://localhost:5050,http://localhost:9090
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5050,http://localhost:9090}
     depends_on:
       db:
         condition: service_healthy

@@ -21,7 +21,12 @@
 	async function handleStudentSubmit() {
 		error = '';
 		loading = true;
-		const result = await studentLogin(satsNumber, dateOfBirth);
+		let result;
+		try {
+			result = await studentLogin(satsNumber, dateOfBirth);
+		} catch (e) {
+			result = { error: 'Unable to reach server. Check your connection.' };
+		}
 		loading = false;
 		if ('error' in result) {
 			error = result.error;
@@ -33,7 +38,12 @@
 	async function handleStaffSubmit() {
 		error = '';
 		loading = true;
-		const result = await staffLogin(mobile, staffPassword);
+		let result;
+		try {
+			result = await staffLogin(mobile, staffPassword);
+		} catch (e) {
+			result = { error: 'Unable to reach server. Check your connection.' };
+		}
 		loading = false;
 		if ('error' in result) {
 			error = result.error;
@@ -45,7 +55,12 @@
 	async function handleAdminSubmit() {
 		error = '';
 		loading = true;
-		const result = await login(adminEmail, adminPassword);
+		let result;
+		try {
+			result = await login(adminEmail, adminPassword);
+		} catch (e) {
+			result = { error: 'Unable to reach server. Check your connection.' };
+		}
 		loading = false;
 		if ('error' in result) {
 			error = result.error;
