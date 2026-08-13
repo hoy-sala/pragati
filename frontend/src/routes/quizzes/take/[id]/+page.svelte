@@ -68,13 +68,8 @@
 	function selectOption(qid: string, optKey: string) {
 		if (!responses[qid]) responses[qid] = { text_answer: '' };
 		const current = responses[qid].selected_options || [];
-		const idx = current.indexOf(optKey);
-		if (idx >= 0) {
-			current.splice(idx, 1);
-		} else {
-			current.push(optKey);
-		}
-		responses[qid] = { ...responses[qid], selected_options: [...current] };
+		const selected = current.includes(optKey) ? [] : [optKey];
+		responses[qid] = { ...responses[qid], selected_options: selected };
 	}
 
 	function setText(qid: string, val: string) {
