@@ -91,63 +91,122 @@
 	<div class="stage" class:show={ready}>
 		<div class="cert-wrap" style="transform: scale({pageScale}); height: {210 * pageScale}mm;">
 			<div class="cert-page">
-				<!-- subtle guilloché background -->
-				<svg class="bg-pattern" viewBox="0 0 120 120" aria-hidden="true">
-					<g transform="translate(60,60)">
-						<circle r="56" fill="none" stroke="#e6d9b8" stroke-width="0.25"/>
-						<circle r="49" fill="none" stroke="#e6d9b8" stroke-width="0.15"/>
-						<circle r="42" fill="none" stroke="#e6d9b8" stroke-width="0.2"/>
-						<circle r="35" fill="none" stroke="#e6d9b8" stroke-width="0.15"/>
-						<circle r="28" fill="none" stroke="#e6d9b8" stroke-width="0.25"/>
-						<circle r="21" fill="none" stroke="#e6d9b8" stroke-width="0.15"/>
-						{#each Array(60) as _, i}
-							<line x1="0" y1="-21" x2="0" y2="-56" transform="rotate({i * 6})" stroke="#e6d9b8" stroke-width="0.1"/>
+
+				<!-- rangoli / lotus background mandala -->
+				<svg class="bg-mandala" viewBox="0 0 200 200" aria-hidden="true">
+					<g transform="translate(100,100)" fill="none" stroke="#c9a227">
+						<circle r="92" stroke-width="0.35" opacity="0.5"/>
+						<circle r="84" stroke-width="0.2" opacity="0.4"/>
+						<circle r="70" stroke-width="0.3" opacity="0.45"/>
+						<circle r="62" stroke-width="0.15" opacity="0.35"/>
+						<!-- radiating spokes -->
+						{#each Array(72) as _, i}
+							<line x1="0" y1="-62" x2="0" y2="-92" transform="rotate({i * 5})" stroke-width="0.12" opacity="0.35"/>
 						{/each}
+						<!-- outer lotus petals -->
+						<g opacity="0.5">
+							{#each Array(16) as _, i}
+								<path d="M0 -92 Q12 -84 0 -70 Q-12 -84 0 -92" transform="rotate({i * 22.5})" stroke-width="0.35"/>
+							{/each}
+						</g>
+						<!-- middle ring of dots (bindi) -->
+						<g opacity="0.55">
+							{#each Array(24) as _, i}
+								<circle cx="0" cy="-46" r="1.1" transform="rotate({i * 15})" fill="#c9a227" stroke="none"/>
+							{/each}
+						</g>
+						<!-- inner lotus -->
+						<g opacity="0.55">
+							{#each Array(12) as _, i}
+								<path d="M0 -46 Q9 -40 0 -30 Q-9 -40 0 -46" transform="rotate({i * 30})" stroke-width="0.3"/>
+							{/each}
+						</g>
+						<circle r="22" stroke-width="0.25" opacity="0.5"/>
+						<g opacity="0.6">
+							{#each Array(8) as _, i}
+								<path d="M0 -22 Q6 -18 0 -12 Q-6 -18 0 -22" transform="rotate({i * 45})" stroke-width="0.3"/>
+							{/each}
+						</g>
+						<circle r="6" stroke-width="0.3" opacity="0.6"/>
 					</g>
 				</svg>
 
-				<!-- ornamental double frame -->
+				<!-- faint paisley corner sprays -->
+				<svg class="bg-paisley tl" viewBox="0 0 120 120" aria-hidden="true">
+					<g fill="none" stroke="#d8b45a" stroke-linecap="round">
+						<path d="M20 100 C6 88 4 56 20 40 C32 52 32 84 20 100" stroke-width="0.5" opacity="0.5"/>
+						<path d="M20 78 C14 70 14 52 20 46 C26 52 26 70 20 78" stroke-width="0.35" opacity="0.4"/>
+						<path d="M36 60 C30 54 30 42 36 38 C42 42 42 54 36 60" stroke-width="0.3" opacity="0.35"/>
+					</g>
+				</svg>
+				<svg class="bg-paisley tr" viewBox="0 0 120 120" aria-hidden="true">
+					<g fill="none" stroke="#d8b45a" stroke-linecap="round">
+						<path d="M100 100 C114 88 116 56 100 40 C88 52 88 84 100 100" stroke-width="0.5" opacity="0.5"/>
+						<path d="M100 78 C106 70 106 52 100 46 C94 52 94 70 100 78" stroke-width="0.35" opacity="0.4"/>
+						<path d="M84 60 C90 54 90 42 84 38 C78 42 78 54 84 60" stroke-width="0.3" opacity="0.35"/>
+					</g>
+				</svg>
+				<svg class="bg-paisley bl" viewBox="0 0 120 120" aria-hidden="true">
+					<g fill="none" stroke="#d8b45a" stroke-linecap="round">
+						<path d="M20 20 C6 32 4 64 20 80 C32 68 32 36 20 20" stroke-width="0.5" opacity="0.5"/>
+						<path d="M20 42 C14 50 14 68 20 74 C26 68 26 50 20 42" stroke-width="0.35" opacity="0.4"/>
+					</g>
+				</svg>
+				<svg class="bg-paisley br" viewBox="0 0 120 120" aria-hidden="true">
+					<g fill="none" stroke="#d8b45a" stroke-linecap="round">
+						<path d="M100 20 C114 32 116 64 100 80 C88 68 88 36 100 20" stroke-width="0.5" opacity="0.5"/>
+						<path d="M100 42 C106 50 106 68 100 74 C94 68 94 50 100 42" stroke-width="0.35" opacity="0.4"/>
+					</g>
+				</svg>
+
+				<!-- ornamental woven border -->
 				<div class="frame">
-					<div class="frame-outer"></div>
-					<div class="frame-inner"></div>
-					<svg class="flourish tl" viewBox="0 0 120 120" aria-hidden="true">
-						<g fill="none" stroke="#b8934c" stroke-linecap="round">
-							<path d="M8 112 V24 Q8 8 24 8 H112" stroke-width="2"/>
-							<path d="M20 100 V36 Q20 20 36 20 H100" stroke-width="1"/>
-							<path d="M30 90 C18 80 18 42 30 30" stroke-width="0.8"/>
-							<path d="M40 80 C32 72 32 48 40 40" stroke-width="0.6"/>
-							<circle cx="30" cy="90" r="2.2" fill="#b8934c"/>
-							<circle cx="30" cy="30" r="2.2" fill="#b8934c"/>
+					<div class="frame-line outer"></div>
+					<div class="frame-band zari"></div>
+					<div class="frame-line inner"></div>
+					<div class="frame-corner"></div>
+					<svg class="corner tl" viewBox="0 0 140 140" aria-hidden="true">
+						<g fill="none" stroke="#c9a227" stroke-linecap="round">
+							<path d="M16 124 V28 Q16 16 28 16 H124" stroke-width="2"/>
+							<path d="M28 112 V40 Q28 28 40 28 H112" stroke-width="0.8"/>
+							<path d="M46 104 C34 94 32 66 46 52 C56 62 56 92 46 104" stroke-width="1"/>
+							<path d="M46 86 C40 80 40 64 46 58 C52 64 52 80 46 86" stroke-width="0.6"/>
+							<circle cx="46" cy="102" r="2.4" fill="#c9a227" stroke="none"/>
+							<path d="M30 26 L34 22 L38 26 L34 30 Z" fill="#c9a227" stroke="none"/>
+							<circle cx="108" cy="30" r="1.8" fill="#c9a227" stroke="none"/>
 						</g>
 					</svg>
-					<svg class="flourish tr" viewBox="0 0 120 120" aria-hidden="true">
-						<g fill="none" stroke="#b8934c" stroke-linecap="round">
-							<path d="M112 112 V24 Q112 8 96 8 H8" stroke-width="2"/>
-							<path d="M100 100 V36 Q100 20 84 20 H20" stroke-width="1"/>
-							<path d="M90 90 C102 80 102 42 90 30" stroke-width="0.8"/>
-							<path d="M80 80 C88 72 88 48 80 40" stroke-width="0.6"/>
-							<circle cx="90" cy="90" r="2.2" fill="#b8934c"/>
-							<circle cx="90" cy="30" r="2.2" fill="#b8934c"/>
+					<svg class="corner tr" viewBox="0 0 140 140" aria-hidden="true">
+						<g fill="none" stroke="#c9a227" stroke-linecap="round">
+							<path d="M124 124 V28 Q124 16 112 16 H16" stroke-width="2"/>
+							<path d="M112 112 V40 Q112 28 100 28 H28" stroke-width="0.8"/>
+							<path d="M94 104 C106 94 108 66 94 52 C84 62 84 92 94 104" stroke-width="1"/>
+							<path d="M94 86 C100 80 100 64 94 58 C88 64 88 80 94 86" stroke-width="0.6"/>
+							<circle cx="94" cy="102" r="2.4" fill="#c9a227" stroke="none"/>
+							<path d="M110 26 L114 22 L118 26 L114 30 Z" fill="#c9a227" stroke="none"/>
+							<circle cx="32" cy="30" r="1.8" fill="#c9a227" stroke="none"/>
 						</g>
 					</svg>
-					<svg class="flourish bl" viewBox="0 0 120 120" aria-hidden="true">
-						<g fill="none" stroke="#b8934c" stroke-linecap="round">
-							<path d="M8 8 V96 Q8 112 24 112 H112" stroke-width="2"/>
-							<path d="M20 20 V84 Q20 100 36 100 H100" stroke-width="1"/>
-							<path d="M30 30 C18 40 18 78 30 90" stroke-width="0.8"/>
-							<path d="M40 40 C32 48 32 72 40 80" stroke-width="0.6"/>
-							<circle cx="30" cy="30" r="2.2" fill="#b8934c"/>
-							<circle cx="30" cy="90" r="2.2" fill="#b8934c"/>
+					<svg class="corner bl" viewBox="0 0 140 140" aria-hidden="true">
+						<g fill="none" stroke="#c9a227" stroke-linecap="round">
+							<path d="M16 16 V112 Q16 124 28 124 H124" stroke-width="2"/>
+							<path d="M28 28 V100 Q28 112 40 112 H112" stroke-width="0.8"/>
+							<path d="M46 36 C34 46 32 74 46 88 C56 78 56 48 46 36" stroke-width="1"/>
+							<path d="M46 54 C40 60 40 76 46 82 C52 76 52 60 46 54" stroke-width="0.6"/>
+							<circle cx="46" cy="38" r="2.4" fill="#c9a227" stroke="none"/>
+							<path d="M30 114 L34 110 L38 114 L34 118 Z" fill="#c9a227" stroke="none"/>
+							<circle cx="108" cy="110" r="1.8" fill="#c9a227" stroke="none"/>
 						</g>
 					</svg>
-					<svg class="flourish br" viewBox="0 0 120 120" aria-hidden="true">
-						<g fill="none" stroke="#b8934c" stroke-linecap="round">
-							<path d="M112 8 V96 Q112 112 96 112 H8" stroke-width="2"/>
-							<path d="M100 20 V84 Q100 100 84 100 H20" stroke-width="1"/>
-							<path d="M90 30 C102 40 102 78 90 90" stroke-width="0.8"/>
-							<path d="M80 40 C88 48 88 72 80 80" stroke-width="0.6"/>
-							<circle cx="90" cy="30" r="2.2" fill="#b8934c"/>
-							<circle cx="90" cy="90" r="2.2" fill="#b8934c"/>
+					<svg class="corner br" viewBox="0 0 140 140" aria-hidden="true">
+						<g fill="none" stroke="#c9a227" stroke-linecap="round">
+							<path d="M124 16 V112 Q124 124 112 124 H16" stroke-width="2"/>
+							<path d="M112 28 V100 Q112 112 100 112 H28" stroke-width="0.8"/>
+							<path d="M94 36 C106 46 108 74 94 88 C84 78 84 48 94 36" stroke-width="1"/>
+							<path d="M94 54 C100 60 100 76 94 82 C88 76 88 60 94 54" stroke-width="0.6"/>
+							<circle cx="94" cy="38" r="2.4" fill="#c9a227" stroke="none"/>
+							<path d="M110 114 L114 110 L118 114 L114 118 Z" fill="#c9a227" stroke="none"/>
+							<circle cx="32" cy="110" r="1.8" fill="#c9a227" stroke="none"/>
 						</g>
 					</svg>
 				</div>
@@ -281,56 +340,98 @@
 		height: 210mm;
 		margin: 0;
 		background:
-			radial-gradient(ellipse at 50% 45%, rgba(255, 253, 246, 0) 0%, rgba(245, 237, 214, 0.55) 100%),
-			#fdfaf1;
+			radial-gradient(ellipse at 50% 42%, rgba(255, 251, 240, 0) 0%, rgba(248, 235, 205, 0.7) 100%),
+			#fdf6e7;
 		overflow: hidden;
 		box-shadow: 0 12px 48px rgba(0, 0, 0, 0.28);
 	}
 
-	.bg-pattern {
+	/* rangoli / lotus mandala background */
+	.bg-mandala {
 		position: absolute;
 		top: 50%;
 		left: 50%;
-		width: 60%;
-		height: 60%;
+		width: 76%;
+		height: 76%;
 		transform: translate(-50%, -50%);
-		opacity: 0.6;
 		z-index: 0;
 	}
 
+	.bg-paisley {
+		position: absolute;
+		width: 42mm;
+		height: 42mm;
+		z-index: 0;
+		opacity: 0.7;
+	}
+	.bg-paisley.tl { top: 20mm; left: 22mm; }
+	.bg-paisley.tr { top: 20mm; right: 22mm; }
+	.bg-paisley.bl { bottom: 16mm; left: 22mm; }
+	.bg-paisley.br { bottom: 16mm; right: 22mm; }
+
+	/* ornamental woven border */
 	.frame {
 		position: absolute;
 		inset: 0;
 		z-index: 1;
 		pointer-events: none;
 	}
-	.frame-outer {
+	.frame-line.outer {
 		position: absolute;
-		inset: 6mm;
-		border: 1.5px solid #b8934c;
-		border-radius: 2mm;
+		inset: 3.2mm;
+		border: 1.4px solid #a8842c;
+		border-radius: 1.6mm;
 	}
-	.frame-inner {
+	.frame-band.zari {
 		position: absolute;
-		inset: 8.5mm;
-		border: 0.8px solid #cdb379;
-		border-radius: 1.5mm;
+		inset: 5.2mm;
+		border-radius: 1.4mm;
+		overflow: hidden;
+		background:
+			repeating-linear-gradient(45deg, #7b1f2d 0 0.9mm, #c9a227 0.9mm 1.8mm);
+		mask:
+			linear-gradient(#fff 0 0) content-box,
+			linear-gradient(#fff 0 0);
+		mask-composite: exclude;
+		-webkit-mask:
+			linear-gradient(#fff 0 0) content-box,
+			linear-gradient(#fff 0 0);
+		-webkit-mask-composite: xor;
+		padding: 1.1mm;
+		opacity: 0.9;
 	}
-	.flourish {
+	.frame-line.inner {
 		position: absolute;
-		width: 26mm;
-		height: 26mm;
+		inset: 8.2mm;
+		border: 1px solid #a8842c;
+		border-radius: 1.2mm;
+	}
+	.frame-corner {
+		position: absolute;
+		inset: 3.2mm;
+		border-radius: 1.6mm;
+		box-shadow:
+			0 0 0 0.4mm #fdf6e7,
+			0 0 0 0.75mm #7b1f2d inset;
+		pointer-events: none;
+	}
+
+	.corner {
+		position: absolute;
+		width: 34mm;
+		height: 34mm;
 		z-index: 2;
+		filter: drop-shadow(0 0.5mm 0.4mm rgba(0,0,0,0.15));
 	}
-	.flourish.tl { top: 3.5mm; left: 3.5mm; }
-	.flourish.tr { top: 3.5mm; right: 3.5mm; transform: scaleX(-1); }
-	.flourish.bl { bottom: 3.5mm; left: 3.5mm; transform: scaleY(-1); }
-	.flourish.br { bottom: 3.5mm; right: 3.5mm; transform: scale(-1, -1); }
+	.corner.tl { top: 0.8mm; left: 0.8mm; }
+	.corner.tr { top: 0.8mm; right: 0.8mm; }
+	.corner.bl { bottom: 0.8mm; left: 0.8mm; }
+	.corner.br { bottom: 0.8mm; right: 0.8mm; }
 
 	.cert-inner {
 		position: relative;
 		z-index: 3;
-		padding: 12mm 22mm 10mm;
+		padding: 14mm 24mm 11mm;
 		height: 210mm;
 		box-sizing: border-box;
 		display: flex;
@@ -348,7 +449,7 @@
 	}
 	.logo-side {
 		flex-shrink: 0;
-		width: 34mm;
+		width: 36mm;
 		display: flex;
 		justify-content: center;
 	}
@@ -356,7 +457,7 @@
 		width: 24mm;
 		height: 24mm;
 		object-fit: contain;
-		filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.12));
+		filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.14));
 	}
 
 	.header {
@@ -367,14 +468,14 @@
 		font-family: 'Anek Kannada', sans-serif;
 		font-weight: 700;
 		font-size: 14.5pt;
-		color: #1e3a8a;
+		color: #7b1f2d;
 		letter-spacing: 0.5px;
 	}
 	.kareis-en {
 		font-family: 'Cinzel', serif;
 		font-weight: 600;
 		font-size: 8.5pt;
-		color: #b8934c;
+		color: #a8842c;
 		letter-spacing: 2.5px;
 		margin-top: 2px;
 		text-transform: uppercase;
@@ -383,21 +484,21 @@
 		font-family: 'Anek Kannada', sans-serif;
 		font-weight: 600;
 		font-size: 11.5pt;
-		color: #3b4252;
+		color: #4a3f2f;
 		margin-top: 5px;
 	}
 	.school-en {
 		font-family: 'Playfair Display', serif;
 		font-weight: 500;
 		font-size: 8pt;
-		color: #64748b;
+		color: #7a6a4e;
 		letter-spacing: 1px;
 		margin-top: 2px;
 		text-transform: uppercase;
 	}
 
 	.title {
-		margin-top: 9mm;
+		margin-top: 8.5mm;
 		width: 100%;
 	}
 	.title-rule {
@@ -405,43 +506,43 @@
 		align-items: center;
 		justify-content: center;
 		gap: 6px;
-		margin: 3mm auto;
-		width: 75%;
+		margin: 2.6mm auto;
+		width: 72%;
 	}
 	.title-rule span {
 		flex: 1;
 		height: 1px;
-		background: linear-gradient(90deg, transparent, #b8934c);
+		background: linear-gradient(90deg, transparent, #a8842c);
 	}
 	.title-rule span:last-child {
-		background: linear-gradient(90deg, #b8934c, transparent);
+		background: linear-gradient(90deg, #a8842c, transparent);
 	}
 	.title-rule i {
 		width: 7px;
 		height: 7px;
 		transform: rotate(45deg);
-		background: #b8934c;
+		background: #c9a227;
 		flex-shrink: 0;
 	}
 	.title-kn {
 		font-family: 'Anek Kannada', sans-serif;
 		font-weight: 700;
 		font-size: 20pt;
-		color: #1e3a8a;
+		color: #7b1f2d;
 		letter-spacing: 1px;
 	}
 	.title-en {
 		font-family: 'Cinzel', serif;
 		font-weight: 700;
 		font-size: 14pt;
-		color: #b8934c;
+		color: #a8842c;
 		letter-spacing: 6px;
 		margin-top: 2px;
 		text-transform: uppercase;
 	}
 
 	.certify {
-		margin-top: 7mm;
+		margin-top: 6.5mm;
 		display: flex;
 		flex-direction: column;
 		gap: 1px;
@@ -450,71 +551,71 @@
 		font-family: 'Playfair Display', serif;
 		font-style: italic;
 		font-size: 10.5pt;
-		color: #475569;
+		color: #4a3f2f;
 	}
 	.certify-kn {
 		font-family: 'Anek Kannada', sans-serif;
 		font-weight: 500;
 		font-size: 9pt;
-		color: #64748b;
+		color: #7a6a4e;
 	}
 
 	.student-name {
 		margin-top: 4mm;
 		font-family: 'Great Vibes', cursive;
 		font-size: 27pt;
-		color: #1e3a8a;
+		color: #7b1f2d;
 		padding: 0 24mm 3mm;
-		border-bottom: 1.2px solid #b8934c;
+		border-bottom: 1.2px solid #c9a227;
 		line-height: 1.5;
 	}
 
 	.details {
-		margin-top: 6.5mm;
+		margin-top: 6mm;
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: center;
 		align-items: baseline;
 		gap: 4px 7px;
-		max-width: 235mm;
+		max-width: 238mm;
 		line-height: 1.6;
 	}
 	.details-kn {
 		font-family: 'Anek Kannada', sans-serif;
 		font-weight: 500;
 		font-size: 9.5pt;
-		color: #64748b;
+		color: #7a6a4e;
 	}
 	.details-en {
 		font-family: 'Playfair Display', serif;
 		font-size: 10pt;
-		color: #475569;
+		color: #4a3f2f;
 	}
 	.category-kn {
 		font-family: 'Anek Kannada', sans-serif;
 		font-weight: 500;
 		font-size: 9.5pt;
-		color: #64748b;
+		color: #7a6a4e;
 	}
 	.category-en {
 		font-family: 'Playfair Display', serif;
 		font-style: italic;
 		font-size: 9.5pt;
-		color: #64748b;
+		color: #7a6a4e;
 	}
 	.value {
 		font-family: 'Playfair Display', serif;
 		font-weight: 600;
 		font-size: 11pt;
-		color: #1e293b;
+		color: #2d2a24;
 	}
-	.value.class { color: #1e3a8a; }
+	.value.class { color: #7b1f2d; }
 	.value.event {
-		color: #1e3a8a;
+		color: #7b1f2d;
 		font-size: 12pt;
 	}
 	.value.prize {
-		color: #b45309;
+		color: #d97706;
 		font-size: 12pt;
 	}
 	.prize-kn {
@@ -525,7 +626,7 @@
 	}
 
 	.date-line {
-		margin-top: 6mm;
+		margin-top: 5.5mm;
 		display: flex;
 		align-items: baseline;
 		gap: 6px;
@@ -534,14 +635,14 @@
 	.date-en {
 		font-family: 'Playfair Display', serif;
 		font-weight: 600;
-		color: #475569;
+		color: #4a3f2f;
 	}
 	.date-value {
 		font-family: 'Playfair Display', serif;
 		font-style: italic;
-		color: #334155;
+		color: #2d2a24;
 	}
-	.date-sep { color: #b8934c; }
+	.date-sep { color: #a8842c; }
 
 	.signatures {
 		margin-top: auto;
@@ -579,14 +680,14 @@
 		font-family: 'Playfair Display', serif;
 		font-weight: 600;
 		font-size: 8.5pt;
-		color: #1e293b;
+		color: #2d2a24;
 		margin-top: 2.5mm;
 	}
 	.sig-role {
 		font-family: 'Anek Kannada', sans-serif;
 		font-weight: 500;
 		font-size: 7.5pt;
-		color: #64748b;
+		color: #7a6a4e;
 		margin-top: 1mm;
 		text-transform: uppercase;
 		letter-spacing: 1px;
