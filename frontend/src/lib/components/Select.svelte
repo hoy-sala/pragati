@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ChevronDown, X } from 'lucide-svelte';
+	import { ChevronDown, X, Search } from 'lucide-svelte';
 
 	let {
 		value = $bindable(''),
@@ -13,6 +13,7 @@
 		clearable = false,
 		disabled = false,
 		size = 'md',
+		searchable = false,
 		onselect,
 		class: className = '',
 	}: {
@@ -27,11 +28,18 @@
 		clearable?: boolean;
 		disabled?: boolean;
 		size?: 'sm' | 'md';
+		searchable?: boolean;
 		onselect?: (val: string) => void;
 		class?: string;
 	} = $props();
 
 	let open = $state(false);
+	let search = $state('');
+	let filteredOptions = $derived(
+		searchable && search.trim()
+			? options.filter((o) => String(o[labelKey]).toLowerCase().includes(search.toLowerCase()))
+			: options
+	);
 	let selectedLabel = $derived(
 		options.find((o) => o[valueKey] === value)?.[labelKey] ?? ''
 	);
@@ -39,7 +47,12 @@
 	let listboxId = $derived(id ? id + '-listbox' : 'listbox-' + Math.random().toString(36).slice(2, 8));
 
 	function toggle() {
-		if (!disabled) open = !open;
+		if (!disabled) {
+			open = !open;
+			if (open && searchable) {
+				search = '';
+			}
+		}
 	}
 
 	function select(val: string) {
@@ -109,10 +122,23 @@
 			tabindex="-1"
 			class="absolute z-50 mt-1 w-full bg-white border border-slate-200 rounded-lg shadow-lg max-h-60 overflow-y-auto py-1"
 		>
-			{#if !options.length}
+			{#if searchable}
+				<li class="px-2 pb-1 sticky top-0 bg-white border-b border-slate-100">
+					<div class="relative">
+						<Search size={14} class="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400" />
+						<input
+							type="text"
+							bind:value={search}
+							placeholder="Search..."
+							class="w-full pl-7 pr-2 py-1.5 text-sm rounded-md border border-slate-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+						/>
+					</div>
+				</li>
+			{/if}
+			{#if !filteredOptions.length}
 				<li class="px-3 py-2 text-sm text-slate-400 text-center">No options</li>
 			{:else}
-				{#each options as opt (opt[valueKey])}
+				{#each filteredOptions as opt (opt[valueKey])}
 					{@const isSelected = opt[valueKey] === value}
 					<li
 						role="option"

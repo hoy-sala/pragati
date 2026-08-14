@@ -376,7 +376,7 @@
 												</div>
 
 												<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 mt-3">
-													<Select bind:value={partForm[e.id].student_id} options={studentOptions} placeholder="Select student" />
+													<Select bind:value={partForm[e.id].student_id} options={studentOptions} placeholder="Select student" searchable />
 													<Select bind:value={partForm[e.id].position} options={POSITIONS} placeholder="Position" />
 													<input bind:value={partForm[e.id].prize_title} placeholder="Prize title (e.g. First Prize)" class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
 													<input bind:value={partForm[e.id].issue_date} type="date" class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
