@@ -92,121 +92,59 @@
 		<div class="cert-wrap" style="transform: scale({pageScale}); height: {210 * pageScale}mm;">
 			<div class="cert-page">
 
-				<!-- rangoli / lotus background mandala -->
-				<svg class="bg-mandala" viewBox="0 0 200 200" aria-hidden="true">
-					<g transform="translate(100,100)" fill="none" stroke="#c9a227">
-						<circle r="92" stroke-width="0.35" opacity="0.5"/>
-						<circle r="84" stroke-width="0.2" opacity="0.4"/>
-						<circle r="70" stroke-width="0.3" opacity="0.45"/>
-						<circle r="62" stroke-width="0.15" opacity="0.35"/>
-						<!-- radiating spokes -->
-						{#each Array(72) as _, i}
-							<line x1="0" y1="-62" x2="0" y2="-92" transform="rotate({i * 5})" stroke-width="0.12" opacity="0.35"/>
+				<!-- globe / concentric arcs watermark -->
+				<svg class="bg-globe" viewBox="0 0 200 200" aria-hidden="true">
+					<g transform="translate(100,100)" fill="none" stroke="#dfe6ee">
+						<circle r="92" stroke-width="0.5"/>
+						<circle r="74" stroke-width="0.35"/>
+						<circle r="56" stroke-width="0.4"/>
+						<circle r="38" stroke-width="0.3"/>
+						<ellipse rx="92" ry="38" stroke-width="0.3"/>
+						<ellipse rx="38" ry="92" stroke-width="0.3"/>
+						<ellipse rx="74" ry="56" stroke-width="0.25"/>
+						<line x1="-92" y1="0" x2="92" y2="0" stroke-width="0.25"/>
+						{#each Array(24) as _, i}
+							<circle cx="0" cy="-56" r="1.3" transform="rotate({i * 15})"/>
 						{/each}
-						<!-- outer lotus petals -->
-						<g opacity="0.5">
-							{#each Array(16) as _, i}
-								<path d="M0 -92 Q12 -84 0 -70 Q-12 -84 0 -92" transform="rotate({i * 22.5})" stroke-width="0.35"/>
-							{/each}
-						</g>
-						<!-- middle ring of dots (bindi) -->
-						<g opacity="0.55">
-							{#each Array(24) as _, i}
-								<circle cx="0" cy="-46" r="1.1" transform="rotate({i * 15})" fill="#c9a227" stroke="none"/>
-							{/each}
-						</g>
-						<!-- inner lotus -->
-						<g opacity="0.55">
-							{#each Array(12) as _, i}
-								<path d="M0 -46 Q9 -40 0 -30 Q-9 -40 0 -46" transform="rotate({i * 30})" stroke-width="0.3"/>
-							{/each}
-						</g>
-						<circle r="22" stroke-width="0.25" opacity="0.5"/>
-						<g opacity="0.6">
-							{#each Array(8) as _, i}
-								<path d="M0 -22 Q6 -18 0 -12 Q-6 -18 0 -22" transform="rotate({i * 45})" stroke-width="0.3"/>
-							{/each}
-						</g>
-						<circle r="6" stroke-width="0.3" opacity="0.6"/>
 					</g>
 				</svg>
 
-				<!-- faint paisley corner sprays -->
-				<svg class="bg-paisley tl" viewBox="0 0 120 120" aria-hidden="true">
-					<g fill="none" stroke="#d8b45a" stroke-linecap="round">
-						<path d="M20 100 C6 88 4 56 20 40 C32 52 32 84 20 100" stroke-width="0.5" opacity="0.5"/>
-						<path d="M20 78 C14 70 14 52 20 46 C26 52 26 70 20 78" stroke-width="0.35" opacity="0.4"/>
-						<path d="M36 60 C30 54 30 42 36 38 C42 42 42 54 36 60" stroke-width="0.3" opacity="0.35"/>
-					</g>
-				</svg>
-				<svg class="bg-paisley tr" viewBox="0 0 120 120" aria-hidden="true">
-					<g fill="none" stroke="#d8b45a" stroke-linecap="round">
-						<path d="M100 100 C114 88 116 56 100 40 C88 52 88 84 100 100" stroke-width="0.5" opacity="0.5"/>
-						<path d="M100 78 C106 70 106 52 100 46 C94 52 94 70 100 78" stroke-width="0.35" opacity="0.4"/>
-						<path d="M84 60 C90 54 90 42 84 38 C78 42 78 54 84 60" stroke-width="0.3" opacity="0.35"/>
-					</g>
-				</svg>
-				<svg class="bg-paisley bl" viewBox="0 0 120 120" aria-hidden="true">
-					<g fill="none" stroke="#d8b45a" stroke-linecap="round">
-						<path d="M20 20 C6 32 4 64 20 80 C32 68 32 36 20 20" stroke-width="0.5" opacity="0.5"/>
-						<path d="M20 42 C14 50 14 68 20 74 C26 68 26 50 20 42" stroke-width="0.35" opacity="0.4"/>
-					</g>
-				</svg>
-				<svg class="bg-paisley br" viewBox="0 0 120 120" aria-hidden="true">
-					<g fill="none" stroke="#d8b45a" stroke-linecap="round">
-						<path d="M100 20 C114 32 116 64 100 80 C88 68 88 36 100 20" stroke-width="0.5" opacity="0.5"/>
-						<path d="M100 42 C106 50 106 68 100 74 C94 68 94 50 100 42" stroke-width="0.35" opacity="0.4"/>
-					</g>
-				</svg>
-
-				<!-- ornamental woven border -->
+				<!-- modern frame -->
 				<div class="frame">
 					<div class="frame-line outer"></div>
-					<div class="frame-band zari"></div>
-					<div class="frame-line inner"></div>
-					<div class="frame-corner"></div>
+					<div class="frame-line gold"></div>
+					<div class="accent-stripe top"></div>
+					<div class="accent-stripe bottom"></div>
 					<svg class="corner tl" viewBox="0 0 140 140" aria-hidden="true">
-						<g fill="none" stroke="#c9a227" stroke-linecap="round">
-							<path d="M16 124 V28 Q16 16 28 16 H124" stroke-width="2"/>
-							<path d="M28 112 V40 Q28 28 40 28 H112" stroke-width="0.8"/>
-							<path d="M46 104 C34 94 32 66 46 52 C56 62 56 92 46 104" stroke-width="1"/>
-							<path d="M46 86 C40 80 40 64 46 58 C52 64 52 80 46 86" stroke-width="0.6"/>
-							<circle cx="46" cy="102" r="2.4" fill="#c9a227" stroke="none"/>
-							<path d="M30 26 L34 22 L38 26 L34 30 Z" fill="#c9a227" stroke="none"/>
-							<circle cx="108" cy="30" r="1.8" fill="#c9a227" stroke="none"/>
+						<g fill="none" stroke="#a8842c" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M16 124 V34 Q16 16 34 16 H124" stroke-width="2.6"/>
+							<path d="M30 110 V48 Q30 30 48 30 H110" stroke-width="1"/>
+							<circle cx="30" cy="110" r="2.6" fill="#a8842c" stroke="none"/>
+							<path d="M44 44 L52 36 L60 44 L52 52 Z" fill="#a8842c" stroke="none"/>
 						</g>
 					</svg>
 					<svg class="corner tr" viewBox="0 0 140 140" aria-hidden="true">
-						<g fill="none" stroke="#c9a227" stroke-linecap="round">
-							<path d="M124 124 V28 Q124 16 112 16 H16" stroke-width="2"/>
-							<path d="M112 112 V40 Q112 28 100 28 H28" stroke-width="0.8"/>
-							<path d="M94 104 C106 94 108 66 94 52 C84 62 84 92 94 104" stroke-width="1"/>
-							<path d="M94 86 C100 80 100 64 94 58 C88 64 88 80 94 86" stroke-width="0.6"/>
-							<circle cx="94" cy="102" r="2.4" fill="#c9a227" stroke="none"/>
-							<path d="M110 26 L114 22 L118 26 L114 30 Z" fill="#c9a227" stroke="none"/>
-							<circle cx="32" cy="30" r="1.8" fill="#c9a227" stroke="none"/>
+						<g fill="none" stroke="#a8842c" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M124 124 V34 Q124 16 106 16 H16" stroke-width="2.6"/>
+							<path d="M110 110 V48 Q110 30 92 30 H30" stroke-width="1"/>
+							<circle cx="110" cy="110" r="2.6" fill="#a8842c" stroke="none"/>
+							<path d="M96 44 L88 36 L80 44 L88 52 Z" fill="#a8842c" stroke="none"/>
 						</g>
 					</svg>
 					<svg class="corner bl" viewBox="0 0 140 140" aria-hidden="true">
-						<g fill="none" stroke="#c9a227" stroke-linecap="round">
-							<path d="M16 16 V112 Q16 124 28 124 H124" stroke-width="2"/>
-							<path d="M28 28 V100 Q28 112 40 112 H112" stroke-width="0.8"/>
-							<path d="M46 36 C34 46 32 74 46 88 C56 78 56 48 46 36" stroke-width="1"/>
-							<path d="M46 54 C40 60 40 76 46 82 C52 76 52 60 46 54" stroke-width="0.6"/>
-							<circle cx="46" cy="38" r="2.4" fill="#c9a227" stroke="none"/>
-							<path d="M30 114 L34 110 L38 114 L34 118 Z" fill="#c9a227" stroke="none"/>
-							<circle cx="108" cy="110" r="1.8" fill="#c9a227" stroke="none"/>
+						<g fill="none" stroke="#a8842c" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M16 16 V106 Q16 124 34 124 H124" stroke-width="2.6"/>
+							<path d="M30 30 V92 Q30 110 48 110 H110" stroke-width="1"/>
+							<circle cx="30" cy="30" r="2.6" fill="#a8842c" stroke="none"/>
+							<path d="M44 96 L52 104 L60 96 L52 88 Z" fill="#a8842c" stroke="none"/>
 						</g>
 					</svg>
 					<svg class="corner br" viewBox="0 0 140 140" aria-hidden="true">
-						<g fill="none" stroke="#c9a227" stroke-linecap="round">
-							<path d="M124 16 V112 Q124 124 112 124 H16" stroke-width="2"/>
-							<path d="M112 28 V100 Q112 112 100 112 H28" stroke-width="0.8"/>
-							<path d="M94 36 C106 46 108 74 94 88 C84 78 84 48 94 36" stroke-width="1"/>
-							<path d="M94 54 C100 60 100 76 94 82 C88 76 88 60 94 54" stroke-width="0.6"/>
-							<circle cx="94" cy="38" r="2.4" fill="#c9a227" stroke="none"/>
-							<path d="M110 114 L114 110 L118 114 L114 118 Z" fill="#c9a227" stroke="none"/>
-							<circle cx="32" cy="110" r="1.8" fill="#c9a227" stroke="none"/>
+						<g fill="none" stroke="#a8842c" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M124 16 V106 Q124 124 106 124 H16" stroke-width="2.6"/>
+							<path d="M110 30 V92 Q110 110 92 110 H30" stroke-width="1"/>
+							<circle cx="110" cy="30" r="2.6" fill="#a8842c" stroke="none"/>
+							<path d="M96 96 L88 104 L80 96 L88 88 Z" fill="#a8842c" stroke="none"/>
 						</g>
 					</svg>
 				</div>
@@ -293,7 +231,7 @@
 {/if}
 
 <style>
-	@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Anek+Kannada:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+	@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Anek+Kannada:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
 
 	:global(html), :global(body) {
 		margin: 0;
@@ -339,37 +277,24 @@
 		width: 297mm;
 		height: 210mm;
 		margin: 0;
-		background:
-			radial-gradient(ellipse at 50% 42%, rgba(255, 251, 240, 0) 0%, rgba(248, 235, 205, 0.7) 100%),
-			#fdf6e7;
+		background: #ffffff;
 		overflow: hidden;
 		box-shadow: 0 12px 48px rgba(0, 0, 0, 0.28);
 	}
 
-	/* rangoli / lotus mandala background */
-	.bg-mandala {
+	/* globe / international watermark */
+	.bg-globe {
 		position: absolute;
 		top: 50%;
 		left: 50%;
-		width: 76%;
-		height: 76%;
+		width: 78%;
+		height: 78%;
 		transform: translate(-50%, -50%);
 		z-index: 0;
+		opacity: 0.85;
 	}
 
-	.bg-paisley {
-		position: absolute;
-		width: 42mm;
-		height: 42mm;
-		z-index: 0;
-		opacity: 0.7;
-	}
-	.bg-paisley.tl { top: 20mm; left: 22mm; }
-	.bg-paisley.tr { top: 20mm; right: 22mm; }
-	.bg-paisley.bl { bottom: 16mm; left: 22mm; }
-	.bg-paisley.br { bottom: 16mm; right: 22mm; }
-
-	/* ornamental woven border */
+	/* modern frame */
 	.frame {
 		position: absolute;
 		inset: 0;
@@ -378,60 +303,43 @@
 	}
 	.frame-line.outer {
 		position: absolute;
-		inset: 3.2mm;
-		border: 1.4px solid #a8842c;
-		border-radius: 1.6mm;
+		inset: 4mm;
+		border: 1px solid #d8dfe8;
+		border-radius: 1mm;
 	}
-	.frame-band.zari {
+	.frame-line.gold {
 		position: absolute;
-		inset: 5.2mm;
-		border-radius: 1.4mm;
-		overflow: hidden;
-		background:
-			repeating-linear-gradient(45deg, #7b1f2d 0 0.9mm, #c9a227 0.9mm 1.8mm);
-		mask:
-			linear-gradient(#fff 0 0) content-box,
-			linear-gradient(#fff 0 0);
-		mask-composite: exclude;
-		-webkit-mask:
-			linear-gradient(#fff 0 0) content-box,
-			linear-gradient(#fff 0 0);
-		-webkit-mask-composite: xor;
-		padding: 1.1mm;
-		opacity: 0.9;
+		inset: 5.6mm;
+		border: 1.2px solid #b8934c;
+		border-radius: 0.8mm;
+		opacity: 0.85;
 	}
-	.frame-line.inner {
+	.accent-stripe {
 		position: absolute;
-		inset: 8.2mm;
-		border: 1px solid #a8842c;
-		border-radius: 1.2mm;
+		left: 5.6mm;
+		right: 5.6mm;
+		height: 2.4mm;
+		background: linear-gradient(90deg, #b8934c, #dfe6ee 30%, #dfe6ee 70%, #b8934c);
+		border-radius: 1mm;
 	}
-	.frame-corner {
-		position: absolute;
-		inset: 3.2mm;
-		border-radius: 1.6mm;
-		box-shadow:
-			0 0 0 0.4mm #fdf6e7,
-			0 0 0 0.75mm #7b1f2d inset;
-		pointer-events: none;
-	}
+	.accent-stripe.top { top: 6.8mm; }
+	.accent-stripe.bottom { bottom: 6.8mm; }
 
 	.corner {
 		position: absolute;
 		width: 34mm;
 		height: 34mm;
 		z-index: 2;
-		filter: drop-shadow(0 0.5mm 0.4mm rgba(0,0,0,0.15));
 	}
-	.corner.tl { top: 0.8mm; left: 0.8mm; }
-	.corner.tr { top: 0.8mm; right: 0.8mm; }
-	.corner.bl { bottom: 0.8mm; left: 0.8mm; }
-	.corner.br { bottom: 0.8mm; right: 0.8mm; }
+	.corner.tl { top: 1.6mm; left: 1.6mm; }
+	.corner.tr { top: 1.6mm; right: 1.6mm; }
+	.corner.bl { bottom: 1.6mm; left: 1.6mm; }
+	.corner.br { bottom: 1.6mm; right: 1.6mm; }
 
 	.cert-inner {
 		position: relative;
 		z-index: 3;
-		padding: 14mm 24mm 11mm;
+		padding: 17mm 26mm 14mm;
 		height: 210mm;
 		box-sizing: border-box;
 		display: flex;
@@ -449,15 +357,15 @@
 	}
 	.logo-side {
 		flex-shrink: 0;
-		width: 36mm;
+		width: 38mm;
 		display: flex;
 		justify-content: center;
 	}
 	.logo {
-		width: 24mm;
-		height: 24mm;
+		width: 25mm;
+		height: 25mm;
 		object-fit: contain;
-		filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.14));
+		filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.12));
 	}
 
 	.header {
@@ -467,38 +375,38 @@
 	.kareis {
 		font-family: 'Anek Kannada', sans-serif;
 		font-weight: 700;
-		font-size: 14.5pt;
-		color: #7b1f2d;
+		font-size: 15pt;
+		color: #123b5c;
 		letter-spacing: 0.5px;
 	}
 	.kareis-en {
-		font-family: 'Cinzel', serif;
+		font-family: 'Montserrat', sans-serif;
 		font-weight: 600;
 		font-size: 8.5pt;
 		color: #a8842c;
-		letter-spacing: 2.5px;
+		letter-spacing: 3px;
 		margin-top: 2px;
 		text-transform: uppercase;
 	}
 	.school {
 		font-family: 'Anek Kannada', sans-serif;
 		font-weight: 600;
-		font-size: 11.5pt;
-		color: #4a3f2f;
+		font-size: 12pt;
+		color: #33455a;
 		margin-top: 5px;
 	}
 	.school-en {
-		font-family: 'Playfair Display', serif;
+		font-family: 'Montserrat', sans-serif;
 		font-weight: 500;
 		font-size: 8pt;
-		color: #7a6a4e;
-		letter-spacing: 1px;
+		color: #7c8ba1;
+		letter-spacing: 1.5px;
 		margin-top: 2px;
 		text-transform: uppercase;
 	}
 
 	.title {
-		margin-top: 8.5mm;
+		margin-top: 9mm;
 		width: 100%;
 	}
 	.title-rule {
@@ -506,43 +414,43 @@
 		align-items: center;
 		justify-content: center;
 		gap: 6px;
-		margin: 2.6mm auto;
-		width: 72%;
+		margin: 3mm auto;
+		width: 68%;
 	}
 	.title-rule span {
 		flex: 1;
 		height: 1px;
-		background: linear-gradient(90deg, transparent, #a8842c);
+		background: linear-gradient(90deg, transparent, #b8934c);
 	}
 	.title-rule span:last-child {
-		background: linear-gradient(90deg, #a8842c, transparent);
+		background: linear-gradient(90deg, #b8934c, transparent);
 	}
 	.title-rule i {
-		width: 7px;
-		height: 7px;
+		width: 6px;
+		height: 6px;
 		transform: rotate(45deg);
-		background: #c9a227;
+		background: #b8934c;
 		flex-shrink: 0;
 	}
 	.title-kn {
 		font-family: 'Anek Kannada', sans-serif;
 		font-weight: 700;
-		font-size: 20pt;
-		color: #7b1f2d;
+		font-size: 21pt;
+		color: #123b5c;
 		letter-spacing: 1px;
 	}
 	.title-en {
-		font-family: 'Cinzel', serif;
+		font-family: 'Montserrat', sans-serif;
 		font-weight: 700;
-		font-size: 14pt;
+		font-size: 13.5pt;
 		color: #a8842c;
-		letter-spacing: 6px;
-		margin-top: 2px;
+		letter-spacing: 7px;
+		margin-top: 3px;
 		text-transform: uppercase;
 	}
 
 	.certify {
-		margin-top: 6.5mm;
+		margin-top: 7.5mm;
 		display: flex;
 		flex-direction: column;
 		gap: 1px;
@@ -550,99 +458,99 @@
 	.certify-en {
 		font-family: 'Playfair Display', serif;
 		font-style: italic;
-		font-size: 10.5pt;
-		color: #4a3f2f;
+		font-size: 11pt;
+		color: #42536b;
 	}
 	.certify-kn {
 		font-family: 'Anek Kannada', sans-serif;
 		font-weight: 500;
 		font-size: 9pt;
-		color: #7a6a4e;
+		color: #7c8ba1;
 	}
 
 	.student-name {
-		margin-top: 4mm;
+		margin-top: 4.5mm;
 		font-family: 'Great Vibes', cursive;
-		font-size: 27pt;
-		color: #7b1f2d;
-		padding: 0 24mm 3mm;
-		border-bottom: 1.2px solid #c9a227;
+		font-size: 29pt;
+		color: #123b5c;
+		padding: 0 26mm 3mm;
+		border-bottom: 1.2px solid #b8934c;
 		line-height: 1.5;
 	}
 
 	.details {
-		margin-top: 6mm;
+		margin-top: 7mm;
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: center;
 		align-items: baseline;
-		gap: 4px 7px;
-		max-width: 238mm;
+		gap: 4px 8px;
+		max-width: 240mm;
 		line-height: 1.6;
 	}
 	.details-kn {
 		font-family: 'Anek Kannada', sans-serif;
 		font-weight: 500;
 		font-size: 9.5pt;
-		color: #7a6a4e;
+		color: #7c8ba1;
 	}
 	.details-en {
 		font-family: 'Playfair Display', serif;
-		font-size: 10pt;
-		color: #4a3f2f;
+		font-size: 10.5pt;
+		color: #42536b;
 	}
 	.category-kn {
 		font-family: 'Anek Kannada', sans-serif;
 		font-weight: 500;
 		font-size: 9.5pt;
-		color: #7a6a4e;
+		color: #7c8ba1;
 	}
 	.category-en {
 		font-family: 'Playfair Display', serif;
 		font-style: italic;
 		font-size: 9.5pt;
-		color: #7a6a4e;
+		color: #7c8ba1;
 	}
 	.value {
 		font-family: 'Playfair Display', serif;
 		font-weight: 600;
-		font-size: 11pt;
-		color: #2d2a24;
+		font-size: 11.5pt;
+		color: #26364a;
 	}
-	.value.class { color: #7b1f2d; }
+	.value.class { color: #123b5c; }
 	.value.event {
-		color: #7b1f2d;
-		font-size: 12pt;
+		color: #123b5c;
+		font-size: 12.5pt;
 	}
 	.value.prize {
-		color: #d97706;
-		font-size: 12pt;
+		color: #e05d33;
+		font-size: 12.5pt;
 	}
 	.prize-kn {
 		font-family: 'Anek Kannada', sans-serif;
 		font-weight: 600;
 		font-size: 9.5pt;
-		color: #b45309;
+		color: #c14e28;
 	}
 
 	.date-line {
-		margin-top: 5.5mm;
+		margin-top: 6mm;
 		display: flex;
 		align-items: baseline;
 		gap: 6px;
-		font-size: 9.5pt;
+		font-size: 10pt;
 	}
 	.date-en {
-		font-family: 'Playfair Display', serif;
+		font-family: 'Montserrat', sans-serif;
 		font-weight: 600;
-		color: #4a3f2f;
+		color: #42536b;
 	}
 	.date-value {
 		font-family: 'Playfair Display', serif;
 		font-style: italic;
-		color: #2d2a24;
+		color: #26364a;
 	}
-	.date-sep { color: #a8842c; }
+	.date-sep { color: #b8934c; }
 
 	.signatures {
 		margin-top: auto;
@@ -674,23 +582,23 @@
 	.signature-line {
 		width: 100%;
 		height: 1.2px;
-		background: #94a3b8;
+		background: #b3bfcc;
 	}
 	.sig-name {
 		font-family: 'Playfair Display', serif;
 		font-weight: 600;
-		font-size: 8.5pt;
-		color: #2d2a24;
+		font-size: 9pt;
+		color: #26364a;
 		margin-top: 2.5mm;
 	}
 	.sig-role {
-		font-family: 'Anek Kannada', sans-serif;
+		font-family: 'Montserrat', sans-serif;
 		font-weight: 500;
 		font-size: 7.5pt;
-		color: #7a6a4e;
+		color: #7c8ba1;
 		margin-top: 1mm;
 		text-transform: uppercase;
-		letter-spacing: 1px;
+		letter-spacing: 1.5px;
 	}
 
 	@media print {
