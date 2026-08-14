@@ -80,20 +80,32 @@
 
 				<!-- globe / concentric arcs watermark -->
 				<svg class="bg-globe" viewBox="0 0 200 200" aria-hidden="true">
-					<g transform="translate(100,100)" fill="none" stroke="#dfe6ee">
-						<circle r="92" stroke-width="0.5"/>
-						<circle r="74" stroke-width="0.35"/>
-						<circle r="56" stroke-width="0.4"/>
-						<circle r="38" stroke-width="0.3"/>
-						<ellipse rx="92" ry="38" stroke-width="0.3"/>
-						<ellipse rx="38" ry="92" stroke-width="0.3"/>
-						<ellipse rx="74" ry="56" stroke-width="0.25"/>
-						<line x1="-92" y1="0" x2="92" y2="0" stroke-width="0.25"/>
+					<defs>
+						<radialGradient id="globeFill" cx="38%" cy="32%" r="75%">
+							<stop offset="0%" stop-color="#f7f9fc"/>
+							<stop offset="100%" stop-color="#eef2f7"/>
+						</radialGradient>
+					</defs>
+					<circle cx="100" cy="100" r="96" fill="url(#globeFill)"/>
+					<g transform="translate(100,100)" fill="none">
+						<circle r="92" stroke="#b8934c" stroke-width="0.6" opacity="0.55"/>
+						<circle r="84" stroke="#dfe6ee" stroke-width="0.4"/>
+						<circle r="74" stroke="#dfe6ee" stroke-width="0.35"/>
+						<circle r="56" stroke="#dfe6ee" stroke-width="0.4"/>
+						<circle r="38" stroke="#dfe6ee" stroke-width="0.3"/>
+						<ellipse rx="92" ry="38" stroke="#dfe6ee" stroke-width="0.3"/>
+						<ellipse rx="38" ry="92" stroke="#dfe6ee" stroke-width="0.3"/>
+						<ellipse rx="74" ry="56" stroke="#dfe6ee" stroke-width="0.25"/>
+						<line x1="-92" y1="0" x2="92" y2="0" stroke="#dfe6ee" stroke-width="0.25"/>
 						{#each Array(24) as _, i}
-							<circle cx="0" cy="-56" r="1.3" transform="rotate({i * 15})"/>
+							<circle cx="0" cy="-56" r="1.3" fill="#b8934c" stroke="none" opacity="0.5"/>
 						{/each}
 					</g>
 				</svg>
+
+				<!-- soft side glows -->
+				<div class="bg-glow bg-glow-l"></div>
+				<div class="bg-glow bg-glow-r"></div>
 
 				<!-- modern frame -->
 				<div class="frame">
@@ -256,7 +268,8 @@
 		width: 297mm;
 		height: 210mm;
 		margin: 0;
-		background: #ffffff;
+		background:
+			radial-gradient(ellipse 120% 90% at 50% 0%, #ffffff 0%, #fbfcfe 55%, #f4f7fb 100%);
 		overflow: hidden;
 		box-shadow: 0 12px 48px rgba(0, 0, 0, 0.28);
 	}
@@ -264,13 +277,33 @@
 	/* globe / international watermark */
 	.bg-globe {
 		position: absolute;
-		top: 50%;
+		top: 52%;
 		left: 50%;
-		width: 78%;
-		height: 78%;
+		width: 76%;
+		height: 76%;
 		transform: translate(-50%, -50%);
 		z-index: 0;
-		opacity: 0.85;
+		opacity: 0.9;
+	}
+
+	/* soft radial glows behind content */
+	.bg-glow {
+		position: absolute;
+		top: 50%;
+		width: 55mm;
+		height: 55mm;
+		border-radius: 50%;
+		transform: translateY(-50%);
+		z-index: 0;
+		pointer-events: none;
+	}
+	.bg-glow-l {
+		left: -18mm;
+		background: radial-gradient(circle, rgba(184, 147, 76, 0.10) 0%, transparent 70%);
+	}
+	.bg-glow-r {
+		right: -18mm;
+		background: radial-gradient(circle, rgba(224, 93, 51, 0.07) 0%, transparent 70%);
 	}
 
 	/* modern frame */
@@ -289,16 +322,16 @@
 	.frame-line.gold {
 		position: absolute;
 		inset: 5.6mm;
-		border: 1.2px solid #b8934c;
+		border: 1.4px solid #b8934c;
 		border-radius: 0.8mm;
-		opacity: 0.85;
+		opacity: 0.9;
 	}
 	.accent-stripe {
 		position: absolute;
 		left: 5.6mm;
 		right: 5.6mm;
 		height: 2.4mm;
-		background: linear-gradient(90deg, #b8934c, #dfe6ee 30%, #dfe6ee 70%, #b8934c);
+		background: linear-gradient(90deg, #b8934c, #d8b25e 20%, #dfe6ee 38%, #dfe6ee 62%, #d8b25e 80%, #b8934c);
 		border-radius: 1mm;
 	}
 	.accent-stripe.top { top: 6.8mm; }
@@ -354,27 +387,27 @@
 	.kareis {
 		font-family: 'Montserrat', sans-serif;
 		font-weight: 700;
-		font-size: 12pt;
-		color: #123b5c;
-		letter-spacing: 1.5px;
+		font-size: 10.5pt;
+		color: #a8842c;
+		letter-spacing: 2px;
 		text-transform: uppercase;
 	}
 	.school {
 		font-family: 'Playfair Display', serif;
-		font-weight: 600;
-		font-size: 13pt;
-		color: #33455a;
-		margin-top: 4px;
+		font-weight: 700;
+		font-size: 19pt;
+		color: #123b5c;
+		margin-top: 5px;
 		letter-spacing: 0.5px;
 		text-transform: uppercase;
 	}
 	.school-en {
 		font-family: 'Montserrat', sans-serif;
-		font-weight: 500;
-		font-size: 8pt;
+		font-weight: 600;
+		font-size: 9pt;
 		color: #7c8ba1;
-		letter-spacing: 1.5px;
-		margin-top: 2px;
+		letter-spacing: 2px;
+		margin-top: 3px;
 		text-transform: uppercase;
 	}
 
