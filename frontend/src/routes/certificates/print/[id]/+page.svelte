@@ -78,23 +78,21 @@
 		<div class="cert-wrap" style="transform: scale({pageScale}); height: {297 * pageScale}mm;">
 			<div class="cert-page">
 
-				<!-- layered corner waves -->
-				<svg class="corner tl" viewBox="0 0 320 320" preserveAspectRatio="xMinYMin meet" aria-hidden="true">
-					<path d="M0 320 C90 320 190 250 190 160 C190 80 250 0 320 0 L0 0 Z" fill="#0B2545"/>
-					<path d="M0 320 C120 320 230 240 230 150 C230 70 280 10 320 10 L0 10 Z" fill="#2563EB"/>
-					<path d="M0 320 C150 320 265 225 265 135 C265 55 300 20 320 20 L0 20 Z" fill="#93C5FD"/>
-					<path d="M0 320 C175 320 300 215 300 120 C300 45 315 30 320 30 L0 30 Z" fill="#E5E7EB"/>
-				</svg>
-				<svg class="corner br" viewBox="0 0 320 320" preserveAspectRatio="xMaxYMax meet" aria-hidden="true">
-					<path d="M0 320 C90 320 190 250 190 160 C190 80 250 0 320 0 L0 0 Z" fill="#0B2545"/>
-					<path d="M0 320 C120 320 230 240 230 150 C230 70 280 10 320 10 L0 10 Z" fill="#2563EB"/>
-					<path d="M0 320 C150 320 265 225 265 135 C265 55 300 20 320 20 L0 20 Z" fill="#93C5FD"/>
-					<path d="M0 320 C175 320 300 215 300 120 C300 45 315 30 320 30 L0 30 Z" fill="#E5E7EB"/>
-				</svg>
+				<!-- hairline frame -->
+				<div class="frame">
+					<div class="frame-line outer"></div>
+					<div class="frame-line inner"></div>
+					<i class="bracket tl"></i><i class="bracket tr"></i><i class="bracket bl"></i><i class="bracket br"></i>
+				</div>
 
-				<!-- dotted accent lines -->
-				<div class="dots dots-l"></div>
-				<div class="dots dots-r"></div>
+				<!-- watermark monogram -->
+				<svg class="watermark" viewBox="0 0 120 120" aria-hidden="true">
+					<g fill="none" stroke="#0B2545">
+						<circle cx="60" cy="60" r="58" stroke-width="0.8"/>
+						<circle cx="60" cy="60" r="52" stroke-width="0.4" opacity="0.5"/>
+					</g>
+					<text x="60" y="78" text-anchor="middle" font-family="Playfair Display, serif" font-weight="700" font-size="40" fill="#0B2545" opacity="0.06">MDRS</text>
+				</svg>
 
 				<div class="cert-inner">
 					<div class="logo-row">
@@ -112,39 +110,30 @@
 					</div>
 					<div class="head-divider"><span></span><i></i><span></span></div>
 
-					<!-- golden seal -->
-					<svg class="seal" viewBox="0 0 120 120" aria-hidden="true">
-						<defs>
-							<radialGradient id="sealGold" cx="35%" cy="30%" r="80%">
-								<stop offset="0%" stop-color="#FBE9B0"/>
-								<stop offset="35%" stop-color="#F5D061"/>
-								<stop offset="70%" stop-color="#E6B325"/>
-								<stop offset="100%" stop-color="#A67C1E"/>
-							</radialGradient>
-						</defs>
-						<circle cx="60" cy="60" r="55" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.6"/>
-						<circle cx="60" cy="60" r="52" fill="none" stroke="#E6B325" stroke-width="12" stroke-dasharray="7 6.4"/>
-						<circle cx="60" cy="60" r="52" fill="none" stroke="#C99B2A" stroke-width="12" stroke-dasharray="7 6.4" transform="rotate(10 60 60)"/>
-						<circle cx="60" cy="60" r="41" fill="url(#sealGold)" stroke="#8a6a14" stroke-width="1"/>
-						<circle cx="60" cy="60" r="35" fill="none" stroke="#A67C1E" stroke-width="0.8"/>
-						<circle cx="60" cy="60" r="28" fill="rgba(255,255,255,0.4)"/>
-						<circle cx="60" cy="60" r="18" fill="none" stroke="#A67C1E" stroke-width="0.8"/>
-						<path d="M60 24 L64 38 L79 38 L67 47 L72 62 L60 53 L48 62 L53 47 L41 38 L56 38 Z" fill="#A67C1E"/>
+					<!-- monogram medallion -->
+					<svg class="medallion" viewBox="0 0 120 120" aria-hidden="true">
+						<circle cx="60" cy="60" r="58" fill="none" stroke="#0B2545" stroke-width="1"/>
+						<circle cx="60" cy="60" r="52" fill="none" stroke="#D4AF37" stroke-width="1.4"/>
+						<circle cx="60" cy="60" r="47" fill="none" stroke="#0B2545" stroke-width="0.5" opacity="0.6"/>
+						<path d="M60 16 L63 26 L73 26 L65 32 L68 42 L60 36 L52 42 L55 32 L47 26 L57 26 Z" fill="#D4AF37"/>
+						<text x="60" y="70" text-anchor="middle" font-family="Playfair Display, serif" font-weight="700" font-size="34" fill="#0B2545">MDRS</text>
+						<circle cx="60" cy="100" r="2.5" fill="#D4AF37"/>
 					</svg>
 
 					<div class="title">
-						<div class="title-main">CERTIFICATE</div>
-						<div class="title-sub">OF ACHIEVEMENT</div>
+						<div class="title-main">Certificate</div>
+						<div class="title-sub">of Achievement</div>
+						<div class="title-rule"><span></span><i></i><span></span></div>
 					</div>
 
 					<div class="intro">
-						This certificate is proudly presented to
+						This is to certify that
 					</div>
 
 					<div class="student-name">{cert.student_name}</div>
 
 					<div class="body">
-						<span class="body-line">for successfully fulfilling the requirements of the</span>
+						<span class="body-line">has successfully participated in</span>
 						<span class="event-name">{cert.event?.name || 'Event'}</span>
 						<span class="event-meta">
 							{categoryEn(cert.event?.category)}
@@ -155,7 +144,7 @@
 					</div>
 
 					<div class="date-line">
-						<span class="date-en">Awarded on</span>
+						<span class="date-en">Date:</span>
 						<span class="date-value">{formatDate(cert.issue_date || cert.event?.held_date)}</span>
 						{#if cert.event?.venue}
 							<span class="date-sep">•</span>
@@ -194,7 +183,7 @@
 {/if}
 
 <style>
-	@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&display=swap');
+	@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;600&display=swap');
 
 	:global(html), :global(body) {
 		margin: 0;
@@ -241,46 +230,52 @@
 		height: 297mm;
 		margin: 0;
 		background:
-			radial-gradient(ellipse 85% 55% at 50% 28%, rgba(37, 99, 235, 0.05), transparent 72%),
-			#ffffff;
+			radial-gradient(130% 100% at 50% 0%, #ffffff 0%, #FDFBF6 50%, #F5F1E6 100%);
 		overflow: hidden;
 		box-shadow: 0 12px 48px rgba(0, 0, 0, 0.25);
 	}
 
-	/* layered corner waves */
-	.corner {
+	/* hairline double frame with corner brackets */
+	.frame {
 		position: absolute;
+		inset: 0;
 		z-index: 1;
 		pointer-events: none;
 	}
-	.corner.tl {
-		top: 0;
-		left: 0;
-		width: 110mm;
-		height: 110mm;
-	}
-	.corner.br {
-		bottom: 0;
-		right: 0;
-		width: 110mm;
-		height: 110mm;
-		transform: rotate(180deg);
-	}
-
-	/* dotted accent lines */
-	.dots {
+	.frame-line.outer {
 		position: absolute;
-		top: 72mm;
-		bottom: 72mm;
-		width: 4px;
-		z-index: 2;
-		background-image: radial-gradient(circle, rgba(37, 99, 235, 0.5) 1.6px, transparent 2.2px);
-		background-size: 4px 16px;
-		background-repeat: repeat-y;
-		pointer-events: none;
+		inset: 4mm;
+		border: 0.8px solid #0B2545;
+		opacity: 0.85;
 	}
-	.dots-l { left: 9mm; }
-	.dots-r { right: 9mm; }
+	.frame-line.inner {
+		position: absolute;
+		inset: 5.6mm;
+		border: 0.5px solid #D4AF37;
+		opacity: 0.9;
+	}
+	.bracket {
+		position: absolute;
+		width: 7mm;
+		height: 7mm;
+		border: 0.9px solid #D4AF37;
+	}
+	.bracket.tl { top: 5.4mm; left: 5.4mm; border-right: none; border-bottom: none; }
+	.bracket.tr { top: 5.4mm; right: 5.4mm; border-left: none; border-bottom: none; }
+	.bracket.bl { bottom: 5.4mm; left: 5.4mm; border-right: none; border-top: none; }
+	.bracket.br { bottom: 5.4mm; right: 5.4mm; border-left: none; border-top: none; }
+
+	/* watermark monogram */
+	.watermark {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 120mm;
+		height: 120mm;
+		transform: translate(-50%, -50%);
+		z-index: 0;
+		opacity: 0.7;
+	}
 
 	.cert-inner {
 		position: relative;
@@ -308,8 +303,8 @@
 		justify-content: center;
 	}
 	.logo {
-		width: 20mm;
-		height: 20mm;
+		width: 19mm;
+		height: 19mm;
 		object-fit: contain;
 		filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.12));
 	}
@@ -321,15 +316,15 @@
 	.kareis {
 		font-family: 'Montserrat', sans-serif;
 		font-weight: 700;
-		font-size: 9.5pt;
-		color: #a8842c;
-		letter-spacing: 2px;
+		font-size: 8.5pt;
+		color: #A67C1E;
+		letter-spacing: 2.5px;
 		text-transform: uppercase;
 	}
 	.school {
 		font-family: 'Playfair Display', serif;
 		font-weight: 700;
-		font-size: 17pt;
+		font-size: 16pt;
 		color: #0B2545;
 		margin-top: 4px;
 		letter-spacing: 0.5px;
@@ -338,7 +333,7 @@
 	.school-en {
 		font-family: 'Montserrat', sans-serif;
 		font-weight: 600;
-		font-size: 8.5pt;
+		font-size: 8pt;
 		color: #7c8ba1;
 		letter-spacing: 2px;
 		margin-top: 2px;
@@ -356,74 +351,94 @@
 	.head-divider span {
 		flex: 1;
 		height: 1px;
-		background: linear-gradient(90deg, transparent, rgba(184, 147, 76, 0.7));
+		background: linear-gradient(90deg, transparent, rgba(184, 147, 76, 0.75));
 	}
 	.head-divider span:last-child {
-		background: linear-gradient(90deg, rgba(184, 147, 76, 0.7), transparent);
+		background: linear-gradient(90deg, rgba(184, 147, 76, 0.75), transparent);
 	}
 	.head-divider i {
-		width: 6px;
-		height: 6px;
+		width: 5px;
+		height: 5px;
 		transform: rotate(45deg);
-		background: #b8934c;
+		background: #D4AF37;
 		flex-shrink: 0;
-		box-shadow: 0 0 0 2px rgba(184, 147, 76, 0.15);
 	}
 
-	/* golden seal */
-	.seal {
-		width: 27mm;
-		height: 27mm;
-		margin-top: 6mm;
-		filter: drop-shadow(0 3px 8px rgba(166, 124, 30, 0.35));
+	/* monogram medallion */
+	.medallion {
+		width: 26mm;
+		height: 26mm;
+		margin-top: 5.5mm;
+		filter: drop-shadow(0 2px 6px rgba(11, 37, 69, 0.18));
 	}
 
 	.title {
-		margin-top: 5.5mm;
+		margin-top: 5mm;
 		width: 100%;
 	}
 	.title-main {
-		font-family: 'Montserrat', sans-serif;
-		font-weight: 800;
-		font-size: 23pt;
+		font-family: 'Playfair Display', serif;
+		font-weight: 700;
+		font-size: 22pt;
 		color: #0B2545;
-		letter-spacing: 10px;
+		letter-spacing: 3px;
 		text-transform: uppercase;
-		margin-right: -10px;
 	}
 	.title-sub {
 		font-family: 'Montserrat', sans-serif;
 		font-weight: 600;
-		font-size: 11pt;
-		color: #1E293B;
-		letter-spacing: 7px;
+		font-size: 10pt;
+		color: #A67C1E;
+		letter-spacing: 5px;
 		text-transform: uppercase;
-		margin-top: 2.5mm;
+		margin-top: 1.5mm;
+	}
+	.title-rule {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		margin: 3mm auto 0;
+		width: 60%;
+	}
+	.title-rule span {
+		flex: 1;
+		height: 1px;
+		background: linear-gradient(90deg, transparent, rgba(184, 147, 76, 0.8));
+	}
+	.title-rule span:last-child {
+		background: linear-gradient(90deg, rgba(184, 147, 76, 0.8), transparent);
+	}
+	.title-rule i {
+		width: 6px;
+		height: 6px;
+		transform: rotate(45deg);
+		background: #D4AF37;
+		flex-shrink: 0;
 	}
 
 	.intro {
 		margin-top: 7mm;
-		font-family: 'Inter', sans-serif;
-		font-weight: 400;
-		font-size: 10pt;
-		color: #334155;
-		letter-spacing: 0.5px;
+		font-family: 'Playfair Display', serif;
+		font-style: italic;
+		font-size: 11pt;
+		color: #42536B;
 	}
 
 	.student-name {
-		margin-top: 4.5mm;
+		margin-top: 4mm;
 		font-family: 'Playfair Display', serif;
 		font-weight: 700;
-		font-size: 30pt;
-		color: #1D4ED8;
+		font-size: 32pt;
+		color: #0B2545;
 		padding: 0 10mm 4mm;
-		border-bottom: 1.5px solid #1D4ED8;
+		border-bottom: 1px solid #D4AF37;
 		line-height: 1.4;
 		width: 100%;
 	}
 
 	.body {
-		margin-top: 8mm;
+		margin-top: 7mm;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -435,33 +450,31 @@
 		font-family: 'Inter', sans-serif;
 		font-weight: 400;
 		font-size: 9.5pt;
-		color: #1E293B;
+		color: #33415c;
 		letter-spacing: 0.3px;
 	}
 	.event-name {
-		font-family: 'Montserrat', sans-serif;
+		font-family: 'Playfair Display', serif;
 		font-weight: 700;
-		font-size: 12.5pt;
+		font-size: 14pt;
 		color: #0B2545;
-		text-transform: uppercase;
-		letter-spacing: 1.5px;
+		letter-spacing: 0.5px;
 	}
 	.event-meta {
-		font-family: 'Inter', sans-serif;
+		font-family: 'Montserrat', sans-serif;
 		font-weight: 500;
-		font-size: 8.5pt;
-		color: #64748B;
+		font-size: 8pt;
+		color: #8a97ad;
 		text-transform: uppercase;
 		letter-spacing: 1.5px;
 	}
-	.event-meta .dot { color: #1D4ED8; margin: 0 3px; }
+	.event-meta .dot { color: #D4AF37; margin: 0 3px; }
 	.prize {
-		font-family: 'Montserrat', sans-serif;
+		font-family: 'Playfair Display', serif;
 		font-weight: 700;
-		font-size: 11.5pt;
-		color: #2563EB;
-		text-transform: uppercase;
-		letter-spacing: 1.5px;
+		font-size: 13pt;
+		color: #A67C1E;
+		letter-spacing: 0.5px;
 	}
 
 	.date-line {
@@ -472,17 +485,17 @@
 		font-size: 9.5pt;
 	}
 	.date-en {
-		font-family: 'Inter', sans-serif;
+		font-family: 'Montserrat', sans-serif;
 		font-weight: 600;
-		color: #0F172A;
+		color: #33415c;
 	}
 	.date-value {
 		font-family: 'Playfair Display', serif;
 		font-style: italic;
-		font-weight: 600;
-		color: #0F172A;
+		font-weight: 500;
+		color: #33415c;
 	}
-	.date-sep { color: #1D4ED8; }
+	.date-sep { color: #D4AF37; }
 
 	.sig-sep {
 		margin-top: 9mm;
