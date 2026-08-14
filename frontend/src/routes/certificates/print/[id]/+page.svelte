@@ -78,30 +78,8 @@
 		<div class="cert-wrap" style="transform: scale({pageScale}); height: {210 * pageScale}mm;">
 			<div class="cert-page">
 
-				<!-- globe / concentric arcs watermark -->
-				<svg class="bg-globe" viewBox="0 0 200 200" aria-hidden="true">
-					<defs>
-						<radialGradient id="globeFill" cx="38%" cy="32%" r="75%">
-							<stop offset="0%" stop-color="#f7f9fc"/>
-							<stop offset="100%" stop-color="#eef2f7"/>
-						</radialGradient>
-					</defs>
-					<circle cx="100" cy="100" r="96" fill="url(#globeFill)"/>
-					<g transform="translate(100,100)" fill="none">
-						<circle r="92" stroke="#b8934c" stroke-width="0.6" opacity="0.55"/>
-						<circle r="84" stroke="#dfe6ee" stroke-width="0.4"/>
-						<circle r="74" stroke="#dfe6ee" stroke-width="0.35"/>
-						<circle r="56" stroke="#dfe6ee" stroke-width="0.4"/>
-						<circle r="38" stroke="#dfe6ee" stroke-width="0.3"/>
-						<ellipse rx="92" ry="38" stroke="#dfe6ee" stroke-width="0.3"/>
-						<ellipse rx="38" ry="92" stroke="#dfe6ee" stroke-width="0.3"/>
-						<ellipse rx="74" ry="56" stroke="#dfe6ee" stroke-width="0.25"/>
-						<line x1="-92" y1="0" x2="92" y2="0" stroke="#dfe6ee" stroke-width="0.25"/>
-						{#each Array(24) as _, i}
-							<circle cx="0" cy="-56" r="1.3" fill="#b8934c" stroke="none" opacity="0.5"/>
-						{/each}
-					</g>
-				</svg>
+				<!-- KREIS logo watermark -->
+				<img src="/logos/kreis-logo.png" alt="" class="bg-watermark" aria-hidden="true" />
 
 				<!-- soft side glows -->
 				<div class="bg-glow bg-glow-l"></div>
@@ -274,16 +252,17 @@
 		box-shadow: 0 12px 48px rgba(0, 0, 0, 0.28);
 	}
 
-	/* globe / international watermark */
-	.bg-globe {
+	/* KREIS logo watermark */
+	.bg-watermark {
 		position: absolute;
 		top: 52%;
 		left: 50%;
-		width: 76%;
-		height: 76%;
+		width: 120mm;
+		height: 120mm;
+		object-fit: contain;
 		transform: translate(-50%, -50%);
 		z-index: 0;
-		opacity: 0.9;
+		opacity: 0.08;
 	}
 
 	/* soft radial glows behind content */
