@@ -10,6 +10,18 @@
 	let loading = $state(true);
 	let error = $state('');
 
+	let pageScale = $state(1);
+	let ready = $state(false);
+
+	function fitToScreen() {
+		const padding = 48;
+		const availW = window.innerWidth - padding;
+		const availH = window.innerHeight - 140;
+		const pageW = (297 / 25.4) * 96;
+		const pageH = (210 / 25.4) * 96;
+		pageScale = Math.min(1, availW / pageW, availH / pageH);
+	}
+
 	const PRIZE_KN: Record<string, string> = {
 		'First Prize': 'ಪ್ರಥಮ ಬಹುಮಾನ',
 		'Runner Up': 'ದ್ವಿತೀಯ ಬಹುಮಾನ',
@@ -52,7 +64,10 @@
 			error = res.error?.message || 'Certificate not found';
 		}
 		loading = false;
-		setTimeout(() => window.print(), 400);
+		fitToScreen();
+		window.addEventListener('resize', fitToScreen);
+		ready = true;
+		setTimeout(() => window.print(), 600);
 	});
 </script>
 
@@ -66,7 +81,9 @@
 {:else if error}
 	<div class="flex h-screen items-center justify-center text-danger-600">{error}</div>
 {:else if cert}
-	<div class="cert-page">
+	<div class="stage" class:show={ready}>
+		<div class="cert-wrap" style="transform: scale({pageScale}); height: {210 * pageScale}mm;">
+			<div class="cert-page">
 		<!-- background guilloché watermark -->
 		<svg class="watermark" viewBox="0 0 100 100" aria-hidden="true">
 			<g transform="translate(50,50)">
@@ -211,16 +228,38 @@
 			</div>
 		</div>
 	</div>
+	</div>
+	</div>
 {/if}
 
 <style>
 	@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Great+Vibes&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Anek+Kannada:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
 
-	body {
+	:global(html), :global(body) {
 		margin: 0;
 		padding: 0;
+		height: 100%;
 		background: #e2e8f0;
 		font-family: 'Inter', 'Anek Kannada', sans-serif;
+		overflow: hidden;
+	}
+
+	.stage {
+		display: flex;
+		justify-content: center;
+		align-items: flex-start;
+		padding: 20px;
+		box-sizing: border-box;
+		min-height: 100vh;
+	}
+
+	.stage.show {
+		opacity: 1;
+		transition: opacity 0.3s;
+	}
+
+	.cert-wrap {
+		transform-origin: top center;
 	}
 
 	.toolbar {
@@ -228,7 +267,7 @@
 		justify-content: center;
 		align-items: center;
 		gap: 12px;
-		padding: 16px;
+		padding: 12px;
 		position: sticky;
 		top: 0;
 		z-index: 50;
@@ -238,8 +277,8 @@
 	.cert-page {
 		position: relative;
 		width: 297mm;
-		min-height: 210mm;
-		margin: 20px auto;
+		height: 210mm;
+		margin: 0;
 		background: #fefcf6;
 		overflow: hidden;
 		box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
@@ -297,7 +336,6 @@
 		width: 20mm;
 		height: 20mm;
 		object-fit: contain;
-		mix-blend-mode: multiply;
 	}
 
 	.header {
@@ -454,7 +492,6 @@
 		object-fit: contain;
 		max-width: 50mm;
 		margin-bottom: 1mm;
-		mix-blend-mode: multiply;
 	}
 	.signature-line {
 		width: 100%;
@@ -480,16 +517,26 @@
 			size: A4 landscape;
 			margin: 0;
 		}
-		body {
+		:global(html), :global(body) {
 			background: white;
+			overflow: visible;
+		}
+		.stage, .stage.show {
+			padding: 0;
+			min-height: 0;
+			display: block;
 		}
 		.toolbar, .no-print {
 			display: none !important;
 		}
+		.cert-wrap {
+			transform: none !important;
+			height: 210mm !important;
+		}
 		.cert-page {
 			margin: 0;
 			width: 297mm;
-			min-height: 210mm;
+			height: 210mm;
 			box-shadow: none;
 			-webkit-print-color-adjust: exact;
 			print-color-adjust: exact;
