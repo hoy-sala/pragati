@@ -301,3 +301,59 @@ export interface APIResponse<T = unknown> {
 	meta?: Pagination;
 	error?: APIError;
 }
+
+export interface CertificateEvent {
+	id: string;
+	school_id: string;
+	academic_year_id?: string;
+	name: string;
+	category: string;
+	held_date?: string;
+	venue?: string;
+	description?: string;
+	created_at: string;
+	updated_at: string;
+}
+
+export interface Certificate {
+	id: string;
+	school_id: string;
+	event_id: string;
+	student_id: string;
+	position: string;
+	prize_title?: string;
+	issue_date?: string;
+	created_at: string;
+	updated_at: string;
+}
+
+export interface CertificateSignatory {
+	id: string;
+	event_id: string;
+	name: string;
+	role: string;
+	title?: string;
+	signature_url?: string;
+	sort_order: number;
+	created_at: string;
+	updated_at: string;
+}
+
+export interface CertificateParticipant {
+	id: string;
+	student_id: string;
+	student_name: string;
+	sats_number: string;
+	class_name: string;
+	position: string;
+	prize_title?: string;
+	issue_date?: string;
+}
+
+export interface CertificateDetail extends Certificate {
+	student_name: string;
+	sats_number: string;
+	class_name: string;
+	event?: CertificateEvent;
+	signatories: CertificateSignatory[];
+}

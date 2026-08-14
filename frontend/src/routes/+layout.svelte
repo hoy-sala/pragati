@@ -13,7 +13,7 @@
 	const publicRoutes = ['/login', '/timetable'];
 
 	function isFullscreenRoute(path: string): boolean {
-		return path.startsWith('/quizzes/take') || path.startsWith('/quizzes/results');
+		return path.startsWith('/quizzes/take') || path.startsWith('/quizzes/results') || path.startsWith('/certificates/print');
 	}
 
 	onMount(() => {

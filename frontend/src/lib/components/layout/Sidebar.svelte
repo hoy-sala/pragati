@@ -4,7 +4,7 @@
 	import {
 		LogOut, GraduationCap, LayoutDashboard, CalendarDays, Users, BookOpen,
 		ClipboardCheck, ClipboardList, PlayCircle, Table, FileSpreadsheet,
-		FileText, Settings, Heart, BarChart3, CheckSquare, Upload, HelpCircle, User
+		FileText, Settings, Heart, BarChart3, CheckSquare, Upload, HelpCircle, User, Award
 	} from 'lucide-svelte';
 	import type { ComponentType } from 'svelte';
 	import type { User as UserType, Student } from '$lib/types';
@@ -97,6 +97,7 @@
 			items: [
 				{ href: '/analytics', label: 'Analytics', icon: BarChart3, roles: ['admin', 'principal', 'teacher'] },
 				{ href: '/reports', label: 'Reports', icon: FileText, roles: ['admin', 'principal', 'teacher', 'student', 'parent'] },
+				{ href: '/certificates', label: 'Certificates', icon: Award, roles: ['admin'] },
 			]
 		},
 		{

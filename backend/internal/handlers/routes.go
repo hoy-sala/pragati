@@ -43,6 +43,7 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
  	hpcH := NewHPCHandler(db)
  	mentorH := NewMentorHandler(db)
  	reportsH := NewReportsHandler(db)
+	certH := NewCertificateHandler(db, cfg.UploadDir)
 
 	roleMw := middleware.NewRoleMiddleware(jwtService)
 	loginLimiter := middleware.NewRateLimiter(10, time.Minute)
@@ -195,11 +196,26 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
 			r.Get("/reports/class", hpcH.GetClassReport)
 			r.Post("/migrate-from-marks", roleMw.RequireRole("admin")(http.HandlerFunc(hpcH.MigrateFromMarks)))
 		})
+		r.Route("/certificates", func(r chi.Router) {
+			r.Use(roleMw.Authenticate)
+			r.Get("/events", roleMw.RequireRole("admin")(http.HandlerFunc(certH.ListEvents)))
+			r.Post("/events", roleMw.RequireRole("admin")(http.HandlerFunc(certH.CreateEvent)))
+			r.Get("/events/{id}", roleMw.RequireRole("admin")(http.HandlerFunc(certH.GetEvent)))
+			r.Post("/events/{id}/participants", roleMw.RequireRole("admin")(http.HandlerFunc(certH.AddParticipant)))
+			r.Post("/events/{id}/signatories", roleMw.RequireRole("admin")(http.HandlerFunc(certH.AddSignatory)))
+			r.Post("/signatures", roleMw.RequireRole("admin")(http.HandlerFunc(certH.UploadSignature)))
+			r.Get("/{id}", roleMw.RequireRole("admin")(http.HandlerFunc(certH.GetCertificate)))
+			r.Put("/{id}", roleMw.RequireRole("admin")(http.HandlerFunc(certH.UpdateCertificate)))
+			r.Delete("/{id}", roleMw.RequireRole("admin")(http.HandlerFunc(certH.DeleteCertificate)))
+			r.Delete("/signatories/{id}", roleMw.RequireRole("admin")(http.HandlerFunc(certH.DeleteSignatory)))
+		})
 	})
 
 	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`{"status":"ok"}`))
 	})
+
+	r.Handle("/api/v1/uploads/*", http.StripPrefix("/api/v1/uploads/", http.FileServer(http.Dir(cfg.UploadDir))))
 
 	return r
 }
