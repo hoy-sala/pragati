@@ -75,6 +75,37 @@
 	function handleBlur() {
 		setTimeout(() => { open = false; }, 150);
 	}
+
+	let triggerEl: HTMLButtonElement | undefined = $state();
+
+	function portalDropdown(node: HTMLElement, getTrigger: () => HTMLButtonElement | undefined) {
+		const reposition = () => {
+			const trigger = getTrigger();
+			if (!trigger) return;
+			const rect = trigger.getBoundingClientRect();
+			node.style.position = 'fixed';
+			node.style.top = `${rect.bottom + 4}px`;
+			node.style.left = `${rect.left}px`;
+			node.style.width = `${trigger.offsetWidth}px`;
+		};
+		const onScroll = () => {
+			if (document.body.contains(node)) reposition();
+		};
+		document.body.appendChild(node);
+		reposition();
+		window.addEventListener('scroll', onScroll, true);
+		window.addEventListener('resize', onScroll);
+		return {
+			update() {
+				reposition();
+			},
+			destroy() {
+				node.remove();
+				window.removeEventListener('scroll', onScroll, true);
+				window.removeEventListener('resize', onScroll);
+			}
+		};
+	}
 </script>
 
 <div class="relative {className}" role="combobox" aria-controls={listboxId} aria-expanded={open} aria-haspopup="listbox" tabindex="-1" onkeydown={handleKeydown}>
@@ -83,6 +114,7 @@
 	{/if}
 	<button
 		type="button"
+		bind:this={triggerEl}
 		id={listId}
 		onclick={toggle}
 		onblur={handleBlur}
@@ -120,7 +152,8 @@
 			id={listboxId}
 			role="listbox"
 			tabindex="-1"
-			class="absolute z-50 mt-1 w-full bg-white border border-slate-200 rounded-lg shadow-lg max-h-60 overflow-y-auto py-1"
+			use:portalDropdown={() => triggerEl}
+			class="z-50 mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-60 overflow-y-auto py-1"
 		>
 			{#if searchable}
 				<li class="px-2 pb-1 sticky top-0 bg-white border-b border-slate-100">
