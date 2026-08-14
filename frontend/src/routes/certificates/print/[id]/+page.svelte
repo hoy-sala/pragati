@@ -83,16 +83,33 @@
 					<div class="frame-line outer"></div>
 					<div class="frame-line inner"></div>
 					<i class="bracket tl"></i><i class="bracket tr"></i><i class="bracket bl"></i><i class="bracket br"></i>
+
+					<svg class="corner tl" viewBox="0 0 80 80" aria-hidden="true">
+						<path d="M10 72 V26 Q10 10 26 10 H72" fill="none" stroke="#B8860B" stroke-width="1"/>
+						<path d="M18 72 V32 Q18 18 32 18 H72" fill="none" stroke="#D4AF37" stroke-width="0.8"/>
+						<path d="M42 3 L44 8 L49 8 L45 12 L47 17 L42 14 L37 17 L39 12 L35 8 L40 8 Z" fill="#D4AF37"/>
+					</svg>
+					<svg class="corner tr" viewBox="0 0 80 80" aria-hidden="true">
+						<path d="M70 72 V26 Q70 10 54 10 H8" fill="none" stroke="#B8860B" stroke-width="1"/>
+						<path d="M62 72 V32 Q62 18 48 18 H8" fill="none" stroke="#D4AF37" stroke-width="0.8"/>
+						<path d="M38 3 L40 8 L45 8 L41 12 L43 17 L38 14 L33 17 L35 12 L31 8 L36 8 Z" fill="#D4AF37"/>
+					</svg>
+					<svg class="corner bl" viewBox="0 0 80 80" aria-hidden="true">
+						<path d="M10 8 V54 Q10 70 26 70 H72" fill="none" stroke="#B8860B" stroke-width="1"/>
+						<path d="M18 8 V48 Q18 62 32 62 H72" fill="none" stroke="#D4AF37" stroke-width="0.8"/>
+						<path d="M42 77 L44 72 L49 72 L45 68 L47 63 L42 66 L37 63 L39 68 L35 72 L40 72 Z" fill="#D4AF37"/>
+					</svg>
+					<svg class="corner br" viewBox="0 0 80 80" aria-hidden="true">
+						<path d="M70 8 V54 Q70 70 54 70 H8" fill="none" stroke="#B8860B" stroke-width="1"/>
+						<path d="M62 8 V48 Q62 62 48 62 H8" fill="none" stroke="#D4AF37" stroke-width="0.8"/>
+						<path d="M38 77 L40 72 L45 72 L41 68 L43 63 L38 66 L33 63 L35 68 L31 72 L36 72 Z" fill="#D4AF37"/>
+					</svg>
+
+					<i class="dot-tick top"></i><i class="dot-tick right"></i><i class="dot-tick bottom"></i><i class="dot-tick left"></i>
 				</div>
 
-				<!-- watermark monogram -->
-				<svg class="watermark" viewBox="0 0 120 120" aria-hidden="true">
-					<g fill="none" stroke="#0B2545">
-						<circle cx="60" cy="60" r="58" stroke-width="0.8"/>
-						<circle cx="60" cy="60" r="52" stroke-width="0.4" opacity="0.5"/>
-					</g>
-					<text x="60" y="78" text-anchor="middle" font-family="Playfair Display, serif" font-weight="700" font-size="40" fill="#0B2545" opacity="0.06">MDRS</text>
-				</svg>
+				<!-- watermark -->
+				<img src="/logos/kreis-logo.png" alt="" class="watermark" aria-hidden="true" />
 
 				<div class="cert-inner">
 					<div class="logo-row">
@@ -110,15 +127,45 @@
 					</div>
 					<div class="head-divider"><span></span><i></i><span></span></div>
 
-					<!-- monogram medallion -->
-					<svg class="medallion" viewBox="0 0 120 120" aria-hidden="true">
-						<circle cx="60" cy="60" r="58" fill="none" stroke="#0B2545" stroke-width="1"/>
-						<circle cx="60" cy="60" r="52" fill="none" stroke="#D4AF37" stroke-width="1.4"/>
-						<circle cx="60" cy="60" r="47" fill="none" stroke="#0B2545" stroke-width="0.5" opacity="0.6"/>
-						<path d="M60 16 L63 26 L73 26 L65 32 L68 42 L60 36 L52 42 L55 32 L47 26 L57 26 Z" fill="#D4AF37"/>
-						<text x="60" y="70" text-anchor="middle" font-family="Playfair Display, serif" font-weight="700" font-size="34" fill="#0B2545">MDRS</text>
-						<circle cx="60" cy="100" r="2.5" fill="#D4AF37"/>
-					</svg>
+					<!-- medallion -->
+					<div class="medallion-row">
+						<svg class="laurel left" viewBox="0 0 110 44" aria-hidden="true">
+							<path d="M6 22 C 40 6, 74 10, 104 22" fill="none" stroke="#B8860B" stroke-width="1"/>
+							<g fill="#D4AF37">
+								<path d="M18 18 q 8 -3 10 3 q -7 4 -10 -3 Z"/>
+								<path d="M22 24 q 8 -2 12 3 q -7 5 -12 -3 Z"/>
+								<path d="M38 16 q 8 -3 11 2 q -7 5 -11 -2 Z"/>
+								<path d="M44 25 q 8 -1 12 4 q -8 4 -12 -4 Z"/>
+								<path d="M60 15 q 8 -2 10 3 q -7 4 -10 -3 Z"/>
+								<path d="M66 26 q 8 0 12 4 q -8 4 -12 -4 Z"/>
+								<path d="M82 16 q 7 -2 9 3 q -6 3 -9 -3 Z"/>
+								<path d="M88 24 q 7 0 10 3 q -7 3 -10 -3 Z"/>
+							</g>
+							<path d="M104 22 l 4 -2 l -1 4 l -3 -2 Z" fill="#D4AF37"/>
+						</svg>
+						<svg class="medallion" viewBox="0 0 120 120" aria-hidden="true">
+							<circle cx="60" cy="60" r="58" fill="none" stroke="#0B2545" stroke-width="1"/>
+							<circle cx="60" cy="60" r="52" fill="none" stroke="#D4AF37" stroke-width="1.4"/>
+							<circle cx="60" cy="60" r="47" fill="none" stroke="#0B2545" stroke-width="0.5" opacity="0.6"/>
+							<path d="M60 16 L63 26 L73 26 L65 32 L68 42 L60 36 L52 42 L55 32 L47 26 L57 26 Z" fill="#D4AF37"/>
+							<text x="60" y="70" text-anchor="middle" font-family="Playfair Display, serif" font-weight="700" font-size="34" fill="#0B2545">MDRS</text>
+							<circle cx="60" cy="100" r="2.5" fill="#D4AF37"/>
+						</svg>
+						<svg class="laurel right" viewBox="0 0 110 44" aria-hidden="true">
+							<path d="M6 22 C 40 6, 74 10, 104 22" fill="none" stroke="#B8860B" stroke-width="1"/>
+							<g fill="#D4AF37">
+								<path d="M18 18 q 8 -3 10 3 q -7 4 -10 -3 Z"/>
+								<path d="M22 24 q 8 -2 12 3 q -7 5 -12 -3 Z"/>
+								<path d="M38 16 q 8 -3 11 2 q -7 5 -11 -2 Z"/>
+								<path d="M44 25 q 8 -1 12 4 q -8 4 -12 -4 Z"/>
+								<path d="M60 15 q 8 -2 10 3 q -7 4 -10 -3 Z"/>
+								<path d="M66 26 q 8 0 12 4 q -8 4 -12 -4 Z"/>
+								<path d="M82 16 q 7 -2 9 3 q -6 3 -9 -3 Z"/>
+								<path d="M88 24 q 7 0 10 3 q -7 3 -10 -3 Z"/>
+							</g>
+							<path d="M104 22 l 4 -2 l -1 4 l -3 -2 Z" fill="#D4AF37"/>
+						</svg>
+					</div>
 
 					<div class="title">
 						<div class="title-main">Certificate</div>
@@ -265,16 +312,42 @@
 	.bracket.bl { bottom: 5.4mm; left: 5.4mm; border-right: none; border-top: none; }
 	.bracket.br { bottom: 5.4mm; right: 5.4mm; border-left: none; border-top: none; }
 
-	/* watermark monogram */
+	/* decorative corner flourishes */
+	.corner {
+		position: absolute;
+		width: 30mm;
+		height: 30mm;
+		z-index: 2;
+	}
+	.corner.tl { top: 5.6mm; left: 5.6mm; }
+	.corner.tr { top: 5.6mm; right: 5.6mm; }
+	.corner.bl { bottom: 5.6mm; left: 5.6mm; }
+	.corner.br { bottom: 5.6mm; right: 5.6mm; }
+
+	/* gold diamonds on the frame midpoints */
+	.dot-tick {
+		position: absolute;
+		width: 5px;
+		height: 5px;
+		background: #D4AF37;
+		transform: rotate(45deg);
+		z-index: 2;
+	}
+	.dot-tick.top { top: 4mm; left: 50%; margin-left: -2.5px; }
+	.dot-tick.bottom { bottom: 4mm; left: 50%; margin-left: -2.5px; }
+	.dot-tick.left { left: 4mm; top: 50%; margin-top: -2.5px; }
+	.dot-tick.right { right: 4mm; top: 50%; margin-top: -2.5px; }
+
+	/* KREIS watermark */
 	.watermark {
 		position: absolute;
 		top: 50%;
 		left: 50%;
-		width: 120mm;
-		height: 120mm;
+		width: 104mm;
+		height: auto;
 		transform: translate(-50%, -50%);
 		z-index: 0;
-		opacity: 0.7;
+		opacity: 0.07;
 	}
 
 	.cert-inner {
@@ -364,12 +437,29 @@
 		flex-shrink: 0;
 	}
 
-	/* monogram medallion */
-	.medallion {
-		width: 26mm;
-		height: 26mm;
+	/* medallion with laurel branches */
+	.medallion-row {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 1mm;
 		margin-top: 5.5mm;
+		width: 100%;
+	}
+	.medallion {
+		width: 24mm;
+		height: 24mm;
+		margin: 0;
 		filter: drop-shadow(0 2px 6px rgba(11, 37, 69, 0.18));
+	}
+	.laurel {
+		width: 42mm;
+		height: 17mm;
+		flex-shrink: 0;
+		opacity: 0.85;
+	}
+	.laurel.right {
+		transform: scaleX(-1);
 	}
 
 	.title {
