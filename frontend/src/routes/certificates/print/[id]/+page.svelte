@@ -37,20 +37,6 @@
 		return 'Certificate of Participation';
 	}
 
-	function positionKn(pos: string): string {
-		if (pos === '1st') return 'ಪ್ರಥಮ ಬಹುಮಾನ';
-		if (pos === '2nd') return 'ದ್ವಿತೀಯ ಬಹುಮಾನ';
-		if (pos === '3rd') return 'ತೃತೀಯ ಬಹುಮಾನ';
-		return 'ಭಾಗವಹಿಸುವಿಕೆ';
-	}
-
-	function categoryKn(cat?: string): string {
-		if (cat === 'sports') return 'ಕ್ರೀಡಾ ಸ್ಪರ್ಧೆಯಲ್ಲಿ';
-		if (cat === 'cultural') return 'ಸಾಂಸ್ಕೃತಿಕ ಸ್ಪರ್ಧೆಯಲ್ಲಿ';
-		if (cat === 'academic') return 'ಶೈಕ್ಷಣಿಕ ಸ್ಪರ್ಧೆಯಲ್ಲಿ';
-		return 'ಸ್ಪರ್ಧೆಯಲ್ಲಿ';
-	}
-
 	function categoryEn(cat?: string): string {
 		if (cat === 'sports') return 'Sports Competition';
 		if (cat === 'cultural') return 'Cultural Competition';
@@ -155,10 +141,9 @@
 							<img src="/logos/karnataka-emblem.png" alt="Government of Karnataka" class="logo" />
 						</div>
 						<div class="header">
-							<div class="kareis">ಕರ್ನಾಟಕ ವಸತಿ ಶಿಕ್ಷಣ ಸಂಸ್ಥೆಗಳ ಸೊಸೈಟಿ</div>
-							<div class="kareis-en">KARNATAKA RESIDENTIAL EDUCATIONAL INSTITUTIONS SOCIETY</div>
-							<div class="school">ಮೊರಾರ್ಜಿ ದೇಸಾಯಿ ವಸತಿ ಶಾಲೆ (SC-32) ಬಹದ್ದೂರ್ಘಟ್ಟ, ಚಿತ್ರದುರ್ಗ</div>
-							<div class="school-en">MORARJI DESAI RESIDENTIAL SCHOOL (SC-32) BAHADDURGHATTA, CHITRADURGA</div>
+							<div class="kareis">KARNATAKA RESIDENTIAL EDUCATIONAL INSTITUTIONS SOCIETY</div>
+							<div class="school">MORARJI DESAI RESIDENTIAL SCHOOL (SC-32)</div>
+							<div class="school-en">BAHADDURGHATTA, CHITRADURGA</div>
 						</div>
 						<div class="logo-side">
 							<img src="/logos/kreis-logo.png" alt="KREIS" class="logo" />
@@ -167,14 +152,12 @@
 
 					<div class="title">
 						<div class="title-rule"><span></span><i></i><span></span></div>
-						<div class="title-kn">ಸಾಧನೆ ಪ್ರಮಾಣಪತ್ರ</div>
 						<div class="title-en">CERTIFICATE OF ACHIEVEMENT</div>
 						<div class="title-rule"><span></span><i></i><span></span></div>
 					</div>
 
 					<div class="certify">
 						<span class="certify-en">This is to certify that</span>
-						<span class="certify-kn">ಇದರಿಂದ ಪ್ರಮಾಣೀಕರಿಸಲಾಗುತ್ತದೆ</span>
 					</div>
 
 					<div class="student-name">{cert.student_name}</div>
@@ -182,15 +165,11 @@
 					<div class="details">
 						<span class="details-en">studying in</span>
 						<span class="value class">{cert.class_name || '—'}</span>
-						<span class="details-kn">ಇವರು ಭಾಗವಹಿಸಿದರು</span>
 						<span class="details-en">has participated in</span>
 						<span class="value event">{cert.event?.name || 'Event'}</span>
-						<span class="category-kn">{categoryKn(cert.event?.category)}</span>
 						<span class="category-en">{categoryEn(cert.event?.category)}</span>
-						<span class="details-kn">ಮತ್ತು ಗಳಿಸಿದರು</span>
 						<span class="details-en">and secured</span>
 						<span class="value prize">{positionLabel(cert.position)}</span>
-						<span class="prize-kn">({positionKn(cert.position)})</span>
 					</div>
 
 					<div class="date-line">
@@ -231,14 +210,14 @@
 {/if}
 
 <style>
-	@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Anek+Kannada:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+	@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap');
 
 	:global(html), :global(body) {
 		margin: 0;
 		padding: 0;
 		height: 100%;
 		background: #dfe4ea;
-		font-family: 'Inter', 'Anek Kannada', sans-serif;
+		font-family: 'Inter', sans-serif;
 		overflow: hidden;
 	}
 
@@ -373,27 +352,21 @@
 		text-align: center;
 	}
 	.kareis {
-		font-family: 'Anek Kannada', sans-serif;
-		font-weight: 700;
-		font-size: 15pt;
-		color: #123b5c;
-		letter-spacing: 0.5px;
-	}
-	.kareis-en {
 		font-family: 'Montserrat', sans-serif;
-		font-weight: 600;
-		font-size: 8.5pt;
-		color: #a8842c;
-		letter-spacing: 3px;
-		margin-top: 2px;
+		font-weight: 700;
+		font-size: 12pt;
+		color: #123b5c;
+		letter-spacing: 1.5px;
 		text-transform: uppercase;
 	}
 	.school {
-		font-family: 'Anek Kannada', sans-serif;
+		font-family: 'Playfair Display', serif;
 		font-weight: 600;
-		font-size: 12pt;
+		font-size: 13pt;
 		color: #33455a;
-		margin-top: 5px;
+		margin-top: 4px;
+		letter-spacing: 0.5px;
+		text-transform: uppercase;
 	}
 	.school-en {
 		font-family: 'Montserrat', sans-serif;
@@ -432,13 +405,6 @@
 		background: #b8934c;
 		flex-shrink: 0;
 	}
-	.title-kn {
-		font-family: 'Anek Kannada', sans-serif;
-		font-weight: 700;
-		font-size: 21pt;
-		color: #123b5c;
-		letter-spacing: 1px;
-	}
 	.title-en {
 		font-family: 'Montserrat', sans-serif;
 		font-weight: 700;
@@ -461,12 +427,6 @@
 		font-size: 11pt;
 		color: #42536b;
 	}
-	.certify-kn {
-		font-family: 'Anek Kannada', sans-serif;
-		font-weight: 500;
-		font-size: 9pt;
-		color: #7c8ba1;
-	}
 
 	.student-name {
 		margin-top: 4.5mm;
@@ -488,22 +448,10 @@
 		max-width: 240mm;
 		line-height: 1.6;
 	}
-	.details-kn {
-		font-family: 'Anek Kannada', sans-serif;
-		font-weight: 500;
-		font-size: 9.5pt;
-		color: #7c8ba1;
-	}
 	.details-en {
 		font-family: 'Playfair Display', serif;
 		font-size: 10.5pt;
 		color: #42536b;
-	}
-	.category-kn {
-		font-family: 'Anek Kannada', sans-serif;
-		font-weight: 500;
-		font-size: 9.5pt;
-		color: #7c8ba1;
 	}
 	.category-en {
 		font-family: 'Playfair Display', serif;
@@ -525,12 +473,6 @@
 	.value.prize {
 		color: #e05d33;
 		font-size: 12.5pt;
-	}
-	.prize-kn {
-		font-family: 'Anek Kannada', sans-serif;
-		font-weight: 600;
-		font-size: 9.5pt;
-		color: #c14e28;
 	}
 
 	.date-line {
