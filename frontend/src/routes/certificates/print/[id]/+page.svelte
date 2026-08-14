@@ -78,28 +78,44 @@
 		<div class="cert-wrap" style="transform: scale({pageScale}); height: {297 * pageScale}mm;">
 			<div class="cert-page">
 
-				<!-- layered corner waves -->
-				<svg class="corner tl" viewBox="0 0 320 320" preserveAspectRatio="xMinYMin meet" aria-hidden="true">
-					<path d="M0 320 C90 320 190 250 190 160 C190 80 250 0 320 0 L0 0 Z" fill="#0B2545"/>
-					<path d="M0 320 C120 320 230 240 230 150 C230 70 280 10 320 10 L0 10 Z" fill="#2563EB"/>
-					<path d="M0 320 C150 320 265 225 265 135 C265 55 300 20 320 20 L0 20 Z" fill="#93C5FD"/>
-					<path d="M0 320 C175 320 300 215 300 120 C300 45 315 30 320 30 L0 30 Z" fill="#E5E7EB"/>
-				</svg>
-				<svg class="corner br" viewBox="0 0 320 320" preserveAspectRatio="xMaxYMax meet" aria-hidden="true">
-					<path d="M0 320 C90 320 190 250 190 160 C190 80 250 0 320 0 L0 0 Z" fill="#0B2545"/>
-					<path d="M0 320 C120 320 230 240 230 150 C230 70 280 10 320 10 L0 10 Z" fill="#2563EB"/>
-					<path d="M0 320 C150 320 265 225 265 135 C265 55 300 20 320 20 L0 20 Z" fill="#93C5FD"/>
-					<path d="M0 320 C175 320 300 215 300 120 C300 45 315 30 320 30 L0 30 Z" fill="#E5E7EB"/>
+				<!-- isometric grid -->
+				<svg class="bg-grid" aria-hidden="true">
+					<defs>
+						<pattern id="iso" width="60" height="103.92" patternUnits="userSpaceOnUse" patternTransform="scale(0.7)">
+							<g fill="none" stroke="#1B2A52" stroke-width="0.8">
+								<path d="M60 0 L30 51.96 L0 0"/>
+								<path d="M60 103.92 L30 51.96 L0 103.92"/>
+								<path d="M30 0 L30 103.92"/>
+							</g>
+						</pattern>
+					</defs>
+					<rect width="100%" height="100%" fill="url(#iso)" opacity="0.5"/>
 				</svg>
 
-				<!-- dotted accent lines -->
-				<div class="dots dots-l"></div>
-				<div class="dots dots-r"></div>
+				<!-- low-poly overlay: top -->
+				<svg class="poly poly-t" viewBox="0 0 210 100" preserveAspectRatio="none" aria-hidden="true">
+					<polygon points="0,0 0,60 75,22 130,52 210,12 210,0" fill="#0D1B3E"/>
+					<polygon points="0,0 0,40 65,16 115,36 210,5 210,0" fill="#16224A"/>
+					<polygon points="0,0 0,24 55,10 100,24 210,0 210,0" fill="#1E2E5C"/>
+					<polygon points="0,0 210,0 210,6 150,2 0,15" fill="#22D3EE" opacity="0.22"/>
+				</svg>
+
+				<!-- low-poly overlay: bottom-right -->
+				<svg class="poly poly-br" viewBox="0 0 210 100" preserveAspectRatio="none" aria-hidden="true">
+					<polygon points="0,0 0,50 60,22 120,42 210,0 210,0" fill="#0D1B3E"/>
+					<polygon points="0,0 0,32 55,12 105,26 210,0 210,0" fill="#16224A"/>
+					<polygon points="0,0 0,18 50,7 95,16 210,0 210,0" fill="#1E2E5C"/>
+					<polygon points="210,0 210,6 150,2 0,12 0,0" fill="#22D3EE" opacity="0.18"/>
+				</svg>
+
+				<!-- faint corner glows -->
+				<div class="glow glow-tl"></div>
+				<div class="glow glow-br"></div>
 
 				<div class="cert-inner">
 					<div class="logo-row">
 						<div class="logo-side">
-							<img src="/logos/karnataka-emblem.png" alt="Government of Karnataka" class="logo" />
+							<div class="logo-disc"><img src="/logos/karnataka-emblem.png" alt="Government of Karnataka" class="logo" /></div>
 						</div>
 						<div class="header">
 							<div class="kareis">KARNATAKA RESIDENTIAL EDUCATIONAL INSTITUTIONS SOCIETY</div>
@@ -107,29 +123,43 @@
 							<div class="school-en">BAHADDURGHATTA, CHITRADURGA</div>
 						</div>
 						<div class="logo-side">
-							<img src="/logos/kreis-logo.png" alt="KREIS" class="logo" />
+							<div class="logo-disc"><img src="/logos/kreis-logo.png" alt="KREIS" class="logo" /></div>
 						</div>
 					</div>
 					<div class="head-divider"><span></span><i></i><span></span></div>
 
-					<!-- golden seal -->
-					<svg class="seal" viewBox="0 0 120 120" aria-hidden="true">
+					<!-- digital emblem -->
+					<svg class="emblem" viewBox="0 0 120 120" aria-hidden="true">
 						<defs>
-							<radialGradient id="sealGold" cx="35%" cy="30%" r="80%">
-								<stop offset="0%" stop-color="#FBE9B0"/>
-								<stop offset="35%" stop-color="#F5D061"/>
-								<stop offset="70%" stop-color="#E6B325"/>
-								<stop offset="100%" stop-color="#A67C1E"/>
+							<radialGradient id="emGlow" cx="50%" cy="50%" r="50%">
+								<stop offset="0%" stop-color="#22D3EE" stop-opacity="0.5"/>
+								<stop offset="55%" stop-color="#38BDF8" stop-opacity="0.16"/>
+								<stop offset="100%" stop-color="#38BDF8" stop-opacity="0"/>
 							</radialGradient>
+							<linearGradient id="platinum" x1="0" y1="0" x2="1" y2="1">
+								<stop offset="0%" stop-color="#F8FAFE"/>
+								<stop offset="40%" stop-color="#D3DBEA"/>
+								<stop offset="100%" stop-color="#93A5C4"/>
+							</linearGradient>
+							<linearGradient id="hexBody" x1="0" y1="0" x2="0" y2="1">
+								<stop offset="0%" stop-color="#182548"/>
+								<stop offset="100%" stop-color="#0B1226"/>
+							</linearGradient>
 						</defs>
-						<circle cx="60" cy="60" r="55" fill="none" stroke="#D4AF37" stroke-width="1" opacity="0.6"/>
-						<circle cx="60" cy="60" r="52" fill="none" stroke="#E6B325" stroke-width="12" stroke-dasharray="7 6.4"/>
-						<circle cx="60" cy="60" r="52" fill="none" stroke="#C99B2A" stroke-width="12" stroke-dasharray="7 6.4" transform="rotate(10 60 60)"/>
-						<circle cx="60" cy="60" r="41" fill="url(#sealGold)" stroke="#8a6a14" stroke-width="1"/>
-						<circle cx="60" cy="60" r="35" fill="none" stroke="#A67C1E" stroke-width="0.8"/>
-						<circle cx="60" cy="60" r="28" fill="rgba(255,255,255,0.4)"/>
-						<circle cx="60" cy="60" r="18" fill="none" stroke="#A67C1E" stroke-width="0.8"/>
-						<path d="M60 24 L64 38 L79 38 L67 47 L72 62 L60 53 L48 62 L53 47 L41 38 L56 38 Z" fill="#A67C1E"/>
+						<circle cx="60" cy="60" r="55" fill="url(#emGlow)"/>
+						<polygon points="60,13 102,36.5 102,83.5 60,107 18,83.5 18,36.5" fill="url(#hexBody)" stroke="#38BDF8" stroke-width="1.2"/>
+						<polygon points="60,22 94,41.5 94,78.5 60,98 26,78.5 26,41.5" fill="none" stroke="#22D3EE" stroke-width="0.7" opacity="0.5"/>
+						<g stroke="#2E4B8C" stroke-width="0.6" opacity="0.9">
+							<line x1="60" y1="60" x2="102" y2="36.5"/>
+							<line x1="60" y1="60" x2="102" y2="83.5"/>
+							<line x1="60" y1="60" x2="60" y2="107"/>
+							<line x1="60" y1="60" x2="18" y2="83.5"/>
+							<line x1="60" y1="60" x2="18" y2="36.5"/>
+							<line x1="60" y1="60" x2="60" y2="13"/>
+						</g>
+						<path d="M60 40 L72 60 L60 80 L48 60 Z" fill="url(#platinum)"/>
+						<path d="M60 40 L60 60 L72 60 Z" fill="#FFFFFF" opacity="0.9"/>
+						<text x="60" y="57" text-anchor="middle" font-family="Montserrat, sans-serif" font-weight="700" font-size="13" fill="#F1F5FB">MDRS</text>
 					</svg>
 
 					<div class="title">
@@ -138,7 +168,7 @@
 					</div>
 
 					<div class="intro">
-						This certificate is proudly presented to
+						Acknowledging the outstanding achievement of
 					</div>
 
 					<div class="student-name">{cert.student_name}</div>
@@ -194,7 +224,7 @@
 {/if}
 
 <style>
-	@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&display=swap');
+	@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Cinzel+Decorative:wght@700&family=Inter:wght@400;500;600&display=swap');
 
 	:global(html), :global(body) {
 		margin: 0;
@@ -241,70 +271,69 @@
 		height: 297mm;
 		margin: 0;
 		background:
-			radial-gradient(ellipse 85% 55% at 50% 28%, rgba(37, 99, 235, 0.04), transparent 72%),
-			#ffffff;
+			radial-gradient(ellipse 90% 60% at 50% 26%, #101c3d 0%, #0A122A 70%),
+			#0A122A;
 		overflow: hidden;
-		box-shadow: 0 12px 48px rgba(0, 0, 0, 0.28);
-	}
-	/* elegant double frame */
-	.cert-page::before {
-		content: '';
-		position: absolute;
-		inset: 5mm;
-		border: 1px solid rgba(184, 147, 76, 0.55);
-		border-radius: 1.5mm;
-		z-index: 1;
-		pointer-events: none;
-	}
-	.cert-page::after {
-		content: '';
-		position: absolute;
-		inset: 6.2mm;
-		border: 0.5px solid rgba(11, 37, 69, 0.18);
-		border-radius: 1.5mm;
-		z-index: 1;
-		pointer-events: none;
+		box-shadow: 0 12px 48px rgba(0, 0, 0, 0.55);
 	}
 
-	/* layered corner waves */
-	.corner {
+	/* isometric grid */
+	.bg-grid {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 0;
+		opacity: 0.7;
+	}
+
+	/* low-poly overlays */
+	.poly {
 		position: absolute;
 		z-index: 1;
 		pointer-events: none;
 	}
-	.corner.tl {
+	.poly-t {
 		top: 0;
 		left: 0;
-		width: 110mm;
-		height: 110mm;
+		width: 100%;
+		height: 80mm;
 	}
-	.corner.br {
+	.poly-br {
 		bottom: 0;
 		right: 0;
-		width: 110mm;
-		height: 110mm;
+		width: 100%;
+		height: 80mm;
 		transform: rotate(180deg);
 	}
 
-	/* dotted accent lines */
-	.dots {
+	/* corner glows */
+	.glow {
 		position: absolute;
-		top: 72mm;
-		bottom: 72mm;
-		width: 4px;
-		z-index: 2;
-		background-image: radial-gradient(circle, rgba(37, 99, 235, 0.55) 1.6px, transparent 2.2px);
-		background-size: 4px 16px;
-		background-repeat: repeat-y;
+		z-index: 1;
 		pointer-events: none;
+		border-radius: 50%;
+		filter: blur(30px);
 	}
-	.dots-l { left: 8mm; }
-	.dots-r { right: 8mm; }
+	.glow-tl {
+		top: -40mm;
+		left: -40mm;
+		width: 110mm;
+		height: 110mm;
+		background: radial-gradient(circle, rgba(34, 211, 238, 0.18), transparent 65%);
+	}
+	.glow-br {
+		bottom: -45mm;
+		right: -45mm;
+		width: 120mm;
+		height: 120mm;
+		background: radial-gradient(circle, rgba(56, 189, 248, 0.15), transparent 65%);
+	}
 
 	.cert-inner {
 		position: relative;
 		z-index: 3;
-		padding: 15mm 30mm 16mm;
+		padding: 14mm 30mm 16mm;
 		height: 297mm;
 		box-sizing: border-box;
 		display: flex;
@@ -326,11 +355,22 @@
 		display: flex;
 		justify-content: center;
 	}
+	.logo-disc {
+		width: 22mm;
+		height: 22mm;
+		border-radius: 50%;
+		background: rgba(255, 255, 255, 0.06);
+		border: 1px solid rgba(148, 197, 255, 0.25);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 2mm;
+	}
 	.logo {
-		width: 20mm;
-		height: 20mm;
+		width: 18mm;
+		height: 18mm;
 		object-fit: contain;
-		filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.12));
+		filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
 	}
 
 	.header {
@@ -340,25 +380,25 @@
 	.kareis {
 		font-family: 'Montserrat', sans-serif;
 		font-weight: 700;
-		font-size: 9.5pt;
-		color: #a8842c;
+		font-size: 8.5pt;
+		color: #7DD3FC;
 		letter-spacing: 2px;
 		text-transform: uppercase;
 	}
 	.school {
-		font-family: 'Playfair Display', serif;
+		font-family: 'Montserrat', sans-serif;
 		font-weight: 700;
-		font-size: 17pt;
-		color: #0B2545;
+		font-size: 15pt;
+		color: #E8ECF5;
 		margin-top: 4px;
-		letter-spacing: 0.5px;
+		letter-spacing: 1px;
 		text-transform: uppercase;
 	}
 	.school-en {
 		font-family: 'Montserrat', sans-serif;
 		font-weight: 600;
-		font-size: 8.5pt;
-		color: #7c8ba1;
+		font-size: 8pt;
+		color: #7C8FB0;
 		letter-spacing: 2px;
 		margin-top: 2px;
 		text-transform: uppercase;
@@ -370,79 +410,88 @@
 		justify-content: center;
 		gap: 8px;
 		width: 82%;
-		margin-top: 6mm;
+		margin-top: 5mm;
 	}
 	.head-divider span {
 		flex: 1;
 		height: 1px;
-		background: linear-gradient(90deg, transparent, rgba(184, 147, 76, 0.7));
+		background: linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.5));
 	}
 	.head-divider span:last-child {
-		background: linear-gradient(90deg, rgba(184, 147, 76, 0.7), transparent);
+		background: linear-gradient(90deg, rgba(125, 211, 252, 0.5), transparent);
 	}
 	.head-divider i {
-		width: 6px;
-		height: 6px;
+		width: 5px;
+		height: 5px;
 		transform: rotate(45deg);
-		background: #b8934c;
+		background: #22D3EE;
 		flex-shrink: 0;
-		box-shadow: 0 0 0 2px rgba(184, 147, 76, 0.15);
+		box-shadow: 0 0 8px rgba(34, 211, 238, 0.7);
 	}
 
-	/* golden seal */
-	.seal {
-		width: 27mm;
-		height: 27mm;
-		margin-top: 7mm;
-		filter: drop-shadow(0 3px 8px rgba(166, 124, 30, 0.4));
+	/* digital emblem */
+	.emblem {
+		width: 30mm;
+		height: 30mm;
+		margin-top: 6mm;
+		animation: emblem-breathe 3s ease-in-out infinite;
+	}
+	@keyframes emblem-breathe {
+		0%, 100% { filter: drop-shadow(0 0 4px rgba(34, 211, 238, 0.35)); }
+		50% { filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.65)); }
 	}
 
 	.title {
-		margin-top: 6mm;
+		margin-top: 5.5mm;
 		width: 100%;
 	}
 	.title-main {
 		font-family: 'Montserrat', sans-serif;
 		font-weight: 800;
-		font-size: 24pt;
-		color: #0B2545;
-		letter-spacing: 10px;
+		font-size: 23pt;
+		letter-spacing: 9px;
 		text-transform: uppercase;
-		margin-right: -10px;
+		margin-right: -9px;
+		background: linear-gradient(180deg, #F7F9FD 0%, #B9C6DE 48%, #7DD3FC 100%);
+		-webkit-background-clip: text;
+		background-clip: text;
+		-webkit-text-fill-color: transparent;
+		color: transparent;
 	}
 	.title-sub {
 		font-family: 'Montserrat', sans-serif;
 		font-weight: 600;
-		font-size: 11pt;
-		color: #1E293B;
+		font-size: 10.5pt;
+		color: #8EA3C4;
 		letter-spacing: 7px;
 		text-transform: uppercase;
 		margin-top: 2.5mm;
 	}
 
 	.intro {
-		margin-top: 8mm;
+		margin-top: 7mm;
 		font-family: 'Inter', sans-serif;
 		font-weight: 400;
-		font-size: 10pt;
-		color: #334155;
+		font-size: 9.5pt;
+		color: #8A9BB8;
 		letter-spacing: 0.5px;
 	}
 
 	.student-name {
-		margin-top: 4.5mm;
-		font-family: 'Playfair Display', serif;
+		margin-top: 4mm;
+		font-family: 'Cinzel Decorative', serif;
 		font-weight: 700;
-		font-size: 30pt;
-		color: #1D4ED8;
+		font-size: 26pt;
+		color: #F1F5FB;
 		padding: 0 10mm 4mm;
-		border-bottom: 1.5px solid #1D4ED8;
+		border-bottom: 1.5px solid rgba(125, 211, 252, 0.55);
 		line-height: 1.4;
 		width: 100%;
+		text-shadow: 0 0 18px rgba(125, 211, 252, 0.35);
 	}
 
 	.body {
-		margin-top: 8mm;
+		margin-top: 7mm;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -454,33 +503,35 @@
 		font-family: 'Inter', sans-serif;
 		font-weight: 400;
 		font-size: 9.5pt;
-		color: #1E293B;
+		color: #9AA9C2;
 		letter-spacing: 0.3px;
 	}
 	.event-name {
 		font-family: 'Montserrat', sans-serif;
 		font-weight: 700;
 		font-size: 12.5pt;
-		color: #0B2545;
+		color: #7DD3FC;
 		text-transform: uppercase;
 		letter-spacing: 1.5px;
+		text-shadow: 0 0 14px rgba(125, 211, 252, 0.45);
 	}
 	.event-meta {
 		font-family: 'Inter', sans-serif;
 		font-weight: 500;
 		font-size: 8.5pt;
-		color: #64748B;
+		color: #647CA0;
 		text-transform: uppercase;
 		letter-spacing: 1.5px;
 	}
-	.event-meta .dot { color: #1D4ED8; margin: 0 3px; }
+	.event-meta .dot { color: #22D3EE; margin: 0 3px; }
 	.prize {
 		font-family: 'Montserrat', sans-serif;
 		font-weight: 700;
 		font-size: 11.5pt;
-		color: #2563EB;
+		color: #38BDF8;
 		text-transform: uppercase;
 		letter-spacing: 1.5px;
+		text-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
 	}
 
 	.date-line {
@@ -493,21 +544,21 @@
 	.date-en {
 		font-family: 'Inter', sans-serif;
 		font-weight: 600;
-		color: #0F172A;
+		color: #9AA9C2;
 	}
 	.date-value {
-		font-family: 'Playfair Display', serif;
+		font-family: 'Inter', sans-serif;
 		font-style: italic;
-		font-weight: 600;
-		color: #0F172A;
+		font-weight: 500;
+		color: #CBD5E1;
 	}
-	.date-sep { color: #1D4ED8; }
+	.date-sep { color: #22D3EE; }
 
 	.sig-sep {
-		margin-top: 10mm;
+		margin-top: 9mm;
 		width: 46%;
 		height: 1px;
-		background: linear-gradient(90deg, transparent, rgba(184, 147, 76, 0.6), transparent);
+		background: linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.45), transparent);
 	}
 
 	.signatures {
@@ -540,20 +591,20 @@
 	.signature-line {
 		width: 100%;
 		height: 1.2px;
-		background: #c3cdd9;
+		background: #3E5480;
 	}
 	.sig-name {
 		font-family: 'Montserrat', sans-serif;
 		font-weight: 700;
 		font-size: 10pt;
-		color: #0B2545;
+		color: #D9E2F0;
 		margin-top: 2.5mm;
 	}
 	.sig-role {
 		font-family: 'Inter', sans-serif;
 		font-weight: 500;
 		font-size: 8pt;
-		color: #64748B;
+		color: #647CA0;
 		margin-top: 1mm;
 		text-transform: uppercase;
 		letter-spacing: 1.5px;
@@ -612,6 +663,9 @@
 			box-shadow: none;
 			-webkit-print-color-adjust: exact;
 			print-color-adjust: exact;
+		}
+		.emblem {
+			animation: none;
 		}
 	}
 </style>
