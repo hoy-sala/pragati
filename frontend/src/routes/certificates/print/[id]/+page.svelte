@@ -607,25 +607,50 @@
 			margin: 0;
 		}
 		:global(html), :global(body) {
+			width: 297mm;
+			height: 210mm;
+			margin: 0 !important;
+			padding: 0 !important;
 			background: white;
-			overflow: visible;
+			overflow: hidden;
+		}
+		:global(.flex.h-screen),
+		:global(.flex),
+		:global(.h-screen),
+		:global(.overflow-hidden),
+		:global(.overflow-y-auto),
+		:global(main),
+		:global(.p-0) {
+			width: 297mm !important;
+			height: 210mm !important;
+			min-height: 0 !important;
+			max-height: 210mm !important;
+			overflow: hidden !important;
+			padding: 0 !important;
+			margin: 0 !important;
 		}
 		.stage, .stage.show {
 			padding: 0;
 			min-height: 0;
 			display: block;
+			width: 297mm;
+			height: 210mm;
+			overflow: hidden;
 		}
 		.toolbar, .no-print {
 			display: none !important;
 		}
 		.cert-wrap {
 			transform: none !important;
+			width: 297mm !important;
 			height: 210mm !important;
+			margin: 0 !important;
 		}
 		.cert-page {
 			margin: 0;
 			width: 297mm;
 			height: 210mm;
+			overflow: hidden;
 			box-shadow: none;
 			-webkit-print-color-adjust: exact;
 			print-color-adjust: exact;
