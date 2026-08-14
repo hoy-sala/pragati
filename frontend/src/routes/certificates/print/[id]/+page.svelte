@@ -17,8 +17,8 @@
 		const padding = 48;
 		const availW = window.innerWidth - padding;
 		const availH = window.innerHeight - 140;
-		const pageW = (297 / 25.4) * 96;
-		const pageH = (210 / 25.4) * 96;
+		const pageW = (210 / 25.4) * 96;
+		const pageH = (297 / 25.4) * 96;
 		pageScale = Math.min(1, availW / pageW, availH / pageH);
 	}
 
@@ -75,55 +75,26 @@
 	<div class="flex h-screen items-center justify-center text-danger-600">{error}</div>
 {:else if cert}
 	<div class="stage" class:show={ready}>
-		<div class="cert-wrap" style="transform: scale({pageScale}); height: {210 * pageScale}mm;">
+		<div class="cert-wrap" style="transform: scale({pageScale}); height: {297 * pageScale}mm;">
 			<div class="cert-page">
 
-				<!-- KREIS logo watermark -->
-				<img src="/logos/kreis-logo.png" alt="" class="bg-watermark" aria-hidden="true" />
+				<!-- layered corner waves -->
+				<svg class="corner tl" viewBox="0 0 320 320" preserveAspectRatio="xMinYMin meet" aria-hidden="true">
+					<path d="M0 320 C90 320 190 250 190 160 C190 80 250 0 320 0 L0 0 Z" fill="#0B2545"/>
+					<path d="M0 320 C120 320 230 240 230 150 C230 70 280 10 320 10 L0 10 Z" fill="#2563EB"/>
+					<path d="M0 320 C150 320 265 225 265 135 C265 55 300 20 320 20 L0 20 Z" fill="#93C5FD"/>
+					<path d="M0 320 C175 320 300 215 300 120 C300 45 315 30 320 30 L0 30 Z" fill="#E5E7EB"/>
+				</svg>
+				<svg class="corner br" viewBox="0 0 320 320" preserveAspectRatio="xMaxYMax meet" aria-hidden="true">
+					<path d="M0 320 C90 320 190 250 190 160 C190 80 250 0 320 0 L0 0 Z" fill="#0B2545"/>
+					<path d="M0 320 C120 320 230 240 230 150 C230 70 280 10 320 10 L0 10 Z" fill="#2563EB"/>
+					<path d="M0 320 C150 320 265 225 265 135 C265 55 300 20 320 20 L0 20 Z" fill="#93C5FD"/>
+					<path d="M0 320 C175 320 300 215 300 120 C300 45 315 30 320 30 L0 30 Z" fill="#E5E7EB"/>
+				</svg>
 
-				<!-- soft side glows -->
-				<div class="bg-glow bg-glow-l"></div>
-				<div class="bg-glow bg-glow-r"></div>
-
-				<!-- modern frame -->
-				<div class="frame">
-					<div class="frame-line outer"></div>
-					<div class="frame-line gold"></div>
-					<div class="accent-stripe top"></div>
-					<div class="accent-stripe bottom"></div>
-					<svg class="corner tl" viewBox="0 0 140 140" aria-hidden="true">
-						<g fill="none" stroke="#a8842c" stroke-linecap="round" stroke-linejoin="round">
-							<path d="M16 124 V34 Q16 16 34 16 H124" stroke-width="2.6"/>
-							<path d="M30 110 V48 Q30 30 48 30 H110" stroke-width="1"/>
-							<circle cx="30" cy="110" r="2.6" fill="#a8842c" stroke="none"/>
-							<path d="M44 44 L52 36 L60 44 L52 52 Z" fill="#a8842c" stroke="none"/>
-						</g>
-					</svg>
-					<svg class="corner tr" viewBox="0 0 140 140" aria-hidden="true">
-						<g fill="none" stroke="#a8842c" stroke-linecap="round" stroke-linejoin="round">
-							<path d="M124 124 V34 Q124 16 106 16 H16" stroke-width="2.6"/>
-							<path d="M110 110 V48 Q110 30 92 30 H30" stroke-width="1"/>
-							<circle cx="110" cy="110" r="2.6" fill="#a8842c" stroke="none"/>
-							<path d="M96 44 L88 36 L80 44 L88 52 Z" fill="#a8842c" stroke="none"/>
-						</g>
-					</svg>
-					<svg class="corner bl" viewBox="0 0 140 140" aria-hidden="true">
-						<g fill="none" stroke="#a8842c" stroke-linecap="round" stroke-linejoin="round">
-							<path d="M16 16 V106 Q16 124 34 124 H124" stroke-width="2.6"/>
-							<path d="M30 30 V92 Q30 110 48 110 H110" stroke-width="1"/>
-							<circle cx="30" cy="30" r="2.6" fill="#a8842c" stroke="none"/>
-							<path d="M44 96 L52 104 L60 96 L52 88 Z" fill="#a8842c" stroke="none"/>
-						</g>
-					</svg>
-					<svg class="corner br" viewBox="0 0 140 140" aria-hidden="true">
-						<g fill="none" stroke="#a8842c" stroke-linecap="round" stroke-linejoin="round">
-							<path d="M124 16 V106 Q124 124 106 124 H16" stroke-width="2.6"/>
-							<path d="M110 30 V92 Q110 110 92 110 H30" stroke-width="1"/>
-							<circle cx="110" cy="30" r="2.6" fill="#a8842c" stroke="none"/>
-							<path d="M96 96 L88 104 L80 96 L88 88 Z" fill="#a8842c" stroke="none"/>
-						</g>
-					</svg>
-				</div>
+				<!-- dotted accent lines -->
+				<div class="dots dots-l"></div>
+				<div class="dots dots-r"></div>
 
 				<div class="cert-inner">
 					<div class="logo-row">
@@ -140,30 +111,47 @@
 						</div>
 					</div>
 
+					<!-- golden seal -->
+					<svg class="seal" viewBox="0 0 120 120" aria-hidden="true">
+						<defs>
+							<radialGradient id="sealGold" cx="35%" cy="30%" r="80%">
+								<stop offset="0%" stop-color="#F7D774"/>
+								<stop offset="45%" stop-color="#E6B325"/>
+								<stop offset="100%" stop-color="#A67C1E"/>
+							</radialGradient>
+						</defs>
+						<circle cx="60" cy="60" r="53" fill="none" stroke="#E6B325" stroke-width="13" stroke-dasharray="8 6.3"/>
+						<circle cx="60" cy="60" r="53" fill="none" stroke="#C99B2A" stroke-width="13" stroke-dasharray="8 6.3" transform="rotate(10 60 60)"/>
+						<circle cx="60" cy="60" r="42" fill="url(#sealGold)" stroke="#8a6a14" stroke-width="1.2"/>
+						<circle cx="60" cy="60" r="33" fill="none" stroke="#A67C1E" stroke-width="1"/>
+						<circle cx="60" cy="60" r="26" fill="rgba(255,255,255,0.35)"/>
+						<path d="M60 22 L64.5 39 L82 39 L68 50 L73 68 L60 57 L47 68 L52 50 L38 39 L55.5 39 Z" fill="#8a6a14"/>
+					</svg>
+
 					<div class="title">
-						<div class="title-rule"><span></span><i></i><span></span></div>
-						<div class="title-en">CERTIFICATE OF ACHIEVEMENT</div>
-						<div class="title-rule"><span></span><i></i><span></span></div>
+						<div class="title-main">CERTIFICATE</div>
+						<div class="title-sub">OF ACHIEVEMENT</div>
 					</div>
 
-					<div class="certify">
-						<span class="certify-en">This is to certify that</span>
+					<div class="intro">
+						This certificate is proudly presented to
 					</div>
 
 					<div class="student-name">{cert.student_name}</div>
 
-					<div class="details">
-						<span class="details-en">studying in</span>
-						<span class="value class">{cert.class_name || '—'}</span>
-						<span class="details-en">has participated in</span>
-						<span class="value event">{cert.event?.name || 'Event'}</span>
-						<span class="category-en">{categoryEn(cert.event?.category)}</span>
-						<span class="details-en">and secured</span>
-						<span class="value prize">{positionLabel(cert.position)}</span>
+					<div class="body">
+						<span class="body-line">for successfully fulfilling the requirements of the</span>
+						<span class="event-name">{cert.event?.name || 'Event'}</span>
+						<span class="event-meta">
+							{categoryEn(cert.event?.category)}
+							{#if cert.class_name}<span class="dot">•</span> Class {cert.class_name}{/if}
+						</span>
+						<span class="body-line">and has been awarded the</span>
+						<span class="prize">{positionLabel(cert.position)}</span>
 					</div>
 
 					<div class="date-line">
-						<span class="date-en">Date:</span>
+						<span class="date-en">Awarded on</span>
 						<span class="date-value">{formatDate(cert.issue_date || cert.event?.held_date)}</span>
 						{#if cert.event?.venue}
 							<span class="date-sep">•</span>
@@ -200,7 +188,7 @@
 {/if}
 
 <style>
-	@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap');
+	@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&display=swap');
 
 	:global(html), :global(body) {
 		margin: 0;
@@ -243,95 +231,54 @@
 
 	.cert-page {
 		position: relative;
-		width: 297mm;
-		height: 210mm;
+		width: 210mm;
+		height: 297mm;
 		margin: 0;
-		background:
-			radial-gradient(ellipse 120% 90% at 50% 0%, #ffffff 0%, #fbfcfe 55%, #f4f7fb 100%);
+		background: #ffffff;
 		overflow: hidden;
 		box-shadow: 0 12px 48px rgba(0, 0, 0, 0.28);
 	}
 
-	/* KREIS logo watermark */
-	.bg-watermark {
+	/* layered corner waves */
+	.corner {
 		position: absolute;
-		top: 52%;
-		left: 50%;
-		width: 120mm;
-		height: 120mm;
-		object-fit: contain;
-		transform: translate(-50%, -50%);
-		z-index: 0;
-		opacity: 0.08;
-	}
-
-	/* soft radial glows behind content */
-	.bg-glow {
-		position: absolute;
-		top: 50%;
-		width: 55mm;
-		height: 55mm;
-		border-radius: 50%;
-		transform: translateY(-50%);
-		z-index: 0;
-		pointer-events: none;
-	}
-	.bg-glow-l {
-		left: -18mm;
-		background: radial-gradient(circle, rgba(184, 147, 76, 0.10) 0%, transparent 70%);
-	}
-	.bg-glow-r {
-		right: -18mm;
-		background: radial-gradient(circle, rgba(224, 93, 51, 0.07) 0%, transparent 70%);
-	}
-
-	/* modern frame */
-	.frame {
-		position: absolute;
-		inset: 0;
 		z-index: 1;
 		pointer-events: none;
 	}
-	.frame-line.outer {
-		position: absolute;
-		inset: 4mm;
-		border: 1px solid #d8dfe8;
-		border-radius: 1mm;
+	.corner.tl {
+		top: 0;
+		left: 0;
+		width: 115mm;
+		height: 115mm;
 	}
-	.frame-line.gold {
-		position: absolute;
-		inset: 5.6mm;
-		border: 1.4px solid #b8934c;
-		border-radius: 0.8mm;
-		opacity: 0.9;
+	.corner.br {
+		bottom: 0;
+		right: 0;
+		width: 115mm;
+		height: 115mm;
+		transform: rotate(180deg);
 	}
-	.accent-stripe {
-		position: absolute;
-		left: 5.6mm;
-		right: 5.6mm;
-		height: 2.4mm;
-		background: linear-gradient(90deg, #b8934c, #d8b25e 20%, #dfe6ee 38%, #dfe6ee 62%, #d8b25e 80%, #b8934c);
-		border-radius: 1mm;
-	}
-	.accent-stripe.top { top: 6.8mm; }
-	.accent-stripe.bottom { bottom: 6.8mm; }
 
-	.corner {
+	/* dotted accent lines */
+	.dots {
 		position: absolute;
-		width: 34mm;
-		height: 34mm;
+		top: 70mm;
+		bottom: 70mm;
+		width: 6px;
 		z-index: 2;
+		background-image: radial-gradient(circle, rgba(37, 99, 235, 0.5) 2.2px, transparent 3px);
+		background-size: 6px 15px;
+		background-repeat: repeat-y;
+		pointer-events: none;
 	}
-	.corner.tl { top: 1.6mm; left: 1.6mm; }
-	.corner.tr { top: 1.6mm; right: 1.6mm; }
-	.corner.bl { bottom: 1.6mm; left: 1.6mm; }
-	.corner.br { bottom: 1.6mm; right: 1.6mm; }
+	.dots-l { left: 11mm; }
+	.dots-r { right: 11mm; }
 
 	.cert-inner {
 		position: relative;
 		z-index: 3;
-		padding: 17mm 26mm 14mm;
-		height: 210mm;
+		padding: 15mm 30mm 16mm;
+		height: 297mm;
 		box-sizing: border-box;
 		display: flex;
 		flex-direction: column;
@@ -348,13 +295,13 @@
 	}
 	.logo-side {
 		flex-shrink: 0;
-		width: 38mm;
+		width: 30mm;
 		display: flex;
 		justify-content: center;
 	}
 	.logo {
-		width: 25mm;
-		height: 25mm;
+		width: 20mm;
+		height: 20mm;
 		object-fit: contain;
 		filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.12));
 	}
@@ -366,7 +313,7 @@
 	.kareis {
 		font-family: 'Montserrat', sans-serif;
 		font-weight: 700;
-		font-size: 10.5pt;
+		font-size: 9.5pt;
 		color: #a8842c;
 		letter-spacing: 2px;
 		text-transform: uppercase;
@@ -374,137 +321,133 @@
 	.school {
 		font-family: 'Playfair Display', serif;
 		font-weight: 700;
-		font-size: 19pt;
-		color: #123b5c;
-		margin-top: 5px;
+		font-size: 17pt;
+		color: #0B2545;
+		margin-top: 4px;
 		letter-spacing: 0.5px;
 		text-transform: uppercase;
 	}
 	.school-en {
 		font-family: 'Montserrat', sans-serif;
 		font-weight: 600;
-		font-size: 9pt;
+		font-size: 8.5pt;
 		color: #7c8ba1;
 		letter-spacing: 2px;
-		margin-top: 3px;
+		margin-top: 2px;
 		text-transform: uppercase;
+	}
+
+	/* golden seal */
+	.seal {
+		width: 30mm;
+		height: 30mm;
+		margin-top: 8mm;
+		filter: drop-shadow(0 3px 6px rgba(166, 124, 30, 0.45));
 	}
 
 	.title {
-		margin-top: 9mm;
+		margin-top: 7mm;
 		width: 100%;
 	}
-	.title-rule {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 6px;
-		margin: 3mm auto;
-		width: 68%;
-	}
-	.title-rule span {
-		flex: 1;
-		height: 1px;
-		background: linear-gradient(90deg, transparent, #b8934c);
-	}
-	.title-rule span:last-child {
-		background: linear-gradient(90deg, #b8934c, transparent);
-	}
-	.title-rule i {
-		width: 6px;
-		height: 6px;
-		transform: rotate(45deg);
-		background: #b8934c;
-		flex-shrink: 0;
-	}
-	.title-en {
+	.title-main {
 		font-family: 'Montserrat', sans-serif;
-		font-weight: 700;
-		font-size: 13.5pt;
-		color: #a8842c;
-		letter-spacing: 7px;
-		margin-top: 3px;
+		font-weight: 800;
+		font-size: 26pt;
+		color: #0B2545;
+		letter-spacing: 12px;
 		text-transform: uppercase;
+		margin-right: -12px;
+	}
+	.title-sub {
+		font-family: 'Montserrat', sans-serif;
+		font-weight: 600;
+		font-size: 12pt;
+		color: #1E293B;
+		letter-spacing: 8px;
+		text-transform: uppercase;
+		margin-top: 3mm;
 	}
 
-	.certify {
-		margin-top: 7.5mm;
-		display: flex;
-		flex-direction: column;
-		gap: 1px;
-	}
-	.certify-en {
-		font-family: 'Playfair Display', serif;
-		font-style: italic;
-		font-size: 11pt;
-		color: #42536b;
+	.intro {
+		margin-top: 9mm;
+		font-family: 'Inter', sans-serif;
+		font-weight: 400;
+		font-size: 10pt;
+		color: #334155;
 	}
 
 	.student-name {
-		margin-top: 4.5mm;
-		font-family: 'Great Vibes', cursive;
-		font-size: 29pt;
-		color: #123b5c;
-		padding: 0 26mm 3mm;
-		border-bottom: 1.2px solid #b8934c;
-		line-height: 1.5;
+		margin-top: 5mm;
+		font-family: 'Playfair Display', serif;
+		font-weight: 700;
+		font-size: 31pt;
+		color: #1D4ED8;
+		padding: 0 10mm 4mm;
+		border-bottom: 1.2px solid #1D4ED8;
+		line-height: 1.4;
+		width: 100%;
 	}
 
-	.details {
-		margin-top: 7mm;
+	.body {
+		margin-top: 9mm;
 		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		align-items: baseline;
-		gap: 4px 8px;
-		max-width: 240mm;
-		line-height: 1.6;
+		flex-direction: column;
+		align-items: center;
+		gap: 3.5mm;
+		max-width: 150mm;
+		line-height: 1.5;
 	}
-	.details-en {
-		font-family: 'Playfair Display', serif;
-		font-size: 10.5pt;
-		color: #42536b;
-	}
-	.category-en {
-		font-family: 'Playfair Display', serif;
-		font-style: italic;
+	.body-line {
+		font-family: 'Inter', sans-serif;
+		font-weight: 400;
 		font-size: 9.5pt;
-		color: #7c8ba1;
+		color: #1E293B;
 	}
-	.value {
-		font-family: 'Playfair Display', serif;
-		font-weight: 600;
+	.event-name {
+		font-family: 'Montserrat', sans-serif;
+		font-weight: 700;
+		font-size: 13pt;
+		color: #0B2545;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+	}
+	.event-meta {
+		font-family: 'Inter', sans-serif;
+		font-weight: 500;
+		font-size: 8.5pt;
+		color: #64748B;
+		text-transform: uppercase;
+		letter-spacing: 1.5px;
+	}
+	.event-meta .dot { color: #1D4ED8; margin: 0 3px; }
+	.prize {
+		font-family: 'Montserrat', sans-serif;
+		font-weight: 700;
 		font-size: 11.5pt;
-		color: #26364a;
-	}
-	.value.class { color: #123b5c; }
-	.value.event {
-		color: #123b5c;
-		font-size: 12.5pt;
-	}
-	.value.prize {
-		color: #e05d33;
-		font-size: 12.5pt;
+		color: #2563EB;
+		text-transform: uppercase;
+		letter-spacing: 1px;
 	}
 
 	.date-line {
-		margin-top: 6mm;
+		margin-top: 9mm;
 		display: flex;
 		align-items: baseline;
-		gap: 6px;
-		font-size: 10pt;
+		gap: 5px;
+		font-size: 9.5pt;
 	}
 	.date-en {
-		font-family: 'Montserrat', sans-serif;
+		font-family: 'Inter', sans-serif;
 		font-weight: 600;
-		color: #42536b;
+		color: #0F172A;
 	}
 	.date-value {
 		font-family: 'Playfair Display', serif;
 		font-style: italic;
-		color: #26364a;
+		font-weight: 600;
+		color: #0F172A;
 	}
-	.date-sep { color: #b8934c; }
+	.date-sep { color: #1D4ED8; }
 
 	.signatures {
 		margin-top: auto;
@@ -518,20 +461,20 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		width: 52mm;
+		width: 48mm;
 	}
 	.signature-area {
-		height: 12mm;
+		height: 13mm;
 		width: 100%;
 		display: flex;
 		align-items: flex-end;
 		justify-content: center;
 	}
 	.signature-img {
-		height: 12mm;
+		height: 13mm;
 		width: auto;
 		object-fit: contain;
-		max-width: 46mm;
+		max-width: 44mm;
 	}
 	.signature-line {
 		width: 100%;
@@ -539,17 +482,17 @@
 		background: #b3bfcc;
 	}
 	.sig-name {
-		font-family: 'Playfair Display', serif;
-		font-weight: 600;
-		font-size: 9pt;
-		color: #26364a;
+		font-family: 'Montserrat', sans-serif;
+		font-weight: 700;
+		font-size: 10pt;
+		color: #0B2545;
 		margin-top: 2.5mm;
 	}
 	.sig-role {
-		font-family: 'Montserrat', sans-serif;
+		font-family: 'Inter', sans-serif;
 		font-weight: 500;
-		font-size: 7.5pt;
-		color: #7c8ba1;
+		font-size: 8pt;
+		color: #64748B;
 		margin-top: 1mm;
 		text-transform: uppercase;
 		letter-spacing: 1.5px;
@@ -557,12 +500,12 @@
 
 	@media print {
 		@page {
-			size: A4 landscape;
+			size: A4 portrait;
 			margin: 0;
 		}
 		:global(html), :global(body) {
-			width: 297mm;
-			height: 210mm;
+			width: 210mm;
+			height: 297mm;
 			margin: 0 !important;
 			padding: 0 !important;
 			background: white;
@@ -575,10 +518,10 @@
 		:global(.overflow-y-auto),
 		:global(main),
 		:global(.p-0) {
-			width: 297mm !important;
-			height: 210mm !important;
+			width: 210mm !important;
+			height: 297mm !important;
 			min-height: 0 !important;
-			max-height: 210mm !important;
+			max-height: 297mm !important;
 			overflow: hidden !important;
 			padding: 0 !important;
 			margin: 0 !important;
@@ -587,8 +530,8 @@
 			padding: 0;
 			min-height: 0;
 			display: block;
-			width: 297mm;
-			height: 210mm;
+			width: 210mm;
+			height: 297mm;
 			overflow: hidden;
 		}
 		.toolbar, .no-print {
@@ -596,14 +539,14 @@
 		}
 		.cert-wrap {
 			transform: none !important;
-			width: 297mm !important;
-			height: 210mm !important;
+			width: 210mm !important;
+			height: 297mm !important;
 			margin: 0 !important;
 		}
 		.cert-page {
 			margin: 0;
-			width: 297mm;
-			height: 210mm;
+			width: 210mm;
+			height: 297mm;
 			overflow: hidden;
 			box-shadow: none;
 			-webkit-print-color-adjust: exact;
