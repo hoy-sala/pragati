@@ -144,8 +144,8 @@ func (h *MentorHandler) Stats(w http.ResponseWriter, r *http.Request) {
 
 	mentorRows, err := h.db.Query(r.Context(),
 		`SELECT u.id, u.name, COUNT(ma.id) as student_count
-		 FROM users u LEFT JOIN mentor_assignments ma ON ma.mentor_id = u.id AND ma.academic_year_id = $1
-		 WHERE u.role IN ('teacher','special_educator') AND u.is_active = true AND u.deleted_at IS NULL
+FROM users u LEFT JOIN mentor_assignments ma ON ma.mentor_id = u.id AND ma.academic_year_id = $1
+		 WHERE u.role IN ('teacher','special_educator','principal') AND u.is_active = true AND u.deleted_at IS NULL
 		 GROUP BY u.id, u.name ORDER BY u.name`, yearID)
 	if err != nil { renderJSON(w, http.StatusInternalServerError, apiErr("INTERNAL_ERROR", "failed to fetch stats")); return }
 	defer mentorRows.Close()
@@ -386,8 +386,8 @@ func (h *MentorHandler) MonthlySummary(w http.ResponseWriter, r *http.Request) {
 		 FROM users u
 		 LEFT JOIN mentor_assignments ma ON ma.mentor_id = u.id AND ma.academic_year_id = $1
 		 LEFT JOIN mentor_attendance a ON a.mentor_id = u.id
-		 LEFT JOIN mentor_logs ml ON ml.mentor_id = u.id
-		 WHERE u.role IN ('teacher','special_educator') AND u.is_active = true AND u.deleted_at IS NULL
+LEFT JOIN mentor_logs ml ON ml.mentor_id = u.id
+		 WHERE u.role IN ('teacher','special_educator','principal') AND u.is_active = true AND u.deleted_at IS NULL
 		 GROUP BY u.id, u.name ORDER BY u.name`, yearID)
 	if err != nil { renderJSON(w, http.StatusInternalServerError, apiErr("INTERNAL_ERROR", "failed to fetch summary")); return }
 	defer rows.Close()
