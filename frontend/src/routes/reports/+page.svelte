@@ -556,7 +556,6 @@
 									<td class="px-3 py-2 text-center text-slate-400">{i + 1}</td>
 									<td class="px-3 py-2">
 										<div class="font-medium text-slate-800 text-xs whitespace-nowrap">{st.name}</div>
-										<div class="text-[10px] text-slate-400">Roll {st.roll_no}</div>
 									</td>
 									<td class="px-3 py-2 text-slate-500 text-xs">{st.sats_number}</td>
 									<td class="px-3 py-2 text-center text-slate-600 text-xs">{st.class_name.replace('Class ', '')}</td>
