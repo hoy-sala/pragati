@@ -91,6 +91,7 @@
 	const curricularOrder = ['KAN', 'ENG', 'HIN', 'MAT', 'SCI', 'SOC'];
 
 	onMount(async () => {
+		document.documentElement.classList.add('report-print');
 		const [cr, yr] = await Promise.all([
 			api<Class[]>('GET', '/classes'),
 			api<AcademicYear[]>('GET', '/academic-years'),
@@ -599,6 +600,27 @@
 		:global(body) { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 		:global(.no-print) { display: none !important; }
 		.print-area { border: none !important; border-radius: 0 !important; box-shadow: none !important; max-width: 100% !important; margin: 0 !important; }
+	}
+
+	@media print {
+		:global(html.report-print), :global(html.report-print body) {
+			height: auto !important;
+			overflow: visible !important;
+			background: white;
+		}
+		:global(html.report-print .flex.h-screen),
+		:global(html.report-print .h-screen),
+		:global(html.report-print .overflow-hidden),
+		:global(html.report-print .overflow-y-auto),
+		:global(html.report-print main) {
+			display: block !important;
+			height: auto !important;
+			min-height: 0 !important;
+			max-height: none !important;
+			overflow: visible !important;
+			padding: 0 !important;
+			margin: 0 !important;
+		}
 	}
 
 	.mentor-page {
