@@ -50,6 +50,7 @@
 	}
 
 	onMount(async () => {
+		document.documentElement.classList.add('cert-print');
 		const res = await api<CertificateDetail>('GET', `/certificates/${certId}`);
 		if (res.data) {
 			cert = res.data;
@@ -648,7 +649,7 @@
 			size: A4 portrait;
 			margin: 0;
 		}
-		:global(html), :global(body) {
+		:global(html.cert-print), :global(html.cert-print body) {
 			width: 210mm;
 			height: 297mm;
 			margin: 0 !important;
@@ -656,13 +657,13 @@
 			background: white;
 			overflow: hidden;
 		}
-		:global(.flex.h-screen),
-		:global(.flex),
-		:global(.h-screen),
-		:global(.overflow-hidden),
-		:global(.overflow-y-auto),
-		:global(main),
-		:global(.p-0) {
+		:global(html.cert-print .flex.h-screen),
+		:global(html.cert-print .flex),
+		:global(html.cert-print .h-screen),
+		:global(html.cert-print .overflow-hidden),
+		:global(html.cert-print .overflow-y-auto),
+		:global(html.cert-print main),
+		:global(html.cert-print .p-0) {
 			width: 210mm !important;
 			height: 297mm !important;
 			min-height: 0 !important;
