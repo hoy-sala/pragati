@@ -843,6 +843,140 @@ func (h *ReportsHandler) StudentSelf(w http.ResponseWriter, r *http.Request) {
 	}))
 }
 
+// MentorReportStudent is one student in a mentor's group.
+type MentorReportStudent struct {
+	StudentID    string  `json:"student_id"`
+	SATSNumber   string  `json:"sats_number"`
+	Name         string  `json:"name"`
+	RollNo       int     `json:"roll_no"`
+	Gender       string  `json:"gender"`
+	ClassName    string  `json:"class_name"`
+	CognitivePct float64 `json:"cognitive_pct"`
+	Tier         int     `json:"tier"`
+}
+
+// MentorReportGroup is one mentor's list of students.
+type MentorReportGroup struct {
+	MentorID        string                `json:"mentor_id"`
+	MentorName      string                `json:"mentor_name"`
+	StudentCount    int                   `json:"student_count"`
+	AvgCognitivePct float64               `json:"avg_cognitive_pct"`
+	Students        []MentorReportStudent `json:"students"`
+}
+
+// GET /api/v1/reports/mentors?academic_year_id=
+func (h *ReportsHandler) MentorReport(w http.ResponseWriter, r *http.Request) {
+	claims := middleware.GetUserClaims(r.Context())
+	academicYearID := r.URL.Query().Get("academic_year_id")
+	if academicYearID == "" {
+		renderJSON(w, http.StatusBadRequest, apiErr("VALIDATION_ERROR", "academic_year_id is required"))
+		return
+	}
+
+	var yearName string
+	if err := h.db.QueryRow(r.Context(),
+		`SELECT name FROM academic_years WHERE id = $1 AND school_id = $2 AND deleted_at IS NULL`,
+		academicYearID, claims.SchoolID,
+	).Scan(&yearName); err != nil {
+		renderJSON(w, http.StatusNotFound, apiErr("NOT_FOUND", "academic year not found"))
+		return
+	}
+
+	rows, err := h.db.Query(r.Context(), `
+		WITH per_student AS (
+			SELECT m.student_id, ROUND(AVG(m.marks_obtained / a.max_marks * 100)::numeric, 2) AS cognitive_pct
+			FROM marks m
+			JOIN assessments a ON a.id = m.assessment_id
+			WHERE m.marks_obtained IS NOT NULL AND a.max_marks > 0
+			GROUP BY m.student_id
+		),
+		ranked AS (
+			SELECT s.id AS student_id, s.class_id, p.cognitive_pct,
+				ROW_NUMBER() OVER (PARTITION BY s.class_id ORDER BY p.cognitive_pct DESC, s.first_name) AS rank_in_class,
+				COUNT(*) OVER (PARTITION BY s.class_id) AS n_in_class
+			FROM students s
+			JOIN per_student p ON p.student_id = s.id
+			WHERE s.deleted_at IS NULL AND s.is_active = true AND s.school_id = $2
+		),
+		tiered AS (
+			SELECT student_id, class_id, cognitive_pct,
+				LEAST(4, CEIL(rank_in_class * 4.0 / n_in_class)) AS tier
+			FROM ranked
+		)
+		SELECT u.id AS mentor_id, u.name AS mentor_name,
+			s.id AS student_id, s.sats_number,
+			s.first_name || ' ' || COALESCE(s.last_name,'') AS student_name,
+			COALESCE(s.roll_no, 0), COALESCE(s.gender, ''),
+			c.name AS class_name, t.cognitive_pct, t.tier
+		FROM mentor_assignments ma
+		JOIN users u ON u.id = ma.mentor_id
+		JOIN students s ON s.id = ma.student_id
+		JOIN classes c ON c.id = s.class_id
+		LEFT JOIN tiered t ON t.student_id = s.id
+		WHERE ma.academic_year_id = $1
+		  AND u.school_id = $2 AND u.deleted_at IS NULL AND u.is_active = true
+		  AND s.deleted_at IS NULL AND s.is_active = true
+		ORDER BY u.name ASC, t.cognitive_pct DESC NULLS LAST, s.first_name ASC`,
+		academicYearID, claims.SchoolID)
+	if err != nil {
+		log.Error().Err(err).Msg("mentor report query failed")
+		renderJSON(w, http.StatusInternalServerError, apiErr("INTERNAL_ERROR", "failed to fetch mentor report"))
+		return
+	}
+	defer rows.Close()
+
+	groups := map[string]*MentorReportGroup{}
+	var order []string
+	for rows.Next() {
+		var mid, mname, sid, sats, sname, gender, cname string
+		var roll int
+		var cog float64
+		var tier int
+		if err := rows.Scan(&mid, &mname, &sid, &sats, &sname, &roll, &gender, &cname, &cog, &tier); err != nil {
+			continue
+		}
+		g, ok := groups[mid]
+		if !ok {
+			g = &MentorReportGroup{MentorID: mid, MentorName: mname}
+			groups[mid] = g
+			order = append(order, mid)
+		}
+		g.Students = append(g.Students, MentorReportStudent{
+			StudentID: sid, SATSNumber: sats, Name: sname, RollNo: roll,
+			Gender: gender, ClassName: cname, CognitivePct: cog, Tier: tier,
+		})
+	}
+	if err := rows.Err(); err != nil {
+		log.Error().Err(err).Msg("mentor report rows error")
+		renderJSON(w, http.StatusInternalServerError, apiErr("INTERNAL_ERROR", "failed to fetch mentor report"))
+		return
+	}
+
+	mentors := make([]MentorReportGroup, 0, len(order))
+	for _, mid := range order {
+		g := groups[mid]
+		g.StudentCount = len(g.Students)
+		var sum float64
+		var cnt int
+		for _, s := range g.Students {
+			if s.CognitivePct > 0 {
+				sum += s.CognitivePct
+				cnt++
+			}
+		}
+		if cnt > 0 {
+			g.AvgCognitivePct = sum / float64(cnt)
+		}
+		mentors = append(mentors, *g)
+	}
+
+	renderJSON(w, http.StatusOK, apiOK(map[string]interface{}{
+		"academic_year_id":   academicYearID,
+		"academic_year_name": yearName,
+		"mentors":            mentors,
+	}))
+}
+
 func apiOK(data interface{}) map[string]interface{} {
 	return map[string]interface{}{"data": data}
 }

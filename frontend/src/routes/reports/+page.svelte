@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { api } from '$lib/api/client.svelte';
-	import { GraduationCap, Printer, Users, FileText } from 'lucide-svelte';
+	import { GraduationCap, Printer, Users, FileText, HeartHandshake } from 'lucide-svelte';
 	import Select from '$lib/components/Select.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import type { Class, AcademicYear } from '$lib/types';
 	import { onMount } from 'svelte';
 
-	type Tab = 'marksheet' | 'report';
+	type Tab = 'marksheet' | 'report' | 'mentors';
 	let activeTab = $state<Tab>('marksheet');
 
 	let classes = $state<Class[]>([]);
@@ -39,6 +39,10 @@
 	let studentReport = $state<StudentReport | null>(null);
 	let reportStudents = $state<{ id: string; name: string; roll_no: number }[]>([]);
 
+	type MentorReportStudent = { student_id: string; sats_number: string; name: string; roll_no: number; gender: string; class_name: string; cognitive_pct: number; tier: number };
+	type MentorReportGroup = { mentor_id: string; mentor_name: string; student_count: number; avg_cognitive_pct: number; students: MentorReportStudent[] };
+	let mentorReport = $state<{ academic_year_id: string; academic_year_name: string; mentors: MentorReportGroup[] } | null>(null);
+
 	const termOptions = [
 		{ id: '', name: 'All Terms' },
 		{ id: 'Term 1', name: 'Term 1 (FA1, FA2, SA1)' },
@@ -70,6 +74,14 @@
 		if (grade === 'D') return 'text-red-600 bg-red-50';
 		if (grade === 'F') return 'text-red-800 bg-red-100';
 		return 'text-slate-600 bg-slate-100';
+	}
+
+	function tierClass(tier: number): string {
+		if (tier === 1) return 'text-emerald-700 bg-emerald-50';
+		if (tier === 2) return 'text-green-700 bg-green-50';
+		if (tier === 3) return 'text-amber-700 bg-amber-50';
+		if (tier === 4) return 'text-red-700 bg-red-50';
+		return 'text-slate-500 bg-slate-100';
 	}
 
 	function subjectTypeLabel(t: string): string {
@@ -133,6 +145,21 @@
 		}
 	}
 
+	async function loadMentorReport() {
+		if (!selectedYear) { err = 'Select an academic year'; return; }
+		err = ''; loading = true; mentorReport = null;
+		try {
+			const params = new URLSearchParams({ academic_year_id: selectedYear });
+			const res = await api<typeof mentorReport>('GET', `/reports/mentors?${params}`);
+			if (res.data) mentorReport = res.data;
+			else if (res.error) err = res.error.message;
+		} catch (e) {
+			err = 'Failed to load mentor report';
+		} finally {
+			loading = false;
+		}
+	}
+
 	$effect(() => {
 		if (selectedClass && activeTab === 'marksheet') loadMarkSheet();
 	});
@@ -143,6 +170,14 @@
 
 	$effect(() => {
 		if (selectedClass && activeTab === 'report') loadReportStudents();
+	});
+
+	$effect(() => {
+		if (selectedYear && activeTab === 'mentors') loadMentorReport();
+	});
+
+	$effect(() => {
+		if (activeTab === 'mentors' && !mentorReport) loadMentorReport();
 	});
 
 	function handlePrint() {
@@ -160,7 +195,7 @@
 			<h1 class="text-2xl font-bold text-slate-900">Reports</h1>
 			<p class="text-sm text-slate-500 mt-0.5">Class mark sheets &amp; student report cards</p>
 		</div>
-		{#if (activeTab === 'marksheet' && markSheetData) || (activeTab === 'report' && studentReport)}
+		{#if (activeTab === 'marksheet' && markSheetData) || (activeTab === 'report' && studentReport) || (activeTab === 'mentors' && mentorReport)}
 			<Button icon={Printer} onclick={handlePrint}>Print</Button>
 		{/if}
 	</div>
@@ -185,6 +220,10 @@
 				<button onclick={() => activeTab = 'report'}
 					class="px-4 py-1.5 text-sm font-medium rounded-md transition-colors {activeTab === 'report' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}">
 					<span class="flex items-center gap-1.5"><FileText size={14} /> Report Card</span>
+				</button>
+				<button onclick={() => activeTab = 'mentors'}
+					class="px-4 py-1.5 text-sm font-medium rounded-md transition-colors {activeTab === 'mentors' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}">
+					<span class="flex items-center gap-1.5"><HeartHandshake size={14} /> Mentor-wise</span>
 				</button>
 			</div>
 
@@ -476,12 +515,77 @@
 		</div>
 	</div>
 
+	{:else if activeTab === 'mentors' && mentorReport}
+		{@const mr = mentorReport}
+		<div class="mentor-report">
+			{#each mr.mentors as g, gi}
+				<div class="mentor-page print-area">
+					<div class="mentor-header">
+						<div class="flex items-center gap-4">
+							<div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-700 flex items-center justify-center shadow-md">
+								<HeartHandshake size={24} class="text-white" />
+							</div>
+							<div>
+								<div class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Mentor Group {gi + 1} of {mr.mentors.length}</div>
+								<h2 class="text-lg font-bold text-slate-900">{g.mentor_name}</h2>
+								<p class="text-xs text-slate-500">Students: {g.student_count} &middot; Avg cognitive: {g.avg_cognitive_pct.toFixed(1)}%</p>
+							</div>
+						</div>
+						<div class="text-right">
+							<div class="text-xs text-slate-500">Academic Year: {mr.academic_year_name}</div>
+							<div class="text-xs text-slate-400">Generated on {new Date().toLocaleDateString()}</div>
+						</div>
+					</div>
+
+					<table class="w-full text-sm">
+						<thead>
+							<tr class="bg-slate-50 border-b border-slate-200">
+								<th class="px-3 py-2 text-left font-semibold text-slate-600 w-10">#</th>
+								<th class="px-3 py-2 text-left font-semibold text-slate-600">Student</th>
+								<th class="px-3 py-2 text-left font-semibold text-slate-600 w-24">SATS No</th>
+								<th class="px-3 py-2 text-center font-semibold text-slate-600 w-16">Class</th>
+								<th class="px-3 py-2 text-center font-semibold text-slate-600 w-16">Gender</th>
+								<th class="px-3 py-2 text-center font-semibold text-slate-600 w-20">Cognitive %</th>
+								<th class="px-3 py-2 text-center font-semibold text-slate-600 w-20">Tier</th>
+							</tr>
+						</thead>
+						<tbody>
+							{#each g.students as st, i}
+								<tr class="border-b border-slate-100">
+									<td class="px-3 py-2 text-center text-slate-400">{i + 1}</td>
+									<td class="px-3 py-2">
+										<div class="font-medium text-slate-800 text-xs whitespace-nowrap">{st.name}</div>
+										<div class="text-[10px] text-slate-400">Roll {st.roll_no}</div>
+									</td>
+									<td class="px-3 py-2 text-slate-500 text-xs">{st.sats_number}</td>
+									<td class="px-3 py-2 text-center text-slate-600 text-xs">{st.class_name.replace('Class ', '')}</td>
+									<td class="px-3 py-2 text-center text-slate-600 text-xs capitalize">{st.gender || '—'}</td>
+									<td class="px-3 py-2 text-center">
+										<span class="text-xs font-medium px-1.5 py-0.5 rounded {pctClass(st.cognitive_pct)}">{st.cognitive_pct.toFixed(1)}</span>
+									</td>
+									<td class="px-3 py-2 text-center">
+										<span class="text-xs font-semibold px-2 py-0.5 rounded {tierClass(st.tier)}">{st.tier || '—'}</span>
+									</td>
+								</tr>
+							{/each}
+						</tbody>
+					</table>
+					<div class="mentor-footer">
+						<div class="text-xs text-slate-400">Mentor's signature</div>
+						<div class="text-xs text-slate-400">Principal's signature</div>
+					</div>
+				</div>
+			{/each}
+		</div>
+
 	{:else if !loading}
 		<div class="bg-white rounded-xl border border-slate-200 p-12 text-center">
 			<FileText size={40} class="mx-auto text-slate-300 mb-3" />
 			<p class="text-slate-500 text-sm">
 				{#if activeTab === 'marksheet'}
 					Select a class and academic year to view the mark sheet.
+				{:else if activeTab === 'mentors'}
+					Select an academic year to view the mentor-wise report.
 				{:else}
 					Select a class and student to generate a report card.
 				{/if}
@@ -495,5 +599,57 @@
 		:global(body) { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 		:global(.no-print) { display: none !important; }
 		.print-area { border: none !important; border-radius: 0 !important; box-shadow: none !important; max-width: 100% !important; margin: 0 !important; }
+	}
+
+	.mentor-page {
+		page-break-after: always;
+		break-after: page;
+		display: flex;
+		flex-direction: column;
+		min-height: 100%;
+		background: white;
+		border: 1px solid #e2e8f0;
+		border-radius: 16px;
+		overflow: hidden;
+		margin-bottom: 24px;
+	}
+	.mentor-page:last-child {
+		page-break-after: auto;
+		break-after: auto;
+	}
+	.mentor-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 16px 24px;
+		border-bottom: 2px solid #14b8a6;
+	}
+	.mentor-footer {
+		display: flex;
+		justify-content: space-between;
+		padding: 24px;
+		margin-top: auto;
+	}
+	.mentor-footer > div {
+		width: 160px;
+		text-align: center;
+		border-top: 1px solid #cbd5e1;
+		padding-top: 8px;
+	}
+
+	@media print {
+		@page {
+			size: A4 portrait;
+			margin: 10mm;
+		}
+		.mentor-report {
+			width: 100%;
+		}
+		.mentor-page {
+			min-height: 0;
+			page-break-after: always;
+			break-after: page;
+			width: 100%;
+		}
 	}
 </style>
