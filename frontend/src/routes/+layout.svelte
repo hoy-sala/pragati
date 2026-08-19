@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '../app.css';
+	import 'katex/dist/katex.min.css';
 	import { onMount } from 'svelte';
 	import { initAuth, getAuthState } from '$lib/stores/auth.svelte';
 	import { goto } from '$app/navigation';

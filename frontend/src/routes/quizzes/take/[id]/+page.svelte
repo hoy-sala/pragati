@@ -4,6 +4,7 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { onMount, onDestroy } from 'svelte';
+	import MathText from '$lib/components/MathText.svelte';
 
 	const quizId = $page.params.id;
 
@@ -156,7 +157,7 @@
 	{:else if currentQuestion}
 		<div class="bg-white rounded-xl border border-slate-200 p-6 space-y-6">
 			<div class="flex items-start justify-between gap-4">
-				<p class="text-sm text-slate-900 leading-relaxed">{currentQuestion.question_text}</p>
+				<p class="text-sm text-slate-900 leading-relaxed"><MathText text={currentQuestion.question_text} /></p>
 				<span class="shrink-0 text-xs text-slate-400">{currentQuestion.marks ?? 1} mark{(currentQuestion.marks ?? 1) !== 1 ? 's' : ''}</span>
 			</div>
 
@@ -169,7 +170,7 @@
 								checked={responses[currentQuestion.question_id]?.selected_options?.includes(opt.key)}
 								class="shrink-0"
 								onchange={() => selectOption(currentQuestion.question_id, opt.key)}>
-							<span class="text-sm text-slate-700">{opt.value}</span>
+							<span class="text-sm text-slate-700"><MathText text={opt.value} /></span>
 						</label>
 					{/each}
 				</div>

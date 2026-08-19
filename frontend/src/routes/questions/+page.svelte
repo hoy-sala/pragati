@@ -6,6 +6,7 @@
 	import Select from '$lib/components/Select.svelte';
 	import SearchFilter from '$lib/components/SearchFilter.svelte';
 	import Pagination from '$lib/components/Pagination.svelte';
+	import MathText from '$lib/components/MathText.svelte';
 
 	let allQuestions = $state<Question[]>([]);
 	let subjects = $state<Subject[]>([]);
@@ -94,7 +95,7 @@
 				<div class="p-4 hover:bg-slate-50 transition-colors">
 					<div class="flex items-start justify-between gap-4">
 						<div class="flex-1 min-w-0">
-							<p class="text-sm text-slate-900 leading-relaxed">{q.question_text}</p>
+							<p class="text-sm text-slate-900 leading-relaxed"><MathText text={q.question_text} /></p>
 							<div class="flex flex-wrap gap-2 mt-2">
 								<span class="text-xs px-2 py-0.5 rounded-full {typeColors[q.question_type] || 'bg-slate-100 text-slate-600'}">
 									{typeLabels[q.question_type] || q.question_type}

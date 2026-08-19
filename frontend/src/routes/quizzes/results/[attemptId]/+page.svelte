@@ -3,6 +3,7 @@
 	import type { QuizResultData } from '$lib/types';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
+	import MathText from '$lib/components/MathText.svelte';
 
 	const attemptId = $page.params.attemptId;
 
@@ -42,7 +43,7 @@
 			{#each result.responses as r (r.id)}
 				<div class="bg-white rounded-xl border border-slate-200 p-4 space-y-3">
 					<div class="flex items-start justify-between gap-4">
-						<p class="text-sm text-slate-900 leading-relaxed">{r.question_text}</p>
+						<p class="text-sm text-slate-900 leading-relaxed"><MathText text={r.question_text} /></p>
 						<span class="shrink-0 text-xs text-slate-400">{r.marks_awarded}/{r.marks_total}</span>
 					</div>
 
@@ -52,7 +53,7 @@
 								<div class="text-sm px-3 py-1.5 rounded-lg
 									{opt.correct ? 'bg-green-50 text-green-800' : ''}
 									{(r.selected_options || []).includes(opt.key) && !opt.correct ? 'bg-danger-50 text-danger-800' : 'text-slate-600'}">
-									{opt.value}
+								<MathText text={opt.value} />
 									{#if opt.correct}<span class="text-xs ml-1">(correct)</span>{/if}
 									{#if (r.selected_options || []).includes(opt.key) && !opt.correct}<span class="text-xs ml-1">(your answer)</span>{/if}
 								</div>

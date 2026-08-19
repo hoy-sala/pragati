@@ -5,6 +5,7 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import Select from '$lib/components/Select.svelte';
+	import MathText from '$lib/components/MathText.svelte';
 
 	const quizId = $page.params.id;
 
@@ -188,7 +189,7 @@
 				<div class="flex items-center gap-3 p-3 hover:bg-slate-50">
 					<input type="checkbox" checked={selectedIds.has(q.id)} onchange={() => toggleQuestion(q.id)} class="shrink-0">
 					<div class="flex-1 min-w-0">
-						<p class="text-sm text-slate-900 line-clamp-1">{q.question_text}</p>
+						<p class="text-sm text-slate-900 line-clamp-1"><MathText text={q.question_text} /></p>
 						<div class="text-xs text-slate-400 mt-0.5">
 							{q.question_type} &middot; {q.difficulty}
 						</div>

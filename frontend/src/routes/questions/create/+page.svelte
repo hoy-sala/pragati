@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import Select from '$lib/components/Select.svelte';
+	import MathText from '$lib/components/MathText.svelte';
 
 	let subjects = $state<Subject[]>([]);
 	let questionType = $state('mcq');
@@ -118,6 +119,13 @@
 			<label for="question" class="block text-sm font-medium text-slate-700 mb-1">Question *</label>
 			<textarea id="question" bind:value={questionText} rows="3" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm resize-none"></textarea>
 		</div>
+
+		{#if questionText.trim()}
+			<div class="p-3 rounded-lg bg-slate-50 border border-slate-200">
+				<p class="text-xs text-slate-500 mb-1">Preview</p>
+				<div class="text-sm text-slate-900 leading-relaxed"><MathText text={questionText} /></div>
+			</div>
+		{/if}
 
 		<div>
 			<label for="chapters" class="block text-sm font-medium text-slate-700 mb-1">Chapters</label>

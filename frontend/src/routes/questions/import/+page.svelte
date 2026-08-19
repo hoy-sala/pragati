@@ -29,7 +29,20 @@ Who wrote the Indian National Anthem? {
 The Earth is flat. {FALSE}
 
 // Fill in blank
-The capital of India is {=New Delhi ~Mumbai ~Kolkata}.`;
+The capital of India is {=New Delhi ~Mumbai ~Kolkata}.
+
+// Science equation with inline math \\(...\\)
+What is the energy of a photon with \\(E = h\\nu\\)? {
+    =\\(E = h\\nu\\)
+    ~\\(E = h/\\nu\\)
+    ~\\(E = h\\nu^2\\)
+}
+
+// Chemistry formula with \\ce{} (KaTeX chemistry)
+Balance: \\[\\ce{2H2 + O2 -> 2H2O}\\]. {
+    =TRUE
+    ~FALSE
+}`;
 
 	onMount(async () => {
 		const res = await api<Subject[]>('GET', '/subjects');
@@ -105,6 +118,8 @@ The capital of India is {=New Delhi ~Mumbai ~Kolkata}.`;
 				<summary class="cursor-pointer hover:text-slate-700">GIFT format reference</summary>
 				<pre class="mt-2 p-3 bg-slate-50 rounded-lg text-xs leading-relaxed">{sampleGIFT}</pre>
 				<p class="mt-2">Rules: <code>~</code> wrong answer, <code>=</code> correct answer, <code>{'{TRUE}'}</code> or <code>{'{FALSE}'}</code> for T/F, <code>{'{"{=correct ~wrong}"}'}</code> for fill blank.</p>
+				<p class="mt-2">Math: wrap LaTeX in <code>{'{\\\(...\\\)}'}</code> (inline) or <code>{'{\\\[...\\\]}'}</code> (display). Braces/tildes/equals inside math are treated as literal — no escaping needed. Chemistry via {'{\\ce{...}}'}. GIFT escapes <code>{'{\\\{ \\\} \\~ \\=}'}</code> still work outside math.</p>
+				<p class="mt-2">Metadata: <code>::title::</code>, <code>{'{#marks}'}</code>, <code>[difficulty:easy|medium|hard]</code>, <code>[chapter:Name]</code>, <code>[tags:a,b]</code> are parsed.</p>
 			</details>
 		{:else}
 			<div>
