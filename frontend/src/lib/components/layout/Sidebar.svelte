@@ -120,10 +120,12 @@
 
 	function isActive(href: string): boolean {
 		const path = $page.url.pathname;
-		if (href === '/dashboard') return path === '/dashboard';
 		if (path === href) return true;
-		if (path.startsWith(href + '/')) return true;
-		return false;
+		if (!path.startsWith(href + '/')) return false;
+		const longer = navSections
+			.flatMap(s => s.items.map(i => i.href))
+			.some(h => h !== href && h.length > href.length && (path === h || path.startsWith(h + '/')));
+		return !longer;
 	}
 
 	function isSectionActive(items: NavItem[]): boolean {
