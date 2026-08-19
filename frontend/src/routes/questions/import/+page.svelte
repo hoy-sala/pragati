@@ -12,7 +12,6 @@
 	let csvFile = $state<File | null>(null);
 	let importing = $state(false);
 	let copied = $state(false);
-	let promptEl = $state<HTMLElement | null>(null);
 	let result = $state<{ imported: number; errors: { line: number; message: string }[] } | null>(null);
 	let error = $state('');
 
@@ -120,20 +119,27 @@ Balance: \\[\\ce{2H2 + O2 -> 2H2O}\\]. {
 		if (res.data) subjects = res.data;
 	});
 
-	async function copyPrompt() {
-		try {
-			await navigator.clipboard.writeText(aiPrompt);
-			copied = true;
-		} catch {
-			if (promptEl) {
-				const range = document.createRange();
-				range.selectNodeContents(promptEl);
-				const sel = window.getSelection();
-				sel?.removeAllRanges();
-				sel?.addRange(range);
-			}
+	function copyPrompt() {
+		const text = aiPrompt;
+		if (navigator.clipboard && window.isSecureContext) {
+			navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
+		} else {
+			fallbackCopy(text);
 		}
+		copied = true;
 		setTimeout(() => (copied = false), 2000);
+	}
+
+	function fallbackCopy(text: string) {
+		const ta = document.createElement('textarea');
+		ta.value = text;
+		ta.style.position = 'fixed';
+		ta.style.opacity = '0';
+		document.body.appendChild(ta);
+		ta.focus();
+		ta.select();
+		document.execCommand('copy');
+		document.body.removeChild(ta);
 	}
 
 	async function handleImport() {
@@ -208,7 +214,7 @@ Balance: \\[\\ce{2H2 + O2 -> 2H2O}\\]. {
 						{copied ? 'Copied ✓' : 'Copy prompt'}
 					</button>
 				</div>
-				<pre bind:this={promptEl} class="max-h-64 overflow-y-auto p-3 bg-white rounded-lg text-xs leading-relaxed whitespace-pre-wrap border border-slate-200">{aiPrompt}</pre>
+				<pre class="max-h-64 overflow-y-auto p-3 bg-white rounded-lg text-xs leading-relaxed whitespace-pre-wrap border border-slate-200">{aiPrompt}</pre>
 			</div>
 
 			<div>
