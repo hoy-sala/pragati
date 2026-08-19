@@ -11,8 +11,76 @@
 	let giftText = $state('');
 	let csvFile = $state<File | null>(null);
 	let importing = $state(false);
+	let copied = $state(false);
+	let promptEl = $state<HTMLElement | null>(null);
 	let result = $state<{ imported: number; errors: { line: number; message: string }[] } | null>(null);
 	let error = $state('');
+
+	const aiPrompt = `You are a question bank generator. I will upload a PDF of textbook questions. Convert EVERY question into GIFT format following the rules below. Output ONLY the GIFT text — no explanations, no preamble, and no markdown code fences (do not wrap the output in triple backticks).
+
+## Question types
+
+1. MCQ — each option on its own line, prefix the correct one with = and every wrong one with ~:
+
+What is the chemical symbol for gold? {
+    ~Go
+    =Au
+    ~Ag
+    ~Gd
+}
+
+2. True/False — append {TRUE} or {FALSE}:
+
+The Earth revolves around the Sun. {TRUE}
+
+3. Fill in the blank — mark the blank {=correct ~alternate}:
+
+The capital of France is {=Paris ~Lyon}.
+
+4. Short answer:
+
+Who discovered gravity? {=Isaac Newton}
+
+## Math, equations and chemistry (very important)
+
+- Wrap ALL math (fractions, roots, symbols, superscripts, subscripts, equations) in inline math \\(...\\) or display math \\[...\\].
+- Inline example: What is \\(E = h\\nu\\)?
+- Display example: Solve for x: \\[\\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}\\]
+- Chemistry: use \\ce{} inside math: \\[\\ce{2H2 + O2 -> 2H2O}\\]
+- Inside math zones, the characters = ~ { } are literal — do NOT escape them and do NOT treat them as answer markers. Only = and ~ OUTSIDE math (at the start of an option line) mark correct/wrong.
+- An option containing math must still start with = or ~ as its first character.
+
+## Metadata (optional but recommended)
+
+Attach metadata after the question text:
+- Title: ::Short Title::
+- Marks: {#2}
+- Difficulty: [difficulty:easy] or [difficulty:medium] or [difficulty:hard]
+- Chapter: [chapter:Chapter Name]
+- Tags: [tags:algebra,formula]
+
+Example:
+
+::Kinetic Energy::
+What is the kinetic energy of a body of mass 5 kg moving at 2 m/s? {#2}
+[difficulty:easy]
+[chapter:Work and Energy]
+[tags:kinetic_energy]
+{
+    =\\(10 J\\)
+    ~\\(20 J\\)
+    ~\\(5 J\\)
+}
+
+## Escaping outside math
+
+Outside math zones, escape literal special characters with a backslash: \\{ \\} \\~ \\= \\\\.
+
+## Important
+
+- Convert ALL questions from the PDF; do not skip any.
+- Preserve numbers, units and notation exactly as printed.
+- Output nothing other than GIFT text.`;
 
 	const openB = '{';
 	const closeB = '}';
@@ -48,6 +116,22 @@ Balance: \\[\\ce{2H2 + O2 -> 2H2O}\\]. {
 		const res = await api<Subject[]>('GET', '/subjects');
 		if (res.data) subjects = res.data;
 	});
+
+	async function copyPrompt() {
+		try {
+			await navigator.clipboard.writeText(aiPrompt);
+			copied = true;
+		} catch {
+			if (promptEl) {
+				const range = document.createRange();
+				range.selectNodeContents(promptEl);
+				const sel = window.getSelection();
+				sel?.removeAllRanges();
+				sel?.addRange(range);
+			}
+		}
+		setTimeout(() => (copied = false), 2000);
+	}
 
 	async function handleImport() {
 		error = '';
@@ -110,6 +194,20 @@ Balance: \\[\\ce{2H2 + O2 -> 2H2O}\\]. {
 		</div>
 
 		{#if importMode === 'gift'}
+			<div class="rounded-lg border border-primary-200 bg-primary-50/60 p-4 space-y-2">
+				<div class="flex items-center justify-between gap-3">
+					<div>
+						<p class="text-sm font-medium text-primary-800">AI Agent Prompt</p>
+						<p class="text-xs text-slate-500">Copy this prompt into your AI agent, upload the PDF, then paste the output below.</p>
+					</div>
+					<button onclick={copyPrompt}
+						class="shrink-0 px-4 py-1.5 rounded-lg text-xs font-medium border transition-colors {copied ? 'bg-green-600 border-green-600 text-white' : 'bg-white border-primary-300 text-primary-700 hover:bg-primary-50'}">
+						{copied ? 'Copied ✓' : 'Copy prompt'}
+					</button>
+				</div>
+				<pre bind:this={promptEl} class="max-h-64 overflow-y-auto p-3 bg-white rounded-lg text-xs leading-relaxed whitespace-pre-wrap border border-slate-200">{aiPrompt}</pre>
+			</div>
+
 			<div>
 				<label for="qimp-gift" class="block text-sm font-medium text-slate-700 mb-1">GIFT Format Text</label>
 				<textarea id="qimp-gift" bind:value={giftText} rows="12" class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm font-mono resize-none" placeholder={sampleGIFT}></textarea>
