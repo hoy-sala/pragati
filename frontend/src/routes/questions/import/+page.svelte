@@ -16,7 +16,7 @@
 	let result = $state<{ imported: number; errors: { line: number; message: string }[] } | null>(null);
 	let error = $state('');
 
-	const aiPrompt = `You are a question bank generator. I will upload a PDF of textbook questions. Convert EVERY question into GIFT format following the rules below. Output ONLY the GIFT text — no explanations, no preamble, and no markdown code fences (do not wrap the output in triple backticks).
+	const aiPrompt = `You are a question bank generator. I will upload textbooks, notes, images, reference material, or website links. The material may or may not contain ready-made questions — your job is to STUDY the material and FORM questions from it that test understanding of the key concepts. Output ONLY the GIFT text — no explanations, no preamble, and no markdown code fences (do not wrap the output in triple backticks).
 
 ## Question types
 
@@ -78,8 +78,11 @@ Outside math zones, escape literal special characters with a backslash: \\{ \\} 
 
 ## Important
 
-- Convert ALL questions from the PDF; do not skip any.
-- Preserve numbers, units and notation exactly as printed.
+- Read the ENTIRE material first, then create questions that cover ALL major concepts, definitions, formulas, facts, and examples in it. Do not skip major topics.
+- If the material already contains questions, include them too; otherwise create questions on your own from the content.
+- For every concept, aim for a mix of types (e.g. one MCQ, one fill-in-the-blank, one short answer) rather than only one type.
+- Prefer questions that test understanding and application, not just factual recall.
+- Preserve numbers, units and notation exactly as given.
 - Output nothing other than GIFT text.`;
 
 	const openB = '{';
@@ -198,7 +201,7 @@ Balance: \\[\\ce{2H2 + O2 -> 2H2O}\\]. {
 				<div class="flex items-center justify-between gap-3">
 					<div>
 						<p class="text-sm font-medium text-primary-800">AI Agent Prompt</p>
-						<p class="text-xs text-slate-500">Copy this prompt into your AI agent, upload the PDF, then paste the output below.</p>
+						<p class="text-xs text-slate-500">Copy this prompt into your AI agent, upload your study material (PDF, images, links, etc.), then paste the generated questions below.</p>
 					</div>
 					<button onclick={copyPrompt}
 						class="shrink-0 px-4 py-1.5 rounded-lg text-xs font-medium border transition-colors {copied ? 'bg-green-600 border-green-600 text-white' : 'bg-white border-primary-300 text-primary-700 hover:bg-primary-50'}">
