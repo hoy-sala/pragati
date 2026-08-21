@@ -177,6 +177,7 @@
 </svelte:head>
 
 <div class="play-root min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-violet-800 flex items-center justify-center p-4 overflow-hidden">
+	<a href="/" class="fixed top-4 left-4 z-50 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur border border-white/20 text-white/70 text-xs font-bold hover:bg-white/20 hover:text-white transition-all flex items-center gap-1.5">🏠 Home</a>
 	{#each scorePopups as popup (popup.id)}
 		<div class="score-popup" style="left: {popup.x}%; top: {popup.y}%">+{popup.value}</div>
 	{/each}

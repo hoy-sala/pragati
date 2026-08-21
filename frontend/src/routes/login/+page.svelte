@@ -67,7 +67,11 @@
 			<div class="flex items-center justify-center gap-2 mt-1">
 				<span class="text-sm font-black text-white/80 uppercase tracking-widest">Pragati</span>
 			</div>
-			<p class="mt-2 text-sm text-white/70 font-medium">Learn. Play. Grow.</p>
+			<div class="mt-3 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur border border-white/15">
+				<span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
+				<span class="text-xs font-bold text-white/80 tracking-wide">MDRS (SC-32) BAHADDURGHATTA</span>
+			</div>
+			<p class="mt-2 text-sm text-white/60 font-medium">Learn. Play. Grow.</p>
 		</div>
 
 		<!-- Cards -->

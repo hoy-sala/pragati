@@ -101,16 +101,19 @@
 
 <div class="min-h-screen bg-slate-50">
 	<div class="max-w-7xl mx-auto px-4 py-6 space-y-6">
-		<div class="text-center space-y-1">
-			<p class="text-[11px] font-semibold text-slate-900 uppercase tracking-widest">Karnataka Residential Educational Institutions Society</p>
-			<h1 class="text-xl font-bold text-red-600">Morarji Desai Residential School (SC-32) Bahaddurghatta, Chitradurga</h1>
-			{#if viewMode === 'subject'}
-				<h2 class="text-2xl font-bold text-primary-700">{SUBJECT_INFO[selectedSubject]?.name} Subject Time Table 2026-27</h2>
-			{:else}
-				<h2 class="text-2xl font-bold text-primary-700">Time Table 2026-27 <span class="print-only text-primary-600 inline">
-					- {showAll ? 'All Classes' : 'Class ' + (activeClass + 6)} - Class Wise
-				</span></h2>
-			{/if}
+		<div class="flex items-start justify-between">
+			<div class="text-center space-y-1 flex-1">
+				<p class="text-[11px] font-semibold text-slate-900 uppercase tracking-widest">Karnataka Residential Educational Institutions Society</p>
+				<h1 class="text-xl font-bold text-red-600">Morarji Desai Residential School (SC-32) Bahaddurghatta, Chitradurga</h1>
+				{#if viewMode === 'subject'}
+					<h2 class="text-2xl font-bold text-primary-700">{SUBJECT_INFO[selectedSubject]?.name} Subject Time Table 2026-27</h2>
+				{:else}
+					<h2 class="text-2xl font-bold text-primary-700">Time Table 2026-27 <span class="print-only text-primary-600 inline">
+						- {showAll ? 'All Classes' : 'Class ' + (activeClass + 6)} - Class Wise
+					</span></h2>
+				{/if}
+			</div>
+			<a href="/" class="no-print shrink-0 ml-4 mt-1 px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center gap-1.5 shadow-sm">🏠 Home</a>
 		</div>
 
 		<div class="flex flex-wrap items-center justify-center gap-3 no-print">
