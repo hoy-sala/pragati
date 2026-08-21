@@ -63,15 +63,14 @@
 					<span class="text-3xl">🏫</span>
 				</div>
 			</div>
-			<h1 class="game-title text-4xl sm:text-5xl font-black tracking-tight leading-none">
-				<span class="game-title-line1">MDRS</span>
-				<span class="game-title-line2">(SC-32)</span>
+			<h1 class="game-title text-3xl sm:text-4xl font-black tracking-tight leading-none whitespace-nowrap">
+				MDRS (SC-32) BAHADDURGHATTA
 			</h1>
-			<p class="game-subtitle mt-1 text-sm sm:text-base font-black uppercase tracking-[0.25em]">Bahaddurghatta</p>
-			<div class="flex items-center justify-center gap-2 mt-2">
-				<span class="h-px w-8 bg-white/20"></span>
+			<p class="mt-2 text-4xl sm:text-5xl font-black text-white/90 font-kannada" style="text-shadow: 2px 2px 0 rgba(0,0,0,0.15)">ಪ್ರಗತಿ</p>
+			<div class="flex items-center justify-center gap-2 mt-1.5">
+				<span class="h-px w-6 bg-white/20"></span>
 				<span class="text-xs font-bold text-white/50 uppercase tracking-widest">Learn. Play. Grow.</span>
-				<span class="h-px w-8 bg-white/20"></span>
+				<span class="h-px w-6 bg-white/20"></span>
 			</div>
 		</div>
 
@@ -315,12 +314,5 @@
 		-webkit-text-fill-color: transparent;
 		background-clip: text;
 		filter: drop-shadow(0 2px 8px rgba(245,158,11,0.4)) drop-shadow(0 4px 2px rgba(0,0,0,0.2));
-		line-height: 1.1;
-	}
-	.game-title-line1 { display: block; font-size: 1.15em; }
-	.game-title-line2 { display: block; font-size: 0.55em; letter-spacing: 0.08em; opacity: 0.85; }
-	.game-subtitle {
-		color: rgba(255,255,255,0.7);
-		text-shadow: 0 1px 6px rgba(0,0,0,0.2);
 	}
 </style>
