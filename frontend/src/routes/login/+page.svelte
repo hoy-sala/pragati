@@ -309,10 +309,14 @@
 
 	/* Game title */
 	.game-title {
-		background: linear-gradient(180deg, #fff 0%, #fde68a 40%, #f59e0b 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-		filter: drop-shadow(0 2px 8px rgba(245,158,11,0.4)) drop-shadow(0 4px 2px rgba(0,0,0,0.2));
+		color: #fbbf24;
+		text-shadow:
+			0 0 10px rgba(251,191,36,0.5),
+			0 2px 0 #b45309,
+			0 3px 0 #92400e,
+			0 4px 0 #78350f,
+			0 5px 8px rgba(0,0,0,0.3);
+		-webkit-text-stroke: 1px rgba(255,255,255,0.15);
+		letter-spacing: 0.04em;
 	}
 </style>
