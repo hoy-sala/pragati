@@ -357,3 +357,39 @@ export interface CertificateDetail extends Certificate {
 	event?: CertificateEvent;
 	signatories: CertificateSignatory[];
 }
+
+export interface PlayClass {
+	id: string;
+	name: string;
+	question_count: number;
+}
+
+export interface PlaySubject {
+	id: string;
+	name: string;
+	question_count: number;
+}
+
+export interface PlayTopic {
+	name: string;
+}
+
+export interface PlayQuestion {
+	id: string;
+	question_text: string;
+	question_type: 'mcq' | 'true_false';
+	options: Option[];
+	difficulty: string;
+}
+
+export interface HighScore {
+	rank: number;
+	player_name: string;
+	score: number;
+	correct_count: number;
+	total_questions: number;
+	best_streak: number;
+	time_taken_ms: number;
+	difficulty: string;
+	created_at: string;
+}

@@ -44,6 +44,7 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
  	mentorH := NewMentorHandler(db)
  	reportsH := NewReportsHandler(db)
 	certH := NewCertificateHandler(db, cfg.UploadDir)
+	playH := NewPlayHandler(db)
 
 	roleMw := middleware.NewRoleMiddleware(jwtService)
 	loginLimiter := middleware.NewRateLimiter(10, time.Minute)
@@ -60,6 +61,15 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
 			r.Use(roleMw.Authenticate)
 			r.Post("/auth/logout", authH.Logout)
 			r.Get("/auth/me", authH.Me)
+		})
+
+		r.Route("/play", func(r chi.Router) {
+			r.Get("/classes", playH.ListClasses)
+			r.Get("/subjects", playH.ListSubjects)
+			r.Get("/topics", playH.ListTopics)
+			r.Get("/quiz", playH.GetQuiz)
+			r.Post("/score", playH.SaveScore)
+			r.Get("/leaderboard", playH.GetLeaderboard)
 		})
 
 		r.Route("/users", func(r chi.Router) {

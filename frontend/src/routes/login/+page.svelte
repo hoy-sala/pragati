@@ -219,9 +219,13 @@
 			{/if}
 		</div>
 
-		<div class="text-center mt-6">
+		<div class="text-center mt-6 flex items-center justify-center gap-4">
 			<a href="/timetable" class="text-xs text-slate-400 hover:text-primary-600 transition-colors underline underline-offset-2">
 				View Master School Timetable 2026-27
+			</a>
+			<span class="text-slate-300">·</span>
+			<a href="/play" class="text-xs font-bold text-primary-500 hover:text-primary-700 transition-colors underline underline-offset-2">
+			 🎮 Play Quiz Arena
 			</a>
 		</div>
 	</div>

@@ -11,10 +11,10 @@
 
 	const auth = getAuthState();
 
-	const publicRoutes = ['/login', '/timetable'];
+	const publicRoutes = ['/login', '/timetable', '/play'];
 
 	function isFullscreenRoute(path: string): boolean {
-		return path.startsWith('/quizzes/take') || path.startsWith('/quizzes/results') || path.startsWith('/certificates/print');
+		return path.startsWith('/quizzes/take') || path.startsWith('/quizzes/results') || path.startsWith('/certificates/print') || path.startsWith('/play');
 	}
 
 	onMount(() => {
