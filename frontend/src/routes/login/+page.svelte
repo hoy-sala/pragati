@@ -185,14 +185,7 @@
 			</div>
 		</div>
 
-		<!-- Footer -->
-		<div class="relative z-10 text-center pb-5 px-4">
-			<div class="flex items-center justify-center gap-3 text-xs text-white/30 font-medium">
-				<span class="px-2 py-0.5 rounded-full bg-white/5">📚 Classes 6–10</span>
-				<span class="px-2 py-0.5 rounded-full bg-white/5">📝 CCE Pattern</span>
-				<span class="px-2 py-0.5 rounded-full bg-white/5">🏆 HPC Reports</span>
-			</div>
-		</div>
+
 
 	{:else}
 		<!-- Login View -->
