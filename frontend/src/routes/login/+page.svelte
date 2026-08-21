@@ -59,19 +59,20 @@
 		<!-- Hero -->
 		<div class="relative z-10 pt-8 sm:pt-10 pb-3 px-4 text-center fade-in">
 			<div class="bounce-in">
-				<div class="inline-flex items-center justify-center w-20 h-20 rounded-[1.5rem] bg-gradient-to-br from-yellow-300 via-orange-400 to-pink-500 shadow-xl shadow-orange-400/40 mb-4 mascot">
-					<span class="text-4xl">🏫</span>
+				<div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-300 via-orange-400 to-pink-500 shadow-xl shadow-orange-400/40 mb-3 mascot">
+					<span class="text-3xl">🏫</span>
 				</div>
 			</div>
-			<h1 class="text-5xl sm:text-6xl font-black text-white tracking-tight drop-shadow-lg font-kannada" style="text-shadow: 3px 3px 0 rgba(0,0,0,0.15)">ಪ್ರಗತಿ</h1>
-			<div class="flex items-center justify-center gap-2 mt-1">
-				<span class="text-sm font-black text-white/80 uppercase tracking-widest">Pragati</span>
+			<h1 class="game-title text-4xl sm:text-5xl font-black tracking-tight leading-none">
+				<span class="game-title-line1">MDRS</span>
+				<span class="game-title-line2">(SC-32)</span>
+			</h1>
+			<p class="game-subtitle mt-1 text-sm sm:text-base font-black uppercase tracking-[0.25em]">Bahaddurghatta</p>
+			<div class="flex items-center justify-center gap-2 mt-2">
+				<span class="h-px w-8 bg-white/20"></span>
+				<span class="text-xs font-bold text-white/50 uppercase tracking-widest">Learn. Play. Grow.</span>
+				<span class="h-px w-8 bg-white/20"></span>
 			</div>
-			<div class="mt-3 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur border border-white/15">
-				<span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
-				<span class="text-xs font-bold text-white/80 tracking-wide">MDRS (SC-32) BAHADDURGHATTA</span>
-			</div>
-			<p class="mt-2 text-sm text-white/60 font-medium">Learn. Play. Grow.</p>
 		</div>
 
 		<!-- Cards -->
@@ -306,4 +307,20 @@
 	@keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 60% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
 	.fade-in { animation: fadeUp 0.5s ease-out; }
 	@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+	/* Game title */
+	.game-title {
+		background: linear-gradient(180deg, #fff 0%, #fde68a 40%, #f59e0b 100%);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+		filter: drop-shadow(0 2px 8px rgba(245,158,11,0.4)) drop-shadow(0 4px 2px rgba(0,0,0,0.2));
+		line-height: 1.1;
+	}
+	.game-title-line1 { display: block; font-size: 1.15em; }
+	.game-title-line2 { display: block; font-size: 0.55em; letter-spacing: 0.08em; opacity: 0.85; }
+	.game-subtitle {
+		color: rgba(255,255,255,0.7);
+		text-shadow: 0 1px 6px rgba(0,0,0,0.2);
+	}
 </style>
