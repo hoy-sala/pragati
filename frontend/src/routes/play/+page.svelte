@@ -117,6 +117,7 @@
 			addPopup(pts);
 		} else { streak = 0; }
 		clearInterval(timerInterval);
+		setTimeout(nextQuestion, 1200);
 	}
 
 	function addPopup(value: number) {
@@ -346,13 +347,6 @@
 						</button>
 					{/each}
 				</div>
-
-				{#if answered}
-					<button onclick={nextQuestion}
-						class="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold text-base shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50 active:scale-95 transition-all fade-in">
-						{currentIndex >= questions.length - 1 ? '🏆 Finish' : 'Next →'}
-					</button>
-				{/if}
 			</div>
 
 		{:else if phase === 'results'}
