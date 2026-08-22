@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { apiUrl } from '$lib/api/client.svelte';
+	import { goto } from '$app/navigation';
 	import type { PlayClass, PlaySubject, PlayTopic, PlayQuestion } from '$lib/types';
 
 	type Phase = 'welcome' | 'classes' | 'subjects' | 'topics' | 'difficulty' | 'quiz' | 'results';
@@ -204,7 +205,7 @@
 
 	function confirmExit() { showExitConfirm = true; }
 	function cancelExit() { showExitConfirm = false; }
-	function confirmGoHome() { showExitConfirm = false; clearInterval(timerInterval); phase = 'welcome'; }
+	function confirmGoHome() { showExitConfirm = false; clearInterval(timerInterval); goto('/'); }
 	function playAgain() { playClick(); phase = 'difficulty'; }
 
 	function timeColor() { return timeLeft > 10 ? '#34d399' : timeLeft > 5 ? '#fbbf24' : '#f43f5e'; }
