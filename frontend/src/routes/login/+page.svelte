@@ -396,6 +396,7 @@
 
 	/* Game title */
 	.game-title {
+		font-family: 'Permanent Marker', cursive;
 		color: #fbbf24;
 		text-shadow:
 			0 0 10px rgba(251,191,36,0.5),
