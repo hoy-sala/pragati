@@ -45,15 +45,21 @@
 
 <div class="min-h-screen flex flex-col overflow-hidden relative game-bg">
 	<!-- Floating decorations -->
+	<div class="deco deco-moon">🌙</div>
+	<div class="deco deco-planet">🪐</div>
+	<div class="deco deco-rocket">🚀</div>
+	<div class="deco deco-ufo">🛸</div>
 	<div class="deco deco-star1">⭐</div>
-	<div class="deco deco-star2">🌟</div>
-	<div class="deco deco-star3">✨</div>
-	<div class="deco deco-cloud1">☁️</div>
-	<div class="deco deco-cloud2">☁️</div>
-	<div class="deco deco-coin1">🪙</div>
-	<div class="deco deco-coin2">⭐</div>
-	<div class="deco deco-heart1">💜</div>
-	<div class="deco deco-zap">⚡</div>
+	<div class="deco deco-star2">✨</div>
+	<div class="deco deco-star3">🌟</div>
+	<div class="deco deco-star4">✦</div>
+	<div class="deco deco-star5">✧</div>
+	<!-- Shooting stars / comets -->
+	<div class="shooting-star ss1"></div>
+	<div class="shooting-star ss2"></div>
+	<div class="shooting-star ss3"></div>
+	<div class="comet comet1"></div>
+	<div class="comet comet2"></div>
 
 	{#if view === 'home'}
 		<!-- Hero -->
@@ -275,16 +281,16 @@
 	}
 
 	/* Floating decorations */
-	.deco { position: fixed; z-index: 1; pointer-events: none; opacity: 0.5; }
-	.deco-star1 { top: 8%; left: 8%; font-size: 1.5rem; animation: floatA 6s ease-in-out infinite; }
-	.deco-star2 { top: 15%; right: 10%; font-size: 1.2rem; animation: floatB 7s ease-in-out infinite 1s; }
-	.deco-star3 { bottom: 20%; left: 12%; font-size: 1rem; animation: floatA 5s ease-in-out infinite 2s; }
-	.deco-cloud1 { top: 5%; right: 20%; font-size: 2rem; animation: driftRight 20s linear infinite; opacity: 0.3; }
-	.deco-cloud2 { top: 25%; left: 5%; font-size: 1.5rem; animation: driftRight 25s linear infinite 5s; opacity: 0.25; }
-	.deco-coin1 { bottom: 15%; right: 12%; font-size: 1.3rem; animation: floatB 4s ease-in-out infinite 0.5s; }
-	.deco-coin2 { top: 40%; left: 5%; font-size: 1rem; animation: floatA 5.5s ease-in-out infinite 1.5s; }
-	.deco-heart1 { top: 35%; right: 6%; font-size: 1.2rem; animation: floatB 6s ease-in-out infinite 2.5s; }
-	.deco-zap { bottom: 30%; left: 8%; font-size: 1.1rem; animation: floatA 4.5s ease-in-out infinite 3s; }
+	.deco { position: fixed; z-index: 1; pointer-events: none; }
+	.deco-moon { top: 8%; left: 8%; font-size: 2rem; opacity: 0.45; animation: floatA 8s ease-in-out infinite; }
+	.deco-planet { bottom: 18%; right: 8%; font-size: 1.8rem; opacity: 0.35; animation: floatB 10s ease-in-out infinite; }
+	.deco-rocket { top: 20%; right: 6%; font-size: 1.5rem; opacity: 0.4; animation: rocketFly 12s ease-in-out infinite; }
+	.deco-ufo { bottom: 30%; left: 5%; font-size: 1.3rem; opacity: 0.3; animation: floatA 9s ease-in-out infinite 2s; }
+	.deco-star1 { top: 12%; right: 18%; font-size: 1rem; opacity: 0.5; animation: twinkle 3s ease-in-out infinite; }
+	.deco-star2 { bottom: 25%; left: 15%; font-size: 0.8rem; opacity: 0.4; animation: twinkle 4s ease-in-out infinite 1s; }
+	.deco-star3 { top: 40%; right: 25%; font-size: 1.1rem; opacity: 0.35; animation: twinkle 3.5s ease-in-out infinite 0.5s; }
+	.deco-star4 { top: 55%; left: 10%; font-size: 0.7rem; opacity: 0.45; animation: twinkle 2.5s ease-in-out infinite 1.5s; }
+	.deco-star5 { bottom: 12%; right: 20%; font-size: 0.9rem; opacity: 0.4; animation: twinkle 3s ease-in-out infinite 2s; }
 
 	@keyframes floatA {
 		0%, 100% { transform: translateY(0) translateX(0); }
@@ -294,9 +300,63 @@
 		0%, 100% { transform: translateY(0) translateX(0); }
 		50% { transform: translateY(10px) translateX(-8px); }
 	}
-	@keyframes driftRight {
-		0% { transform: translateX(-100px); }
-		100% { transform: translateX(calc(100vw + 100px)); }
+	@keyframes rocketFly {
+		0%, 100% { transform: translateY(0) translateX(0) rotate(-15deg); }
+		25% { transform: translateY(-20px) translateX(10px) rotate(-10deg); }
+		50% { transform: translateY(-8px) translateX(-5px) rotate(-20deg); }
+		75% { transform: translateY(-25px) translateX(5px) rotate(-12deg); }
+	}
+	@keyframes twinkle {
+		0%, 100% { opacity: 0.3; transform: scale(1); }
+		50% { opacity: 0.7; transform: scale(1.3); }
+	}
+
+	/* Shooting stars */
+	.shooting-star {
+		position: fixed; z-index: 1; pointer-events: none;
+		width: 3px; height: 3px; border-radius: 50%;
+		background: white;
+		box-shadow: 0 0 6px 2px rgba(255,255,255,0.6), -20px 0 15px 1px rgba(255,255,255,0.3), -40px 0 25px 1px rgba(255,255,255,0.1);
+	}
+	.ss1 {
+		top: 8%; left: -5%;
+		animation: shootingStar 4s linear infinite 0s;
+	}
+	.ss2 {
+		top: 25%; left: -5%;
+		animation: shootingStar 5s linear infinite 2s;
+	}
+	.ss3 {
+		top: 45%; left: -5%;
+		animation: shootingStar 3.5s linear infinite 4s;
+	}
+	@keyframes shootingStar {
+		0% { transform: translateX(0) translateY(0) rotate(-35deg); opacity: 0; }
+		5% { opacity: 1; }
+		70% { opacity: 1; }
+		100% { transform: translateX(110vw) translateY(40vh) rotate(-35deg); opacity: 0; }
+	}
+
+	/* Comets */
+	.comet {
+		position: fixed; z-index: 1; pointer-events: none;
+		width: 4px; height: 4px; border-radius: 50%;
+		background: #fbbf24;
+		box-shadow: 0 0 8px 3px rgba(251,191,36,0.5), -15px 0 20px 2px rgba(251,191,36,0.2), -30px 0 30px 1px rgba(251,191,36,0.1);
+	}
+	.comet1 {
+		top: 15%; right: -5%;
+		animation: cometLeft 6s linear infinite 1s;
+	}
+	.comet2 {
+		bottom: 20%; right: -5%;
+		animation: cometLeft 7s linear infinite 3.5s;
+	}
+	@keyframes cometLeft {
+		0% { transform: translateX(0) translateY(0) rotate(25deg); opacity: 0; }
+		5% { opacity: 1; }
+		70% { opacity: 1; }
+		100% { transform: translateX(-110vw) translateY(30vh) rotate(25deg); opacity: 0; }
 	}
 
 	:global(.animate-spin-slow) { animation: spin 4s linear infinite; }
