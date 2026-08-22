@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { login, staffLogin, studentLogin } from '$lib/stores/auth.svelte';
 	import { goto } from '$app/navigation';
-	import { GraduationCap, Phone, Key, Hash, Calendar, Shield, Gamepad2, Clock, LogIn, ArrowLeft, Star, Zap, Trophy, BookOpen } from 'lucide-svelte';
+	import { Phone, Key, Hash, Calendar, Shield, ArrowLeft } from 'lucide-svelte';
 
 	type View = 'home' | 'login';
 	let view = $state<View>('home');
@@ -84,110 +84,95 @@
 		<!-- Cards -->
 		<div class="relative z-10 flex-1 flex items-start justify-center px-4 pb-6">
 			<div class="w-full max-w-5xl">
-				<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-stretch">
+				<div class="grid grid-cols-1 sm:grid-cols-3 gap-5 items-stretch">
 
 					<!-- Quiz Arena -->
-					<a href="/play" class="game-card game-card-quiz group relative rounded-[1.5rem] p-5 text-white shadow-2xl hover:scale-[1.04] active:scale-[0.97] transition-all duration-200 overflow-hidden">
-						<!-- Sparkle decorations -->
-						<div class="absolute top-3 right-3 text-lg animate-spin-slow">⭐</div>
-						<div class="absolute bottom-4 left-3 text-sm animate-bounce">🎯</div>
-						<div class="absolute top-12 right-10 text-xs animate-pulse">🔥</div>
-
-						<!-- Game icon -->
-						<div class="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center mb-3 shadow-lg group-hover:rotate-12 transition-transform duration-300">
-							<span class="text-3xl">🎮</span>
+					<a href="/play" class="c card-quiz group relative rounded-3xl p-6 text-white overflow-hidden hover:scale-[1.04] active:scale-[0.97] transition-all duration-300">
+						<div class="card-shine"></div>
+						<div class="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-white/5"></div>
+						<div class="absolute -bottom-12 -left-12 w-40 h-40 rounded-full bg-white/5"></div>
+						<div class="absolute top-4 left-4 px-2.5 py-1 rounded-full bg-yellow-400 text-yellow-900 text-[10px] font-black uppercase tracking-wider shadow-lg z-10">HOT</div>
+						<div class="absolute top-4 right-4 text-xl z-10 animate-spin-slow">⭐</div>
+						<div class="absolute bottom-6 right-5 text-lg z-10 animate-bounce">🎯</div>
+						<div class="absolute bottom-4 left-5 text-sm z-10 animate-pulse">🔥</div>
+						<div class="absolute top-16 left-5 text-xs z-10 animate-bounce" style="animation-delay:.4s">✨</div>
+						<div class="w-20 h-20 rounded-[1.25rem] bg-white/15 backdrop-blur flex items-center justify-center mb-4 shadow-xl group-hover:rotate-12 group-hover:scale-110 transition-all duration-300 border border-white/10 relative z-10">
+							<span class="text-4xl">🎮</span>
 						</div>
-
-						<h2 class="text-2xl font-black relative drop-shadow-sm">Quiz Arena</h2>
-						<p class="text-white/70 text-sm mt-1.5 leading-relaxed relative font-medium">Battle through questions, earn points & climb the leaderboard!</p>
-
-						<!-- Stats bar -->
-						<div class="flex items-center gap-3 mt-4 relative">
-							<div class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/15 text-xs font-bold">
-								<Star size={12} /> Points
-							</div>
-							<div class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/15 text-xs font-bold">
-								<Trophy size={12} /> Rank
-							</div>
-							<div class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/15 text-xs font-bold">
-								<Zap size={12} /> Streak
-							</div>
+						<h2 class="text-2xl font-black relative z-10" style="text-shadow:0 2px 4px rgba(0,0,0,0.15)">Quiz Arena</h2>
+						<p class="text-white/65 text-sm mt-1.5 leading-relaxed relative z-10">Battle through questions, earn points & climb the leaderboard!</p>
+						<div class="flex items-center gap-2 mt-4 relative z-10 flex-wrap">
+							<span class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/15 text-xs font-bold">⭐ Points</span>
+							<span class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/15 text-xs font-bold">🏆 Rank</span>
+							<span class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/15 text-xs font-bold">⚡ Streak</span>
 						</div>
-
-						<!-- Play button -->
-						<div class="mt-4 relative">
-							<div class="w-full py-2.5 rounded-xl bg-white/20 backdrop-blur text-center font-black text-sm tracking-wide group-hover:bg-white/30 transition-colors flex items-center justify-center gap-2">
-								PLAY NOW <span class="text-lg">🚀</span>
+						<div class="mt-5 relative z-10">
+							<div class="w-full py-3 rounded-2xl bg-white/20 backdrop-blur text-center font-black text-sm tracking-wide group-hover:bg-white/30 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all duration-300">
+								PLAY NOW 🚀
 							</div>
 						</div>
 					</a>
 
 					<!-- Timetable -->
-					<a href="/timetable" class="game-card game-card-time group relative rounded-[1.5rem] p-5 text-white shadow-2xl hover:scale-[1.04] active:scale-[0.97] transition-all duration-200 overflow-hidden">
-						<div class="absolute top-3 right-3 text-lg animate-bounce" style="animation-delay:0.3s">📅</div>
-						<div class="absolute bottom-4 left-3 text-sm animate-pulse">📚</div>
-						<div class="absolute top-12 right-10 text-xs animate-spin-slow">🕐</div>
-
-						<!-- Game icon -->
-						<div class="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center mb-3 shadow-lg group-hover:-rotate-12 transition-transform duration-300">
-							<span class="text-3xl">🗓️</span>
+					<a href="/timetable" class="c card-time group relative rounded-3xl p-6 text-white overflow-hidden hover:scale-[1.04] active:scale-[0.97] transition-all duration-300">
+						<div class="card-shine"></div>
+						<div class="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-white/5"></div>
+						<div class="absolute -bottom-12 -left-12 w-40 h-40 rounded-full bg-white/5"></div>
+						<div class="absolute top-4 right-4 text-xl z-10 animate-bounce" style="animation-delay:.3s">📅</div>
+						<div class="absolute bottom-6 left-5 text-lg z-10 animate-pulse">📚</div>
+						<div class="absolute top-16 right-5 text-sm z-10 animate-spin-slow">🕐</div>
+						<div class="absolute bottom-4 right-5 text-xs z-10 animate-bounce" style="animation-delay:.6s">🌟</div>
+						<div class="w-20 h-20 rounded-[1.25rem] bg-white/15 backdrop-blur flex items-center justify-center mb-4 shadow-xl group-hover:-rotate-12 group-hover:scale-110 transition-all duration-300 border border-white/10 relative z-10">
+							<span class="text-4xl">🗓️</span>
 						</div>
-
-						<h2 class="text-2xl font-black relative drop-shadow-sm">Timetable</h2>
-						<p class="text-white/70 text-sm mt-1.5 leading-relaxed relative font-medium">See your weekly schedule — know what's next!</p>
-
-						<!-- Mini schedule preview -->
-						<div class="mt-4 space-y-1.5 relative">
-							<div class="flex items-center gap-2">
-								<div class="w-2 h-2 rounded-full bg-yellow-300"></div>
-								<div class="h-2 flex-1 rounded-full bg-white/15 overflow-hidden"><div class="h-full bg-white/30 rounded-full" style="width:80%"></div></div>
-								<span class="text-[10px] text-white/50 font-bold">8AM</span>
+						<h2 class="text-2xl font-black relative z-10" style="text-shadow:0 2px 4px rgba(0,0,0,0.15)">Timetable</h2>
+						<p class="text-white/65 text-sm mt-1.5 leading-relaxed relative z-10">See your weekly schedule — know what's next!</p>
+						<div class="mt-4 space-y-2 relative z-10">
+							<div class="flex items-center gap-2.5">
+								<div class="w-3 h-3 rounded-full bg-yellow-300 shadow-[0_0_8px_rgba(253,224,71,0.5)]"></div>
+								<div class="h-2.5 flex-1 rounded-full bg-white/10 overflow-hidden"><div class="h-full bg-gradient-to-r from-yellow-300/50 to-yellow-300/20 rounded-full" style="width:80%"></div></div>
+								<span class="text-[10px] text-white/50 font-bold w-7">8AM</span>
 							</div>
-							<div class="flex items-center gap-2">
-								<div class="w-2 h-2 rounded-full bg-green-300"></div>
-								<div class="h-2 flex-1 rounded-full bg-white/15 overflow-hidden"><div class="h-full bg-white/30 rounded-full" style="width:60%"></div></div>
-								<span class="text-[10px] text-white/50 font-bold">9AM</span>
+							<div class="flex items-center gap-2.5">
+								<div class="w-3 h-3 rounded-full bg-green-300 shadow-[0_0_8px_rgba(134,239,172,0.5)]"></div>
+								<div class="h-2.5 flex-1 rounded-full bg-white/10 overflow-hidden"><div class="h-full bg-gradient-to-r from-green-300/50 to-green-300/20 rounded-full" style="width:60%"></div></div>
+								<span class="text-[10px] text-white/50 font-bold w-7">9AM</span>
 							</div>
-							<div class="flex items-center gap-2">
-								<div class="w-2 h-2 rounded-full bg-pink-300"></div>
-								<div class="h-2 flex-1 rounded-full bg-white/15 overflow-hidden"><div class="h-full bg-white/30 rounded-full" style="width:90%"></div></div>
-								<span class="text-[10px] text-white/50 font-bold">10AM</span>
+							<div class="flex items-center gap-2.5">
+								<div class="w-3 h-3 rounded-full bg-pink-300 shadow-[0_0_8px_rgba(249,168,212,0.5)]"></div>
+								<div class="h-2.5 flex-1 rounded-full bg-white/10 overflow-hidden"><div class="h-full bg-gradient-to-r from-pink-300/50 to-pink-300/20 rounded-full" style="width:90%"></div></div>
+								<span class="text-[10px] text-white/50 font-bold w-7">10AM</span>
 							</div>
 						</div>
-
-						<div class="mt-4 relative">
-							<div class="w-full py-2.5 rounded-xl bg-white/20 backdrop-blur text-center font-black text-sm tracking-wide group-hover:bg-white/30 transition-colors flex items-center justify-center gap-2">
-								VIEW SCHEDULE <span class="text-lg">📋</span>
+						<div class="mt-5 relative z-10">
+							<div class="w-full py-3 rounded-2xl bg-white/20 backdrop-blur text-center font-black text-sm tracking-wide group-hover:bg-white/30 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all duration-300">
+								VIEW SCHEDULE 📋
 							</div>
 						</div>
 					</a>
 
 					<!-- Sign In -->
-					<button onclick={() => view = 'login'} class="game-card game-card-sign group relative rounded-[1.5rem] p-5 text-left bg-white shadow-2xl hover:scale-[1.04] active:scale-[0.97] transition-all duration-200 overflow-hidden border-4 border-white/50">
-						<div class="absolute top-3 right-3 text-lg animate-bounce" style="animation-delay:0.5s">👋</div>
-						<div class="absolute bottom-4 left-3 text-sm animate-pulse">🎓</div>
-						<div class="absolute top-12 right-10 text-xs animate-spin-slow">🌟</div>
-
-						<!-- Character avatars -->
-						<div class="flex items-center gap-2 mb-3">
-							<div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-xl shadow-lg shadow-blue-400/30 group-hover:animate-bounce">🧑‍🎓</div>
-							<div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-xl shadow-lg shadow-orange-400/30 group-hover:animate-bounce" style="animation-delay:0.1s">👩‍🏫</div>
-							<div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-xl shadow-lg shadow-purple-400/30 group-hover:animate-bounce" style="animation-delay:0.2s">👨‍💼</div>
+					<button onclick={() => view = 'login'} class="c card-sign group relative rounded-3xl p-6 text-left bg-white overflow-hidden hover:scale-[1.04] active:scale-[0.97] transition-all duration-300 border-4 border-indigo-100">
+						<div class="card-shine-light"></div>
+						<div class="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-indigo-50"></div>
+						<div class="absolute -bottom-12 -left-12 w-40 h-40 rounded-full bg-purple-50"></div>
+						<div class="absolute top-4 right-4 text-xl z-10 animate-bounce" style="animation-delay:.5s">👋</div>
+						<div class="absolute bottom-5 left-5 text-sm z-10 animate-bounce" style="animation-delay:.8s">🌟</div>
+						<div class="flex items-center gap-3 mb-4 relative z-10">
+							<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-2xl shadow-lg shadow-blue-400/30 group-hover:animate-bounce border-2 border-white">🧑‍🎓</div>
+							<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-2xl shadow-lg shadow-orange-400/30 group-hover:animate-bounce border-2 border-white" style="animation-delay:.1s">👩‍🏫</div>
+							<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-2xl shadow-lg shadow-purple-400/30 group-hover:animate-bounce border-2 border-white" style="animation-delay:.2s">👨‍💼</div>
 						</div>
-
-						<h2 class="text-2xl font-black text-slate-800 relative">Sign In</h2>
-						<p class="text-slate-400 text-sm mt-1.5 leading-relaxed relative font-medium">Jump back into your learning dashboard!</p>
-
-						<!-- Role badges -->
-						<div class="flex items-center gap-2 mt-4 relative">
+						<h2 class="text-2xl font-black text-slate-800 relative z-10">Sign In</h2>
+						<p class="text-slate-400 text-sm mt-1.5 leading-relaxed relative z-10">Jump back into your learning dashboard!</p>
+						<div class="flex items-center gap-2 mt-4 relative z-10 flex-wrap">
 							<span class="px-3 py-1 rounded-full bg-blue-100 text-blue-600 text-xs font-black">🧑‍🎓 Student</span>
 							<span class="px-3 py-1 rounded-full bg-amber-100 text-amber-600 text-xs font-black">👩‍🏫 Teacher</span>
 							<span class="px-3 py-1 rounded-full bg-purple-100 text-purple-600 text-xs font-black">👨‍💼 Admin</span>
 						</div>
-
-						<div class="mt-4 relative">
-							<div class="w-full py-2.5 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 text-center font-black text-sm tracking-wide text-white group-hover:from-primary-600 group-hover:to-primary-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary-500/30">
-								ENTER <span class="text-lg">🎯</span>
+						<div class="mt-5 relative z-10">
+							<div class="w-full py-3 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 text-center font-black text-sm tracking-wide text-white group-hover:from-indigo-600 group-hover:to-purple-700 transition-all shadow-lg shadow-indigo-500/30 group-hover:shadow-indigo-500/50">
+								ENTER 🎯
 							</div>
 						</div>
 					</button>
@@ -282,17 +267,27 @@
 			radial-gradient(1.5px 1.5px at 75% 5%, rgba(255,255,255,0.5) 0%, transparent 100%),
 			radial-gradient(1px 1px at 20% 90%, rgba(255,255,255,0.3) 0%, transparent 100%);
 	}
-	.game-card-quiz {
-		background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
-		border: 3px solid rgba(255,255,255,0.2);
+	.c { position: relative; }
+	.card-quiz {
+		background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 40%, #a855f7 70%, #c084fc 100%);
+		box-shadow: 0 8px 32px rgba(139,92,246,0.35), 0 0 0 3px rgba(255,255,255,0.1), inset 0 1px 0 rgba(255,255,255,0.15);
 	}
-	.game-card-time {
-		background: linear-gradient(135deg, #06b6d4 0%, #0ea5e9 50%, #3b82f6 100%);
-		border: 3px solid rgba(255,255,255,0.2);
+	.card-time {
+		background: linear-gradient(135deg, #06b6d4 0%, #0ea5e9 40%, #3b82f6 70%, #6366f1 100%);
+		box-shadow: 0 8px 32px rgba(14,165,233,0.35), 0 0 0 3px rgba(255,255,255,0.1), inset 0 1px 0 rgba(255,255,255,0.15);
 	}
-	.game-card-sign {
-		background: linear-gradient(135deg, #fefefe 0%, #f8fafc 100%);
-		border: 3px solid rgba(99,102,241,0.2);
+	.card-sign {
+		box-shadow: 0 8px 32px rgba(99,102,241,0.2), 0 0 0 3px rgba(99,102,241,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
+	}
+	.card-shine {
+		position: absolute; top: 0; left: 0; right: 0; height: 50%;
+		background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, transparent 100%);
+		border-radius: 1.5rem 1.5rem 0 0; pointer-events: none;
+	}
+	.card-shine-light {
+		position: absolute; top: 0; left: 0; right: 0; height: 50%;
+		background: linear-gradient(180deg, rgba(255,255,255,0.6) 0%, transparent 100%);
+		border-radius: 1.5rem 1.5rem 0 0; pointer-events: none;
 	}
 	.mascot { animation: mascotFloat 3s ease-in-out infinite; }
 	@keyframes mascotFloat {
