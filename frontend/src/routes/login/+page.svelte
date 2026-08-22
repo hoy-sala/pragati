@@ -91,7 +91,6 @@
 						<div class="card-shine"></div>
 						<div class="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-white/5"></div>
 						<div class="absolute -bottom-12 -left-12 w-40 h-40 rounded-full bg-white/5"></div>
-						<div class="absolute top-4 left-4 px-2.5 py-1 rounded-full bg-yellow-400 text-yellow-900 text-[10px] font-black uppercase tracking-wider shadow-lg z-10">HOT</div>
 						<div class="absolute top-4 right-4 text-xl z-10 animate-spin-slow">⭐</div>
 						<div class="absolute bottom-6 right-5 text-lg z-10 animate-bounce">🎯</div>
 						<div class="absolute bottom-4 left-5 text-sm z-10 animate-pulse">🔥</div>
