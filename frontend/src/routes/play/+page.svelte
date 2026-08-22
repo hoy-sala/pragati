@@ -33,6 +33,7 @@
 	let scorePopups = $state<{ id: number; value: number; x: number; y: number }[]>([]);
 	let popupId = $state(0);
 	let confettiPieces = $state<{ id: number; x: number; color: string; rot: number; delay: number }[]>([]);
+	let answerBounce = $state(false);
 
 	const SUBJECT_COLORS = ['from-violet-500 to-purple-600', 'from-blue-500 to-cyan-500', 'from-emerald-500 to-teal-500', 'from-amber-500 to-orange-500', 'from-rose-500 to-pink-500', 'from-indigo-500 to-blue-500', 'from-fuchsia-500 to-purple-500'];
 	const DIFFICULTY_COLORS: Record<string, string> = { easy: 'from-emerald-400 to-green-500', medium: 'from-amber-400 to-orange-500', hard: 'from-rose-400 to-red-500' };
@@ -174,6 +175,8 @@
 			playWrong();
 			setTimeout(() => { screenShake = false; }, 500);
 		}
+		answerBounce = true;
+		setTimeout(() => { answerBounce = false; }, 300);
 		clearInterval(timerInterval);
 		setTimeout(nextQuestion, 1200);
 	}
