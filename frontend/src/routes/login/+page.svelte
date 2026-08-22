@@ -44,6 +44,7 @@
 </script>
 
 <div class="min-h-screen flex flex-col overflow-hidden relative game-bg">
+	<div class="starfield"></div>
 	<!-- Floating decorations -->
 	<div class="deco deco-moon">🌙</div>
 	<div class="deco deco-planet">🪐</div>
@@ -252,14 +253,34 @@
 
 <style>
 	.game-bg {
-		background: linear-gradient(160deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #fda085 100%);
+		background: linear-gradient(160deg, #0c0a2a 0%, #1a1150 25%, #2d1b69 40%, #1e1145 60%, #0f0d30 80%, #0a0820 100%);
 		background-size: 400% 400%;
-		animation: gradientShift 15s ease infinite;
+		animation: gradientShift 20s ease infinite;
 	}
 	@keyframes gradientShift {
 		0% { background-position: 0% 50%; }
 		50% { background-position: 100% 50%; }
 		100% { background-position: 0% 50%; }
+	}
+	.starfield {
+		position: fixed; inset: 0; z-index: 0; pointer-events: none;
+		background-image:
+			radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.5) 0%, transparent 100%),
+			radial-gradient(1px 1px at 25% 45%, rgba(255,255,255,0.4) 0%, transparent 100%),
+			radial-gradient(1px 1px at 40% 10%, rgba(255,255,255,0.3) 0%, transparent 100%),
+			radial-gradient(1px 1px at 55% 60%, rgba(255,255,255,0.5) 0%, transparent 100%),
+			radial-gradient(1px 1px at 70% 30%, rgba(255,255,255,0.4) 0%, transparent 100%),
+			radial-gradient(1px 1px at 85% 55%, rgba(255,255,255,0.3) 0%, transparent 100%),
+			radial-gradient(1px 1px at 15% 75%, rgba(255,255,255,0.4) 0%, transparent 100%),
+			radial-gradient(1px 1px at 50% 85%, rgba(255,255,255,0.3) 0%, transparent 100%),
+			radial-gradient(1px 1px at 80% 80%, rgba(255,255,255,0.5) 0%, transparent 100%),
+			radial-gradient(1px 1px at 35% 35%, rgba(255,255,255,0.4) 0%, transparent 100%),
+			radial-gradient(1.5px 1.5px at 60% 15%, rgba(255,255,255,0.6) 0%, transparent 100%),
+			radial-gradient(1.5px 1.5px at 90% 45%, rgba(255,255,255,0.5) 0%, transparent 100%),
+			radial-gradient(1px 1px at 5% 50%, rgba(255,255,255,0.3) 0%, transparent 100%),
+			radial-gradient(1px 1px at 45% 70%, rgba(255,255,255,0.4) 0%, transparent 100%),
+			radial-gradient(1.5px 1.5px at 75% 5%, rgba(255,255,255,0.5) 0%, transparent 100%),
+			radial-gradient(1px 1px at 20% 90%, rgba(255,255,255,0.3) 0%, transparent 100%);
 	}
 	.game-card-quiz {
 		background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
@@ -282,81 +303,87 @@
 
 	/* Floating decorations */
 	.deco { position: fixed; z-index: 1; pointer-events: none; }
-	.deco-moon { top: 8%; left: 8%; font-size: 2rem; opacity: 0.45; animation: floatA 8s ease-in-out infinite; }
-	.deco-planet { bottom: 18%; right: 8%; font-size: 1.8rem; opacity: 0.35; animation: floatB 10s ease-in-out infinite; }
-	.deco-rocket { top: 20%; right: 6%; font-size: 1.5rem; opacity: 0.4; animation: rocketFly 12s ease-in-out infinite; }
-	.deco-ufo { bottom: 30%; left: 5%; font-size: 1.3rem; opacity: 0.3; animation: floatA 9s ease-in-out infinite 2s; }
-	.deco-star1 { top: 12%; right: 18%; font-size: 1rem; opacity: 0.5; animation: twinkle 3s ease-in-out infinite; }
-	.deco-star2 { bottom: 25%; left: 15%; font-size: 0.8rem; opacity: 0.4; animation: twinkle 4s ease-in-out infinite 1s; }
-	.deco-star3 { top: 40%; right: 25%; font-size: 1.1rem; opacity: 0.35; animation: twinkle 3.5s ease-in-out infinite 0.5s; }
-	.deco-star4 { top: 55%; left: 10%; font-size: 0.7rem; opacity: 0.45; animation: twinkle 2.5s ease-in-out infinite 1.5s; }
-	.deco-star5 { bottom: 12%; right: 20%; font-size: 0.9rem; opacity: 0.4; animation: twinkle 3s ease-in-out infinite 2s; }
+	.deco-moon { top: 6%; left: 6%; font-size: 3.5rem; opacity: 0.5; animation: floatA 8s ease-in-out infinite; filter: drop-shadow(0 0 12px rgba(255,255,200,0.4)); }
+	.deco-planet { bottom: 12%; right: 6%; font-size: 3rem; opacity: 0.4; animation: floatB 10s ease-in-out infinite; filter: drop-shadow(0 0 10px rgba(200,180,255,0.3)); }
+	.deco-rocket { top: 15%; right: 5%; font-size: 2.5rem; opacity: 0.5; animation: rocketFly 12s ease-in-out infinite; filter: drop-shadow(0 0 8px rgba(255,150,50,0.4)); }
+	.deco-ufo { bottom: 25%; left: 4%; font-size: 2.2rem; opacity: 0.4; animation: ufoFloat 9s ease-in-out infinite 2s; filter: drop-shadow(0 0 10px rgba(100,255,200,0.3)); }
+	.deco-star1 { top: 10%; right: 15%; font-size: 1.4rem; opacity: 0.6; animation: twinkle 3s ease-in-out infinite; }
+	.deco-star2 { bottom: 22%; left: 12%; font-size: 1.1rem; opacity: 0.5; animation: twinkle 4s ease-in-out infinite 1s; }
+	.deco-star3 { top: 38%; right: 22%; font-size: 1.5rem; opacity: 0.45; animation: twinkle 3.5s ease-in-out infinite 0.5s; }
+	.deco-star4 { top: 55%; left: 8%; font-size: 1rem; opacity: 0.55; animation: twinkle 2.5s ease-in-out infinite 1.5s; }
+	.deco-star5 { bottom: 10%; right: 18%; font-size: 1.2rem; opacity: 0.5; animation: twinkle 3s ease-in-out infinite 2s; }
 
 	@keyframes floatA {
 		0%, 100% { transform: translateY(0) translateX(0); }
-		50% { transform: translateY(-15px) translateX(5px); }
+		50% { transform: translateY(-18px) translateX(8px); }
 	}
 	@keyframes floatB {
-		0%, 100% { transform: translateY(0) translateX(0); }
-		50% { transform: translateY(10px) translateX(-8px); }
+		0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+		50% { transform: translateY(12px) translateX(-10px) rotate(8deg); }
 	}
 	@keyframes rocketFly {
-		0%, 100% { transform: translateY(0) translateX(0) rotate(-15deg); }
-		25% { transform: translateY(-20px) translateX(10px) rotate(-10deg); }
-		50% { transform: translateY(-8px) translateX(-5px) rotate(-20deg); }
-		75% { transform: translateY(-25px) translateX(5px) rotate(-12deg); }
+		0%, 100% { transform: translateY(0) translateX(0) rotate(-25deg); }
+		25% { transform: translateY(-25px) translateX(12px) rotate(-18deg); }
+		50% { transform: translateY(-10px) translateX(-8px) rotate(-30deg); }
+		75% { transform: translateY(-30px) translateX(8px) rotate(-20deg); }
+	}
+	@keyframes ufoFloat {
+		0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+		25% { transform: translateY(-12px) translateX(15px) rotate(5deg); }
+		50% { transform: translateY(5px) translateX(-10px) rotate(-3deg); }
+		75% { transform: translateY(-8px) translateX(8px) rotate(2deg); }
 	}
 	@keyframes twinkle {
 		0%, 100% { opacity: 0.3; transform: scale(1); }
-		50% { opacity: 0.7; transform: scale(1.3); }
+		50% { opacity: 0.8; transform: scale(1.4); }
 	}
 
 	/* Shooting stars */
 	.shooting-star {
 		position: fixed; z-index: 1; pointer-events: none;
-		width: 3px; height: 3px; border-radius: 50%;
+		width: 4px; height: 4px; border-radius: 50%;
 		background: white;
-		box-shadow: 0 0 6px 2px rgba(255,255,255,0.6), -20px 0 15px 1px rgba(255,255,255,0.3), -40px 0 25px 1px rgba(255,255,255,0.1);
+		box-shadow: 0 0 8px 3px rgba(255,255,255,0.7), -25px 0 18px 2px rgba(255,255,255,0.4), -50px 0 30px 1px rgba(255,255,255,0.15);
 	}
 	.ss1 {
-		top: 8%; left: -5%;
+		top: 6%; left: -5%;
 		animation: shootingStar 4s linear infinite 0s;
 	}
 	.ss2 {
-		top: 25%; left: -5%;
-		animation: shootingStar 5s linear infinite 2s;
+		top: 22%; left: -5%;
+		animation: shootingStar 5s linear infinite 2.5s;
 	}
 	.ss3 {
-		top: 45%; left: -5%;
-		animation: shootingStar 3.5s linear infinite 4s;
+		top: 42%; left: -5%;
+		animation: shootingStar 3.5s linear infinite 5s;
 	}
 	@keyframes shootingStar {
 		0% { transform: translateX(0) translateY(0) rotate(-35deg); opacity: 0; }
 		5% { opacity: 1; }
 		70% { opacity: 1; }
-		100% { transform: translateX(110vw) translateY(40vh) rotate(-35deg); opacity: 0; }
+		100% { transform: translateX(110vw) translateY(45vh) rotate(-35deg); opacity: 0; }
 	}
 
 	/* Comets */
 	.comet {
 		position: fixed; z-index: 1; pointer-events: none;
-		width: 4px; height: 4px; border-radius: 50%;
+		width: 5px; height: 5px; border-radius: 50%;
 		background: #fbbf24;
-		box-shadow: 0 0 8px 3px rgba(251,191,36,0.5), -15px 0 20px 2px rgba(251,191,36,0.2), -30px 0 30px 1px rgba(251,191,36,0.1);
+		box-shadow: 0 0 10px 4px rgba(251,191,36,0.6), -20px 0 25px 3px rgba(251,191,36,0.25), -40px 0 35px 2px rgba(251,191,36,0.1);
 	}
 	.comet1 {
-		top: 15%; right: -5%;
+		top: 12%; right: -5%;
 		animation: cometLeft 6s linear infinite 1s;
 	}
 	.comet2 {
-		bottom: 20%; right: -5%;
-		animation: cometLeft 7s linear infinite 3.5s;
+		bottom: 18%; right: -5%;
+		animation: cometLeft 7s linear infinite 4s;
 	}
 	@keyframes cometLeft {
 		0% { transform: translateX(0) translateY(0) rotate(25deg); opacity: 0; }
 		5% { opacity: 1; }
 		70% { opacity: 1; }
-		100% { transform: translateX(-110vw) translateY(30vh) rotate(25deg); opacity: 0; }
+		100% { transform: translateX(-110vw) translateY(35vh) rotate(25deg); opacity: 0; }
 	}
 
 	:global(.animate-spin-slow) { animation: spin 4s linear infinite; }
