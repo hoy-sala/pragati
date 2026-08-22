@@ -50,7 +50,7 @@
 		try {
 			const opts: RequestInit = { method, headers: { 'Content-Type': 'application/json' } };
 			if (body) opts.body = JSON.stringify(body);
-			const res = await fetch(apiUrl('/api/v1' + path), opts);
+			const res = await fetch(apiUrl(path), opts);
 			const json = await res.json();
 			return json.data ?? null;
 		} catch { return null; }
