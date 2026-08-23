@@ -550,5 +550,3 @@
 
 	@media (prefers-reduced-motion: reduce) { .card, .btn-primary { transition: none; } }
 </style>
-#   t e s t  
- 
