@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { login, staffLogin, studentLogin } from '$lib/stores/auth.svelte';
 	import { goto } from '$app/navigation';
-	import { Phone, Key, Hash, Calendar, Shield, ArrowLeft, Gamepad2, CalendarDays, LogIn, Building2, Users, GraduationCap } from 'lucide-svelte';
+	import { Phone, Key, Hash, Calendar, Shield, ArrowLeft, Gamepad2, CalendarDays, LogIn, Building2, Users, GraduationCap, Info } from 'lucide-svelte';
 
 	type View = 'home' | 'login';
 	let view = $state<View>('home');
@@ -55,12 +55,12 @@
 				<Building2 size={22} strokeWidth={2.2} />
 			</div>
 			<div class="identity-text">
-				<p class="wordmark">PRAGATI</p>
-				<p class="tagline"><span class="tagline-kannada">ಪ್ರಗತಿ</span> <span class="tagline-sep">·</span> MDRS (SC-32) Bahaddurghatta · KREIS, Karnataka</p>
+				<p class="wordmark">PRAGATI <span class="wordmark-kannada">ಪ್ರಗತಿ</span></p>
+				<p class="tagline">MDRS Bahaddurghatta — where curiosity becomes progress</p>
 			</div>
 		</a>
 		<button class="about-link" onclick={() => aboutOpen = true}>
-			<span class="about-icon" aria-hidden="true">ⓘ</span>
+			<Info size={16} strokeWidth={2} aria-hidden="true" />
 			<span class="about-label">About</span>
 		</button>
 	</header>
@@ -268,8 +268,7 @@
 		margin: 0.22rem 0 0;
 		line-height: 1.3;
 	}
-	.tagline-kannada { font-family: 'Anek Kannada', system-ui, sans-serif; font-weight: 700; color: var(--ink); }
-	.tagline-sep { opacity: 0.35; margin: 0 0.2rem; }
+	.wordmark-kannada { font-family: 'Anek Kannada', system-ui, sans-serif; font-weight: 700; color: var(--ink-soft); font-size: 0.88em; margin-left: 0.4rem; letter-spacing: -0.01em; }
 	.about-link {
 		display: inline-flex;
 		align-items: center;
