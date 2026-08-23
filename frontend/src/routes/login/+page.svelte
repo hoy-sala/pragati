@@ -56,7 +56,7 @@
 			</div>
 			<div class="identity-text">
 				<p class="wordmark">PRAGATI <span class="wordmark-kannada">ಪ್ರಗತಿ</span></p>
-				<p class="tagline">MDRS Bahaddurghatta — where curiosity becomes progress</p>
+				<p class="tagline">MDRS (SC-32) Bahaddurghatta — where curiosity becomes progress</p>
 			</div>
 		</a>
 		<button class="about-link" onclick={() => aboutOpen = true}>
@@ -124,7 +124,7 @@
 				<button class="about-close" onclick={() => aboutOpen = false} aria-label="Close">✕</button>
 				<h2 class="about-title">Why Pragati exists</h2>
 				<div class="about-body">
-					<p>Pragati (<span class="font-kannada">ಪ್ರಗತಿ</span> — progress) is the school system for MDRS Bahaddurghatta. It brings academics, CCE assessments, holistic progress cards, quizzes and certificates together — so teachers teach and families follow along.</p>
+					<p>Pragati (<span class="font-kannada">ಪ್ರಗತಿ</span> — progress) is the school system for MDRS (SC-32) Bahaddurghatta. It brings academics, CCE assessments, holistic progress cards, quizzes and certificates together — so teachers teach and families follow along.</p>
 					<p>The quiz space here is for practice, not exams. Questions cover the subjects you teach, with topics and difficulty levels. No ads, no tracking.</p>
 					<p><a href="/play">Try a quiz</a> or <button class="link-btn" onclick={() => { aboutOpen = false; view = 'login'; }}>sign in</button>.</p>
 				</div>

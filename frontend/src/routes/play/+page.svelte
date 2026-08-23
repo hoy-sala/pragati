@@ -233,7 +233,7 @@
 		<button onclick={handleIdentityClick} class="qh-identity" aria-label="Go home">
 			<span class="qh-logo"><Building2 size={16} /></span>
 			<span class="qh-wordmark">PRAGATI</span>
-			<span class="qh-sub">MDRS Bahaddurghatta</span>
+			<span class="qh-sub">MDRS (SC-32) Bahaddurghatta</span>
 		</button>
 		{#if phase !== 'results'}
 			<button onclick={confirmExit} class="qh-home">← Home</button>
