@@ -66,58 +66,50 @@
 	</header>
 
 	{#if view === 'home'}
-		<div class="intro">
-			<h1 class="intro-title">Practice, check the <em>timetable</em>, and keep progress visible.</h1>
-			<p class="intro-sub">Quizzes, schedules and records in one calm place — for students, teachers and parents of MDRS Bahaddurghatta. Built to the NEP 2020 vision, free to use.</p>
+		<div class="intro intro-kids">
+			<div class="kids-art" aria-hidden="true"><span class="ka ka1">🎮</span><span class="ka ka2">⭐</span><span class="ka ka3">📚</span></div>
+			<h1 class="intro-title">ಬಾ ಆಡೋಣ! <em>Let's play</em> & learn</h1>
+			<p class="intro-sub">Pick a quiz, check your timetable, or sign in — all yours.</p>
 			<div class="intro-meta">
-				<span class="pill"><span class="pill-dot" style="background:var(--teal)"></span> 3 spaces — Quiz, Timetable, Sign in</span>
-				<span class="pill mono">KREIS · Govt. of Karnataka</span>
+				<span class="pill"><span class="pill-dot" style="background:var(--amber)"></span> For Classes 6–10</span>
+				<span class="pill"><span class="pill-dot" style="background:var(--teal)"></span> Free & safe</span>
 			</div>
 		</div>
 
 		<div class="card-grid">
 			<!-- Quiz -->
-			<a href="/play" class="card">
+			<a href="/play" class="card card-quiz">
 				<div class="card-head">
-					<span class="eyebrow">Practice · Classes 6–10</span>
-					<span class="icon-badge"><Gamepad2 size={18} /></span>
+					<span class="eyebrow">15s · Streak ×4</span>
+					<span class="icon-badge badge-amber"><Gamepad2 size={20} /></span>
 				</div>
 				<h2 class="card-title">Quizzes</h2>
-				<p class="card-desc">Choose a class and subject, pick a topic and difficulty, then answer. Timed 15s, with streak bonuses and plain-English explanations.</p>
-				<div class="tag-row">
-					<span class="tag tag-mint">GK · States & Capitals</span>
-					<span class="tag">15s · Streak ×4</span>
-				</div>
-				<span class="card-cta">Start practising <span aria-hidden="true">→</span></span>
+				<p class="card-desc">Pick your class & subject — then play. Fast, fun, no pressure.</p>
+				<span class="card-cta">Let's play <span aria-hidden="true">→</span></span>
 			</a>
 
 			<!-- Timetable -->
-			<a href="/timetable" class="card">
+			<a href="/timetable" class="card card-tt">
 				<div class="card-head">
-					<span class="eyebrow">Plan the week</span>
-					<span class="icon-badge"><CalendarDays size={18} /></span>
+					<span class="eyebrow">Know what's next</span>
+					<span class="icon-badge badge-mint"><CalendarDays size={20} /></span>
 				</div>
 				<h2 class="card-title">Timetable</h2>
-				<p class="card-desc">Class-wise and subject-wise views. Know what’s next at a glance.</p>
-				<div class="tag-row">
-					<span class="tag">Classes 6–10</span>
-					<span class="tag">Updated weekly</span>
-				</div>
-				<span class="card-cta cta-ghost">View timetable <span aria-hidden="true">→</span></span>
+				<p class="card-desc">Your week at a glance — simple and clear.</p>
+				<span class="card-cta cta-ghost">View week <span aria-hidden="true">→</span></span>
 			</a>
 
 			<!-- Sign in -->
-			<button onclick={() => view = 'login'} class="card card-interactive">
+			<button onclick={() => view = 'login'} class="card card-interactive card-signin">
 				<div class="card-head">
-					<span class="eyebrow">Your records</span>
-					<span class="icon-badge"><LogIn size={18} /></span>
+					<span class="eyebrow">For you</span>
+					<span class="icon-badge badge-plum"><LogIn size={20} /></span>
 				</div>
 				<h2 class="card-title">Sign in</h2>
-				<p class="card-desc">Students: SATS + DOB. Staff: mobile + password. Admin: email + password. Your dashboard follows.</p>
+				<p class="card-desc">Students, teachers & parents — jump in here.</p>
 				<div class="role-row">
-					<span class="role"><GraduationCap size={14} /> Student</span>
-					<span class="role"><Users size={14} /> Staff</span>
-					<span class="role"><Shield size={14} /> Admin</span>
+					<span class="role"><GraduationCap size={13} /> Student</span>
+					<span class="role"><Users size={13} /> Staff</span>
 				</div>
 				<span class="card-cta cta-dark">Enter <span aria-hidden="true">→</span></span>
 			</button>
@@ -299,6 +291,12 @@
 	.about-icon { display: inline-grid; place-items: center; width: 18px; height: 18px; border: 1.5px solid currentColor; border-radius: 50%; font-size: 0.7rem; font-weight: 700; }
 
 	.intro { margin-bottom: 1.5rem; max-width: 60ch; }
+	.intro-kids { max-width: 48ch; }
+	.kids-art { display: flex; gap: 0.6rem; margin-bottom: 0.7rem; }
+	.ka { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 12px; border: 1.5px solid var(--ink); font-size: 1.25rem; box-shadow: 2px 2px 0 var(--ink); }
+	.ka1 { background: var(--amber); transform: rotate(-6deg); }
+	.ka2 { background: var(--mint); transform: rotate(5deg); }
+	.ka3 { background: var(--paper); transform: rotate(-3deg); }
 	.intro-title {
 		font-family: var(--font-display);
 		font-size: clamp(1.7rem, 1.2rem + 1.8vw, 2.45rem);
@@ -364,10 +362,15 @@
 		color: var(--ink-soft);
 	}
 	.icon-badge {
-		width: 34px; height: 34px; border-radius: 9px;
+		width: 40px; height: 40px; border-radius: 11px;
 		border: 1.5px solid var(--ink); background: var(--cream);
 		display: grid; place-items: center; color: var(--ink); flex: none;
 	}
+	.badge-amber { background: var(--amber); }
+	.badge-mint { background: var(--mint); }
+	.badge-plum { background: #EDE9FE; }
+	.card-quiz { background: var(--paper); }
+	.card-tt { background: var(--paper); }
 	.card-title {
 		font-family: var(--font-display);
 		font-size: 1.28rem;
