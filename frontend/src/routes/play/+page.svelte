@@ -534,27 +534,19 @@
 				<button onclick={goBack} class="back-btn" aria-label="Back">←</button>
 				<div>
 					<h2 class="section-title">Pick a table</h2>
-					<p class="section-sub">Start with 2–10, then take the challenge</p>
+					<p class="section-sub">Master 2 to 10 first, then take the challenge</p>
 				</div>
 			</div>
+			<p class="tchip-label">Challenge · 11 to 20</p>
 			<div class="tchip-grid">
-				{#each [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] as n (n)}
+				{#each [11, 12, 13, 14, 15, 16, 17, 18, 19, 20] as n (n)}
 					<button onclick={() => { playClick(); selectedTable = n; phase = 'tables-ready'; }} class="tchip {mastered.includes(n) ? 'tchip-done' : ''}">
 						{n}
 						{#if mastered.includes(n)}<span class="tchip-check"><Check size={12} strokeWidth={3} /></span>{/if}
 					</button>
 				{/each}
 			</div>
-			<p class="tchip-label">Challenge</p>
-			<div class="tchip-grid">
-				{#each [13, 14, 15, 16, 17, 18, 19, 20] as n (n)}
-					<button onclick={() => { playClick(); selectedTable = n; phase = 'tables-ready'; }} class="tchip {mastered.includes(n) ? 'tchip-done' : ''}">
-						{n}
-						{#if mastered.includes(n)}<span class="tchip-check"><Check size={12} strokeWidth={3} /></span>{/if}
-					</button>
-				{/each}
-			</div>
-			<button onclick={() => { playClick(); selectedTable = 0; phase = 'tables-ready'; }} class="btn-ghost btn-block" style="margin-top:0.5rem">🎲 Mixed — random from 2 to 10</button>
+			<button onclick={() => { playClick(); selectedTable = 0; phase = 'tables-ready'; }} class="btn-ghost btn-block" style="margin-top:1rem">Mixed — random from 2 to 10</button>
 			<p class="hint">Get 9 or more right in Practice to master a table ✓</p>
 		</div>
 
@@ -979,9 +971,9 @@
 	.mode-card .pick-name { font-size: 1.1rem; }
 
 	/* tables pick chips */
-	.tchip-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 0.55rem; }
+	.tchip-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.55rem; }
 	.tchip {
-		position: relative; min-height: 52px; border-radius: 12px;
+		position: relative; width: 56px; min-height: 52px; border-radius: 12px;
 		border: 2px solid var(--ink); background: var(--paper); color: var(--ink);
 		font-family: var(--font-display); font-weight: 800; font-size: 1.15rem;
 		cursor: pointer; display: grid; place-items: center;
