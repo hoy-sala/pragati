@@ -1,17 +1,18 @@
 <script lang="ts">
 	import { apiUrl } from '$lib/api/client.svelte';
 	import { goto } from '$app/navigation';
-	import { Building2, GraduationCap, BookOpen, Layers, Sparkles } from 'lucide-svelte';
+	import { Building2, GraduationCap, BookOpen, Layers, Sparkles, Hash, Zap, Check } from 'lucide-svelte';
 	import type { PlayClass, PlaySubject, PlayTopic, PlayQuestion } from '$lib/types';
 
-	type Phase = 'welcome' | 'classes' | 'subjects' | 'topics' | 'difficulty' | 'quiz' | 'results';
+	type Phase = 'welcome' | 'mode' | 'classes' | 'subjects' | 'topics' | 'difficulty' | 'tables' | 'tables-ready' | 'quiz' | 'results';
+	type GenQ = PlayQuestion & { uid: number; isRepeat?: boolean };
 
 	let phase = $state<Phase>('welcome');
 	let playerName = $state('');
 	let classes = $state<PlayClass[]>([]);
 	let subjects = $state<PlaySubject[]>([]);
 	let topics = $state<PlayTopic[]>([]);
-	let questions = $state<PlayQuestion[]>([]);
+	let questions = $state<GenQ[]>([]);
 
 	let selectedClass = $state<PlayClass | null>(null);
 	let selectedSubject = $state<PlaySubject | null>(null);
@@ -36,6 +37,97 @@
 	let popupId = $state(0);
 	let confettiPieces = $state<{ id: number; x: number; color: string; rot: number; delay: number }[]>([]);
 	let answerBounce = $state(false);
+
+	// ── Times tables ──
+	let tablesActive = $state(false);
+	let rushMode = $state(false);
+	let selectedTable = $state(0); // 0 = mixed
+	let rushLeft = $state(60);
+	let qUid = $state(0);
+	let uniqueTotal = $state(0);
+	let uniqueWrong = $state<number[]>([]);
+	let justMastered = $state(false);
+	let mastered = $state<number[]>([]);
+	let bestRush = $state<Record<string, number>>({});
+
+	if (typeof window !== 'undefined') {
+		try { mastered = JSON.parse(localStorage.getItem('pragati:tables:mastered') || '[]'); } catch { mastered = []; }
+		try { bestRush = JSON.parse(localStorage.getItem('pragati:tables:best') || '{}'); } catch { bestRush = {}; }
+	}
+	function saveTables() {
+		try {
+			localStorage.setItem('pragati:tables:mastered', JSON.stringify(mastered));
+			localStorage.setItem('pragati:tables:best', JSON.stringify(bestRush));
+		} catch { /* ignore */ }
+	}
+
+	function makeTableQ(a: number, b: number): GenQ {
+		const ans = a * b;
+		const cands = shuffle([ans + a, ans - a, ans + b, ans - b, ans + 10, ans - 10, a * (b + 1), b > 1 ? a * (b - 1) : -1, a + b]);
+		const distractors: number[] = [];
+		for (const c of cands) {
+			if (distractors.length >= 3) break;
+			if (c > 0 && c !== ans && !distractors.includes(c)) distractors.push(c);
+		}
+		let filler = ans + 1;
+		while (distractors.length < 3) { if (filler !== ans && !distractors.includes(filler)) distractors.push(filler); filler++; }
+		const options = shuffle([ans, ...distractors]).map((v, i) => ({ key: 'ABCD'[i], value: String(v), correct: v === ans }));
+		return { question_text: `What is ${a} × ${b}?`, options, uid: ++qUid, isRepeat: false };
+	}
+
+	function randPair(): [number, number] {
+		if (selectedTable === 0) return [2 + Math.floor(Math.random() * 9), 1 + Math.floor(Math.random() * 10)];
+		return [selectedTable, 1 + Math.floor(Math.random() * 10)];
+	}
+
+	function genTablesQuestions(n = 10): GenQ[] {
+		const out: GenQ[] = [];
+		if (selectedTable === 0) {
+			const used = new Set<string>();
+			while (out.length < n) {
+				const [a, b] = randPair();
+				const k = `${a}x${b}`;
+				if (!used.has(k)) { used.add(k); out.push(makeTableQ(a, b)); }
+			}
+		} else {
+			for (const b of shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).slice(0, n)) out.push(makeTableQ(selectedTable, b));
+		}
+		return out;
+	}
+
+	function startTablesQuiz(mode: 'practice' | 'rush') {
+		playClick();
+		tablesActive = true;
+		rushMode = mode === 'rush';
+		justMastered = false;
+		selectedDifficulty = mode;
+		uniqueTotal = 10; uniqueWrong = [];
+		questions = genTablesQuestions(10);
+		currentIndex = 0; score = 0; streak = 0; bestStreak = 0; correctCount = 0;
+		selectedKey = ''; answered = false; startTime = Date.now();
+		phase = 'quiz';
+		if (rushMode) startRushTimer(); else startTimer();
+	}
+
+	function startRushTimer() {
+		clearInterval(timerInterval);
+		rushLeft = 60;
+		timerInterval = setInterval(() => {
+			rushLeft -= 0.1;
+			if (rushLeft <= 0) { rushLeft = 0; clearInterval(timerInterval); finishQuiz(); }
+		}, 100);
+	}
+
+	function tableLabel() { return selectedTable === 0 ? 'Mixed tables' : `Table of ${selectedTable}`; }
+	function displayAccuracy() {
+		if (tablesActive && !rushMode) return Math.round(((uniqueTotal - uniqueWrong.length) / Math.max(uniqueTotal, 1)) * 100);
+		return accuracy();
+	}
+	function displayCorrect() {
+		if (tablesActive && !rushMode) return `${uniqueTotal - uniqueWrong.length}/${uniqueTotal}`;
+		return `${correctCount}/${questions.length}`;
+	}
+	function rushColor() { return rushLeft > 20 ? '#0E7C71' : rushLeft > 10 ? '#B45309' : '#C2381B'; }
 
 	const CONFETTI_COLORS = ['#FFC233', '#D8F3E3', '#0E7C71', '#FBDAD3', '#6B3FA0', '#FDE9C2'];
 
@@ -102,6 +194,8 @@
 
 	async function loadClasses() {
 		playClick();
+		tablesActive = false;
+		rushMode = false;
 		loading = true;
 		classes = (await api<PlayClass[]>('GET', '/play/classes')) ?? [];
 		loading = false;
@@ -158,9 +252,7 @@
 		if (isCorrect) {
 			correctCount++; streak++;
 			if (streak > bestStreak) bestStreak = streak;
-			const timePoints = Math.round(timeLeft * 10);
-			const multiplier = Math.min(streak, 4);
-			const pts = (100 + timePoints) * multiplier;
+			const pts = rushMode ? 100 * Math.min(streak, 5) : (100 + Math.round(timeLeft * 10)) * Math.min(streak, 4);
 			score += pts;
 			addPopup(pts);
 			if (streak >= 3) playStreak(); else playCorrect();
@@ -173,17 +265,53 @@
 		}
 		answerBounce = true;
 		setTimeout(() => { answerBounce = false; }, 300);
-		clearInterval(timerInterval);
-		setTimeout(nextQuestion, 1200);
+		if (!rushMode) clearInterval(timerInterval);
+		// Tables practice: re-queue wrong questions a few positions later (active recall)
+		if (tablesActive && !rushMode) {
+			const q = questions[currentIndex];
+			if (!q.isRepeat) {
+				if (!isCorrect && !uniqueWrong.includes(q.uid)) uniqueWrong = [...uniqueWrong, q.uid];
+			}
+			if (!isCorrect && !q.isRepeat && questions.length < 15) {
+				const clone: GenQ = { ...q, uid: ++qUid, isRepeat: true };
+				const at = Math.min(currentIndex + 3, questions.length);
+				questions = [...questions.slice(0, at), clone, ...questions.slice(at)];
+			}
+		}
+		setTimeout(nextQuestion, rushMode ? 700 : 1200);
 	}
 
 	function nextQuestion() {
+		if (phase !== 'quiz') return;
+		if (rushMode) {
+			currentIndex++; selectedKey = ''; answered = false;
+			const [a, b] = randPair();
+			questions = [...questions, makeTableQ(a, b)];
+			return;
+		}
+		if (tablesActive) {
+			if (currentIndex >= questions.length - 1) { finishQuiz(); return; }
+			currentIndex++; selectedKey = ''; answered = false; startTimer();
+			return;
+		}
 		if (currentIndex >= questions.length - 1) { finishQuiz(); return; }
 		currentIndex++; selectedKey = ''; answered = false; startTimer();
 	}
 
 	function finishQuiz() {
 		clearInterval(timerInterval);
+		if (tablesActive && !rushMode && selectedTable !== 0) {
+			const acc = (uniqueTotal - uniqueWrong.length) / Math.max(uniqueTotal, 1);
+			if (acc >= 0.9 && !mastered.includes(selectedTable)) {
+				mastered = [...mastered, selectedTable];
+				justMastered = true;
+			}
+		}
+		if (tablesActive && rushMode) {
+			const key = selectedTable === 0 ? 'mixed' : String(selectedTable);
+			if (score > (bestRush[key] || 0)) bestRush = { ...bestRush, [key]: score };
+		}
+		if (tablesActive) saveTables();
 		playComplete();
 		spawnConfetti();
 		phase = 'results';
@@ -192,8 +320,9 @@
 	function goBack() {
 		playClick();
 		const back: Partial<Record<Phase, Phase>> = {
-			classes: 'welcome', subjects: 'classes', topics: 'subjects',
-			difficulty: 'topics', quiz: 'welcome', results: 'welcome'
+			mode: 'welcome', classes: 'mode', subjects: 'classes', topics: 'subjects',
+			difficulty: 'topics', tables: 'mode', 'tables-ready': 'tables',
+			quiz: 'welcome', results: 'welcome'
 		};
 		phase = back[phase] ?? 'welcome';
 	}
@@ -205,14 +334,14 @@
 		if (phase === 'welcome') goto('/');
 		else confirmExit();
 	}
-	function playAgain() { playClick(); phase = 'difficulty'; }
+	function playAgain() { playClick(); phase = tablesActive ? 'tables-ready' : 'difficulty'; }
 
 	function timeColor() { return timeLeft > 10 ? '#0E7C71' : timeLeft > 5 ? '#B45309' : '#C2381B'; }
 	function progressWidth() { return questions.length ? `${((currentIndex + 1) / questions.length) * 100}%` : '0%'; }
 	function accuracy() { return questions.length ? Math.round((correctCount / questions.length) * 100) : 0; }
 	function formatTime(ms: number) { const s = ms / 1000; return s < 60 ? `${s.toFixed(1)}s` : `${Math.floor(s / 60)}m ${Math.floor(s % 60)}s`; }
-	function stars() { return accuracy() >= 80 ? '★★★' : accuracy() >= 50 ? '★★' : '★'; }
-	function starsLabel() { return accuracy() >= 80 ? 'Excellent' : accuracy() >= 50 ? 'Good work' : 'Keep practising'; }
+	function stars() { return displayAccuracy() >= 80 ? '★★★' : displayAccuracy() >= 50 ? '★★' : '★'; }
+	function starsLabel() { return displayAccuracy() >= 80 ? 'Excellent' : displayAccuracy() >= 50 ? 'Good work' : 'Keep practising'; }
 </script>
 
 <svelte:head>
@@ -261,7 +390,7 @@
 				<div class="welcome-icon" aria-hidden="true"><Sparkles size={28} /></div>
 				<h1 class="welcome-title">Quizzes</h1>
 				<p class="welcome-sub">What's your name, superstar?</p>
-				<form class="welcome-form" onsubmit={(e) => { e.preventDefault(); if (playerName.trim()) loadClasses(); }}>
+				<form class="welcome-form" onsubmit={(e) => { e.preventDefault(); if (playerName.trim()) { tablesActive = false; rushMode = false; phase = 'mode'; } }}>
 					<label class="field">
 						<span class="field-label">Your name</span>
 						<input bind:value={playerName} placeholder="Enter your name…" maxlength={50} class="input" required />
@@ -271,6 +400,87 @@
 					</button>
 					<p class="hint">Just your name — ready to play?</p>
 				</form>
+			</div>
+		</div>
+
+	<!-- ═══ MODE ═══ -->
+	{:else if phase === 'mode'}
+		<div class="stack fade-in">
+			<div class="section-head">
+				<button onclick={goBack} class="back-btn" aria-label="Back">←</button>
+				<div>
+					<h2 class="section-title">What will you play?</h2>
+					<p class="section-sub">{playerName}'s turn</p>
+				</div>
+			</div>
+			<div class="mode-grid">
+				<button onclick={loadClasses} class="pick-card mode-card">
+					<span class="pick-icon"><BookOpen size={18} /></span>
+					<span class="pick-name">Subject quizzes</span>
+					<span class="pick-meta">GK, Maths &amp; more</span>
+				</button>
+				<button onclick={() => { playClick(); tablesActive = true; rushMode = false; phase = 'tables'; }} class="pick-card mode-card">
+					<span class="pick-icon"><Hash size={18} /></span>
+					<span class="pick-name">Times tables</span>
+					<span class="pick-meta">Learn · Practice · Rush</span>
+				</button>
+			</div>
+		</div>
+
+	<!-- ═══ TABLES PICK ═══ -->
+	{:else if phase === 'tables'}
+		<div class="stack fade-in">
+			<div class="section-head">
+				<button onclick={goBack} class="back-btn" aria-label="Back">←</button>
+				<div>
+					<h2 class="section-title">Pick a table</h2>
+					<p class="section-sub">Start with 2–10, then take the challenge</p>
+				</div>
+			</div>
+			<div class="tchip-grid">
+				{#each [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] as n (n)}
+					<button onclick={() => { playClick(); selectedTable = n; phase = 'tables-ready'; }} class="tchip {mastered.includes(n) ? 'tchip-done' : ''}">
+						{n}
+						{#if mastered.includes(n)}<span class="tchip-check"><Check size={12} strokeWidth={3} /></span>{/if}
+					</button>
+				{/each}
+			</div>
+			<p class="tchip-label">Challenge</p>
+			<div class="tchip-grid">
+				{#each [13, 14, 15, 16, 17, 18, 19, 20] as n (n)}
+					<button onclick={() => { playClick(); selectedTable = n; phase = 'tables-ready'; }} class="tchip {mastered.includes(n) ? 'tchip-done' : ''}">
+						{n}
+						{#if mastered.includes(n)}<span class="tchip-check"><Check size={12} strokeWidth={3} /></span>{/if}
+					</button>
+				{/each}
+			</div>
+			<button onclick={() => { playClick(); selectedTable = 0; phase = 'tables-ready'; }} class="btn-ghost btn-block" style="margin-top:0.5rem">🎲 Mixed — random from 2 to 10</button>
+			<p class="hint">Get 9 or more right in Practice to master a table ✓</p>
+		</div>
+
+	<!-- ═══ TABLES READY / LEARN ═══ -->
+	{:else if phase === 'tables-ready'}
+		<div class="center fade-in">
+			<div class="q-card" style="max-width:520px;width:100%">
+				<div class="section-head" style="margin:0 0 0.9rem">
+					<button onclick={goBack} class="back-btn" aria-label="Back">←</button>
+					<div>
+						<h2 class="section-title">{tableLabel()}</h2>
+						<p class="section-sub">{selectedTable === 0 ? 'Any question from 2×1 to 10×10' : `See the pattern, then race it`}</p>
+					</div>
+				</div>
+				{#if selectedTable !== 0}
+					<div class="tt-grid">
+						{#each [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as i (i)}
+							<div class="tt-row"><span class="tt-expr">{selectedTable} × {i}</span><span class="tt-eq">=</span><span class="tt-val">{selectedTable * i}</span></div>
+						{/each}
+					</div>
+				{/if}
+				<div class="welcome-form">
+					<button onclick={() => startTablesQuiz('practice')} class="btn-primary btn-block">Practice — 10 questions →</button>
+					<button onclick={() => startTablesQuiz('rush')} class="btn-ghost btn-block"><Zap size={16} /> Rush — 60 seconds</button>
+					<p class="hint">Learn the pattern first — then beat the clock!</p>
+				</div>
 			</div>
 		</div>
 
@@ -397,12 +607,18 @@
 			<div class="quiz-main">
 				<div class="q-meta">
 					<div class="q-tags">
-						<span class="tag">{selectedClass?.name}</span>
-						<span class="tag">{selectedSubject?.name}</span>
-						{#if selectedTopic}<span class="tag">{selectedTopic}</span>{/if}
-						<span class="tag tag-difficulty tag-{selectedDifficulty}">{selectedDifficulty}</span>
+						{#if tablesActive}
+							<span class="tag">Times tables</span>
+							<span class="tag">{tableLabel()}</span>
+							<span class="tag tag-difficulty">{rushMode ? 'Rush · 60s' : 'Practice'}</span>
+						{:else}
+							<span class="tag">{selectedClass?.name}</span>
+							<span class="tag">{selectedSubject?.name}</span>
+							{#if selectedTopic}<span class="tag">{selectedTopic}</span>{/if}
+							<span class="tag tag-difficulty tag-{selectedDifficulty}">{selectedDifficulty}</span>
+						{/if}
 					</div>
-					<span class="counter">{currentIndex + 1} / {questions.length}</span>
+					<span class="counter">{rushMode ? `${questions.length} asked` : `${currentIndex + 1} / ${questions.length}`}</span>
 				</div>
 
 				<div class="q-card q-question {answerBounce ? 'answer-pop' : ''}">
@@ -462,11 +678,11 @@
 					</div>
 					<div class="side-grid">
 						<div class="stat">
-							<span class="stat-v mono">{accuracy()}%</span>
+							<span class="stat-v mono">{displayAccuracy()}%</span>
 							<span class="stat-k">Accuracy</span>
 						</div>
 						<div class="stat">
-							<span class="stat-v mono">{correctCount}/{questions.length}</span>
+							<span class="stat-v mono">{displayCorrect()}</span>
 							<span class="stat-k">Correct</span>
 						</div>
 						<div class="stat">
@@ -478,11 +694,11 @@
 
 				<div class="side-card">
 					<div class="timer-head">
-						<span class="side-label">Time</span>
-						<span class="timer-num mono" style="color:{timeColor()}">{Math.ceil(timeLeft)}s</span>
+						<span class="side-label">{rushMode ? 'Time left' : 'Time'}</span>
+						<span class="timer-num mono" style="color:{rushMode ? rushColor() : timeColor()}">{Math.ceil(rushMode ? rushLeft : timeLeft)}s</span>
 					</div>
 					<div class="timer-track">
-						<div class="timer-fill" style="width:{(timeLeft/15)*100}%; background:{timeColor()}"></div>
+						<div class="timer-fill" style="width:{(rushMode ? rushLeft / 60 : timeLeft / 15) * 100}%; background:{rushMode ? rushColor() : timeColor()}"></div>
 					</div>
 					{#if streak >= 2}
 						<div class="streak-box">{streak}× streak</div>
@@ -490,7 +706,7 @@
 				</div>
 
 				<div class="side-card side-muted">
-					<p class="side-hint">Tip: quick answers earn a bit extra. Get 3 in a row for a streak!</p>
+					<p class="side-hint">{rushMode ? 'Speed round! Every correct answer counts — go, go, go!' : 'Tip: quick answers earn a bit extra. Get 3 in a row for a streak!'}</p>
 				</div>
 			</aside>
 		</div>
@@ -505,17 +721,30 @@
 				<div class="score-num mono">{score.toLocaleString()}</div>
 				<p class="score-label">Points</p>
 				<p class="score-name">{playerName}</p>
-				<p class="score-meta">{selectedClass?.name} · {selectedSubject?.name}{selectedTopic ? ` · ${selectedTopic}` : ''} · {selectedDifficulty}</p>
+				<p class="score-meta">
+					{#if tablesActive}{tableLabel()} · {rushMode ? 'Rush' : 'Practice'}{:else}{selectedClass?.name} · {selectedSubject?.name}{selectedTopic ? ` · ${selectedTopic}` : ''} · {selectedDifficulty}{/if}
+				</p>
+				{#if justMastered}
+					<span class="master-badge"><Check size={14} strokeWidth={3} /> Table mastered!</span>
+				{/if}
 				<div class="score-stats">
-					<div class="s-stat"><span class="s-v mono">{accuracy()}%</span><span class="s-k">Accuracy</span></div>
+					<div class="s-stat"><span class="s-v mono">{displayAccuracy()}%</span><span class="s-k">Accuracy</span></div>
 					<div class="s-sep"></div>
 					<div class="s-stat"><span class="s-v mono">{bestStreak}</span><span class="s-k">Best streak</span></div>
 					<div class="s-sep"></div>
-					<div class="s-stat"><span class="s-v mono">{correctCount}/{questions.length}</span><span class="s-k">Correct</span></div>
+					<div class="s-stat"><span class="s-v mono">{displayCorrect()}</span><span class="s-k">Correct</span></div>
 				</div>
-				<p class="score-time">{formatTime(Date.now() - startTime)} · {questions.length} questions</p>
+				{#if tablesActive && rushMode}
+					<p class="score-time">Personal best: {Math.max(score, bestRush[selectedTable === 0 ? 'mixed' : String(selectedTable)] || 0).toLocaleString()}</p>
+				{:else}
+					<p class="score-time">{formatTime(Date.now() - startTime)} · {tablesActive ? `${uniqueTotal} questions` : `${questions.length} questions`}</p>
+				{/if}
+				{#if tablesActive && !rushMode && uniqueWrong.length > 0}
+					<p class="score-time">Practise these: {uniqueWrong.slice(0, 4).map(uid => { const q = questions.find(qq => qq.uid === uid); return q ? q.question_text.replace('What is ', '').replace('?', '') : ''; }).filter(Boolean).join(' · ')}</p>
+				{/if}
 				<div class="score-actions">
 					<button onclick={playAgain} class="btn-primary btn-block">Play again →</button>
+					<button onclick={() => { playClick(); phase = tablesActive ? 'tables' : 'mode'; }} class="btn-ghost btn-block">Choose {tablesActive ? 'table' : 'quiz'}</button>
 					<a href="/" class="btn-ghost btn-block" style="text-align:center; text-decoration:none; display:flex; justify-content:center;">Back to home</a>
 				</div>
 				<p class="hint">Take a screenshot to share your score.</p>
@@ -634,6 +863,54 @@
 	}
 	.topic:hover { background: var(--cream); }
 	.topic-all { background: var(--amber); border-width: 2px; }
+
+	/* mode select */
+	.mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+	@media (max-width: 560px) { .mode-grid { grid-template-columns: 1fr; } }
+	.mode-card { flex-direction: column; align-items: flex-start; gap: 0.4rem; padding: 1.15rem; }
+	.mode-card .pick-name { font-size: 1.1rem; }
+
+	/* tables pick chips */
+	.tchip-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 0.55rem; }
+	.tchip {
+		position: relative; min-height: 52px; border-radius: 12px;
+		border: 2px solid var(--ink); background: var(--paper); color: var(--ink);
+		font-family: var(--font-display); font-weight: 800; font-size: 1.15rem;
+		cursor: pointer; display: grid; place-items: center;
+		box-shadow: 3px 3px 0 var(--ink); transition: box-shadow 120ms, transform 120ms, background 120ms;
+	}
+	.tchip:hover { transform: translate(1px, 1px); box-shadow: 2px 2px 0 var(--ink); background: var(--cream); }
+	.tchip:active { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--ink); }
+	.tchip-done { background: var(--mint); }
+	.tchip-check {
+		position: absolute; top: -7px; right: -7px; width: 18px; height: 18px;
+		border-radius: 50%; border: 2px solid var(--ink); background: var(--teal); color: var(--paper);
+		display: grid; place-items: center;
+	}
+	.tchip-label {
+		font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700;
+		letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft);
+		margin: 0.9rem 0 0.45rem;
+	}
+
+	/* tables learn grid */
+	.tt-grid {
+		display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem 1.2rem;
+		background: var(--cream); border: 2px solid var(--ink); border-radius: 14px;
+		padding: 0.9rem 1.1rem;
+	}
+	.tt-row { display: flex; align-items: baseline; gap: 0.5rem; font-size: 1.02rem; padding: 0.15rem 0; }
+	.tt-expr { font-weight: 600; color: var(--ink-soft); min-width: 4.2rem; }
+	.tt-eq { color: var(--ink-soft); }
+	.tt-val { font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; color: var(--ink); }
+
+	/* mastery badge */
+	.master-badge {
+		display: inline-flex; align-items: center; gap: 0.35rem;
+		font-size: 0.85rem; font-weight: 700;
+		border: 2px solid var(--ink); background: var(--amber); border-radius: 999px;
+		padding: 0.28rem 0.75rem; color: var(--ink);
+	}
 
 	.diff-card { max-width: 520px; width: 100%; display: flex; flex-direction: column; gap: 1rem; }
 	.diff-stack { display: flex; flex-direction: column; gap: 0.75rem; }
