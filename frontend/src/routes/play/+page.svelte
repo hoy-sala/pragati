@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { apiUrl } from '$lib/api/client.svelte';
 	import { goto } from '$app/navigation';
-	import { Building2, GraduationCap, BookOpen, Layers, Sparkles, Hash, Zap, Check } from 'lucide-svelte';
+	import { Building2, GraduationCap, BookOpen, Layers, Sparkles, Hash, Zap, Check, Globe, Newspaper, Clock } from 'lucide-svelte';
 	import type { PlayClass, PlaySubject, PlayTopic, PlayQuestion } from '$lib/types';
 
-	type Phase = 'welcome' | 'mode' | 'classes' | 'subjects' | 'topics' | 'difficulty' | 'tables' | 'tables-ready' | 'quiz' | 'results';
+	type Phase = 'welcome' | 'mode' | 'classes' | 'subjects' | 'topics' | 'difficulty' | 'tables' | 'tables-ready' | 'gk' | 'coming-soon' | 'quiz' | 'results';
 	type GenQ = PlayQuestion & { uid: number; isRepeat?: boolean };
+	type QuizEntry = 'subject' | 'gk' | 'ca';
 
 	let phase = $state<Phase>('welcome');
 	let playerName = $state('');
@@ -19,6 +20,8 @@
 	let selectedTopic = $state('');
 	let selectedDifficulty = $state('');
 	let loading = $state(false);
+	let quizEntry = $state<QuizEntry>('subject');
+	let comingSoonLabel = $state('');
 
 	let currentIndex = $state(0);
 	let score = $state(0);
@@ -196,9 +199,11 @@
 		playClick();
 		tablesActive = false;
 		rushMode = false;
+		quizEntry = 'subject';
 		loading = true;
 		classes = (await api<PlayClass[]>('GET', '/play/classes')) ?? [];
 		loading = false;
+		if (classes.length === 0) { comingSoonLabel = 'Class quizzes'; phase = 'coming-soon'; return; }
 		phase = 'classes';
 	}
 
@@ -208,6 +213,7 @@
 		loading = true;
 		subjects = (await api<PlaySubject[]>('GET', `/play/subjects?class_id=${cls.id}`)) ?? [];
 		loading = false;
+		if (subjects.length === 0) { comingSoonLabel = `${cls.name} quizzes`; phase = 'coming-soon'; return; }
 		phase = 'subjects';
 	}
 
@@ -215,8 +221,41 @@
 		playClick();
 		selectedSubject = sub;
 		loading = true;
-		topics = (await api<PlayTopic[]>('GET', `/play/topics?class_id=${selectedClass!.id}&subject_id=${sub.id}`)) ?? [];
+		const classParam = selectedClass ? `class_id=${selectedClass.id}&` : '';
+		topics = (await api<PlayTopic[]>('GET', `/play/topics?${classParam}subject_id=${sub.id}`)) ?? [];
 		loading = false;
+		if (topics.length === 0) { comingSoonLabel = `${sub.name} quizzes`; phase = 'coming-soon'; return; }
+		phase = 'topics';
+	}
+
+	async function loadGK() {
+		playClick();
+		tablesActive = false; rushMode = false;
+		selectedClass = null;
+		loading = true;
+		const subs = (await api<PlaySubject[]>('GET', '/play/subjects')) ?? [];
+		const gk = subs.find(s => /general\s*knowledge/i.test(s.name));
+		if (!gk) { loading = false; comingSoonLabel = 'General Knowledge'; phase = 'coming-soon'; return; }
+		selectedSubject = gk;
+		topics = (await api<PlayTopic[]>('GET', `/play/topics?subject_id=${gk.id}`)) ?? [];
+		loading = false;
+		phase = 'gk';
+	}
+
+	async function loadCA() {
+		playClick();
+		tablesActive = false; rushMode = false;
+		selectedClass = null;
+		loading = true;
+		const subs = (await api<PlaySubject[]>('GET', '/play/subjects')) ?? [];
+		const ca = subs.find(s => /current\s*affairs/i.test(s.name));
+		if (!ca) { loading = false; comingSoonLabel = 'Current Affairs'; phase = 'coming-soon'; return; }
+		selectedSubject = ca;
+		topics = (await api<PlayTopic[]>('GET', `/play/topics?subject_id=${ca.id}`)) ?? [];
+		loading = false;
+		if (topics.length === 0) { comingSoonLabel = 'Current Affairs'; phase = 'coming-soon'; return; }
+		quizEntry = 'ca';
+		selectedTopic = '';
 		phase = 'topics';
 	}
 
@@ -224,10 +263,15 @@
 		playClick();
 		selectedDifficulty = difficulty;
 		loading = true;
+		const classParam = selectedClass ? `class_id=${selectedClass.id}&` : '';
 		const topicParam = selectedTopic ? `&topic=${encodeURIComponent(selectedTopic)}` : '';
-		const data = await api<PlayQuestion[]>('GET', `/play/quiz?class_id=${selectedClass!.id}&subject_id=${selectedSubject!.id}${topicParam}&difficulty=${difficulty}&limit=10`);
+		const data = await api<PlayQuestion[]>('GET', `/play/quiz?${classParam}subject_id=${selectedSubject!.id}${topicParam}&difficulty=${difficulty}&limit=10`);
 		loading = false;
-		if (!data || data.length === 0) { alert('No questions found. Try different options.'); return; }
+		if (!data || data.length === 0) {
+			comingSoonLabel = selectedTopic ? `${selectedTopic} (${difficulty})` : `${selectedSubject?.name} (${difficulty})`;
+			phase = 'coming-soon';
+			return;
+		}
 		questions = data.map(q => ({ ...q, options: shuffle(q.options) }));
 		currentIndex = 0; score = 0; streak = 0; bestStreak = 0; correctCount = 0;
 		selectedKey = ''; answered = false; startTime = Date.now();
@@ -319,9 +363,17 @@
 
 	function goBack() {
 		playClick();
+		if (phase === 'topics') {
+			phase = quizEntry === 'subject' ? 'subjects' : 'mode';
+			return;
+		}
+		if (phase === 'difficulty') {
+			phase = quizEntry === 'subject' ? 'topics' : quizEntry === 'gk' ? 'gk' : 'topics';
+			return;
+		}
 		const back: Partial<Record<Phase, Phase>> = {
-			mode: 'welcome', classes: 'mode', subjects: 'classes', topics: 'subjects',
-			difficulty: 'topics', tables: 'mode', 'tables-ready': 'tables',
+			mode: 'welcome', classes: 'mode', subjects: 'classes', tables: 'mode', 'tables-ready': 'tables',
+			gk: 'mode', 'coming-soon': 'mode',
 			quiz: 'welcome', results: 'welcome'
 		};
 		phase = back[phase] ?? 'welcome';
@@ -417,13 +469,60 @@
 				<button onclick={loadClasses} class="pick-card mode-card">
 					<span class="pick-icon"><BookOpen size={18} /></span>
 					<span class="pick-name">Subject quizzes</span>
-					<span class="pick-meta">GK, Maths &amp; more</span>
+					<span class="pick-meta">Maths, Science &amp; more</span>
 				</button>
+				<button onclick={loadGK} class="pick-card mode-card">
+					<span class="pick-icon"><Globe size={18} /></span>
+					<span class="pick-name">General Knowledge</span>
+					<span class="pick-meta">Tables · States &amp; Capitals</span>
+				</button>
+				<button onclick={loadCA} class="pick-card mode-card">
+					<span class="pick-icon"><Newspaper size={18} /></span>
+					<span class="pick-name">Current Affairs</span>
+					<span class="pick-meta">What's happening around the world</span>
+				</button>
+			</div>
+		</div>
+
+	<!-- ═══ GK HUB ═══ -->
+	{:else if phase === 'gk'}
+		<div class="stack fade-in">
+			<div class="section-head">
+				<button onclick={goBack} class="back-btn" aria-label="Back">←</button>
+				<div>
+					<h2 class="section-title">General Knowledge</h2>
+					<p class="section-sub">Pick a challenge, {playerName}</p>
+				</div>
+			</div>
+			<div class="mode-grid">
 				<button onclick={() => { playClick(); tablesActive = true; rushMode = false; phase = 'tables'; }} class="pick-card mode-card">
 					<span class="pick-icon"><Hash size={18} /></span>
 					<span class="pick-name">Times tables</span>
 					<span class="pick-meta">Learn · Practice · Rush</span>
 				</button>
+			</div>
+			{#if loading}
+				<div class="empty">Loading…</div>
+			{:else if topics.length > 0}
+				<p class="tchip-label">Quiz topics</p>
+				<div class="topics">
+					{#each topics as topic (topic.name)}
+						<button onclick={() => { playClick(); selectedTopic = topic.name; quizEntry = 'gk'; phase = 'difficulty'; }} class="topic">{topic.name}</button>
+					{/each}
+				</div>
+			{/if}
+		</div>
+
+	<!-- ═══ COMING SOON ═══ -->
+	{:else if phase === 'coming-soon'}
+		<div class="center fade-in">
+			<div class="q-card welcome-card">
+				<div class="welcome-icon" aria-hidden="true"><Clock size={28} /></div>
+				<h1 class="welcome-title">Coming soon!</h1>
+				<p class="welcome-sub">{comingSoonLabel} are being prepared right now. Check back soon — new questions are on the way!</p>
+				<div class="welcome-form">
+					<button onclick={() => { playClick(); phase = 'mode'; }} class="btn-primary btn-block">← Choose another quiz</button>
+				</div>
 			</div>
 		</div>
 
@@ -566,7 +665,7 @@
 					<button onclick={goBack} class="back-btn" aria-label="Back">←</button>
 					<div>
 						<h2 class="section-title">Choose difficulty</h2>
-						<p class="section-sub">{selectedClass?.name} → {selectedSubject?.name}{selectedTopic ? ` → ${selectedTopic}` : ''}</p>
+						<p class="section-sub">{selectedClass ? `${selectedClass.name} → ` : ''}{selectedSubject?.name}{selectedTopic ? ` → ${selectedTopic}` : ''}</p>
 					</div>
 				</div>
 				{#if loading}
@@ -612,7 +711,7 @@
 							<span class="tag">{tableLabel()}</span>
 							<span class="tag tag-difficulty">{rushMode ? 'Rush · 60s' : 'Practice'}</span>
 						{:else}
-							<span class="tag">{selectedClass?.name}</span>
+							{#if selectedClass}<span class="tag">{selectedClass.name}</span>{/if}
 							<span class="tag">{selectedSubject?.name}</span>
 							{#if selectedTopic}<span class="tag">{selectedTopic}</span>{/if}
 							<span class="tag tag-difficulty tag-{selectedDifficulty}">{selectedDifficulty}</span>
@@ -722,7 +821,7 @@
 				<p class="score-label">Points</p>
 				<p class="score-name">{playerName}</p>
 				<p class="score-meta">
-					{#if tablesActive}{tableLabel()} · {rushMode ? 'Rush' : 'Practice'}{:else}{selectedClass?.name} · {selectedSubject?.name}{selectedTopic ? ` · ${selectedTopic}` : ''} · {selectedDifficulty}{/if}
+					{#if tablesActive}{tableLabel()} · {rushMode ? 'Rush' : 'Practice'}{:else}{#if selectedClass}{selectedClass.name} · {/if}{selectedSubject?.name}{selectedTopic ? ` · ${selectedTopic}` : ''} · {selectedDifficulty}{/if}
 				</p>
 				{#if justMastered}
 					<span class="master-badge"><Check size={14} strokeWidth={3} /> Table mastered!</span>

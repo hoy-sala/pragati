@@ -108,20 +108,21 @@ func (h *PlayHandler) ListClasses(w http.ResponseWriter, r *http.Request) {
 
 func (h *PlayHandler) ListSubjects(w http.ResponseWriter, r *http.Request) {
 	classID := r.URL.Query().Get("class_id")
-	if classID == "" {
-		renderJSON(w, http.StatusBadRequest, models.APIResponse{Error: &models.APIError{Code: "VALIDATION_ERROR", Message: "class_id is required"}})
-		return
-	}
 
-	rows, err := h.db.Query(r.Context(), `
+	query := `
 		SELECT s.id, s.name, COUNT(DISTINCT q.id)::int
 		FROM subjects s
-		JOIN class_subjects cs ON cs.subject_id = s.id
 		JOIN questions q ON q.subject_id = s.id
-		WHERE cs.class_id = $1 AND q.deleted_at IS NULL AND q.is_active = true
-		GROUP BY s.id, s.name
-		ORDER BY s.name
-	`, classID)
+		WHERE q.deleted_at IS NULL AND q.is_active = true
+	`
+	args := []interface{}{}
+	if classID != "" {
+		query += ` AND q.id IN (SELECT q2.id FROM questions q2 JOIN class_subjects cs2 ON cs2.subject_id = q2.subject_id WHERE cs2.class_id = $1)`
+		args = append(args, classID)
+	}
+	query += ` GROUP BY s.id, s.name ORDER BY s.name`
+
+	rows, err := h.db.Query(r.Context(), query, args...)
 	if err != nil {
 		log.Error().Err(err).Msg("play: list subjects failed")
 		renderJSON(w, http.StatusInternalServerError, models.APIResponse{Error: &models.APIError{Code: "INTERNAL_ERROR", Message: "failed to fetch subjects"}})
@@ -146,20 +147,26 @@ func (h *PlayHandler) ListSubjects(w http.ResponseWriter, r *http.Request) {
 func (h *PlayHandler) ListTopics(w http.ResponseWriter, r *http.Request) {
 	classID := r.URL.Query().Get("class_id")
 	subjectID := r.URL.Query().Get("subject_id")
-	if classID == "" || subjectID == "" {
-		renderJSON(w, http.StatusBadRequest, models.APIResponse{Error: &models.APIError{Code: "VALIDATION_ERROR", Message: "class_id and subject_id are required"}})
+	if subjectID == "" {
+		renderJSON(w, http.StatusBadRequest, models.APIResponse{Error: &models.APIError{Code: "VALIDATION_ERROR", Message: "subject_id is required"}})
 		return
 	}
 
-	rows, err := h.db.Query(r.Context(), `
+	query := `
 		SELECT DISTINCT jsonb_array_elements_text(q.chapters) AS topic
 		FROM questions q
-		JOIN class_subjects cs ON cs.subject_id = q.subject_id
-		WHERE cs.class_id = $1 AND q.subject_id = $2
+		WHERE q.subject_id = $1
 		AND q.deleted_at IS NULL AND q.is_active = true
 		AND q.chapters != '[]'::jsonb AND q.chapters IS NOT NULL
-		ORDER BY topic
-	`, classID, subjectID)
+	`
+	args := []interface{}{subjectID}
+	if classID != "" {
+		query += ` AND q.id IN (SELECT q2.id FROM questions q2 JOIN class_subjects cs2 ON cs2.subject_id = q2.subject_id WHERE cs2.class_id = $2)`
+		args = append(args, classID)
+	}
+	query += ` ORDER BY topic`
+
+	rows, err := h.db.Query(r.Context(), query, args...)
 	if err != nil {
 		log.Error().Err(err).Msg("play: list topics failed")
 		renderJSON(w, http.StatusInternalServerError, models.APIResponse{Error: &models.APIError{Code: "INTERNAL_ERROR", Message: "failed to fetch topics"}})
@@ -193,21 +200,26 @@ func (h *PlayHandler) GetQuiz(w http.ResponseWriter, r *http.Request) {
 		limit = 10
 	}
 
-	if classID == "" || subjectID == "" {
-		renderJSON(w, http.StatusBadRequest, models.APIResponse{Error: &models.APIError{Code: "VALIDATION_ERROR", Message: "class_id and subject_id are required"}})
+	if subjectID == "" {
+		renderJSON(w, http.StatusBadRequest, models.APIResponse{Error: &models.APIError{Code: "VALIDATION_ERROR", Message: "subject_id is required"}})
 		return
 	}
 
 	query := `
 		SELECT q.id, q.question_text, q.question_type, q.options, q.difficulty
 		FROM questions q
-		JOIN class_subjects cs ON cs.subject_id = q.subject_id
-		WHERE cs.class_id = $1 AND q.subject_id = $2
+		WHERE q.subject_id = $1
 		AND q.deleted_at IS NULL AND q.is_active = true
 		AND q.question_type IN ('mcq', 'true_false')
 	`
-	args := []interface{}{classID, subjectID}
-	n := 3
+	args := []interface{}{subjectID}
+	n := 2
+
+	if classID != "" {
+		query += ` AND q.id IN (SELECT q2.id FROM questions q2 JOIN class_subjects cs2 ON cs2.subject_id = q2.subject_id WHERE cs2.class_id = $` + strconv.Itoa(n) + `)`
+		args = append(args, classID)
+		n++
+	}
 
 	if topic != "" {
 		query += ` AND q.chapters @> $` + strconv.Itoa(n) + `::jsonb`
