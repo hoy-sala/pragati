@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { apiUrl } from '$lib/api/client.svelte';
 	import { goto } from '$app/navigation';
+	import { Building2, GraduationCap, BookOpen, Layers, Sparkles } from 'lucide-svelte';
 	import type { PlayClass, PlaySubject, PlayTopic, PlayQuestion } from '$lib/types';
 
 	type Phase = 'welcome' | 'classes' | 'subjects' | 'topics' | 'difficulty' | 'quiz' | 'results';
@@ -36,11 +37,7 @@
 	let confettiPieces = $state<{ id: number; x: number; color: string; rot: number; delay: number }[]>([]);
 	let answerBounce = $state(false);
 
-	const SUBJECT_COLORS = ['from-violet-500 to-purple-600', 'from-blue-500 to-cyan-500', 'from-emerald-500 to-teal-500', 'from-amber-500 to-orange-500', 'from-rose-500 to-pink-500', 'from-indigo-500 to-blue-500', 'from-fuchsia-500 to-purple-500'];
-	const DIFFICULTY_COLORS: Record<string, string> = { easy: 'from-emerald-400 to-green-500', medium: 'from-amber-400 to-orange-500', hard: 'from-rose-400 to-red-500' };
-	const DIFFICULTY_EMOJI: Record<string, string> = { easy: '🌟', medium: '🔥', hard: '💎' };
-	const OPTION_COLORS = ['from-blue-500 to-indigo-600', 'from-emerald-500 to-teal-600', 'from-amber-500 to-orange-600', 'from-rose-500 to-pink-600'];
-	const CONFETTI_COLORS = ['#FFC233', '#F472B6', '#0E7C71', '#60a5fa', '#a78bfa', '#fb923c'];
+	const CONFETTI_COLORS = ['#FFC233', '#D8F3E3', '#0E7C71', '#FBDAD3', '#6B3FA0', '#FDE9C2'];
 
 	function shuffle<T>(arr: T[]): T[] {
 		const a = [...arr];
@@ -50,8 +47,6 @@
 		}
 		return a;
 	}
-
-	function subjectColor(i: number) { return SUBJECT_COLORS[i % SUBJECT_COLORS.length]; }
 
 	let audioCtx: AudioContext | null = null;
 	function getAudio() {
@@ -212,7 +207,8 @@
 	function progressWidth() { return questions.length ? `${((currentIndex + 1) / questions.length) * 100}%` : '0%'; }
 	function accuracy() { return questions.length ? Math.round((correctCount / questions.length) * 100) : 0; }
 	function formatTime(ms: number) { const s = ms / 1000; return s < 60 ? `${s.toFixed(1)}s` : `${Math.floor(s / 60)}m ${Math.floor(s % 60)}s`; }
-	function stars() { return accuracy() >= 80 ? '⭐⭐⭐' : accuracy() >= 50 ? '⭐⭐' : '⭐'; }
+	function stars() { return accuracy() >= 80 ? '★★★' : accuracy() >= 50 ? '★★' : '★'; }
+	function starsLabel() { return accuracy() >= 80 ? 'Excellent' : accuracy() >= 50 ? 'Good work' : 'Keep practising'; }
 </script>
 
 <svelte:head>
@@ -229,11 +225,11 @@
 {/each}
 
 <div class="page {screenShake ? 'shake' : ''}">
-	<!-- tiny header -->
 	<header class="quiz-header">
-		<a href="/" class="qh-identity">
-			<span class="qh-logo">🏫</span>
-			<span class="qh-wordmark">PRAGATI<span class="qh-dot">.</span>quest</span>
+		<a href="/" class="qh-identity" aria-label="Pragati home">
+			<span class="qh-logo"><Building2 size={16} /></span>
+			<span class="qh-wordmark">PRAGATI</span>
+			<span class="qh-sub">MDRS Bahaddurghatta</span>
 		</a>
 		{#if phase !== 'results'}
 			<button onclick={confirmExit} class="qh-home">← Home</button>
@@ -244,7 +240,7 @@
 		<div class="modal-scrim" role="presentation" onclick={cancelExit}></div>
 		<div class="modal" role="dialog" aria-modal="true" aria-label="Quit quiz">
 			<button class="modal-close" onclick={cancelExit} aria-label="Close">✕</button>
-			<div class="modal-emoji">🚪</div>
+			<div class="modal-emoji" aria-hidden="true"><Layers size={28} /></div>
 			<h3 class="modal-title">Quit quiz?</h3>
 			<p class="modal-sub">Your progress will be lost.</p>
 			<div class="modal-actions">
@@ -258,9 +254,9 @@
 	{#if phase === 'welcome'}
 		<div class="center fade-in">
 			<div class="q-card welcome-card">
-				<div class="welcome-icon">🎮</div>
-				<h1 class="welcome-title">Quiz Arena</h1>
-				<p class="welcome-sub">Test your knowledge &amp; have fun. Choose a class, pick a subject and go.</p>
+				<div class="welcome-icon" aria-hidden="true"><Sparkles size={28} /></div>
+				<h1 class="welcome-title">Quizzes</h1>
+				<p class="welcome-sub">Choose a class and subject, then practise. No login needed — enter your name to begin.</p>
 				<div class="welcome-form">
 					<label class="field">
 						<span class="field-label">Your name</span>
@@ -290,9 +286,9 @@
 				<div class="empty">No classes with questions yet.</div>
 			{:else}
 				<div class="pick-grid">
-					{#each classes as cls, i (cls.id)}
+					{#each classes as cls (cls.id)}
 						<button onclick={() => loadSubjects(cls)} class="pick-card">
-							<span class="pick-icon">{['📚','📖','✏️','🎒','📝'][i % 5]}</span>
+							<span class="pick-icon"><GraduationCap size={18} /></span>
 							<span class="pick-name">{cls.name}</span>
 							<span class="pick-meta">{cls.question_count} questions</span>
 						</button>
@@ -315,9 +311,9 @@
 				<div class="empty">Loading…</div>
 			{:else}
 				<div class="pick-grid">
-					{#each subjects as sub, i (sub.id)}
+					{#each subjects as sub (sub.id)}
 						<button onclick={() => loadTopics(sub)} class="pick-card">
-							<span class="pick-icon">{['🔢','🔬','📖','🗣️','🌍','🧠','🎨','🎵','⚽','💻'][i % 10]}</span>
+							<span class="pick-icon"><BookOpen size={18} /></span>
 							<span class="pick-name">{sub.name}</span>
 							<span class="pick-meta">{sub.question_count} questions</span>
 						</button>
@@ -340,7 +336,7 @@
 				<div class="empty">Loading…</div>
 			{:else}
 				<div class="topics">
-					<button onclick={() => { playClick(); selectedTopic = ''; phase = 'difficulty'; }} class="topic topic-all">🎯 All topics</button>
+					<button onclick={() => { playClick(); selectedTopic = ''; phase = 'difficulty'; }} class="topic topic-all">All topics</button>
 					{#each topics as topic (topic.name)}
 						<button onclick={() => { playClick(); selectedTopic = topic.name; phase = 'difficulty'; }} class="topic">{topic.name}</button>
 					{/each}
@@ -364,21 +360,21 @@
 				{:else}
 					<div class="diff-stack">
 						<button onclick={() => startQuiz('easy')} class="diff-btn diff-easy">
-							<span class="diff-left"><span class="diff-emoji">🌟</span> Easy</span>
+							<span class="diff-left">Easy</span>
 							<span class="diff-meta">
 								<span class="dots"><span class="dot filled"></span><span class="dot"></span><span class="dot"></span></span>
 								Gentle start
 							</span>
 						</button>
 						<button onclick={() => startQuiz('medium')} class="diff-btn diff-medium">
-							<span class="diff-left"><span class="diff-emoji">🔥</span> Medium</span>
+							<span class="diff-left">Medium</span>
 							<span class="diff-meta">
 								<span class="dots"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span></span>
 								Level up
 							</span>
 						</button>
 						<button onclick={() => startQuiz('hard')} class="diff-btn diff-hard">
-							<span class="diff-left"><span class="diff-emoji">💎</span> Hard</span>
+							<span class="diff-left">Hard</span>
 							<span class="diff-meta">
 								<span class="dots"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span></span>
 								Expert only
@@ -400,7 +396,7 @@
 						<span class="tag">{selectedClass?.name}</span>
 						<span class="tag">{selectedSubject?.name}</span>
 						{#if selectedTopic}<span class="tag">{selectedTopic}</span>{/if}
-						<span class="tag tag-difficulty tag-{selectedDifficulty}">{DIFFICULTY_EMOJI[selectedDifficulty]} {selectedDifficulty}</span>
+						<span class="tag tag-difficulty tag-{selectedDifficulty}">{selectedDifficulty}</span>
 					</div>
 					<span class="counter">{currentIndex + 1} / {questions.length}</span>
 				</div>
@@ -436,7 +432,7 @@
 							<div class="feedback-head">
 								<span class="feedback-badge">{isCorrect ? '✓' : '✕'}</span>
 								<span class="feedback-title">{isCorrect ? 'Correct!' : 'Not quite'}</span>
-								{#if streak >= 3 && isCorrect}<span class="streak-chip">🔥 {streak} streak</span>{/if}
+								{#if streak >= 3 && isCorrect}<span class="streak-chip">{streak} streak</span>{/if}
 							</div>
 							<p class="feedback-text">
 								{#if isCorrect}
@@ -485,7 +481,7 @@
 						<div class="timer-fill" style="width:{(timeLeft/15)*100}%; background:{timeColor()}"></div>
 					</div>
 					{#if streak >= 2}
-						<div class="streak-box">🔥 {streak}× streak</div>
+						<div class="streak-box">{streak}× streak</div>
 					{/if}
 				</div>
 
@@ -500,7 +496,8 @@
 		<div class="center fade-in">
 			<div class="q-card score-card">
 				<p class="score-kicker">MDRS (SC-32) Bahaddurghatta · KREIS</p>
-				<div class="score-stars">{stars()}</div>
+				<div class="score-stars" aria-hidden="true">{stars()}</div>
+				<div class="score-stars-label">{starsLabel()}</div>
 				<div class="score-num mono">{score.toLocaleString()}</div>
 				<p class="score-label">Points</p>
 				<p class="score-name">{playerName}</p>
@@ -508,7 +505,7 @@
 				<div class="score-stats">
 					<div class="s-stat"><span class="s-v mono">{accuracy()}%</span><span class="s-k">Accuracy</span></div>
 					<div class="s-sep"></div>
-					<div class="s-stat"><span class="s-v mono">{bestStreak} 🔥</span><span class="s-k">Best streak</span></div>
+					<div class="s-stat"><span class="s-v mono">{bestStreak}</span><span class="s-k">Best streak</span></div>
 					<div class="s-sep"></div>
 					<div class="s-stat"><span class="s-v mono">{correctCount}/{questions.length}</span><span class="s-k">Correct</span></div>
 				</div>
@@ -517,7 +514,7 @@
 					<button onclick={playAgain} class="btn-primary btn-block">Play again →</button>
 					<a href="/" class="btn-ghost btn-block" style="text-align:center; text-decoration:none; display:flex; justify-content:center;">Back to home</a>
 				</div>
-				<p class="hint">Take a screenshot to share your score 📸</p>
+				<p class="hint">Take a screenshot to share your score.</p>
 			</div>
 		</div>
 	{/if}

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { login, staffLogin, studentLogin } from '$lib/stores/auth.svelte';
 	import { goto } from '$app/navigation';
-	import { Phone, Key, Hash, Calendar, Shield, ArrowLeft } from 'lucide-svelte';
+	import { Phone, Key, Hash, Calendar, Shield, ArrowLeft, Gamepad2, CalendarDays, LogIn, Building2, Users, GraduationCap } from 'lucide-svelte';
 
 	type View = 'home' | 'login';
 	let view = $state<View>('home');
@@ -16,6 +16,7 @@
 	let adminPassword = $state('');
 	let error = $state('');
 	let loading = $state(false);
+	let aboutOpen = $state(false);
 
 	async function handleStudentSubmit() {
 		error = ''; loading = true;
@@ -48,94 +49,99 @@
 </svelte:head>
 
 <div class="page">
-	<!-- Header — a11y.quest style -->
 	<header class="site-header">
-		<a href="/" class="identity">
+		<a href="/" class="identity" aria-label="Pragati home">
 			<div class="logo-box" aria-hidden="true">
-				<span style="font-size:1.65rem">🏫</span>
+				<Building2 size={22} strokeWidth={2.2} />
 			</div>
 			<div class="identity-text">
-				<p class="wordmark">PRAGATI<span class="dot">.</span><span class="wordmark-kannada">quest</span></p>
-				<p class="tagline"><span class="tagline-strong">MDRS (SC-32) Bahaddurghatta</span> <span class="tagline-sep">·</span> KREIS, Karnataka</p>
+				<p class="wordmark">PRAGATI</p>
+				<p class="tagline"><span class="tagline-kannada">ಪ್ರಗತಿ</span> <span class="tagline-sep">·</span> MDRS (SC-32) Bahaddurghatta · KREIS, Karnataka</p>
 			</div>
 		</a>
-		<div class="header-right">
-			<span class="header-badge">Learn · Play · Grow</span>
-		</div>
+		<button class="about-link" onclick={() => aboutOpen = true}>
+			<span class="about-icon" aria-hidden="true">ⓘ</span>
+			<span class="about-label">About</span>
+		</button>
 	</header>
 
 	{#if view === 'home'}
-		<!-- Intro -->
 		<div class="intro">
-			<h1 class="intro-title">A school that <em>feels</em> like a playground.</h1>
-			<p class="intro-sub">Quizzes, timetables &amp; progress — all in one place. Pick a card to begin. Built for students, teachers &amp; parents of MDRS Bahaddurghatta.</p>
+			<h1 class="intro-title">Practice, check the <em>timetable</em>, and keep progress visible.</h1>
+			<p class="intro-sub">Quizzes, schedules and records in one calm place — for students, teachers and parents of MDRS Bahaddurghatta. Built to the NEP 2020 vision, free to use.</p>
 			<div class="intro-meta">
-				<span class="pill"><span class="pill-dot" style="background:var(--teal)"></span> 3 spaces</span>
-				<span class="pill"><span class="pill-dot" style="background:var(--amber)"></span> NEP 2020</span>
-				<span class="pill">ಪ್ರಗತಿ — progress</span>
+				<span class="pill"><span class="pill-dot" style="background:var(--teal)"></span> 3 spaces — Quiz, Timetable, Sign in</span>
+				<span class="pill mono">KREIS · Govt. of Karnataka</span>
 			</div>
 		</div>
 
-		<!-- Cards — 3-up brutalist -->
 		<div class="card-grid">
-			<!-- Quiz Arena -->
+			<!-- Quiz -->
 			<a href="/play" class="card">
-				<div class="card-top">
-					<div class="icon-wrap icon-amber">🎮</div>
-					<span class="eyebrow">Practice · GK · States</span>
+				<div class="card-head">
+					<span class="eyebrow">Practice · Classes 6–10</span>
+					<span class="icon-badge"><Gamepad2 size={18} /></span>
 				</div>
-				<h2 class="card-title">Quiz Arena</h2>
-				<p class="card-desc">Battle through questions, earn points, keep a streak and climb the leaderboard. Works off-line, works on phones.</p>
+				<h2 class="card-title">Quizzes</h2>
+				<p class="card-desc">Choose a class and subject, pick a topic and difficulty, then answer. Timed 15s, with streak bonuses and plain-English explanations.</p>
 				<div class="tag-row">
-					<span class="tag tag-amber">⭐ Points</span>
-					<span class="tag tag-mint">🔥 Streak</span>
-					<span class="tag tag-coral">🏆 Rank</span>
+					<span class="tag tag-mint">GK · States & Capitals</span>
+					<span class="tag">15s per question</span>
+					<span class="tag">Streak ×4</span>
 				</div>
-				<span class="card-cta">Play now <span aria-hidden="true">→</span></span>
+				<span class="card-cta">Start practising <span aria-hidden="true">→</span></span>
 			</a>
 
 			<!-- Timetable -->
 			<a href="/timetable" class="card">
-				<div class="card-top">
-					<div class="icon-wrap icon-mint">🗓️</div>
-					<span class="eyebrow">Class-wise · Subject-wise</span>
+				<div class="card-head">
+					<span class="eyebrow">Plan the week</span>
+					<span class="icon-badge"><CalendarDays size={18} /></span>
 				</div>
 				<h2 class="card-title">Timetable</h2>
-				<p class="card-desc">Your weekly schedule at a glance — know what's next, never miss a period.</p>
-				<div class="mini-schedule" aria-hidden="true">
-					<div class="mini-row"><span class="mini-dot dot-amber"></span><span class="mini-bar" style="width:78%"></span><span class="mini-label">8AM</span></div>
-					<div class="mini-row"><span class="mini-dot dot-teal"></span><span class="mini-bar" style="width:58%"></span><span class="mini-label">10AM</span></div>
-					<div class="mini-row"><span class="mini-dot dot-coral"></span><span class="mini-bar" style="width:88%"></span><span class="mini-label">2PM</span></div>
-				</div>
-				<span class="card-cta cta-ghost">View schedule <span aria-hidden="true">→</span></span>
+				<p class="card-desc">Class-wise and subject-wise views. Know what’s next at a glance — no spreadsheets, no confusion.</p>
+				<ul class="timetable-preview" aria-hidden="true">
+					<li><span class="tp-dot"></span><span class="tp-bar" style="width:72%"></span><span class="tp-time">08:00</span></li>
+					<li><span class="tp-dot" style="background:var(--mint)"></span><span class="tp-bar" style="width:58%"></span><span class="tp-time">10:00</span></li>
+					<li><span class="tp-dot" style="background:var(--coral-tint)"></span><span class="tp-bar" style="width:84%"></span><span class="tp-time">14:00</span></li>
+				</ul>
+				<span class="card-cta cta-ghost">View timetable <span aria-hidden="true">→</span></span>
 			</a>
 
-			<!-- Sign In -->
+			<!-- Sign in -->
 			<button onclick={() => view = 'login'} class="card card-interactive">
-				<div class="card-top">
-					<div class="avatar-row" aria-hidden="true">
-						<span class="ava ava-blue">🧑‍🎓</span>
-						<span class="ava ava-amber">👩‍🏫</span>
-						<span class="ava ava-plum">👨‍💼</span>
-					</div>
-					<span class="eyebrow">Secure sign-in</span>
+				<div class="card-head">
+					<span class="eyebrow">Your records</span>
+					<span class="icon-badge"><LogIn size={18} /></span>
 				</div>
 				<h2 class="card-title">Sign in</h2>
-				<p class="card-desc">Students use SATS + DOB. Staff use mobile + password. Admin uses email.</p>
-				<div class="tag-row">
-					<span class="tag tag-paper">Student</span>
-					<span class="tag tag-paper">Teacher</span>
-					<span class="tag tag-paper">Admin</span>
+				<p class="card-desc">Students: SATS + DOB. Staff: mobile + password. Admin: email + password. Your dashboard follows.</p>
+				<div class="role-row">
+					<span class="role"><GraduationCap size={14} /> Student</span>
+					<span class="role"><Users size={14} /> Staff</span>
+					<span class="role"><Shield size={14} /> Admin</span>
 				</div>
 				<span class="card-cta cta-dark">Enter <span aria-hidden="true">→</span></span>
 			</button>
 		</div>
 
-		<!-- Footer note -->
-		<p class="footer-note">Karnataka Residential Educational Institutions Society · MDRS (SC-32) Bahaddurghatta · Holiday? Check the <a href="/timetable">timetable</a>.</p>
+		<p class="footer-note">A <a href="/timetable">timetable</a> that stays up to date, quizzes that respect your time, and records that travel with the child.</p>
+
+		<!-- About dialog -->
+		{#if aboutOpen}
+			<div class="scrim" role="presentation" onclick={() => aboutOpen = false}></div>
+			<div class="about" role="dialog" aria-modal="true" aria-label="About Pragati">
+				<button class="about-close" onclick={() => aboutOpen = false} aria-label="Close">✕</button>
+				<h2 class="about-title">Why Pragati exists</h2>
+				<div class="about-body">
+					<p>Pragati (<span class="font-kannada">ಪ್ರಗತಿ</span> — progress) is the school system for MDRS Bahaddurghatta. It brings academics, CCE assessments, holistic progress cards, quizzes and certificates together — so teachers teach and families follow along.</p>
+					<p>The quiz space here is for practice, not exams. Questions cover the subjects you teach, with topics and difficulty levels. No ads, no tracking.</p>
+					<p><a href="/play">Try a quiz</a> or <button class="link-btn" onclick={() => { aboutOpen = false; view = 'login'; }}>sign in</button>.</p>
+				</div>
+			</div>
+		{/if}
 
 	{:else}
-		<!-- Login view -->
 		<div class="login-wrap">
 			<button onclick={() => { view = 'home'; error = ''; }} class="back-link">
 				<ArrowLeft size={16} /> Back to home
@@ -143,10 +149,10 @@
 
 			<div class="login-card">
 				<div class="login-head">
-					<div class="logo-box small" aria-hidden="true"><span style="font-size:1.25rem">🏫</span></div>
+					<div class="logo-box small" aria-hidden="true"><Building2 size={18} /></div>
 					<div>
 						<h1 class="login-title">Welcome back</h1>
-						<p class="login-sub">Choose your role to enter</p>
+						<p class="login-sub">Choose your role to continue</p>
 					</div>
 				</div>
 
@@ -174,7 +180,7 @@
 						</label>
 						{#if error}<div class="error" role="alert">{error}</div>{/if}
 						<button type="submit" disabled={loading || !satsNumber || !dateOfBirth} class="btn-primary"> {loading ? 'Signing in…' : 'Sign in →'} </button>
-						<p class="field-hint">No password needed. Use your school SATS number and DOB.</p>
+						<p class="field-hint">No password needed.</p>
 					</form>
 				{:else if activeTab === 'staff'}
 					<form onsubmit={(e) => { e.preventDefault(); handleStaffSubmit(); }} class="form">
@@ -217,7 +223,7 @@
 				{/if}
 			</div>
 
-			<p class="login-foot">Protected by KREIS. <a href="/">Back to site</a></p>
+			<p class="login-foot">Protected by KREIS.</p>
 		</div>
 	{/if}
 </div>
@@ -226,9 +232,8 @@
 	.page {
 		max-width: 1040px;
 		margin: 0 auto;
-		padding: 1rem clamp(1rem, 4vw, 1.5rem) 3rem;
+		padding: 1rem clamp(1rem, 4vw, 1.5rem) 3.5rem;
 	}
-	/* header */
 	.site-header {
 		display: flex;
 		justify-content: space-between;
@@ -245,69 +250,72 @@
 		min-width: 0;
 	}
 	.logo-box {
-		width: 56px;
-		height: 56px;
+		width: 52px;
+		height: 52px;
 		flex: none;
 		background: var(--paper);
-		border: 3px solid var(--ink);
+		border: 2.5px solid var(--ink);
 		box-shadow: 4px 4px 0 var(--ink);
-		border-radius: 16px;
+		border-radius: 14px;
 		display: grid;
 		place-items: center;
+		color: var(--ink);
 	}
 	.logo-box.small { width: 44px; height: 44px; border-radius: 12px; box-shadow: 3px 3px 0 var(--ink); }
 	.identity-text { min-width: 0; }
 	.wordmark {
 		font-family: var(--font-display);
 		font-weight: 800;
-		font-size: clamp(1.5rem, 1.1rem + 2vw, 2rem);
+		font-size: clamp(1.55rem, 1.2rem + 1.6vw, 2rem);
 		letter-spacing: -0.03em;
 		color: var(--ink);
 		margin: 0;
 		line-height: 1;
 	}
-	.wordmark-kannada { font-weight: 700; color: var(--plum); }
-	.dot { color: var(--coral); }
 	.tagline {
 		color: var(--ink-soft);
-		font-size: 0.95rem;
-		margin: 0.2rem 0 0;
+		font-size: 0.92rem;
+		margin: 0.22rem 0 0;
 		line-height: 1.3;
 	}
-	.tagline-strong { font-weight: 700; color: var(--ink); }
-	.tagline-sep { opacity: 0.4; margin: 0 0.2rem; }
-	.header-right { display: flex; align-items: center; padding-top: 0.35rem; }
-	.header-badge {
-		font-family: var(--font-mono);
-		font-size: 0.75rem;
-		font-weight: 700;
-		letter-spacing: 0.06em;
-		text-transform: uppercase;
-		background: var(--paper);
-		border: 2px solid var(--ink);
-		border-radius: 999px;
-		padding: 0.35rem 0.7rem;
-		color: var(--ink);
+	.tagline-kannada { font-family: 'Anek Kannada', system-ui, sans-serif; font-weight: 700; color: var(--ink); }
+	.tagline-sep { opacity: 0.35; margin: 0 0.2rem; }
+	.about-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		background: transparent;
+		border: 2px solid transparent;
+		border-radius: 10px;
+		padding: 0.35rem 0.6rem;
+		font: inherit;
+		font-weight: 600;
+		color: var(--ink-soft);
+		cursor: pointer;
+		margin-top: 0.2rem;
+		text-decoration: underline;
+		text-underline-offset: 3px;
+		text-decoration-thickness: 1.5px;
 	}
+	.about-link:hover { color: var(--ink); background: var(--paper); border-color: var(--ink); }
+	.about-icon { display: inline-grid; place-items: center; width: 18px; height: 18px; border: 1.5px solid currentColor; border-radius: 50%; font-size: 0.7rem; font-weight: 700; }
 
-	/* intro */
-	.intro { margin-bottom: 1.75rem; }
+	.intro { margin-bottom: 1.75rem; max-width: 64ch; }
 	.intro-title {
 		font-family: var(--font-display);
-		font-size: clamp(1.9rem, 1.4rem + 2.4vw, 3rem);
+		font-size: clamp(1.85rem, 1.35rem + 2.2vw, 2.8rem);
 		font-weight: 800;
-		line-height: 1.05;
+		line-height: 1.06;
 		color: var(--ink);
 		margin: 0;
-		max-width: 22ch;
+		letter-spacing: -0.02em;
 	}
 	.intro-title em { font-style: normal; background: var(--amber); padding: 0 0.22em; border-radius: 6px; box-decoration-break: clone; }
 	.intro-sub {
 		color: var(--ink-soft);
-		font-size: clamp(1rem, 0.95rem + 0.4vw, 1.15rem);
-		line-height: 1.5;
-		margin: 0.75rem 0 0;
-		max-width: 60ch;
+		font-size: clamp(1rem, 0.95rem + 0.35vw, 1.12rem);
+		line-height: 1.6;
+		margin: 0.7rem 0 0;
 	}
 	.intro-meta { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
 	.pill {
@@ -322,21 +330,21 @@
 		padding: 0.28rem 0.65rem;
 		color: var(--ink);
 	}
+	.mono { font-family: var(--font-mono); }
 	.pill-dot { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid var(--ink); display: inline-block; }
 
-	/* cards */
 	.card-grid {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		gap: 1.25rem;
 	}
-	@media (max-width: 860px) { .card-grid { grid-template-columns: 1fr; } .site-header { flex-direction: column; } }
+	@media (max-width: 860px) { .card-grid { grid-template-columns: 1fr; } .site-header { flex-wrap: wrap; } }
 	.card {
 		background: var(--paper);
 		border: 3px solid var(--ink);
 		box-shadow: 8px 8px 0 var(--ink);
 		border-radius: 22px;
-		padding: 1.35rem 1.35rem 1.15rem;
+		padding: 1.3rem 1.35rem 1.2rem;
 		display: flex;
 		flex-direction: column;
 		gap: 0.85rem;
@@ -345,43 +353,22 @@
 		transition: transform 80ms, box-shadow 80ms;
 	}
 	.card:hover { transform: translate(2px, 2px); box-shadow: 6px 6px 0 var(--ink); }
-	.card:active { transform: translate(6px, 6px); box-shadow: 2px 2px 0 var(--ink); }
+	.card:active { transform: translate(5px, 5px); box-shadow: 2px 2px 0 var(--ink); }
 	.card-interactive { cursor: pointer; width: 100%; text-align: left; font: inherit; }
-	.card-top { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+	.card-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
 	.eyebrow {
 		font-family: var(--font-mono);
-		font-size: 0.7rem;
+		font-size: 0.68rem;
 		font-weight: 700;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
 		color: var(--ink-soft);
 	}
-	.icon-wrap {
-		width: 46px;
-		height: 46px;
-		border-radius: 14px;
-		border: 2.5px solid var(--ink);
-		display: grid;
-		place-items: center;
-		font-size: 1.35rem;
-		flex: none;
+	.icon-badge {
+		width: 36px; height: 36px; border-radius: 10px;
+		border: 2px solid var(--ink); background: var(--cream);
+		display: grid; place-items: center; color: var(--ink); flex: none;
 	}
-	.icon-amber { background: var(--amber); }
-	.icon-mint { background: var(--mint); }
-	.avatar-row { display: flex; gap: -0.5rem; }
-	.ava {
-		width: 40px;
-		height: 40px;
-		border-radius: 12px;
-		border: 2.5px solid var(--ink);
-		display: grid;
-		place-items: center;
-		font-size: 1.1rem;
-		margin-right: -8px;
-	}
-	.ava-blue { background: #DBEAFE; }
-	.ava-amber { background: var(--amber-tint); }
-	.ava-plum { background: #EDE9FE; }
 	.card-title {
 		font-family: var(--font-display);
 		font-size: 1.55rem;
@@ -392,7 +379,7 @@
 	.card-desc {
 		color: var(--ink-soft);
 		font-size: 0.96rem;
-		line-height: 1.5;
+		line-height: 1.55;
 		margin: 0;
 		flex: 1;
 	}
@@ -403,17 +390,20 @@
 		border: 2px solid var(--ink);
 		border-radius: 999px;
 		padding: 0.22rem 0.55rem;
+		background: var(--paper);
 	}
-	.tag-amber { background: var(--amber-tint); }
 	.tag-mint { background: var(--mint); }
-	.tag-coral { background: var(--coral-tint); }
-	.tag-paper { background: var(--cream); }
-	.mini-schedule { display: flex; flex-direction: column; gap: 0.45rem; padding: 0.2rem 0; }
-	.mini-row { display: flex; align-items: center; gap: 0.5rem; }
-	.mini-dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--ink); flex: none; }
-	.dot-amber { background: var(--amber); } .dot-teal { background: #0E7C71; } .dot-coral { background: #FBDAD3; }
-	.mini-bar { height: 8px; border-radius: 999px; border: 2px solid var(--ink); background: var(--cream-deep); }
-	.mini-label { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; color: var(--ink-soft); width: 2.2rem; text-align: right; }
+	.timetable-preview { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.45rem; }
+	.timetable-preview li { display: flex; align-items: center; gap: 0.5rem; }
+	.tp-dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--ink); background: var(--amber); flex: none; }
+	.tp-bar { height: 8px; border-radius: 999px; border: 2px solid var(--ink); background: var(--cream-deep); }
+	.tp-time { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; color: var(--ink-soft); width: 2.6rem; text-align: right; }
+	.role-row { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+	.role {
+		display: inline-flex; align-items: center; gap: 0.3rem;
+		font-size: 0.78rem; font-weight: 700;
+		border: 2px solid var(--ink); border-radius: 999px; padding: 0.22rem 0.55rem; background: var(--cream);
+	}
 	.card-cta {
 		margin-top: 0.2rem;
 		display: inline-flex;
@@ -441,7 +431,23 @@
 	}
 	.footer-note a { color: var(--plum); font-weight: 700; }
 
-	/* login view */
+	.scrim { position: fixed; inset: 0; background: rgba(31,26,46,0.45); backdrop-filter: blur(2px); z-index: 60; }
+	.about {
+		position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+		z-index: 61; background: var(--paper); border: 3px solid var(--ink);
+		box-shadow: 10px 10px 0 var(--ink); border-radius: 22px;
+		padding: 1.5rem; width: min(560px, calc(100vw - 2rem)); max-height: calc(100dvh - 2rem); overflow: auto;
+	}
+	.about-close {
+		position: absolute; top: 0.6rem; right: 0.6rem;
+		width: 36px; height: 36px; border-radius: 10px; border: 2.5px solid var(--ink);
+		background: var(--paper); cursor: pointer; display: grid; place-items: center; color: var(--ink);
+	}
+	.about-title { font-family: var(--font-display); font-size: 1.45rem; font-weight: 800; margin: 0 2rem 0 0; }
+	.about-body { display: flex; flex-direction: column; gap: 0.85rem; line-height: 1.6; color: var(--ink); margin-top: 0.85rem; }
+	.about-body p { margin: 0; }
+	.about-body a, .link-btn { color: var(--plum); font-weight: 700; background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; font: inherit; }
+
 	.login-wrap { max-width: 520px; margin: 0 auto; }
 	.back-link {
 		display: inline-flex;
@@ -547,7 +553,6 @@
 	.btn-primary:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: 5px 5px 0 var(--ink); }
 	.field-hint { color: var(--ink-soft); font-size: 0.85rem; margin: 0; text-align: center; }
 	.login-foot { text-align: center; color: var(--ink-soft); font-size: 0.85rem; margin-top: 1rem; }
-	.login-foot a { color: var(--plum); font-weight: 700; }
 
 	@media (prefers-reduced-motion: reduce) { .card, .btn-primary { transition: none; } }
 </style>
