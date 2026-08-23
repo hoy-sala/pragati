@@ -55,7 +55,7 @@
 				<Building2 size={22} strokeWidth={2.2} />
 			</div>
 			<div class="identity-text">
-				<p class="wordmark">PRAGATI <span class="wordmark-kannada">ಪ್ರಗತಿ</span></p>
+				<p class="wordmark wordmark-kannada-main">ಪ್ರಗತಿ</p>
 				<p class="tagline">MDRS (SC-32) Bahaddurghatta — where curiosity becomes progress</p>
 			</div>
 		</a>
@@ -262,6 +262,7 @@
 		margin: 0;
 		line-height: 1;
 	}
+	.wordmark-kannada-main { font-family: 'Anek Kannada', var(--font-display), system-ui, sans-serif; font-weight: 700; letter-spacing: -0.01em; }
 	.tagline {
 		color: var(--ink-soft);
 		font-size: 0.92rem;
@@ -552,3 +553,5 @@
 
 	@media (prefers-reduced-motion: reduce) { .card, .btn-primary { transition: none; } }
 </style>
+#   t e s t  
+ 

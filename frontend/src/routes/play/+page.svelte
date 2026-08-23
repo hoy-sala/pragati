@@ -232,7 +232,7 @@
 	<header class="quiz-header">
 		<button onclick={handleIdentityClick} class="qh-identity" aria-label="Go home">
 			<span class="qh-logo"><Building2 size={16} /></span>
-			<span class="qh-wordmark">PRAGATI</span>
+			<span class="qh-wordmark qh-wordmark-kannada">ಪ್ರಗತಿ</span>
 			<span class="qh-sub">MDRS (SC-32) Bahaddurghatta</span>
 		</button>
 		{#if phase !== 'results'}
@@ -545,6 +545,7 @@
 		display: grid; place-items: center; font-size: 1.15rem; flex: none;
 	}
 	.qh-wordmark { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.02em; font-size: 1.15rem; }
+	.qh-wordmark-kannada { font-family: 'Anek Kannada', var(--font-display), system-ui, sans-serif; font-weight: 700; }
 	.qh-dot { color: var(--coral); }
 	.qh-home {
 		font-family: var(--font-body); font-weight: 700; font-size: 0.9rem;
