@@ -500,17 +500,18 @@
 					<span class="pick-name">Times tables</span>
 					<span class="pick-meta">Learn · Practice · Rush</span>
 				</button>
-			</div>
-			{#if loading}
-				<div class="empty">Loading…</div>
-			{:else if topics.length > 0}
-				<p class="tchip-label">Quiz topics</p>
-				<div class="topics">
+				{#if loading}
+					<div class="empty" style="grid-column:1/-1">Loading…</div>
+				{:else}
 					{#each topics as topic (topic.name)}
-						<button onclick={() => { playClick(); selectedTopic = topic.name; quizEntry = 'gk'; phase = 'difficulty'; }} class="topic">{topic.name}</button>
+						<button onclick={() => { playClick(); selectedTopic = topic.name; quizEntry = 'gk'; phase = 'difficulty'; }} class="pick-card mode-card">
+							<span class="pick-icon"><Globe size={18} /></span>
+							<span class="pick-name">{topic.name}</span>
+							<span class="pick-meta">Quiz · Easy to Hard</span>
+						</button>
 					{/each}
-				</div>
-			{/if}
+				{/if}
+			</div>
 		</div>
 
 	<!-- ═══ COMING SOON ═══ -->
@@ -648,10 +649,18 @@
 			{#if loading}
 				<div class="empty">Loading…</div>
 			{:else}
-				<div class="topics">
-					<button onclick={() => { playClick(); selectedTopic = ''; phase = 'difficulty'; }} class="topic topic-all">All topics</button>
+				<div class="mode-grid">
+					<button onclick={() => { playClick(); selectedTopic = ''; phase = 'difficulty'; }} class="pick-card mode-card">
+						<span class="pick-icon"><Sparkles size={18} /></span>
+						<span class="pick-name">All topics</span>
+						<span class="pick-meta">Everything mixed</span>
+					</button>
 					{#each topics as topic (topic.name)}
-						<button onclick={() => { playClick(); selectedTopic = topic.name; phase = 'difficulty'; }} class="topic">{topic.name}</button>
+						<button onclick={() => { playClick(); selectedTopic = topic.name; phase = 'difficulty'; }} class="pick-card mode-card">
+							<span class="pick-icon"><BookOpen size={18} /></span>
+							<span class="pick-name">{topic.name}</span>
+							<span class="pick-meta">Quiz · Easy to Hard</span>
+						</button>
 					{/each}
 				</div>
 			{/if}
