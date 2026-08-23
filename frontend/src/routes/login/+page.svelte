@@ -115,7 +115,7 @@
 			</button>
 		</div>
 
-		<p class="footer-note">A <a href="/timetable">timetable</a> that stays up to date, quizzes that respect your time, and records that travel with the child.</p>
+		<p class="footer-note">Developed by <strong>Hoysala T</strong>, Computer Science Teacher — MDRS (SC-32) Bahaddurghatta</p>
 
 		<!-- About dialog -->
 		{#if aboutOpen}
