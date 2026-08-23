@@ -68,7 +68,7 @@
 	{#if view === 'home'}
 		<div class="intro intro-kids">
 			<div class="kids-art" aria-hidden="true"><span class="ka ka1">🎮</span><span class="ka ka2">⭐</span><span class="ka ka3">📚</span></div>
-			<h1 class="intro-title">ಬಾ ಆಡೋಣ! <em>Let's play</em> & learn</h1>
+			<h1 class="intro-title"><em>Let's play</em> & learn!</h1>
 			<p class="intro-sub">Pick a quiz, check your timetable, or sign in — all yours.</p>
 			<div class="intro-meta">
 				<span class="pill"><span class="pill-dot" style="background:var(--amber)"></span> For Classes 6–10</span>
@@ -111,7 +111,7 @@
 					<span class="role"><GraduationCap size={13} /> Student</span>
 					<span class="role"><Users size={13} /> Staff</span>
 				</div>
-				<span class="card-cta cta-dark">Enter <span aria-hidden="true">→</span></span>
+				<span class="card-cta">Enter <span aria-hidden="true">→</span></span>
 			</button>
 		</div>
 
