@@ -611,19 +611,19 @@
 	.section-sub { color: var(--ink-soft); font-size: 0.88rem; margin: 0.15rem 0 0; }
 	.empty { text-align: center; padding: 2rem; color: var(--ink-soft); font-weight: 600; }
 
-	.pick-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 170px), 1fr)); gap: 0.7rem; }
+	.pick-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.8rem; }
 	.pick-card {
 		text-align: left; background: var(--paper); border: 2px solid var(--ink);
-		box-shadow: 3px 3px 0 var(--ink); border-radius: 14px; padding: 0.9rem;
-		cursor: pointer; display: flex; align-items: center; gap: 0.7rem;
+		box-shadow: 3px 3px 0 var(--ink); border-radius: 14px; padding: 1rem;
+		cursor: pointer; display: flex; flex-direction: column; align-items: flex-start; gap: 0.45rem;
 		transition: box-shadow 120ms, transform 120ms, background 120ms;
 		min-width: 0; overflow: hidden;
 	}
 	.pick-card:hover { transform: translate(1px, 1px); box-shadow: 2px 2px 0 var(--ink); background: var(--cream); }
 	.pick-card:active { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--ink); }
-	.pick-icon { width: 34px; height: 34px; border-radius: 9px; border: 1.5px solid var(--ink); background: var(--cream); display: grid; place-items: center; color: var(--ink); flex: none; }
-	.pick-name { font-family: var(--font-display); font-weight: 700; font-size: 0.98rem; line-height: 1.2; flex: 1; min-width: 0; overflow-wrap: anywhere; word-break: break-word; }
-	.pick-meta { color: var(--ink-soft); font-size: 0.76rem; font-weight: 600; font-family: var(--font-mono); flex: none; white-space: nowrap; }
+	.pick-icon { width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid var(--ink); background: var(--cream); display: grid; place-items: center; color: var(--ink); flex: none; }
+	.pick-name { font-family: var(--font-display); font-weight: 700; font-size: 1.02rem; line-height: 1.2; }
+	.pick-meta { color: var(--ink-soft); font-size: 0.76rem; font-weight: 600; font-family: var(--font-mono); }
 
 	.topics { display: flex; flex-wrap: wrap; gap: 0.6rem; }
 	.topic {
