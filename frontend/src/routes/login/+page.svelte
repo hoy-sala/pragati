@@ -43,362 +43,511 @@
 	}
 </script>
 
-<div class="min-h-screen flex flex-col overflow-hidden relative game-bg">
-	<div class="starfield"></div>
-	<!-- Floating decorations -->
-	<div class="deco deco-moon">🌙</div>
-	<div class="deco deco-planet">🪐</div>
-	<div class="deco deco-rocket">🚀</div>
-	<div class="deco deco-ufo">🛸</div>
-	<div class="deco deco-star1">⭐</div>
-	<div class="deco deco-star2">✨</div>
-	<div class="deco deco-star3">🌟</div>
-	<div class="deco deco-star4">✦</div>
-	<div class="deco deco-star5">✧</div>
-	<!-- Shooting stars / comets -->
-	<div class="shooting-star ss1"></div>
-	<div class="shooting-star ss2"></div>
-	<div class="shooting-star ss3"></div>
-	<div class="comet comet1"></div>
-	<div class="comet comet2"></div>
+<svelte:head>
+	<title>Pragati — MDRS Bahaddurghatta</title>
+</svelte:head>
+
+<div class="page">
+	<!-- Header — a11y.quest style -->
+	<header class="site-header">
+		<a href="/" class="identity">
+			<div class="logo-box" aria-hidden="true">
+				<span style="font-size:1.65rem">🏫</span>
+			</div>
+			<div class="identity-text">
+				<p class="wordmark">PRAGATI<span class="dot">.</span><span class="wordmark-kannada">quest</span></p>
+				<p class="tagline"><span class="tagline-strong">MDRS (SC-32) Bahaddurghatta</span> <span class="tagline-sep">·</span> KREIS, Karnataka</p>
+			</div>
+		</a>
+		<div class="header-right">
+			<span class="header-badge">Learn · Play · Grow</span>
+		</div>
+	</header>
 
 	{#if view === 'home'}
-		<!-- Hero -->
-		<div class="relative z-10 pt-8 sm:pt-10 pb-3 px-4 text-center fade-in">
-			<div class="bounce-in">
-				<div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-300 via-orange-400 to-pink-500 shadow-xl shadow-orange-400/40 mb-3 mascot">
-					<span class="text-3xl">🏫</span>
-				</div>
-			</div>
-			<h1 class="game-title text-3xl sm:text-4xl font-black tracking-tight leading-none whitespace-nowrap">
-				MDRS (SC-32) BAHADDURGHATTA
-			</h1>
-			<p class="mt-2 text-4xl sm:text-5xl font-black text-white/90 font-kannada" style="text-shadow: 2px 2px 0 rgba(0,0,0,0.15)">ಪ್ರಗತಿ</p>
-			<div class="flex items-center justify-center gap-2 mt-1.5">
-				<span class="h-px w-6 bg-white/20"></span>
-				<span class="text-xs font-bold text-white/50 uppercase tracking-widest">Learn. Play. Grow.</span>
-				<span class="h-px w-6 bg-white/20"></span>
+		<!-- Intro -->
+		<div class="intro">
+			<h1 class="intro-title">A school that <em>feels</em> like a playground.</h1>
+			<p class="intro-sub">Quizzes, timetables &amp; progress — all in one place. Pick a card to begin. Built for students, teachers &amp; parents of MDRS Bahaddurghatta.</p>
+			<div class="intro-meta">
+				<span class="pill"><span class="pill-dot" style="background:var(--teal)"></span> 3 spaces</span>
+				<span class="pill"><span class="pill-dot" style="background:var(--amber)"></span> NEP 2020</span>
+				<span class="pill">ಪ್ರಗತಿ — progress</span>
 			</div>
 		</div>
 
-		<!-- Cards -->
-		<div class="relative z-10 flex-1 flex items-start justify-center px-4 pb-6">
-			<div class="w-full max-w-5xl">
-				<div class="grid grid-cols-1 sm:grid-cols-3 gap-5 items-stretch">
-
-					<!-- Quiz Arena -->
-					<a href="/play" class="c card-quiz group relative rounded-3xl p-6 text-white overflow-hidden hover:scale-[1.04] active:scale-[0.97] transition-all duration-300">
-						<div class="card-shine"></div>
-						<div class="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-white/5"></div>
-						<div class="absolute -bottom-12 -left-12 w-40 h-40 rounded-full bg-white/5"></div>
-						<div class="absolute top-4 right-4 text-xl z-10 animate-spin-slow">⭐</div>
-						<div class="absolute bottom-6 right-5 text-lg z-10 animate-bounce">🎯</div>
-						<div class="absolute bottom-4 left-5 text-sm z-10 animate-pulse">🔥</div>
-						<div class="absolute top-16 left-5 text-xs z-10 animate-bounce" style="animation-delay:.4s">✨</div>
-						<div class="w-20 h-20 rounded-[1.25rem] bg-white/15 backdrop-blur flex items-center justify-center mb-4 shadow-xl group-hover:rotate-12 group-hover:scale-110 transition-all duration-300 border border-white/10 relative z-10">
-							<span class="text-4xl">🎮</span>
-						</div>
-						<h2 class="text-2xl font-black relative z-10" style="text-shadow:0 2px 4px rgba(0,0,0,0.15)">Quiz Arena</h2>
-						<p class="text-white/65 text-sm mt-1.5 leading-relaxed relative z-10">Battle through questions, earn points & climb the leaderboard!</p>
-						<div class="flex items-center gap-2 mt-4 relative z-10 flex-wrap">
-							<span class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/15 text-xs font-bold">⭐ Points</span>
-							<span class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/15 text-xs font-bold">🏆 Rank</span>
-							<span class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/15 text-xs font-bold">⚡ Streak</span>
-						</div>
-						<div class="mt-5 relative z-10">
-							<div class="w-full py-3 rounded-2xl bg-white/20 backdrop-blur text-center font-black text-sm tracking-wide group-hover:bg-white/30 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all duration-300">
-								PLAY NOW 🚀
-							</div>
-						</div>
-					</a>
-
-					<!-- Timetable -->
-					<a href="/timetable" class="c card-time group relative rounded-3xl p-6 text-white overflow-hidden hover:scale-[1.04] active:scale-[0.97] transition-all duration-300">
-						<div class="card-shine"></div>
-						<div class="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-white/5"></div>
-						<div class="absolute -bottom-12 -left-12 w-40 h-40 rounded-full bg-white/5"></div>
-						<div class="absolute top-4 right-4 text-xl z-10 animate-bounce" style="animation-delay:.3s">📅</div>
-						<div class="absolute bottom-6 left-5 text-lg z-10 animate-pulse">📚</div>
-						<div class="absolute top-16 right-5 text-sm z-10 animate-spin-slow">🕐</div>
-						<div class="absolute bottom-4 right-5 text-xs z-10 animate-bounce" style="animation-delay:.6s">🌟</div>
-						<div class="w-20 h-20 rounded-[1.25rem] bg-white/15 backdrop-blur flex items-center justify-center mb-4 shadow-xl group-hover:-rotate-12 group-hover:scale-110 transition-all duration-300 border border-white/10 relative z-10">
-							<span class="text-4xl">🗓️</span>
-						</div>
-						<h2 class="text-2xl font-black relative z-10" style="text-shadow:0 2px 4px rgba(0,0,0,0.15)">Timetable</h2>
-						<p class="text-white/65 text-sm mt-1.5 leading-relaxed relative z-10">See your weekly schedule — know what's next!</p>
-						<div class="mt-4 space-y-2 relative z-10">
-							<div class="flex items-center gap-2.5">
-								<div class="w-3 h-3 rounded-full bg-yellow-300 shadow-[0_0_8px_rgba(253,224,71,0.5)]"></div>
-								<div class="h-2.5 flex-1 rounded-full bg-white/10 overflow-hidden"><div class="h-full bg-gradient-to-r from-yellow-300/50 to-yellow-300/20 rounded-full" style="width:80%"></div></div>
-								<span class="text-[10px] text-white/50 font-bold w-7">8AM</span>
-							</div>
-							<div class="flex items-center gap-2.5">
-								<div class="w-3 h-3 rounded-full bg-green-300 shadow-[0_0_8px_rgba(134,239,172,0.5)]"></div>
-								<div class="h-2.5 flex-1 rounded-full bg-white/10 overflow-hidden"><div class="h-full bg-gradient-to-r from-green-300/50 to-green-300/20 rounded-full" style="width:60%"></div></div>
-								<span class="text-[10px] text-white/50 font-bold w-7">9AM</span>
-							</div>
-							<div class="flex items-center gap-2.5">
-								<div class="w-3 h-3 rounded-full bg-pink-300 shadow-[0_0_8px_rgba(249,168,212,0.5)]"></div>
-								<div class="h-2.5 flex-1 rounded-full bg-white/10 overflow-hidden"><div class="h-full bg-gradient-to-r from-pink-300/50 to-pink-300/20 rounded-full" style="width:90%"></div></div>
-								<span class="text-[10px] text-white/50 font-bold w-7">10AM</span>
-							</div>
-						</div>
-						<div class="mt-5 relative z-10">
-							<div class="w-full py-3 rounded-2xl bg-white/20 backdrop-blur text-center font-black text-sm tracking-wide group-hover:bg-white/30 group-hover:shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all duration-300">
-								VIEW SCHEDULE 📋
-							</div>
-						</div>
-					</a>
-
-					<!-- Sign In -->
-					<button onclick={() => view = 'login'} class="c card-sign group relative rounded-3xl p-6 text-left bg-white overflow-hidden hover:scale-[1.04] active:scale-[0.97] transition-all duration-300 border-4 border-indigo-100">
-						<div class="card-shine-light"></div>
-						<div class="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-indigo-50"></div>
-						<div class="absolute -bottom-12 -left-12 w-40 h-40 rounded-full bg-purple-50"></div>
-						<div class="absolute top-4 right-4 text-xl z-10 animate-bounce" style="animation-delay:.5s">👋</div>
-						<div class="absolute bottom-5 left-5 text-sm z-10 animate-bounce" style="animation-delay:.8s">🌟</div>
-						<div class="flex items-center gap-3 mb-4 relative z-10">
-							<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-2xl shadow-lg shadow-blue-400/30 group-hover:animate-bounce border-2 border-white">🧑‍🎓</div>
-							<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-2xl shadow-lg shadow-orange-400/30 group-hover:animate-bounce border-2 border-white" style="animation-delay:.1s">👩‍🏫</div>
-							<div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-2xl shadow-lg shadow-purple-400/30 group-hover:animate-bounce border-2 border-white" style="animation-delay:.2s">👨‍💼</div>
-						</div>
-						<h2 class="text-2xl font-black text-slate-800 relative z-10">Sign In</h2>
-						<p class="text-slate-400 text-sm mt-1.5 leading-relaxed relative z-10">Jump back into your learning dashboard!</p>
-						<div class="flex items-center gap-2 mt-4 relative z-10 flex-wrap">
-							<span class="px-3 py-1 rounded-full bg-blue-100 text-blue-600 text-xs font-black">🧑‍🎓 Student</span>
-							<span class="px-3 py-1 rounded-full bg-amber-100 text-amber-600 text-xs font-black">👩‍🏫 Teacher</span>
-							<span class="px-3 py-1 rounded-full bg-purple-100 text-purple-600 text-xs font-black">👨‍💼 Admin</span>
-						</div>
-						<div class="mt-5 relative z-10">
-							<div class="w-full py-3 rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 text-center font-black text-sm tracking-wide text-white group-hover:from-indigo-600 group-hover:to-purple-700 transition-all shadow-lg shadow-indigo-500/30 group-hover:shadow-indigo-500/50">
-								ENTER 🎯
-							</div>
-						</div>
-					</button>
-
+		<!-- Cards — 3-up brutalist -->
+		<div class="card-grid">
+			<!-- Quiz Arena -->
+			<a href="/play" class="card">
+				<div class="card-top">
+					<div class="icon-wrap icon-amber">🎮</div>
+					<span class="eyebrow">Practice · GK · States</span>
 				</div>
-			</div>
+				<h2 class="card-title">Quiz Arena</h2>
+				<p class="card-desc">Battle through questions, earn points, keep a streak and climb the leaderboard. Works off-line, works on phones.</p>
+				<div class="tag-row">
+					<span class="tag tag-amber">⭐ Points</span>
+					<span class="tag tag-mint">🔥 Streak</span>
+					<span class="tag tag-coral">🏆 Rank</span>
+				</div>
+				<span class="card-cta">Play now <span aria-hidden="true">→</span></span>
+			</a>
+
+			<!-- Timetable -->
+			<a href="/timetable" class="card">
+				<div class="card-top">
+					<div class="icon-wrap icon-mint">🗓️</div>
+					<span class="eyebrow">Class-wise · Subject-wise</span>
+				</div>
+				<h2 class="card-title">Timetable</h2>
+				<p class="card-desc">Your weekly schedule at a glance — know what's next, never miss a period.</p>
+				<div class="mini-schedule" aria-hidden="true">
+					<div class="mini-row"><span class="mini-dot dot-amber"></span><span class="mini-bar" style="width:78%"></span><span class="mini-label">8AM</span></div>
+					<div class="mini-row"><span class="mini-dot dot-teal"></span><span class="mini-bar" style="width:58%"></span><span class="mini-label">10AM</span></div>
+					<div class="mini-row"><span class="mini-dot dot-coral"></span><span class="mini-bar" style="width:88%"></span><span class="mini-label">2PM</span></div>
+				</div>
+				<span class="card-cta cta-ghost">View schedule <span aria-hidden="true">→</span></span>
+			</a>
+
+			<!-- Sign In -->
+			<button onclick={() => view = 'login'} class="card card-interactive">
+				<div class="card-top">
+					<div class="avatar-row" aria-hidden="true">
+						<span class="ava ava-blue">🧑‍🎓</span>
+						<span class="ava ava-amber">👩‍🏫</span>
+						<span class="ava ava-plum">👨‍💼</span>
+					</div>
+					<span class="eyebrow">Secure sign-in</span>
+				</div>
+				<h2 class="card-title">Sign in</h2>
+				<p class="card-desc">Students use SATS + DOB. Staff use mobile + password. Admin uses email.</p>
+				<div class="tag-row">
+					<span class="tag tag-paper">Student</span>
+					<span class="tag tag-paper">Teacher</span>
+					<span class="tag tag-paper">Admin</span>
+				</div>
+				<span class="card-cta cta-dark">Enter <span aria-hidden="true">→</span></span>
+			</button>
 		</div>
 
-
+		<!-- Footer note -->
+		<p class="footer-note">Karnataka Residential Educational Institutions Society · MDRS (SC-32) Bahaddurghatta · Holiday? Check the <a href="/timetable">timetable</a>.</p>
 
 	{:else}
-		<!-- Login View -->
-		<div class="relative z-10 flex-1 flex items-center justify-center px-4 py-8">
-			<div class="w-full max-w-sm fade-in">
-				<button onclick={() => { view = 'home'; error = ''; }}
-					class="flex items-center gap-1.5 text-sm text-white/60 hover:text-white font-bold mb-6 transition-colors">
-					<ArrowLeft size={16} /> Back
-				</button>
-				<div class="text-center mb-5">
-					<div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-300 via-orange-400 to-pink-500 shadow-xl shadow-orange-400/30 mb-3 mascot">
-						<span class="text-3xl">🏫</span>
-					</div>
-					<h1 class="text-3xl font-black text-white drop-shadow-lg">Welcome Back!</h1>
-					<p class="text-sm text-white/60 mt-1.5 font-medium">Choose your character to enter</p>
-				</div>
-				<div class="bg-white/95 backdrop-blur-xl rounded-[1.5rem] shadow-2xl border-4 border-white/30 p-5 space-y-4">
-					<div class="flex border-2 border-slate-200 rounded-xl overflow-hidden">
-						<button onclick={() => { activeTab = 'student'; error = ''; }}
-							class="flex-1 py-2.5 text-sm font-black transition-all {activeTab === 'student' ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/30' : 'bg-white text-slate-500 hover:bg-slate-50'}">🧑‍🎓 Student</button>
-						<button onclick={() => { activeTab = 'staff'; error = ''; }}
-							class="flex-1 py-2.5 text-sm font-black transition-all {activeTab === 'staff' ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/30' : 'bg-white text-slate-500 hover:bg-slate-50'}">👩‍🏫 Staff</button>
-						<button onclick={() => { activeTab = 'admin'; error = ''; }}
-							class="flex-1 py-2.5 text-sm font-black transition-all {activeTab === 'admin' ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg shadow-purple-500/30' : 'bg-white text-slate-500 hover:bg-slate-50'}">👨‍💼 Admin</button>
-					</div>
+		<!-- Login view -->
+		<div class="login-wrap">
+			<button onclick={() => { view = 'home'; error = ''; }} class="back-link">
+				<ArrowLeft size={16} /> Back to home
+			</button>
 
-					{#if activeTab === 'student'}
-						<form onsubmit={handleStudentSubmit} class="space-y-3">
-							<div class="relative"><Hash size={16} class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" /><input type="text" bind:value={satsNumber} maxlength="9" placeholder="SATS Number (9 digits)" class="w-full pl-9 pr-3 py-2.5 rounded-xl border-2 border-slate-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-slate-50 focus:bg-white transition-colors" /></div>
-							<div class="relative"><Calendar size={16} class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" /><input type="date" bind:value={dateOfBirth} class="w-full pl-9 pr-3 py-2.5 rounded-xl border-2 border-slate-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-slate-50 focus:bg-white transition-colors" /></div>
-							{#if error}<div class="text-sm font-bold text-red-600 bg-red-50 rounded-xl p-3 border-2 border-red-100">{error}</div>{/if}
-							<button type="submit" disabled={loading || !satsNumber || !dateOfBirth} class="w-full py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl text-sm font-black hover:from-blue-600 hover:to-blue-700 disabled:opacity-50 transition-all shadow-lg shadow-blue-500/30 flex items-center justify-center gap-2">{loading ? '⏳ Signing in...' : '🚀 Sign In'}</button>
-						</form>
-					{:else if activeTab === 'staff'}
-						<form onsubmit={handleStaffSubmit} class="space-y-3">
-							<div class="relative"><Phone size={16} class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" /><input type="tel" bind:value={mobile} maxlength="10" placeholder="10-digit mobile number" class="w-full pl-9 pr-3 py-2.5 rounded-xl border-2 border-slate-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-slate-50 focus:bg-white transition-colors" /></div>
-							<div class="relative"><Key size={16} class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" /><input type="password" bind:value={staffPassword} placeholder="Password" class="w-full pl-9 pr-3 py-2.5 rounded-xl border-2 border-slate-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 bg-slate-50 focus:bg-white transition-colors" /></div>
-							{#if error}<div class="text-sm font-bold text-red-600 bg-red-50 rounded-xl p-3 border-2 border-red-100">{error}</div>{/if}
-							<button type="submit" disabled={loading || !mobile || !staffPassword} class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-xl text-sm font-black hover:from-amber-600 hover:to-orange-600 disabled:opacity-50 transition-all shadow-lg shadow-amber-500/30 flex items-center justify-center gap-2">{loading ? '⏳ Signing in...' : '🚀 Sign In'}</button>
-						</form>
-					{:else}
-						<form onsubmit={handleAdminSubmit} class="space-y-3">
-							<div class="relative"><Shield size={16} class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" /><input type="email" bind:value={adminEmail} placeholder="Email address" class="w-full pl-9 pr-3 py-2.5 rounded-xl border-2 border-slate-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-slate-50 focus:bg-white transition-colors" /></div>
-							<div class="relative"><Key size={16} class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" /><input type="password" bind:value={adminPassword} placeholder="Password" class="w-full pl-9 pr-3 py-2.5 rounded-xl border-2 border-slate-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-slate-50 focus:bg-white transition-colors" /></div>
-							{#if error}<div class="text-sm font-bold text-red-600 bg-red-50 rounded-xl p-3 border-2 border-red-100">{error}</div>{/if}
-							<button type="submit" disabled={loading || !adminEmail || !adminPassword} class="w-full py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl text-sm font-black hover:from-purple-600 hover:to-purple-700 disabled:opacity-50 transition-all shadow-lg shadow-purple-500/30 flex items-center justify-center gap-2">{loading ? '⏳ Signing in...' : '🚀 Sign In'}</button>
-						</form>
-					{/if}
+			<div class="login-card">
+				<div class="login-head">
+					<div class="logo-box small" aria-hidden="true"><span style="font-size:1.25rem">🏫</span></div>
+					<div>
+						<h1 class="login-title">Welcome back</h1>
+						<p class="login-sub">Choose your role to enter</p>
+					</div>
 				</div>
+
+				<div class="tabs" role="tablist" aria-label="Login role">
+					<button role="tab" aria-selected={activeTab === 'student'} onclick={() => { activeTab = 'student'; error = ''; }} class="tab {activeTab === 'student' ? 'tab-active' : ''}">Student</button>
+					<button role="tab" aria-selected={activeTab === 'staff'} onclick={() => { activeTab = 'staff'; error = ''; }} class="tab {activeTab === 'staff' ? 'tab-active' : ''}">Staff</button>
+					<button role="tab" aria-selected={activeTab === 'admin'} onclick={() => { activeTab = 'admin'; error = ''; }} class="tab {activeTab === 'admin' ? 'tab-active' : ''}">Admin</button>
+				</div>
+
+				{#if activeTab === 'student'}
+					<form onsubmit={(e) => { e.preventDefault(); handleStudentSubmit(); }} class="form">
+						<label class="field">
+							<span class="field-label">SATS number</span>
+							<span class="control">
+								<Hash size={16} class="field-icon" />
+								<input type="text" bind:value={satsNumber} maxlength="9" placeholder="9-digit SATS number" class="input" autocomplete="off" />
+							</span>
+						</label>
+						<label class="field">
+							<span class="field-label">Date of birth</span>
+							<span class="control">
+								<Calendar size={16} class="field-icon" />
+								<input type="date" bind:value={dateOfBirth} class="input" />
+							</span>
+						</label>
+						{#if error}<div class="error" role="alert">{error}</div>{/if}
+						<button type="submit" disabled={loading || !satsNumber || !dateOfBirth} class="btn-primary"> {loading ? 'Signing in…' : 'Sign in →'} </button>
+						<p class="field-hint">No password needed. Use your school SATS number and DOB.</p>
+					</form>
+				{:else if activeTab === 'staff'}
+					<form onsubmit={(e) => { e.preventDefault(); handleStaffSubmit(); }} class="form">
+						<label class="field">
+							<span class="field-label">Mobile number</span>
+							<span class="control">
+								<Phone size={16} class="field-icon" />
+								<input type="tel" bind:value={mobile} maxlength="10" placeholder="10-digit mobile" class="input" />
+							</span>
+						</label>
+						<label class="field">
+							<span class="field-label">Password</span>
+							<span class="control">
+								<Key size={16} class="field-icon" />
+								<input type="password" bind:value={staffPassword} placeholder="Password" class="input" />
+							</span>
+						</label>
+						{#if error}<div class="error" role="alert">{error}</div>{/if}
+						<button type="submit" disabled={loading || !mobile || !staffPassword} class="btn-primary"> {loading ? 'Signing in…' : 'Sign in →'} </button>
+					</form>
+				{:else}
+					<form onsubmit={(e) => { e.preventDefault(); handleAdminSubmit(); }} class="form">
+						<label class="field">
+							<span class="field-label">Email address</span>
+							<span class="control">
+								<Shield size={16} class="field-icon" />
+								<input type="email" bind:value={adminEmail} placeholder="you@school.edu" class="input" autocomplete="email" />
+							</span>
+						</label>
+						<label class="field">
+							<span class="field-label">Password</span>
+							<span class="control">
+								<Key size={16} class="field-icon" />
+								<input type="password" bind:value={adminPassword} placeholder="Password" class="input" />
+							</span>
+						</label>
+						{#if error}<div class="error" role="alert">{error}</div>{/if}
+						<button type="submit" disabled={loading || !adminEmail || !adminPassword} class="btn-primary"> {loading ? 'Signing in…' : 'Sign in →'} </button>
+					</form>
+				{/if}
 			</div>
+
+			<p class="login-foot">Protected by KREIS. <a href="/">Back to site</a></p>
 		</div>
 	{/if}
 </div>
 
 <style>
-	.game-bg {
-		background: linear-gradient(160deg, #0c0a2a 0%, #1a1150 25%, #2d1b69 40%, #1e1145 60%, #0f0d30 80%, #0a0820 100%);
-		background-size: 400% 400%;
-		animation: gradientShift 20s ease infinite;
+	.page {
+		max-width: 1040px;
+		margin: 0 auto;
+		padding: 1rem clamp(1rem, 4vw, 1.5rem) 3rem;
 	}
-	@keyframes gradientShift {
-		0% { background-position: 0% 50%; }
-		50% { background-position: 100% 50%; }
-		100% { background-position: 0% 50%; }
+	/* header */
+	.site-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 1rem;
+		margin: 1.25rem 0 2rem;
 	}
-	.starfield {
-		position: fixed; inset: 0; z-index: 0; pointer-events: none;
-		background-image:
-			radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.5) 0%, transparent 100%),
-			radial-gradient(1px 1px at 25% 45%, rgba(255,255,255,0.4) 0%, transparent 100%),
-			radial-gradient(1px 1px at 40% 10%, rgba(255,255,255,0.3) 0%, transparent 100%),
-			radial-gradient(1px 1px at 55% 60%, rgba(255,255,255,0.5) 0%, transparent 100%),
-			radial-gradient(1px 1px at 70% 30%, rgba(255,255,255,0.4) 0%, transparent 100%),
-			radial-gradient(1px 1px at 85% 55%, rgba(255,255,255,0.3) 0%, transparent 100%),
-			radial-gradient(1px 1px at 15% 75%, rgba(255,255,255,0.4) 0%, transparent 100%),
-			radial-gradient(1px 1px at 50% 85%, rgba(255,255,255,0.3) 0%, transparent 100%),
-			radial-gradient(1px 1px at 80% 80%, rgba(255,255,255,0.5) 0%, transparent 100%),
-			radial-gradient(1px 1px at 35% 35%, rgba(255,255,255,0.4) 0%, transparent 100%),
-			radial-gradient(1.5px 1.5px at 60% 15%, rgba(255,255,255,0.6) 0%, transparent 100%),
-			radial-gradient(1.5px 1.5px at 90% 45%, rgba(255,255,255,0.5) 0%, transparent 100%),
-			radial-gradient(1px 1px at 5% 50%, rgba(255,255,255,0.3) 0%, transparent 100%),
-			radial-gradient(1px 1px at 45% 70%, rgba(255,255,255,0.4) 0%, transparent 100%),
-			radial-gradient(1.5px 1.5px at 75% 5%, rgba(255,255,255,0.5) 0%, transparent 100%),
-			radial-gradient(1px 1px at 20% 90%, rgba(255,255,255,0.3) 0%, transparent 100%);
+	.identity {
+		display: flex;
+		align-items: center;
+		gap: 0.9rem;
+		text-decoration: none;
+		color: inherit;
+		min-width: 0;
 	}
-	.c { position: relative; }
-	.card-quiz {
-		background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 40%, #a855f7 70%, #c084fc 100%);
-		box-shadow: 0 8px 32px rgba(139,92,246,0.35), 0 0 0 3px rgba(255,255,255,0.1), inset 0 1px 0 rgba(255,255,255,0.15);
+	.logo-box {
+		width: 56px;
+		height: 56px;
+		flex: none;
+		background: var(--paper);
+		border: 3px solid var(--ink);
+		box-shadow: 4px 4px 0 var(--ink);
+		border-radius: 16px;
+		display: grid;
+		place-items: center;
 	}
-	.card-time {
-		background: linear-gradient(135deg, #06b6d4 0%, #0ea5e9 40%, #3b82f6 70%, #6366f1 100%);
-		box-shadow: 0 8px 32px rgba(14,165,233,0.35), 0 0 0 3px rgba(255,255,255,0.1), inset 0 1px 0 rgba(255,255,255,0.15);
+	.logo-box.small { width: 44px; height: 44px; border-radius: 12px; box-shadow: 3px 3px 0 var(--ink); }
+	.identity-text { min-width: 0; }
+	.wordmark {
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: clamp(1.5rem, 1.1rem + 2vw, 2rem);
+		letter-spacing: -0.03em;
+		color: var(--ink);
+		margin: 0;
+		line-height: 1;
 	}
-	.card-sign {
-		box-shadow: 0 8px 32px rgba(99,102,241,0.2), 0 0 0 3px rgba(99,102,241,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
+	.wordmark-kannada { font-weight: 700; color: var(--plum); }
+	.dot { color: var(--coral); }
+	.tagline {
+		color: var(--ink-soft);
+		font-size: 0.95rem;
+		margin: 0.2rem 0 0;
+		line-height: 1.3;
 	}
-	.card-shine {
-		position: absolute; top: 0; left: 0; right: 0; height: 50%;
-		background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, transparent 100%);
-		border-radius: 1.5rem 1.5rem 0 0; pointer-events: none;
-	}
-	.card-shine-light {
-		position: absolute; top: 0; left: 0; right: 0; height: 50%;
-		background: linear-gradient(180deg, rgba(255,255,255,0.6) 0%, transparent 100%);
-		border-radius: 1.5rem 1.5rem 0 0; pointer-events: none;
-	}
-	.mascot { animation: mascotFloat 3s ease-in-out infinite; }
-	@keyframes mascotFloat {
-		0%, 100% { transform: translateY(0) rotate(0deg); }
-		25% { transform: translateY(-6px) rotate(-2deg); }
-		75% { transform: translateY(3px) rotate(2deg); }
-	}
-
-	/* Floating decorations */
-	.deco { position: fixed; z-index: 1; pointer-events: none; }
-	.deco-moon { top: 6%; left: 6%; font-size: 3.5rem; opacity: 0.5; animation: floatA 8s ease-in-out infinite; filter: drop-shadow(0 0 12px rgba(255,255,200,0.4)); }
-	.deco-planet { bottom: 12%; right: 6%; font-size: 3rem; opacity: 0.4; animation: floatB 10s ease-in-out infinite; filter: drop-shadow(0 0 10px rgba(200,180,255,0.3)); }
-	.deco-rocket { top: 15%; right: 5%; font-size: 2.5rem; opacity: 0.5; animation: rocketFly 12s ease-in-out infinite; filter: drop-shadow(0 0 8px rgba(255,150,50,0.4)); }
-	.deco-ufo { bottom: 25%; left: 4%; font-size: 2.2rem; opacity: 0.4; animation: ufoFloat 9s ease-in-out infinite 2s; filter: drop-shadow(0 0 10px rgba(100,255,200,0.3)); }
-	.deco-star1 { top: 10%; right: 15%; font-size: 1.4rem; opacity: 0.6; animation: twinkle 3s ease-in-out infinite; }
-	.deco-star2 { bottom: 22%; left: 12%; font-size: 1.1rem; opacity: 0.5; animation: twinkle 4s ease-in-out infinite 1s; }
-	.deco-star3 { top: 38%; right: 22%; font-size: 1.5rem; opacity: 0.45; animation: twinkle 3.5s ease-in-out infinite 0.5s; }
-	.deco-star4 { top: 55%; left: 8%; font-size: 1rem; opacity: 0.55; animation: twinkle 2.5s ease-in-out infinite 1.5s; }
-	.deco-star5 { bottom: 10%; right: 18%; font-size: 1.2rem; opacity: 0.5; animation: twinkle 3s ease-in-out infinite 2s; }
-
-	@keyframes floatA {
-		0%, 100% { transform: translateY(0) translateX(0); }
-		50% { transform: translateY(-18px) translateX(8px); }
-	}
-	@keyframes floatB {
-		0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
-		50% { transform: translateY(12px) translateX(-10px) rotate(8deg); }
-	}
-	@keyframes rocketFly {
-		0%, 100% { transform: translateY(0) translateX(0) rotate(-25deg); }
-		25% { transform: translateY(-25px) translateX(12px) rotate(-18deg); }
-		50% { transform: translateY(-10px) translateX(-8px) rotate(-30deg); }
-		75% { transform: translateY(-30px) translateX(8px) rotate(-20deg); }
-	}
-	@keyframes ufoFloat {
-		0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
-		25% { transform: translateY(-12px) translateX(15px) rotate(5deg); }
-		50% { transform: translateY(5px) translateX(-10px) rotate(-3deg); }
-		75% { transform: translateY(-8px) translateX(8px) rotate(2deg); }
-	}
-	@keyframes twinkle {
-		0%, 100% { opacity: 0.3; transform: scale(1); }
-		50% { opacity: 0.8; transform: scale(1.4); }
+	.tagline-strong { font-weight: 700; color: var(--ink); }
+	.tagline-sep { opacity: 0.4; margin: 0 0.2rem; }
+	.header-right { display: flex; align-items: center; padding-top: 0.35rem; }
+	.header-badge {
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		background: var(--paper);
+		border: 2px solid var(--ink);
+		border-radius: 999px;
+		padding: 0.35rem 0.7rem;
+		color: var(--ink);
 	}
 
-	/* Shooting stars */
-	.shooting-star {
-		position: fixed; z-index: 1; pointer-events: none;
-		width: 4px; height: 4px; border-radius: 50%;
-		background: white;
-		box-shadow: 0 0 8px 3px rgba(255,255,255,0.7), -25px 0 18px 2px rgba(255,255,255,0.4), -50px 0 30px 1px rgba(255,255,255,0.15);
+	/* intro */
+	.intro { margin-bottom: 1.75rem; }
+	.intro-title {
+		font-family: var(--font-display);
+		font-size: clamp(1.9rem, 1.4rem + 2.4vw, 3rem);
+		font-weight: 800;
+		line-height: 1.05;
+		color: var(--ink);
+		margin: 0;
+		max-width: 22ch;
 	}
-	.ss1 {
-		top: 6%; left: -5%;
-		animation: shootingStar 4s linear infinite 0s;
+	.intro-title em { font-style: normal; background: var(--amber); padding: 0 0.22em; border-radius: 6px; box-decoration-break: clone; }
+	.intro-sub {
+		color: var(--ink-soft);
+		font-size: clamp(1rem, 0.95rem + 0.4vw, 1.15rem);
+		line-height: 1.5;
+		margin: 0.75rem 0 0;
+		max-width: 60ch;
 	}
-	.ss2 {
-		top: 22%; left: -5%;
-		animation: shootingStar 5s linear infinite 2.5s;
+	.intro-meta { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+	.pill {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		font-size: 0.82rem;
+		font-weight: 700;
+		border: 2px solid var(--ink);
+		background: var(--paper);
+		border-radius: 999px;
+		padding: 0.28rem 0.65rem;
+		color: var(--ink);
 	}
-	.ss3 {
-		top: 42%; left: -5%;
-		animation: shootingStar 3.5s linear infinite 5s;
-	}
-	@keyframes shootingStar {
-		0% { transform: translateX(0) translateY(0) rotate(-35deg); opacity: 0; }
-		5% { opacity: 1; }
-		70% { opacity: 1; }
-		100% { transform: translateX(110vw) translateY(45vh) rotate(-35deg); opacity: 0; }
-	}
+	.pill-dot { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid var(--ink); display: inline-block; }
 
-	/* Comets */
-	.comet {
-		position: fixed; z-index: 1; pointer-events: none;
-		width: 5px; height: 5px; border-radius: 50%;
-		background: #fbbf24;
-		box-shadow: 0 0 10px 4px rgba(251,191,36,0.6), -20px 0 25px 3px rgba(251,191,36,0.25), -40px 0 35px 2px rgba(251,191,36,0.1);
+	/* cards */
+	.card-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.25rem;
 	}
-	.comet1 {
-		top: 12%; right: -5%;
-		animation: cometLeft 6s linear infinite 1s;
+	@media (max-width: 860px) { .card-grid { grid-template-columns: 1fr; } .site-header { flex-direction: column; } }
+	.card {
+		background: var(--paper);
+		border: 3px solid var(--ink);
+		box-shadow: 8px 8px 0 var(--ink);
+		border-radius: 22px;
+		padding: 1.35rem 1.35rem 1.15rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.85rem;
+		text-decoration: none;
+		color: var(--ink);
+		transition: transform 80ms, box-shadow 80ms;
 	}
-	.comet2 {
-		bottom: 18%; right: -5%;
-		animation: cometLeft 7s linear infinite 4s;
+	.card:hover { transform: translate(2px, 2px); box-shadow: 6px 6px 0 var(--ink); }
+	.card:active { transform: translate(6px, 6px); box-shadow: 2px 2px 0 var(--ink); }
+	.card-interactive { cursor: pointer; width: 100%; text-align: left; font: inherit; }
+	.card-top { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+	.eyebrow {
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
 	}
-	@keyframes cometLeft {
-		0% { transform: translateX(0) translateY(0) rotate(25deg); opacity: 0; }
-		5% { opacity: 1; }
-		70% { opacity: 1; }
-		100% { transform: translateX(-110vw) translateY(35vh) rotate(25deg); opacity: 0; }
+	.icon-wrap {
+		width: 46px;
+		height: 46px;
+		border-radius: 14px;
+		border: 2.5px solid var(--ink);
+		display: grid;
+		place-items: center;
+		font-size: 1.35rem;
+		flex: none;
 	}
+	.icon-amber { background: var(--amber); }
+	.icon-mint { background: var(--mint); }
+	.avatar-row { display: flex; gap: -0.5rem; }
+	.ava {
+		width: 40px;
+		height: 40px;
+		border-radius: 12px;
+		border: 2.5px solid var(--ink);
+		display: grid;
+		place-items: center;
+		font-size: 1.1rem;
+		margin-right: -8px;
+	}
+	.ava-blue { background: #DBEAFE; }
+	.ava-amber { background: var(--amber-tint); }
+	.ava-plum { background: #EDE9FE; }
+	.card-title {
+		font-family: var(--font-display);
+		font-size: 1.55rem;
+		font-weight: 800;
+		line-height: 1.1;
+		margin: 0;
+	}
+	.card-desc {
+		color: var(--ink-soft);
+		font-size: 0.96rem;
+		line-height: 1.5;
+		margin: 0;
+		flex: 1;
+	}
+	.tag-row { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+	.tag {
+		font-size: 0.78rem;
+		font-weight: 700;
+		border: 2px solid var(--ink);
+		border-radius: 999px;
+		padding: 0.22rem 0.55rem;
+	}
+	.tag-amber { background: var(--amber-tint); }
+	.tag-mint { background: var(--mint); }
+	.tag-coral { background: var(--coral-tint); }
+	.tag-paper { background: var(--cream); }
+	.mini-schedule { display: flex; flex-direction: column; gap: 0.45rem; padding: 0.2rem 0; }
+	.mini-row { display: flex; align-items: center; gap: 0.5rem; }
+	.mini-dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--ink); flex: none; }
+	.dot-amber { background: var(--amber); } .dot-teal { background: #0E7C71; } .dot-coral { background: #FBDAD3; }
+	.mini-bar { height: 8px; border-radius: 999px; border: 2px solid var(--ink); background: var(--cream-deep); }
+	.mini-label { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; color: var(--ink-soft); width: 2.2rem; text-align: right; }
+	.card-cta {
+		margin-top: 0.2rem;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.35rem;
+		min-height: 44px;
+		padding: 0.6rem 1rem;
+		border-radius: 14px;
+		border: 3px solid var(--ink);
+		background: var(--amber);
+		color: var(--ink);
+		box-shadow: 4px 4px 0 var(--ink);
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 1rem;
+	}
+	.cta-ghost { background: var(--paper); }
+	.cta-dark { background: var(--ink); color: var(--paper); }
+	.footer-note {
+		margin-top: 1.75rem;
+		text-align: center;
+		color: var(--ink-soft);
+		font-size: 0.88rem;
+	}
+	.footer-note a { color: var(--plum); font-weight: 700; }
 
-	:global(.animate-spin-slow) { animation: spin 4s linear infinite; }
-	@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-	.bounce-in { animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
-	@keyframes bounceIn { 0% { transform: scale(0.3); opacity: 0; } 60% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
-	.fade-in { animation: fadeUp 0.5s ease-out; }
-	@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-	/* Game title */
-	.game-title {
-		font-family: 'Permanent Marker', cursive;
-		color: #fbbf24;
-		text-shadow:
-			0 0 10px rgba(251,191,36,0.5),
-			0 2px 0 #b45309,
-			0 3px 0 #92400e,
-			0 4px 0 #78350f,
-			0 5px 8px rgba(0,0,0,0.3);
-		-webkit-text-stroke: 1px rgba(255,255,255,0.15);
-		letter-spacing: 0.04em;
+	/* login view */
+	.login-wrap { max-width: 520px; margin: 0 auto; }
+	.back-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		border: 2px solid transparent;
+		background: transparent;
+		color: var(--ink-soft);
+		font-weight: 700;
+		font-size: 0.9rem;
+		cursor: pointer;
+		padding: 0.3rem 0.5rem;
+		border-radius: 10px;
+		margin-bottom: 1rem;
 	}
+	.back-link:hover { background: var(--paper); border-color: var(--ink); color: var(--ink); }
+	.login-card {
+		background: var(--paper);
+		border: 3px solid var(--ink);
+		box-shadow: 8px 8px 0 var(--ink);
+		border-radius: 22px;
+		padding: clamp(1.2rem, 1rem + 1.5vw, 1.9rem);
+	}
+	.login-head { display: flex; gap: 0.85rem; align-items: center; margin-bottom: 1.25rem; }
+	.login-title { font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; margin: 0; line-height: 1; }
+	.login-sub { color: var(--ink-soft); font-size: 0.95rem; margin: 0.15rem 0 0; }
+	.tabs {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.4rem;
+		background: var(--cream);
+		border: 2.5px solid var(--ink);
+		border-radius: 14px;
+		padding: 0.35rem;
+		margin-bottom: 1.25rem;
+	}
+	.tab {
+		min-height: 40px;
+		border-radius: 10px;
+		border: 2px solid transparent;
+		background: transparent;
+		font-weight: 700;
+		font-size: 0.92rem;
+		cursor: pointer;
+		color: var(--ink-soft);
+	}
+	.tab-active {
+		background: var(--amber);
+		border-color: var(--ink);
+		color: var(--ink);
+		box-shadow: 2px 2px 0 var(--ink);
+	}
+	.form { display: flex; flex-direction: column; gap: 0.9rem; }
+	.field { display: flex; flex-direction: column; gap: 0.35rem; }
+	.field-label {
+		font-size: 0.78rem;
+		font-weight: 700;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--ink);
+	}
+	.control { position: relative; display: flex; align-items: center; }
+	:global(.field-icon) { position: absolute; left: 0.75rem; color: var(--ink-soft); pointer-events: none; }
+	.input {
+		width: 100%;
+		min-height: 46px;
+		padding: 0.6rem 0.85rem 0.6rem 2.4rem;
+		border-radius: 12px;
+		border: 2.5px solid var(--ink);
+		background: var(--cream);
+		color: var(--ink);
+		font-size: 0.98rem;
+		font-weight: 500;
+		outline: none;
+	}
+	.input:focus { background: var(--paper); border-color: var(--plum); box-shadow: 0 0 0 3px rgba(107,63,160,0.18); }
+	.error {
+		background: var(--coral-tint);
+		border: 2px solid var(--coral);
+		color: var(--ink);
+		border-radius: 12px;
+		padding: 0.6rem 0.85rem;
+		font-size: 0.92rem;
+		font-weight: 600;
+	}
+	.btn-primary {
+		min-height: 48px;
+		border-radius: 14px;
+		border: 3px solid var(--ink);
+		background: var(--amber);
+		color: var(--ink);
+		box-shadow: 5px 5px 0 var(--ink);
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 1.05rem;
+		cursor: pointer;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.btn-primary:hover { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--ink); }
+	.btn-primary:active { transform: translate(5px, 5px); box-shadow: 0 0 0 var(--ink); }
+	.btn-primary:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: 5px 5px 0 var(--ink); }
+	.field-hint { color: var(--ink-soft); font-size: 0.85rem; margin: 0; text-align: center; }
+	.login-foot { text-align: center; color: var(--ink-soft); font-size: 0.85rem; margin-top: 1rem; }
+	.login-foot a { color: var(--plum); font-weight: 700; }
+
+	@media (prefers-reduced-motion: reduce) { .card, .btn-primary { transition: none; } }
 </style>

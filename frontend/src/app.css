@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Anek+Kannada:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Anek+Kannada:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Geist+Mono:wght@600;700&display=swap');
 
 @font-face {
 	font-family: 'JetBrains Mono';
@@ -36,13 +36,38 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --paper: #FFFCF5;
+  --cream: #FBF4E6;
+  --cream-deep: #F4E7CE;
+  --ink: #1F1A2E;
+  --ink-soft: #4A4458;
+  --amber: #FFC233;
+  --amber-tint: #FDE9C2;
+  --mint: #D8F3E3;
+  --teal: #0E7C71;
+  --coral: #C2381B;
+  --coral-tint: #FBDAD3;
+  --plum: #6B3FA0;
+  --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, monospace;
+}
+
 @layer base {
   * {
     @apply border-slate-200;
   }
 
   body {
-    @apply font-sans text-slate-900 bg-slate-50;
+    font-family: var(--font-body);
+    color: var(--ink);
+    background: var(--cream);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
   }
 }
 
