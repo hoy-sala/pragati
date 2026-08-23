@@ -70,10 +70,6 @@
 			<div class="kids-art" aria-hidden="true"><span class="ka ka1">🎮</span><span class="ka ka2">⭐</span><span class="ka ka3">📚</span></div>
 			<h1 class="intro-title"><em>Let's play</em> & learn!</h1>
 			<p class="intro-sub">Pick a quiz, check your timetable, or sign in — all yours.</p>
-			<div class="intro-meta">
-				<span class="pill"><span class="pill-dot" style="background:var(--amber)"></span> For Classes 6–10</span>
-				<span class="pill"><span class="pill-dot" style="background:var(--teal)"></span> Free & safe</span>
-			</div>
 		</div>
 
 		<div class="card-grid">
@@ -292,11 +288,12 @@
 
 	.intro { margin-bottom: 1.5rem; max-width: 60ch; }
 	.intro-kids { max-width: 48ch; }
-	.kids-art { display: flex; gap: 0.6rem; margin-bottom: 0.7rem; }
-	.ka { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 12px; border: 1.5px solid var(--ink); font-size: 1.25rem; box-shadow: 2px 2px 0 var(--ink); }
-	.ka1 { background: var(--amber); transform: rotate(-6deg); }
-	.ka2 { background: var(--mint); transform: rotate(5deg); }
-	.ka3 { background: var(--paper); transform: rotate(-3deg); }
+	.kids-art { display: flex; gap: 0.6rem; margin-bottom: 0.8rem; }
+	.ka { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px; border: 1.5px solid var(--ink); font-size: 1.35rem; box-shadow: 2px 2px 0 var(--ink); animation: kaFloat 3s ease-in-out infinite; }
+	.ka1 { background: var(--amber); --r: -6deg; transform: rotate(var(--r)); animation-delay: 0s; }
+	.ka2 { background: var(--mint); --r: 5deg; transform: rotate(var(--r)); animation-delay: 0.4s; }
+	.ka3 { background: var(--paper); --r: -3deg; transform: rotate(var(--r)); animation-delay: 0.8s; }
+	@keyframes kaFloat { 0%,100% { transform: translateY(0) rotate(var(--r)); } 50% { transform: translateY(-4px) rotate(var(--r)); } }
 	.intro-title {
 		font-family: var(--font-display);
 		font-size: clamp(1.7rem, 1.2rem + 1.8vw, 2.45rem);
