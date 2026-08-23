@@ -201,6 +201,10 @@
 	function confirmExit() { showExitConfirm = true; }
 	function cancelExit() { showExitConfirm = false; }
 	function confirmGoHome() { showExitConfirm = false; clearInterval(timerInterval); goto('/'); }
+	function handleIdentityClick() {
+		if (phase === 'welcome') goto('/');
+		else confirmExit();
+	}
 	function playAgain() { playClick(); phase = 'difficulty'; }
 
 	function timeColor() { return timeLeft > 10 ? '#0E7C71' : timeLeft > 5 ? '#B45309' : '#C2381B'; }
@@ -226,11 +230,11 @@
 
 <div class="page {screenShake ? 'shake' : ''}">
 	<header class="quiz-header">
-		<a href="/" class="qh-identity" aria-label="Pragati home">
+		<button onclick={handleIdentityClick} class="qh-identity" aria-label="Go home">
 			<span class="qh-logo"><Building2 size={16} /></span>
 			<span class="qh-wordmark">PRAGATI</span>
 			<span class="qh-sub">MDRS Bahaddurghatta</span>
-		</a>
+		</button>
 		{#if phase !== 'results'}
 			<button onclick={confirmExit} class="qh-home">← Home</button>
 		{/if}
@@ -257,16 +261,16 @@
 				<div class="welcome-icon" aria-hidden="true"><Sparkles size={28} /></div>
 				<h1 class="welcome-title">Quizzes</h1>
 				<p class="welcome-sub">Choose a class and subject, then practise. No login needed — enter your name to begin.</p>
-				<div class="welcome-form">
+				<form class="welcome-form" onsubmit={(e) => { e.preventDefault(); if (playerName.trim()) loadClasses(); }}>
 					<label class="field">
 						<span class="field-label">Your name</span>
-						<input bind:value={playerName} placeholder="Enter your name…" maxlength={50} class="input" />
+						<input bind:value={playerName} placeholder="Enter your name…" maxlength={50} class="input" required />
 					</label>
-					<button onclick={loadClasses} disabled={!playerName.trim()} class="btn-primary btn-block">
+					<button type="submit" disabled={!playerName.trim()} class="btn-primary btn-block">
 						Start playing →
 					</button>
-					<p class="hint">No login needed. Scores are saved locally.</p>
-				</div>
+					<p class="hint">No login needed. Scores are saved locally. Press Enter to continue.</p>
+				</form>
 			</div>
 		</div>
 
@@ -533,7 +537,8 @@
 		gap: 1rem;
 		margin: 0.75rem 0 1.5rem;
 	}
-	.qh-identity { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; color: var(--ink); }
+	.qh-identity { display: flex; align-items: center; gap: 0.6rem; color: var(--ink); background: transparent; border: 0; padding: 0; cursor: pointer; font: inherit; text-align: left; }
+	.qh-sub { font-size: 0.78rem; color: var(--ink-soft); font-weight: 600; margin-left: 0.35rem; }
 	.qh-logo {
 		width: 38px; height: 38px; border-radius: 10px; border: 2.5px solid var(--ink);
 		background: var(--paper); box-shadow: 3px 3px 0 var(--ink);
@@ -606,18 +611,19 @@
 	.section-sub { color: var(--ink-soft); font-size: 0.88rem; margin: 0.15rem 0 0; }
 	.empty { text-align: center; padding: 2rem; color: var(--ink-soft); font-weight: 600; }
 
-	.pick-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 0.7rem; }
+	.pick-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 170px), 1fr)); gap: 0.7rem; }
 	.pick-card {
 		text-align: left; background: var(--paper); border: 2px solid var(--ink);
 		box-shadow: 3px 3px 0 var(--ink); border-radius: 14px; padding: 0.9rem;
 		cursor: pointer; display: flex; align-items: center; gap: 0.7rem;
 		transition: box-shadow 120ms, transform 120ms, background 120ms;
+		min-width: 0; overflow: hidden;
 	}
 	.pick-card:hover { transform: translate(1px, 1px); box-shadow: 2px 2px 0 var(--ink); background: var(--cream); }
 	.pick-card:active { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--ink); }
 	.pick-icon { width: 34px; height: 34px; border-radius: 9px; border: 1.5px solid var(--ink); background: var(--cream); display: grid; place-items: center; color: var(--ink); flex: none; }
-	.pick-name { font-family: var(--font-display); font-weight: 700; font-size: 0.98rem; line-height: 1.2; flex: 1; }
-	.pick-meta { color: var(--ink-soft); font-size: 0.76rem; font-weight: 600; font-family: var(--font-mono); }
+	.pick-name { font-family: var(--font-display); font-weight: 700; font-size: 0.98rem; line-height: 1.2; flex: 1; min-width: 0; overflow-wrap: anywhere; word-break: break-word; }
+	.pick-meta { color: var(--ink-soft); font-size: 0.76rem; font-weight: 600; font-family: var(--font-mono); flex: none; white-space: nowrap; }
 
 	.topics { display: flex; flex-wrap: wrap; gap: 0.6rem; }
 	.topic {
@@ -663,8 +669,8 @@
 	.tag-easy { background: var(--mint); } .tag-medium { background: var(--amber-tint); } .tag-hard { background: var(--coral-tint); }
 	.counter { font-family: var(--font-mono); font-weight: 700; color: var(--ink-soft); font-size: 0.85rem; }
 	.q-fieldset { border: 0; margin: 0; padding: 0; min-inline-size: 0; }
-	.q-legend { font-family: var(--font-body); font-weight: 700; font-size: clamp(1rem, 0.96rem + 0.4vw, 1.18rem); line-height: 1.45; color: var(--ink); margin: 0 0 0.9rem; width: 100%; }
-	.options { display: flex; flex-direction: column; gap: 0.55rem; }
+	.q-legend { font-family: var(--font-body); font-weight: 700; font-size: clamp(1rem, 0.96rem + 0.4vw, 1.18rem); line-height: 1.45; color: var(--ink); margin: 0 0 0.9rem; width: 100%; overflow-wrap: anywhere; word-break: break-word; }
+	.options { display: flex; flex-direction: column; gap: 0.55rem; min-width: 0; }
 	.opt {
 		display: block; border: 2px solid var(--ink); background: var(--paper);
 		border-radius: 12px; cursor: pointer; position: relative;
@@ -678,7 +684,7 @@
 	}
 	.opt-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--ink); transform: scale(0); transition: transform 120ms; }
 	.opt-input:checked + .opt-row .opt-dot { transform: scale(1); }
-	.opt-text { flex: 1; font-size: 0.96rem; line-height: 1.4; font-weight: 500; }
+	.opt-text { flex: 1; min-width: 0; font-size: 0.96rem; line-height: 1.4; font-weight: 500; overflow-wrap: anywhere; word-break: break-word; }
 	.opt-state { width: 26px; height: 26px; display: grid; place-items: center; font-weight: 800; flex: none; }
 	.opt-selected { border-color: var(--plum); background: var(--amber-tint); }
 	.opt-correct { border-color: var(--teal); background: var(--mint); }
