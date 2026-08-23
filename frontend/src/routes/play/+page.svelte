@@ -260,7 +260,7 @@
 			<div class="q-card welcome-card">
 				<div class="welcome-icon" aria-hidden="true"><Sparkles size={28} /></div>
 				<h1 class="welcome-title">Quizzes</h1>
-				<p class="welcome-sub">Choose a class and subject, then practise. No login needed — enter your name to begin.</p>
+				<p class="welcome-sub">What's your name, superstar?</p>
 				<form class="welcome-form" onsubmit={(e) => { e.preventDefault(); if (playerName.trim()) loadClasses(); }}>
 					<label class="field">
 						<span class="field-label">Your name</span>
@@ -269,7 +269,7 @@
 					<button type="submit" disabled={!playerName.trim()} class="btn-primary btn-block">
 						Start playing →
 					</button>
-					<p class="hint">No login needed. Scores are saved locally. Press Enter to continue.</p>
+					<p class="hint">Just your name — ready to play?</p>
 				</form>
 			</div>
 		</div>
@@ -490,7 +490,7 @@
 				</div>
 
 				<div class="side-card side-muted">
-					<p class="side-hint">Tip: answer faster for bonus points. Streaks multiply your score up to 4×.</p>
+					<p class="side-hint">Tip: quick answers earn a bit extra. Get 3 in a row for a streak!</p>
 				</div>
 			</aside>
 		</div>

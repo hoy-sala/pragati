@@ -76,7 +76,7 @@
 			<!-- Quiz -->
 			<a href="/play" class="card card-quiz">
 				<div class="card-head">
-					<span class="eyebrow">15s · Streak ×4</span>
+					<span class="eyebrow">Classes 6–10 · Your level</span>
 					<span class="icon-badge badge-amber"><Gamepad2 size={20} /></span>
 				</div>
 				<h2 class="card-title">Quizzes</h2>
@@ -118,11 +118,12 @@
 			<div class="scrim" role="presentation" onclick={() => aboutOpen = false}></div>
 			<div class="about" role="dialog" aria-modal="true" aria-label="About Pragati">
 				<button class="about-close" onclick={() => aboutOpen = false} aria-label="Close">✕</button>
-				<h2 class="about-title">Why Pragati exists</h2>
+				<h2 class="about-title">About ಪ್ರಗತಿ</h2>
 				<div class="about-body">
-					<p>Pragati (<span class="font-kannada">ಪ್ರಗತಿ</span> — progress) is the school system for MDRS (SC-32) Bahaddurghatta. It brings academics, CCE assessments, holistic progress cards, quizzes and certificates together — so teachers teach and families follow along.</p>
-					<p>The quiz space here is for practice, not exams. Questions cover the subjects you teach, with topics and difficulty levels. No ads, no tracking.</p>
-					<p><a href="/play">Try a quiz</a> or <button class="link-btn" onclick={() => { aboutOpen = false; view = 'login'; }}>sign in</button>.</p>
+					<p>Hi, I'm <strong>Hoysala T</strong> — Computer Science Teacher at <strong>MDRS (SC-32) Bahaddurghatta</strong>.</p>
+					<p>I built <span class="font-kannada">ಪ್ರಗತಿ</span> — Pragati (progress) — as a simple, safe home for our children: your timetable, quick quizzes, and your progress, all in one place.</p>
+					<p>Quizzes are practice, not exams. Questions come from what you learn in class. Pick your level, play at your pace — alone or with friends. No ads, no tracking, just learning together.</p>
+					<p><a href="/play">Try a quiz</a> or <button class="link-btn" onclick={() => { aboutOpen = false; view = 'login'; }}>sign in</button> to see your dashboard.</p>
 				</div>
 			</div>
 		{/if}
