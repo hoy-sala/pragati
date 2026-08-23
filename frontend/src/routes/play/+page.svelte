@@ -211,7 +211,8 @@
 		playClick();
 		selectedClass = cls;
 		loading = true;
-		subjects = (await api<PlaySubject[]>('GET', `/play/subjects?class_id=${cls.id}`)) ?? [];
+		const all = (await api<PlaySubject[]>('GET', `/play/subjects?class_id=${cls.id}`)) ?? [];
+		subjects = all.filter(s => !/general\s*knowledge|current\s*affairs/i.test(s.name));
 		loading = false;
 		if (subjects.length === 0) { comingSoonLabel = `${cls.name} quizzes`; phase = 'coming-soon'; return; }
 		phase = 'subjects';
@@ -468,7 +469,7 @@
 			<div class="mode-grid">
 				<button onclick={loadClasses} class="pick-card mode-card">
 					<span class="pick-icon"><BookOpen size={18} /></span>
-					<span class="pick-name">Subject quizzes</span>
+					<span class="pick-name">Subject Quizzes</span>
 					<span class="pick-meta">Maths, Science &amp; more</span>
 				</button>
 				<button onclick={loadGK} class="pick-card mode-card">
@@ -497,7 +498,7 @@
 			<div class="mode-grid">
 				<button onclick={() => { playClick(); tablesActive = true; rushMode = false; phase = 'tables'; }} class="pick-card mode-card">
 					<span class="pick-icon"><Hash size={18} /></span>
-					<span class="pick-name">Times tables</span>
+					<span class="pick-name">Times Tables</span>
 					<span class="pick-meta">Learn · Practice · Rush</span>
 				</button>
 				{#if loading}
