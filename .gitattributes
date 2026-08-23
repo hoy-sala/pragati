@@ -1,0 +1,16 @@
+* text=auto eol=lf
+*.svelte text eol=lf
+*.ts text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.md text eol=lf
+*.sql text eol=lf
+*.go text eol=lf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.woff2 binary
+*.ttf binary
+*.ico binary
