@@ -269,7 +269,7 @@
 							<th rowspan="2" class="px-3 py-2 text-left font-semibold text-slate-600 border-r border-slate-200 sticky left-0 bg-slate-50 z-10 w-8">#</th>
 							<th rowspan="2" class="px-3 py-2 text-left font-semibold text-slate-600 border-r border-slate-200 sticky left-8 bg-slate-50 z-10">Student</th>
 							{#each ms.subjects as sg}
-								<th colspan={sg.assessments.length} class="px-3 py-1.5 text-center font-semibold text-slate-700 border-r border-slate-200 border-b border-slate-100">
+								<th colspan={sg.assessments.length * 2} class="px-3 py-1.5 text-center font-semibold text-slate-700 border-r border-slate-200 border-b border-slate-100">
 									<div class="text-xs">{sg.subject_code}</div>
 									<div class="text-[10px] font-normal text-slate-400">{sg.subject_type === 'curricular' ? 'Curricular' : 'Co-curricular'}</div>
 								</th>
@@ -282,9 +282,9 @@
 						<tr class="bg-slate-50 border-b border-slate-200">
 							{#each ms.subjects as sg}
 								{#each sg.assessments as a}
-									<th class="px-2 py-1.5 text-center font-medium border-r border-slate-200 text-[10px] {a.term === 'Term 1' ? 'text-blue-600 bg-blue-50/30' : 'text-purple-600 bg-purple-50/30'}">
+									<th colspan="2" class="px-2 py-1.5 text-center font-medium border-r border-slate-200 text-[10px] {a.term === 'Term 1' ? 'text-blue-600 bg-blue-50/30' : 'text-purple-600 bg-purple-50/30'}">
 										<div>{a.name}</div>
-										<div class="text-[9px] text-slate-400">/{a.max_marks}</div>
+										<div class="text-[9px] text-slate-400 font-normal">/{a.max_marks} · Gr</div>
 									</th>
 								{/each}
 							{/each}
@@ -306,6 +306,13 @@
 											</span>
 										{:else}
 											<span class="text-xs text-slate-300">—</span>
+										{/if}
+									</td>
+									<td class="px-1.5 py-2 text-center border-r border-slate-100">
+										{#if m.has_mark && !m.is_absent && m.grade}
+											<span class="text-[10px] font-bold text-slate-500">{m.grade}</span>
+										{:else}
+											<span class="text-[10px] text-slate-300">—</span>
 										{/if}
 									</td>
 								{/each}

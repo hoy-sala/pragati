@@ -197,6 +197,7 @@ type MarkCell struct {
 	Value         float64 `json:"value"`
 	IsAbsent      bool    `json:"is_absent"`
 	HasMark       bool    `json:"has_mark"`
+	Grade         string  `json:"grade,omitempty"`
 }
 
 // SubjectAggregate rolls up a student's marks per subject.
@@ -363,6 +364,10 @@ func (h *ReportsHandler) MarkSheet(w http.ResponseWriter, r *http.Request) {
 					}
 				}
 				maxTotal += a.MaxMarks
+				if cell.HasMark && !cell.IsAbsent && a.MaxMarks > 0 {
+					g := computeGrade((cell.Value/a.MaxMarks)*100, subjectType(a.SubjectType), cn)
+					cell.Grade = g.grade
+				}
 				cells[i] = cell
 
 				if subAgg[a.SubjectID] == nil {
