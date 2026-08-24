@@ -726,7 +726,7 @@
 					<fieldset class="q-fieldset">
 						<legend class="q-legend">{q.question_text}</legend>
 						<div class="options">
-							{#each q.options as opt, oi (opt.key)}
+							{#each q.options as opt, oi (`${currentIndex}-${opt.key}`)}
 								{@const isSelected = answered && opt.key === selectedKey}
 								{@const isCorrectOpt = !!opt.correct}
 								<label class="opt
