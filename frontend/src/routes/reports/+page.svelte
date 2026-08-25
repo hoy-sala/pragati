@@ -266,26 +266,33 @@
 				<table class="w-full text-sm">
 					<thead>
 						<tr class="bg-slate-50 border-b border-slate-200">
-							<th rowspan="2" class="px-3 py-2 text-left font-semibold text-slate-600 border-r border-slate-200 sticky left-0 bg-slate-50 z-10 w-8">#</th>
-							<th rowspan="2" class="px-3 py-2 text-left font-semibold text-slate-600 border-r border-slate-200 sticky left-8 bg-slate-50 z-10">Student</th>
+							<th rowspan="3" class="px-3 py-2 text-left font-semibold text-slate-600 border-r border-slate-200 sticky left-0 bg-slate-50 z-10 w-8">#</th>
+							<th rowspan="3" class="px-3 py-2 text-left font-semibold text-slate-600 border-r border-slate-200 sticky left-8 bg-slate-50 z-10">Student</th>
 							{#each ms.subjects as sg}
 								<th colspan={sg.assessments.length * 2} class="px-3 py-1.5 text-center font-semibold text-slate-700 border-r border-slate-200 border-b border-slate-100">
 									<div class="text-xs">{sg.subject_code}</div>
 									<div class="text-[10px] font-normal text-slate-400">{sg.subject_type === 'curricular' ? 'Curricular' : 'Co-curricular'}</div>
 								</th>
 							{/each}
-							<th rowspan="2" class="px-3 py-2 text-center font-semibold text-slate-700 border-r border-slate-200 w-16">Total</th>
-							<th rowspan="2" class="px-3 py-2 text-center font-semibold text-slate-700 border-r border-slate-200 w-14">%</th>
-							<th rowspan="2" class="px-3 py-2 text-center font-semibold text-slate-700 border-r border-slate-200 w-14">Grade</th>
-							<th rowspan="2" class="px-3 py-2 text-center font-semibold text-slate-700 w-12">Rank</th>
+							<th rowspan="3" class="px-3 py-2 text-center font-semibold text-slate-700 border-r border-slate-200 w-16">Total</th>
+							<th rowspan="3" class="px-3 py-2 text-center font-semibold text-slate-700 border-r border-slate-200 w-14">%</th>
+							<th rowspan="3" class="px-3 py-2 text-center font-semibold text-slate-700 border-r border-slate-200 w-14">Grade</th>
+							<th rowspan="3" class="px-3 py-2 text-center font-semibold text-slate-700 w-12">Rank</th>
 						</tr>
 						<tr class="bg-slate-50 border-b border-slate-200">
 							{#each ms.subjects as sg}
 								{#each sg.assessments as a}
 									<th colspan="2" class="px-2 py-1.5 text-center font-medium border-r border-slate-200 text-[10px] {a.term === 'Term 1' ? 'text-blue-600 bg-blue-50/30' : 'text-purple-600 bg-purple-50/30'}">
-										<div>{a.name}</div>
-										<div class="text-[9px] text-slate-400 font-normal">/{a.max_marks} · Gr</div>
+										{a.name} ({a.max_marks})
 									</th>
+								{/each}
+							{/each}
+						</tr>
+						<tr class="bg-slate-50 border-b border-slate-200">
+							{#each ms.subjects as sg}
+								{#each sg.assessments as a}
+									<th class="px-1.5 py-1 text-center font-semibold text-[9px] text-slate-500 border-r border-slate-100">M</th>
+									<th class="px-1.5 py-1 text-center font-semibold text-[9px] text-slate-500 border-r border-slate-200">Gr</th>
 								{/each}
 							{/each}
 						</tr>
@@ -296,7 +303,7 @@
 								<td class="px-3 py-2 text-center text-slate-400 border-r border-slate-100 sticky left-0 bg-white z-10">{i + 1}</td>
 								<td class="px-3 py-2 border-r border-slate-100 sticky left-8 bg-white z-10">
 									<div class="font-medium text-slate-800 text-xs whitespace-nowrap">{s.name}</div>
-									<div class="text-[10px] text-slate-400">Roll {s.roll_no}</div>
+									<div class="text-[10px] text-slate-400">SATS {s.sats_number || '—'}</div>
 								</td>
 								{#each s.marks as m}
 									<td class="px-2 py-2 text-center border-r border-slate-100">
