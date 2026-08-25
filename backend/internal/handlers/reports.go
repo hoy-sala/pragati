@@ -316,7 +316,7 @@ func (h *ReportsHandler) MarkSheet(w http.ResponseWriter, r *http.Request) {
 
 	studQuery := `SELECT id, sats_number, first_name, COALESCE(last_name,''), roll_no
 		FROM students WHERE class_id = $1 AND deleted_at IS NULL AND is_active = true
-		ORDER BY roll_no NULLS LAST, first_name`
+		ORDER BY first_name ASC, last_name ASC, roll_no NULLS LAST`
 	studRows, err := h.db.Query(r.Context(), studQuery, classID)
 	if err != nil {
 		log.Error().Err(err).Msg("mark sheet: query students failed")

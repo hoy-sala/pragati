@@ -109,7 +109,7 @@ func (h *StudentHandler) List(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	query += fmt.Sprintf(" ORDER BY s.roll_no ASC, s.first_name ASC LIMIT $%d OFFSET $%d", argIdx, argIdx+1)
+	query += fmt.Sprintf(" ORDER BY s.first_name ASC, s.last_name ASC, s.roll_no ASC LIMIT $%d OFFSET $%d", argIdx, argIdx+1)
 	args = append(args, limit, offset)
 
 	rows, err := h.db.Query(r.Context(), query, args...)
