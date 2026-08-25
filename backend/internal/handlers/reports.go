@@ -424,15 +424,25 @@ func (h *ReportsHandler) MarkSheet(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	sort.Slice(students, func(i, j int) bool {
-		if students[i].Total != students[j].Total {
-			return students[i].Total > students[j].Total
+	// Rank by total marks (descending), then display alphabetically.
+	byMarks := make([]MarkSheetStudent, len(students))
+	copy(byMarks, students)
+	sort.SliceStable(byMarks, func(i, j int) bool {
+		if byMarks[i].Total != byMarks[j].Total {
+			return byMarks[i].Total > byMarks[j].Total
 		}
+		return byMarks[i].Name < byMarks[j].Name
+	})
+	rankByStudent := map[string]int{}
+	for i := range byMarks {
+		rankByStudent[byMarks[i].StudentID] = i + 1
+	}
+	for i := range students {
+		students[i].Rank = rankByStudent[students[i].StudentID]
+	}
+	sort.SliceStable(students, func(i, j int) bool {
 		return students[i].Name < students[j].Name
 	})
-	for i := range students {
-		students[i].Rank = i + 1
-	}
 
 	subjGroups := map[string]*SubjectGroup{}
 	subjOrder := []string{}
