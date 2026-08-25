@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -55,6 +56,18 @@ func classNum(className string) int {
 type gradeInfo struct {
 	grade string
 	label string
+}
+
+// resolveYear returns the given academic year id, or the school's current year when empty.
+func (h *ReportsHandler) resolveYear(ctx context.Context, schoolID, ayID string) string {
+	if ayID != "" {
+		return ayID
+	}
+	var id string
+	_ = h.db.QueryRow(ctx,
+		`SELECT id FROM academic_years WHERE school_id = $1 AND is_current = true AND deleted_at IS NULL`,
+		schoolID).Scan(&id)
+	return id
 }
 
 // computeGrade returns the grade for a percentage given subject type and class number.
@@ -248,7 +261,7 @@ func (h *ReportsHandler) MarkSheet(w http.ResponseWriter, r *http.Request) {
 		renderJSON(w, http.StatusBadRequest, apiErr("VALIDATION_ERROR", "class_id is required"))
 		return
 	}
-	academicYearID := r.URL.Query().Get("academic_year_id")
+	academicYearID := h.resolveYear(r.Context(), claims.SchoolID, r.URL.Query().Get("academic_year_id"))
 	term := r.URL.Query().Get("term")
 
 	var className string
@@ -543,7 +556,7 @@ func (h *ReportsHandler) StudentReport(w http.ResponseWriter, r *http.Request) {
 		renderJSON(w, http.StatusBadRequest, apiErr("VALIDATION_ERROR", "student_id is required"))
 		return
 	}
-	academicYearID := r.URL.Query().Get("academic_year_id")
+	academicYearID := h.resolveYear(r.Context(), claims.SchoolID, r.URL.Query().Get("academic_year_id"))
 	term := r.URL.Query().Get("term")
 
 	var st ReportStudent
@@ -722,7 +735,7 @@ func (h *ReportsHandler) StudentReport(w http.ResponseWriter, r *http.Request) {
 func (h *ReportsHandler) StudentSelf(w http.ResponseWriter, r *http.Request) {
 	claims := middleware.GetUserClaims(r.Context())
 	studentID := claims.UserID
-	academicYearID := r.URL.Query().Get("academic_year_id")
+	academicYearID := h.resolveYear(r.Context(), claims.SchoolID, r.URL.Query().Get("academic_year_id"))
 
 	var st ReportStudent
 	var classID, dob, gender string
@@ -872,9 +885,9 @@ type MentorReportGroup struct {
 // GET /api/v1/reports/mentors?academic_year_id=
 func (h *ReportsHandler) MentorReport(w http.ResponseWriter, r *http.Request) {
 	claims := middleware.GetUserClaims(r.Context())
-	academicYearID := r.URL.Query().Get("academic_year_id")
+	academicYearID := h.resolveYear(r.Context(), claims.SchoolID, r.URL.Query().Get("academic_year_id"))
 	if academicYearID == "" {
-		renderJSON(w, http.StatusBadRequest, apiErr("VALIDATION_ERROR", "academic_year_id is required"))
+		renderJSON(w, http.StatusBadRequest, apiErr("VALIDATION_ERROR", "no current academic year configured"))
 		return
 	}
 

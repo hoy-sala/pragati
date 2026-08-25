@@ -8,7 +8,7 @@
 		if (!auth.isLoading && !auth.isAuthenticated) {
 			goto('/login');
 		} else if (!auth.isLoading && auth.isAuthenticated) {
-			goto('/dashboard');
+			goto('/reports');
 		}
 	});
 </script>

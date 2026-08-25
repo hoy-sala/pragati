@@ -3,7 +3,7 @@
 	import { Save, X, BookOpen, Users, ClipboardCheck, Filter, Table } from 'lucide-svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Select from '$lib/components/Select.svelte';
-	import type { Assessment, AssessmentCategory, Class, Subject, AcademicYear, MarkGridRow, MarkInput } from '$lib/types';
+	import type { Assessment, AssessmentCategory, Class, Subject, MarkGridRow, MarkInput } from '$lib/types';
 	import { onMount } from 'svelte';
 	import { TabulatorFull as Tabulator } from 'tabulator-tables';
 	import 'tabulator-tables/dist/css/tabulator.min.css';
@@ -12,7 +12,6 @@
 	let categories = $state<AssessmentCategory[]>([]);
 	let classes = $state<Class[]>([]);
 	let subjects = $state<Subject[]>([]);
-	let years = $state<AcademicYear[]>([]);
 	let assessments = $state<Assessment[]>([]);
 
 	let selectedCategory = $state('');
@@ -46,19 +45,14 @@
 		selectedCategory = sp.get('category') ?? '';
 		selectedClass = sp.get('class') ?? '';
 
-		const [catRes, classRes, subRes, yrRes] = await Promise.all([
+		const [catRes, classRes, subRes] = await Promise.all([
 			api<AssessmentCategory[]>('GET', '/assessment-categories'),
 			api<Class[]>('GET', '/classes'),
 			api<Subject[]>('GET', '/subjects'),
-			api<AcademicYear[]>('GET', '/academic-years'),
 		]);
 		if (catRes.data) categories = catRes.data;
 		if (classRes.data) classes = classRes.data;
 		if (subRes.data) subjects = subRes.data;
-		if (yrRes.data) {
-			years = yrRes.data;
-			const current = yrRes.data.find(y => y.is_current);
-		}
 
 		selectedSubject = sp.get('subject') ?? '';
 		selectedAssessment = sp.get('assessment') ?? '';

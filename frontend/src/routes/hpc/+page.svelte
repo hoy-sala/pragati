@@ -81,7 +81,14 @@
 
 <div class="space-y-4">
 	<div class="flex items-center justify-between">
-		<h1 class="text-xl font-bold text-slate-900">Holistic Progress Card (HPC)</h1>
+		<div>
+			<h1 class="text-xl font-bold text-slate-900">Holistic Progress Card (HPC)</h1>
+			<div class="flex items-center gap-3 mt-0.5">
+				<p class="text-sm text-slate-500">Assess learning outcomes per student</p>
+				<a href="/hpc/config" class="text-xs text-primary-600 hover:text-primary-700 font-medium">Config</a>
+				<a href="/hpc/lo-import" class="text-xs text-primary-600 hover:text-primary-700 font-medium">Import LOs</a>
+			</div>
+		</div>
 		<div class="flex gap-2">
 			<button onclick={migrateFromMarks} disabled={!selectedClass}
 				class="px-3 py-1.5 border border-slate-300 rounded-lg text-sm hover:bg-slate-50 transition-colors">
@@ -99,10 +106,6 @@
 			<div>
 				<label for="hpc-class" class="block text-xs font-medium text-slate-600 mb-1">Class</label>
 				<Select id="hpc-class" bind:value={selectedClass} options={classes} placeholder="Select Class" />
-			</div>
-			<div>
-				<label for="hpc-year" class="block text-xs font-medium text-slate-600 mb-1">Academic Year</label>
-				<Select id="hpc-year" bind:value={selectedYear} options={years} />
 			</div>
 			<div>
 				<label for="hpc-term" class="block text-xs font-medium text-slate-600 mb-1">Term</label>

@@ -3,17 +3,15 @@
 	import { GraduationCap, Printer, Users, FileText, HeartHandshake } from 'lucide-svelte';
 	import Select from '$lib/components/Select.svelte';
 	import Button from '$lib/components/Button.svelte';
-	import type { Class, AcademicYear } from '$lib/types';
+	import type { Class } from '$lib/types';
 	import { onMount } from 'svelte';
 
 	type Tab = 'marksheet' | 'report' | 'mentors';
 	let activeTab = $state<Tab>('marksheet');
 
 	let classes = $state<Class[]>([]);
-	let years = $state<AcademicYear[]>([]);
 
 	let selectedClass = $state('');
-	let selectedYear = $state('');
 	let selectedStudent = $state('');
 
 	let loading = $state(false);
@@ -92,16 +90,8 @@
 
 	onMount(async () => {
 		document.documentElement.classList.add('report-print');
-		const [cr, yr] = await Promise.all([
-			api<Class[]>('GET', '/classes'),
-			api<AcademicYear[]>('GET', '/academic-years'),
-		]);
+		const cr = await api<Class[]>('GET', '/classes');
 		if (cr.data) classes = cr.data;
-		if (yr.data) {
-			years = yr.data;
-			const cur = yr.data.find(y => y.is_current);
-			if (cur) selectedYear = cur.id;
-		}
 	});
 
 	async function loadMarkSheet() {
@@ -109,7 +99,6 @@
 		err = ''; loading = true; markSheetData = null;
 		try {
 			const params = new URLSearchParams({ class_id: selectedClass });
-			if (selectedYear) params.set('academic_year_id', selectedYear);
 			if (selectedTerm) params.set('term', selectedTerm);
 			const res = await api<typeof markSheetData>('GET', `/reports/mark-sheet?${params}`);
 			if (res.data) markSheetData = res.data;
@@ -124,7 +113,6 @@
 	async function loadReportStudents() {
 		if (!selectedClass) return;
 		const params = new URLSearchParams({ class_id: selectedClass });
-		if (selectedYear) params.set('academic_year_id', selectedYear);
 		const res = await api<{ id: string; name: string; roll_no: number; sats_number: string }[]>('GET', `/students?${params}`);
 		reportStudents = res.data || [];
 	}
@@ -134,7 +122,6 @@
 		err = ''; loading = true; studentReport = null;
 		try {
 			const params = new URLSearchParams({ student_id: selectedStudent });
-			if (selectedYear) params.set('academic_year_id', selectedYear);
 			if (selectedTerm) params.set('term', selectedTerm);
 			const res = await api<StudentReport>('GET', `/reports/student?${params}`);
 			if (res.data) studentReport = res.data;
@@ -147,10 +134,9 @@
 	}
 
 	async function loadMentorReport() {
-		if (!selectedYear) { err = 'Select an academic year'; return; }
 		err = ''; loading = true; mentorReport = null;
 		try {
-			const params = new URLSearchParams({ academic_year_id: selectedYear });
+			const params = new URLSearchParams();
 			const res = await api<typeof mentorReport>('GET', `/reports/mentors?${params}`);
 			if (res.data) mentorReport = res.data;
 			else if (res.error) err = res.error.message;
@@ -174,7 +160,7 @@
 	});
 
 	$effect(() => {
-		if (selectedYear && activeTab === 'mentors') loadMentorReport();
+		if (activeTab === 'mentors') loadMentorReport();
 	});
 
 	$effect(() => {
@@ -205,9 +191,6 @@
 		<div class="flex flex-wrap gap-3 items-end">
 			<div class="w-44">
 				<Select bind:value={selectedClass} options={classes.map(c => ({ id: c.id, name: c.name }))} placeholder="Select class" />
-			</div>
-			<div class="w-44">
-				<Select bind:value={selectedYear} options={years.map(y => ({ id: y.id, name: y.name }))} placeholder="Academic year" />
 			</div>
 			<div class="w-48">
 				<Select bind:value={selectedTerm} options={termOptions} placeholder="All Terms" />
@@ -597,9 +580,9 @@
 			<FileText size={40} class="mx-auto text-slate-300 mb-3" />
 			<p class="text-slate-500 text-sm">
 				{#if activeTab === 'marksheet'}
-					Select a class and academic year to view the mark sheet.
+					Select a class to view the mark sheet.
 				{:else if activeTab === 'mentors'}
-					Select an academic year to view the mentor-wise report.
+					Loading the mentor-wise report for the current academic year.
 				{:else}
 					Select a class and student to generate a report card.
 				{/if}

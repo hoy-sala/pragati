@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { api } from '$lib/api/client.svelte';
-	import type { Class, Subject, AcademicYear, AssessmentCategory } from '$lib/types';
+	import type { Class, Subject, AssessmentCategory } from '$lib/types';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import Select from '$lib/components/Select.svelte';
@@ -8,7 +8,6 @@
 	let categories = $state<AssessmentCategory[]>([]);
 	let classes = $state<Class[]>([]);
 	let subjects = $state<Subject[]>([]);
-	let years = $state<AcademicYear[]>([]);
 
 	let selectedCategory = $state('');
 	let selectedSubject = $state('');
@@ -29,7 +28,7 @@
 			api<AssessmentCategory[]>('GET', '/assessment-categories'),
 			api<Class[]>('GET', '/classes'),
 			api<Subject[]>('GET', '/subjects'),
-			api<AcademicYear[]>('GET', '/academic-years'),
+			api<{ id: string; is_current: boolean }[]>('GET', '/academic-years'),
 		]);
 		if (catRes.data) categories = catRes.data;
 		if (classRes.data) classes = classRes.data;
@@ -101,10 +100,6 @@
 			<div>
 				<label for="section" class="block text-sm font-medium text-slate-700 mb-1">Section</label>
 				<input id="section" type="text" bind:value={section} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm" placeholder="optional">
-			</div>
-			<div>
-				<label for="year" class="block text-sm font-medium text-slate-700 mb-1">Academic Year *</label>
-				<Select id="year" bind:value={selectedYear} options={years} placeholder="Select" />
 			</div>
 			<div>
 				<label for="date" class="block text-sm font-medium text-slate-700 mb-1">Date</label>

@@ -24,7 +24,7 @@
 		try { result = await studentLogin(satsNumber, dateOfBirth); }
 		catch { result = { error: 'Unable to reach server.' }; }
 		loading = false;
-		if ('error' in result) error = result.error; else goto('/dashboard');
+		if ('error' in result) error = result.error; else goto('/reports');
 	}
 	async function handleStaffSubmit() {
 		error = ''; loading = true;
@@ -32,7 +32,7 @@
 		try { result = await staffLogin(mobile, staffPassword); }
 		catch { result = { error: 'Unable to reach server.' }; }
 		loading = false;
-		if ('error' in result) error = result.error; else goto('/dashboard');
+		if ('error' in result) error = result.error; else goto('/reports');
 	}
 	async function handleAdminSubmit() {
 		error = ''; loading = true;
@@ -40,7 +40,7 @@
 		try { result = await login(adminEmail, adminPassword); }
 		catch { result = { error: 'Unable to reach server.' }; }
 		loading = false;
-		if ('error' in result) error = result.error; else goto('/dashboard');
+		if ('error' in result) error = result.error; else goto('/reports');
 	}
 </script>
 

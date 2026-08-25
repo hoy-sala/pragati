@@ -30,7 +30,7 @@
 			}
 		}
 		if (!auth.isLoading && auth.isAuthenticated && $page.url.pathname === '/login') {
-			goto('/dashboard');
+			goto('/reports');
 		}
 	});
 </script>

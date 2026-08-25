@@ -2,9 +2,9 @@
 	import { getAuthState, logout } from '$lib/stores/auth.svelte';
 	import { page } from '$app/stores';
 	import {
-		LogOut, GraduationCap, LayoutDashboard, CalendarDays,
-		ClipboardCheck, ClipboardList, PlayCircle, Table, FileSpreadsheet,
-		FileText, Settings, Heart, BarChart3, CheckSquare, Upload, HelpCircle, User, Award
+		LogOut, GraduationCap, CalendarDays,
+		ClipboardCheck, ClipboardList, Table, FileSpreadsheet,
+		FileText, Settings, Heart, CheckSquare, HelpCircle, User, Award
 	} from 'lucide-svelte';
 	import type { ComponentType } from 'svelte';
 	import type { User as UserType, Student } from '$lib/types';
@@ -60,11 +60,6 @@
 
 	const navSections: NavSection[] = [
 		{
-			items: [
-				{ href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, roles: ['admin', 'principal', 'teacher', 'special_educator', 'student', 'parent'] },
-			]
-		},
-		{
 			label: 'Academic',
 			items: [
 				{ href: '/timetable', label: 'Time Table', icon: CalendarDays, roles: ['admin', 'principal', 'teacher', 'special_educator', 'student', 'parent'] },
@@ -75,10 +70,9 @@
 			label: 'Assessment',
 			items: [
 				{ href: '/assessments', label: 'Assessments', icon: ClipboardCheck, roles: ['admin', 'principal', 'teacher'] },
-				{ href: '/quizzes', label: 'Quizzes', icon: ClipboardList, roles: ['admin', 'principal', 'teacher'] },
-				{ href: '/quizzes/available', label: 'Take Quiz', icon: PlayCircle, roles: ['admin', 'principal', 'teacher', 'student'] },
 				{ href: '/marks', label: 'Marks Entry', icon: Table, roles: ['admin', 'principal', 'teacher'] },
 				{ href: '/questions', label: 'Question Bank', icon: HelpCircle, roles: ['admin', 'principal', 'teacher'] },
+				{ href: '/quizzes', label: 'Quizzes', icon: ClipboardList, roles: ['admin', 'principal', 'teacher'] },
 			]
 		},
 		{
@@ -87,13 +81,11 @@
 				{ href: '/mentors', label: 'Mentors', icon: Heart, roles: ['admin', 'principal', 'teacher', 'special_educator'] },
 				{ href: '/hpc', label: 'HPC Cards', icon: FileSpreadsheet, roles: ['admin', 'principal', 'teacher'] },
 				{ href: '/hpc/assess', label: 'LO Assessment', icon: CheckSquare, roles: ['admin', 'principal', 'teacher'] },
-				{ href: '/hpc/lo-import', label: 'Import LOs', icon: Upload, roles: ['admin', 'principal'] },
 			]
 		},
 		{
 			label: 'Reports',
 			items: [
-				{ href: '/analytics', label: 'Analytics', icon: BarChart3, roles: ['admin', 'principal', 'teacher'] },
 				{ href: '/reports', label: 'Reports', icon: FileText, roles: ['admin', 'principal', 'teacher', 'student', 'parent'] },
 				{ href: '/certificates', label: 'Certificates', icon: Award, roles: ['admin'] },
 			]
@@ -101,7 +93,6 @@
 		{
 			label: 'System',
 			items: [
-				{ href: '/hpc/config', label: 'HPC Config', icon: Settings, roles: ['admin'] },
 				{ href: '/settings', label: 'Settings', icon: Settings, roles: ['admin'] },
 			]
 		},

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { api, apiUrl } from '$lib/api/client.svelte';
-	import type { CertificateEvent, CertificateParticipant, CertificateSignatory, Student, AcademicYear } from '$lib/types';
+	import type { CertificateEvent, CertificateParticipant, CertificateSignatory, Student } from '$lib/types';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import Select from '$lib/components/Select.svelte';
@@ -28,7 +28,6 @@
 	];
 
 	let events: CertificateEvent[] = $state([]);
-	let academicYears: AcademicYear[] = $state([]);
 	let students: Student[] = $state([]);
 	let loading = $state(true);
 	let saving = $state(false);
@@ -50,10 +49,6 @@
 		students.map(s => ({ id: s.id, name: `${s.first_name} ${s.last_name || ''}`.trim() + (s.sats_number ? ` (${s.sats_number})` : '') }))
 	);
 
-	let academicYearOptions = $derived(
-		academicYears.map(y => ({ id: y.id, name: y.name + (y.is_current ? ' (current)' : '') }))
-	);
-
 	let partForm: Record<string, { student_id: string; position: string; prize_title: string; issue_date: string }> = $state({});
 
 	let signForm: Record<string, { name: string; role: string; title: string; signature_url: string; uploading: boolean; error: string }> = $state({});
@@ -61,7 +56,7 @@
 	onMount(async () => {
 		const [eventRes, yearRes, studentRes] = await Promise.all([
 			api<CertificateEvent[]>('GET', '/certificates/events?limit=100'),
-			api<AcademicYear[]>('GET', '/academic-years?limit=50'),
+			api<{ id: string; is_current: boolean }[]>('GET', '/academic-years?limit=50'),
 			api<Student[]>('GET', '/students?limit=500')
 		]);
 		if (eventRes.data) {
@@ -69,7 +64,6 @@
 			for (const e of events) initForms(e.id);
 		}
 		if (yearRes.data) {
-			academicYears = yearRes.data;
 			const current = yearRes.data.find(y => y.is_current);
 			if (current) newAcademicYearId = current.id;
 		}
@@ -250,7 +244,6 @@
 			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
 				<input bind:value={newName} placeholder="Event name (e.g. Kannada Elocution)" class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
 				<Select bind:value={newCategory} options={CATEGORIES} placeholder="Category" />
-				<Select bind:value={newAcademicYearId} options={academicYearOptions} placeholder="Academic year" />
 				<input bind:value={newHeldDate} type="date" class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
 				<input bind:value={newVenue} placeholder="Venue (optional)" class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
 				<input bind:value={newDescription} placeholder="Description (optional)" class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />

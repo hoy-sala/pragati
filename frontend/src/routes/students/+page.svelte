@@ -313,7 +313,6 @@
 
 				<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
 					<Select bind:value={formClassId} label="Class *" options={classes} icon={Users} placeholder="Select class" />
-					<Select bind:value={formAcademicYearId} label="Academic Year" options={academicYears} icon={Calendar} placeholder="Select academic year" />
 				</div>
 
 				<div class="border-t border-slate-100 pt-4">
