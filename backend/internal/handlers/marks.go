@@ -48,7 +48,7 @@ func (h *MarkHandler) GetGrid(w http.ResponseWriter, r *http.Request) {
 		FROM students s
 		LEFT JOIN marks m ON m.student_id = s.id AND m.assessment_id = $1
 		WHERE s.class_id = $2 AND s.deleted_at IS NULL AND s.is_active = true
-		ORDER BY s.roll_no ASC, s.first_name ASC`,
+		ORDER BY s.first_name ASC, s.last_name ASC, s.roll_no ASC`,
 		assessmentID, assessment.ClassID,
 	)
 	if err != nil {

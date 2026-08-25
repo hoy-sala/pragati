@@ -232,7 +232,7 @@ func (h *HPCHandler) GetGrid(w http.ResponseWriter, r *http.Request) {
 		LEFT JOIN hpc_entries e ON e.student_id = s.id AND e.term = $1
 			AND e.academic_year_id = $2 AND e.deleted_at IS NULL
 		WHERE s.class_id = $3 AND s.deleted_at IS NULL AND s.is_active = true
-		ORDER BY s.roll_no ASC, s.first_name ASC`,
+		ORDER BY s.first_name ASC, s.last_name ASC, s.roll_no ASC`,
 		term, academicYearID, classID,
 	)
 	if err != nil {
@@ -577,7 +577,7 @@ func (h *HPCHandler) GetLOAssessmentGrid(w http.ResponseWriter, r *http.Request)
 		`SELECT s.id, s.sats_number, s.first_name, COALESCE(s.last_name, ''), s.roll_no
 		 FROM students s
 		 WHERE s.class_id = $1 AND s.school_id = $2 AND s.deleted_at IS NULL AND s.is_active = true
-		 ORDER BY s.roll_no ASC`,
+		 ORDER BY s.first_name ASC, COALESCE(s.last_name, '') ASC, s.roll_no ASC`,
 		classID, claims.SchoolID,
 	)
 	if err != nil {
