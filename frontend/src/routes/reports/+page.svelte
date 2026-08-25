@@ -238,7 +238,6 @@
 						</div>
 						<div>
 							<h2 class="text-base font-bold text-slate-900">{ms.class_name} — Mark Sheet</h2>
-							<p class="text-xs text-slate-500">Academic Year: {years.find(y => y.id === ms.academic_year)?.name || 'All'}</p>
 						</div>
 					</div>
 					<div class="text-xs text-slate-400 hidden print-only">{new Date().toLocaleDateString()}</div>
@@ -389,7 +388,7 @@
 					</div>
 					<div class="text-right">
 						<h2 class="text-lg font-bold text-primary-700">Student Report Card</h2>
-						<p class="text-xs text-slate-500">Year: {years.find(y => y.id === r.academic_year)?.name || '—'} {#if r.term} &middot; {r.term}{/if}</p>
+						<p class="text-xs text-slate-500">Year: {r.academic_year} {#if r.term} &middot; {r.term}{/if}</p>
 					</div>
 				</div>
 			</div>
