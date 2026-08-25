@@ -706,8 +706,15 @@ func (h *ReportsHandler) StudentReport(w http.ResponseWriter, r *http.Request) {
 	overallPct := finalMarks / count
 	overallGrade := cce.GradeFromMarks(overallPct)
 
+	var yearName string
+	if academicYearID != "" {
+		_ = h.db.QueryRow(r.Context(),
+			`SELECT name FROM academic_years WHERE id = $1 AND deleted_at IS NULL`,
+			academicYearID).Scan(&yearName)
+	}
+
 	resp := StudentReportResponse{
-		Student: st, AcademicYear: academicYearID, Term: term,
+		Student: st, AcademicYear: yearName, Term: term,
 		Subjects: subjects, GrandTotal: grandTotal, GrandMax: grandMax, Pct: overallPct, Grade: overallGrade,
 	}
 
