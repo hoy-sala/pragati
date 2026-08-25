@@ -4,6 +4,7 @@
 	import { ClipboardCheck, Plus, BookOpen, Users, Filter, Eye } from 'lucide-svelte';
 	import Select from '$lib/components/Select.svelte';
 	import Button from '$lib/components/Button.svelte';
+	import { toast } from '$lib/stores/toast.svelte';
 	import type { Assessment, AssessmentCategory, Class, Subject } from '$lib/types';
 
 	let assessments = $state<Assessment[]>([]);
@@ -20,8 +21,6 @@
 	let page = $state(0);
 	const pageSize = 20;
 	let publishing = $state<string | null>(null);
-	let statusMsg = $state('');
-	let statusType = $state<'info' | 'error' | 'success'>('info');
 
 	let filteredSubjects = $derived(
 		selectedClass ? subjects.filter(s => s.is_core || s.is_language) : subjects
@@ -72,15 +71,12 @@
 	async function publish(a: Assessment) {
 		if (a.is_published) return;
 		publishing = a.id;
-		statusMsg = '';
 		const res = await api<unknown>('POST', `/assessments/${a.id}/publish`);
 		if (res.data) {
-			statusMsg = `Published "${a.name}"`;
-			statusType = 'success';
+			toast(`Published "${a.name}"`, 'success');
 			await load();
 		} else if (res.error) {
-			statusMsg = res.error.message;
-			statusType = 'error';
+			toast(res.error.message, 'error');
 		}
 		publishing = null;
 	}
@@ -117,9 +113,6 @@
 		</a>
 	</div>
 
-	{#if statusMsg}
-		<div class="text-sm px-4 py-2 rounded-lg {statusType === 'success' ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'}">{statusMsg}</div>
-	{/if}
 
 	<div class="bg-white rounded-xl border border-slate-200 p-4 no-print">
 		<div class="flex items-center gap-2 mb-3">
@@ -207,7 +200,7 @@
 								</td>
 								<td class="px-4 py-3">
 									<div class="flex items-center justify-end gap-2">
-										<a href="/marks?assessment_id={a.id}" title="Enter marks">
+										<a href="/marks?assessment={a.id}" title="Enter marks">
 											<Button variant="ghost" size="sm" icon={ClipboardCheck}>Marks</Button>
 										</a>
 										{#if !a.is_published}

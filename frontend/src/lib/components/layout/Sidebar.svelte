@@ -2,7 +2,7 @@
 	import { getAuthState, logout } from '$lib/stores/auth.svelte';
 	import { page } from '$app/stores';
 	import {
-		LogOut, GraduationCap, LayoutDashboard, CalendarDays, Users, BookOpen,
+		LogOut, GraduationCap, LayoutDashboard, CalendarDays,
 		ClipboardCheck, ClipboardList, PlayCircle, Table, FileSpreadsheet,
 		FileText, Settings, Heart, BarChart3, CheckSquare, Upload, HelpCircle, User, Award
 	} from 'lucide-svelte';
@@ -68,8 +68,6 @@
 			label: 'Academic',
 			items: [
 				{ href: '/timetable', label: 'Time Table', icon: CalendarDays, roles: ['admin', 'principal', 'teacher', 'special_educator', 'student', 'parent'] },
-				{ href: '/classes', label: 'Classes', icon: Users, roles: ['admin', 'principal'] },
-				{ href: '/subjects', label: 'Subjects', icon: BookOpen, roles: ['admin', 'principal'] },
 				{ href: '/students', label: 'Students', icon: User, roles: ['admin', 'principal', 'teacher'] },
 			]
 		},

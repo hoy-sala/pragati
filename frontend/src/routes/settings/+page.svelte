@@ -3,6 +3,8 @@
 	import { onMount } from 'svelte';
 	import { Settings, Calendar, Users, BookOpen, ClipboardCheck, Plus, Star, Shield, UserPlus, Power, RotateCw } from 'lucide-svelte';
 	import Button from '$lib/components/Button.svelte';
+	import Modal from '$lib/components/Modal.svelte';
+	import { toast } from '$lib/stores/toast.svelte';
 	import type { AcademicYear, Class, Subject, AssessmentCategory } from '$lib/types';
 
 	type Tab = 'users' | 'years' | 'classes' | 'subjects' | 'categories';
@@ -17,14 +19,13 @@
 	let showUserForm = $state(false);
 	let userForm = $state({ email: '', password: '', name: '', role: 'teacher', phone: '' });
 	let editingId = $state<string | null>(null);
+	let editOpen = $state(false);
 	let editSubjects = $state<{ id: string; name: string; selected: boolean }[]>([]);
 	let editClassId = $state('');
 	let resettingId = $state<string | null>(null);
 	let resetPassword = $state('');
 
 	let loading = $state(true);
-	let statusMsg = $state('');
-	let statusType = $state<'info' | 'error' | 'success'>('info');
 
 	let showYearForm = $state(false);
 	let yearForm = $state({ name: '', start_date: '', end_date: '', is_current: false });
@@ -76,6 +77,7 @@
 
 	async function loadTeacherDetail(id: string) {
 		editingId = id;
+		editOpen = true;
 		const res = await api<{ subjects: { id: string; name: string }[]; class_id: string }>('GET', `/users/${id}/teacher-detail`);
 		if (res.data) {
 			const allSubRes = await api<{ id: string; name: string }[]>('GET', '/subjects');
@@ -85,12 +87,17 @@
 		}
 	}
 
+	function closeEdit() {
+		editingId = null;
+		editOpen = false;
+	}
+
 	async function saveTeacherDetail() {
 		if (!editingId) return;
 		const subjectIds = editSubjects.filter(s => s.selected).map(s => s.id);
 		const res = await api<unknown>('PUT', `/users/${editingId}/teacher-detail`, { subject_ids: subjectIds, class_id: editClassId });
-		if (res.data) { msg('Teacher assignments updated'); editingId = null; loadUsers(); }
-		else if (res.error) msg(res.error.message, 'error');
+		if (res.data) { toast('Teacher assignments updated', 'success'); closeEdit(); loadUsers(); }
+		else if (res.error) toast(res.error.message, 'error');
 	}
 
 	const tabItems: { id: Tab; label: string; icon: typeof Settings }[] = [
@@ -102,9 +109,7 @@
 	];
 
 	function msg(text: string, type: 'success' | 'error' | 'info' = 'success') {
-		statusMsg = text;
-		statusType = type;
-		setTimeout(() => { statusMsg = ''; }, 4000);
+		toast(text, type);
 	}
 
 	async function loadAll() {
@@ -207,9 +212,6 @@
 		</div>
 	</div>
 
-	{#if statusMsg}
-		<div class="text-sm px-4 py-2 rounded-lg {statusType === 'success' ? 'bg-emerald-50 text-emerald-700' : statusType === 'error' ? 'bg-red-50 text-red-700' : 'bg-slate-100 text-slate-700'}">{statusMsg}</div>
-	{/if}
 
 	<div class="flex gap-1 bg-slate-100 rounded-lg p-1 no-print">
 		{#each tabItems as item}
@@ -307,35 +309,32 @@
 		</div>
 
 		{#if editingId}
-			<div class="fixed inset-0 bg-black/40 flex items-center justify-center z-50" role="button" tabindex="0" onclick={() => editingId = null} onkeydown={(e) => { if (e.key === 'Escape') editingId = null; }}>
-				<div class="bg-white rounded-xl shadow-xl w-full max-w-md mx-4 p-6" role="dialog" onclick={(e) => e.stopPropagation()} onkeydown={(e) => e.stopPropagation()}>
-					<h3 class="text-base font-semibold text-slate-900 mb-4">Assign Subjects & Class</h3>
-					<div class="mb-4">
-						<label class="block text-xs font-medium text-slate-600 mb-2">Subjects</label>
-						<div class="flex flex-wrap gap-2">
-							{#each editSubjects as s}
-								<label class="flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg border cursor-pointer {s.selected ? 'bg-primary-50 border-primary-300 text-primary-700' : 'bg-slate-50 border-slate-200 text-slate-600'}">
-									<input type="checkbox" bind:checked={s.selected} class="hidden" />
-									{s.name}
-								</label>
-							{/each}
-						</div>
-					</div>
-					<div class="mb-6">
-						<label for="teach-class" class="block text-xs font-medium text-slate-600 mb-1">Class</label>
-						<select id="teach-class" bind:value={editClassId} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
-							<option value="">No class assigned</option>
-							{#each classes as c}
-								<option value={c.id}>{c.name}</option>
-							{/each}
-						</select>
-					</div>
-					<div class="flex justify-end gap-2">
-						<Button variant="ghost" onclick={() => editingId = null}>Cancel</Button>
-						<Button onclick={saveTeacherDetail}>Save</Button>
+			<Modal bind:open={editOpen} title="Assign Subjects & Class" onclose={() => editingId = null}>
+				<div class="mb-4">
+					<label class="block text-xs font-medium text-slate-600 mb-2">Subjects</label>
+					<div class="flex flex-wrap gap-2">
+						{#each editSubjects as s}
+							<label class="flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg border cursor-pointer {s.selected ? 'bg-primary-50 border-primary-300 text-primary-700' : 'bg-slate-50 border-slate-200 text-slate-600'}">
+								<input type="checkbox" bind:checked={s.selected} class="hidden" />
+								{s.name}
+							</label>
+						{/each}
 					</div>
 				</div>
-			</div>
+				<div>
+					<label for="teach-class" class="block text-xs font-medium text-slate-600 mb-1">Class</label>
+					<select id="teach-class" bind:value={editClassId} class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm">
+						<option value="">No class assigned</option>
+						{#each classes as c}
+							<option value={c.id}>{c.name}</option>
+						{/each}
+					</select>
+				</div>
+				{#snippet footer()}
+					<Button variant="ghost" onclick={closeEdit}>Cancel</Button>
+					<Button onclick={saveTeacherDetail}>Save</Button>
+				{/snippet}
+			</Modal>
 		{/if}
 
 	{:else if activeTab === 'years'}

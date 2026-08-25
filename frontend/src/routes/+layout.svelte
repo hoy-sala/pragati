@@ -6,6 +6,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Sidebar from '$lib/components/layout/Sidebar.svelte';
+	import Toast from '$lib/components/Toast.svelte';
 
 	let { children } = $props();
 
@@ -52,3 +53,4 @@
 		{@render children()}
 	</main>
 {/if}
+<Toast />

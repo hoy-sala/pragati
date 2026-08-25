@@ -7,6 +7,7 @@
 	import { onMount } from 'svelte';
 	import { TabulatorFull as Tabulator } from 'tabulator-tables';
 	import 'tabulator-tables/dist/css/tabulator.min.css';
+	import { toast } from '$lib/stores/toast.svelte';
 
 	let categories = $state<AssessmentCategory[]>([]);
 	let classes = $state<Class[]>([]);
@@ -280,8 +281,7 @@
 			statusType = 'error';
 		} else if (res.data) {
 			const d = res.data as any;
-			statusMsg = `Saved ${d.updated} mark${d.updated !== 1 ? 's' : ''}` + (d.errors?.length ? ` (${d.errors.length} error${d.errors.length !== 1 ? 's' : ''})` : '');
-			statusType = d.errors?.length ? 'error' : 'success';
+			toast(`Saved ${d.updated} mark${d.updated !== 1 ? 's' : ''}` + (d.errors?.length ? ` (${d.errors.length} error${d.errors.length !== 1 ? 's' : ''})` : ''), d.errors?.length ? 'error' : 'success');
 			gridVersion = (gridVersion || 0) + 1;
 		}
 	}

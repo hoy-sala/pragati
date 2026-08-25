@@ -4,13 +4,12 @@
 	import { Building2, GraduationCap, BookOpen, Layers, Sparkles, Hash, Zap, Check, Globe, Newspaper, Clock } from 'lucide-svelte';
 	import type { PlayClass, PlaySubject, PlayTopic, PlayQuestion } from '$lib/types';
 
-	type Phase = 'welcome' | 'mode' | 'classes' | 'subjects' | 'topics' | 'difficulty' | 'tables' | 'tables-ready' | 'gk' | 'coming-soon' | 'quiz' | 'results';
+	type Phase = 'welcome' | 'mode' | 'classes' | 'subjects' | 'topics' | 'tables' | 'tables-ready' | 'gk' | 'coming-soon' | 'quiz' | 'results';
 	type GenQ = PlayQuestion & { uid: number; isRepeat?: boolean };
 	type QuizEntry = 'subject' | 'gk' | 'ca';
 
 	let phase = $state<Phase>('welcome');
-	let playerName = $state('');
-	let classes = $state<PlayClass[]>([]);
+	let playerName = $state('');	let classes = $state<PlayClass[]>([]);
 	let subjects = $state<PlaySubject[]>([]);
 	let topics = $state<PlayTopic[]>([]);
 	let questions = $state<GenQ[]>([]);
@@ -56,6 +55,11 @@
 	if (typeof window !== 'undefined') {
 		try { mastered = JSON.parse(localStorage.getItem('pragati:tables:mastered') || '[]'); } catch { mastered = []; }
 		try { bestRush = JSON.parse(localStorage.getItem('pragati:tables:best') || '{}'); } catch { bestRush = {}; }
+		playerName = localStorage.getItem('pragati:player:name') || '';
+		if (playerName) phase = 'mode';
+	}
+	function savePlayerName() {
+		try { localStorage.setItem('pragati:player:name', playerName.trim()); } catch { /* ignore */ }
 	}
 	function saveTables() {
 		try {
@@ -365,11 +369,7 @@
 	function goBack() {
 		playClick();
 		if (phase === 'topics') {
-			phase = quizEntry === 'subject' ? 'subjects' : 'mode';
-			return;
-		}
-		if (phase === 'difficulty') {
-			phase = quizEntry === 'subject' ? 'topics' : quizEntry === 'gk' ? 'gk' : 'topics';
+			phase = quizEntry === 'subject' ? 'subjects' : quizEntry === 'gk' ? 'gk' : 'mode';
 			return;
 		}
 		const back: Partial<Record<Phase, Phase>> = {
@@ -387,7 +387,7 @@
 		if (phase === 'welcome') goto('/');
 		else confirmExit();
 	}
-	function playAgain() { playClick(); phase = tablesActive ? 'tables-ready' : 'difficulty'; }
+	function playAgain() { playClick(); phase = tablesActive ? 'tables-ready' : 'topics'; }
 
 	function timeColor() { return timeLeft > 10 ? '#0E7C71' : timeLeft > 5 ? '#B45309' : '#C2381B'; }
 	function progressWidth() { return questions.length ? `${((currentIndex + 1) / questions.length) * 100}%` : '0%'; }
@@ -443,7 +443,7 @@
 				<div class="welcome-icon" aria-hidden="true"><Sparkles size={28} /></div>
 				<h1 class="welcome-title">Quizzes</h1>
 				<p class="welcome-sub">What's your name, superstar?</p>
-				<form class="welcome-form" onsubmit={(e) => { e.preventDefault(); if (playerName.trim()) { tablesActive = false; rushMode = false; phase = 'mode'; } }}>
+				<form class="welcome-form" onsubmit={(e) => { e.preventDefault(); if (playerName.trim()) { savePlayerName(); tablesActive = false; rushMode = false; phase = 'mode'; } }}>
 					<label class="field">
 						<span class="field-label">Your name</span>
 						<input bind:value={playerName} placeholder="Enter your name…" maxlength={50} class="input" required />
@@ -505,7 +505,7 @@
 					<div class="empty" style="grid-column:1/-1">Loading…</div>
 				{:else}
 					{#each topics as topic (topic.name)}
-						<button onclick={() => { playClick(); selectedTopic = topic.name; quizEntry = 'gk'; phase = 'difficulty'; }} class="pick-card mode-card">
+						<button onclick={() => { playClick(); selectedTopic = topic.name; quizEntry = 'gk'; phase = 'topics'; }} class="pick-card mode-card">
 							<span class="pick-icon"><Globe size={18} /></span>
 							<span class="pick-name">{topic.name}</span>
 							<span class="pick-meta">Quiz · Easy to Hard</span>
@@ -629,75 +629,49 @@
 			{/if}
 		</div>
 
-	<!-- ═══ TOPICS ═══ -->
+	<!-- ═══ TOPICS + DIFFICULTY (merged start screen) ═══ -->
 	{:else if phase === 'topics'}
 		<div class="stack fade-in">
 			<div class="section-head">
 				<button onclick={goBack} class="back-btn" aria-label="Back">←</button>
 				<div>
-					<h2 class="section-title">Select topic</h2>
-					<p class="section-sub">{selectedSubject?.name}</p>
+					<h2 class="section-title">{selectedTopic || 'Select topic'}</h2>
+					<p class="section-sub">{selectedClass ? `${selectedClass.name} · ` : ''}{selectedSubject?.name}</p>
 				</div>
 			</div>
 			{#if loading}
 				<div class="empty">Loading…</div>
 			{:else}
-				<div class="mode-grid">
-					<button onclick={() => { playClick(); selectedTopic = ''; phase = 'difficulty'; }} class="pick-card mode-card">
-						<span class="pick-icon"><Sparkles size={18} /></span>
-						<span class="pick-name">All topics</span>
-						<span class="pick-meta">Everything mixed</span>
-					</button>
+				<div class="topics">
+					<button onclick={() => { playClick(); selectedTopic = ''; }} class="topic {selectedTopic === '' ? 'topic-selected' : ''}">All topics</button>
 					{#each topics as topic (topic.name)}
-						<button onclick={() => { playClick(); selectedTopic = topic.name; phase = 'difficulty'; }} class="pick-card mode-card">
-							<span class="pick-icon"><BookOpen size={18} /></span>
-							<span class="pick-name">{topic.name}</span>
-							<span class="pick-meta">Quiz · Easy to Hard</span>
-						</button>
+						<button onclick={() => { playClick(); selectedTopic = topic.name; }} class="topic {selectedTopic === topic.name ? 'topic-selected' : ''}">{topic.name}</button>
 					{/each}
 				</div>
-			{/if}
-		</div>
-
-	<!-- ═══ DIFFICULTY ═══ -->
-	{:else if phase === 'difficulty'}
-		<div class="center fade-in">
-			<div class="q-card diff-card">
-				<div class="section-head" style="margin:0">
-					<button onclick={goBack} class="back-btn" aria-label="Back">←</button>
-					<div>
-						<h2 class="section-title">Choose difficulty</h2>
-						<p class="section-sub">{selectedClass ? `${selectedClass.name} → ` : ''}{selectedSubject?.name}{selectedTopic ? ` → ${selectedTopic}` : ''}</p>
-					</div>
+				<div class="diff-stack" style="margin-top:1.25rem">
+					<button onclick={() => startQuiz('easy')} class="diff-btn diff-easy">
+						<span class="diff-left">Easy</span>
+						<span class="diff-meta">
+							<span class="dots"><span class="dot filled"></span><span class="dot"></span><span class="dot"></span></span>
+							Gentle start
+						</span>
+					</button>
+					<button onclick={() => startQuiz('medium')} class="diff-btn diff-medium">
+						<span class="diff-left">Medium</span>
+						<span class="diff-meta">
+							<span class="dots"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span></span>
+							Level up
+						</span>
+					</button>
+					<button onclick={() => startQuiz('hard')} class="diff-btn diff-hard">
+						<span class="diff-left">Hard</span>
+						<span class="diff-meta">
+							<span class="dots"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span></span>
+							Expert only
+						</span>
+					</button>
 				</div>
-				{#if loading}
-					<div class="empty">Loading…</div>
-				{:else}
-					<div class="diff-stack">
-						<button onclick={() => startQuiz('easy')} class="diff-btn diff-easy">
-							<span class="diff-left">Easy</span>
-							<span class="diff-meta">
-								<span class="dots"><span class="dot filled"></span><span class="dot"></span><span class="dot"></span></span>
-								Gentle start
-							</span>
-						</button>
-						<button onclick={() => startQuiz('medium')} class="diff-btn diff-medium">
-							<span class="diff-left">Medium</span>
-							<span class="diff-meta">
-								<span class="dots"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span></span>
-								Level up
-							</span>
-						</button>
-						<button onclick={() => startQuiz('hard')} class="diff-btn diff-hard">
-							<span class="diff-left">Hard</span>
-							<span class="diff-meta">
-								<span class="dots"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span></span>
-								Expert only
-							</span>
-						</button>
-					</div>
-				{/if}
-			</div>
+			{/if}
 		</div>
 
 	<!-- ═══ QUIZ ═══ -->
@@ -963,6 +937,8 @@
 		font-weight: 600; font-size: 0.88rem; cursor: pointer;
 	}
 	.topic:hover { background: var(--cream); }
+	.topic-selected { background: var(--ink); color: var(--paper); border-width: 2px; }
+	.topic-selected:hover { background: var(--ink); }
 	.topic-all { background: var(--amber); border-width: 2px; }
 
 	/* mode select */
