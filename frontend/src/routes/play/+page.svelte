@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { apiUrl } from '$lib/api/client.svelte';
 	import { goto } from '$app/navigation';
-	import { Building2, GraduationCap, BookOpen, Layers, Sparkles, Hash, Zap, Check, Globe, Newspaper, Clock } from 'lucide-svelte';
+	import { Building2, GraduationCap, BookOpen, Layers, Sparkles, Hash, Zap, Check, Globe, Newspaper, Clock, Atom } from 'lucide-svelte';
 	import type { PlayClass, PlaySubject, PlayTopic, PlayQuestion } from '$lib/types';
+	import { ELEMENTS, CATEGORY_LABELS, elementClass, elementPeriod, PERIODIC_DIFFICULTIES } from '$lib/data/elements';
 
-	type Phase = 'welcome' | 'mode' | 'classes' | 'subjects' | 'topics' | 'tables' | 'tables-ready' | 'gk' | 'coming-soon' | 'quiz' | 'results';
+	type Phase = 'welcome' | 'mode' | 'classes' | 'subjects' | 'topics' | 'tables' | 'tables-ready' | 'gk' | 'coming-soon' | 'periodic' | 'periodic-ready' | 'quiz' | 'results';
 	type GenQ = PlayQuestion & { uid: number; isRepeat?: boolean };
 	type QuizEntry = 'subject' | 'gk' | 'ca';
 
@@ -45,6 +46,9 @@
 	let rushMode = $state(false);
 	let selectedTable = $state(0); // 0 = mixed
 	let rushLeft = $state(60);
+	// ── Periodic table ──
+	let periodicActive = $state(false);
+	let selectedPeriodicMax = $state(0); // 30 | 60 | 118, 0 = none
 	let qUid = $state(0);
 	let uniqueTotal = $state(0);
 	let uniqueWrong = $state<number[]>([]);
@@ -104,7 +108,7 @@
 
 	function startTablesQuiz(mode: 'practice' | 'rush') {
 		playClick();
-		tablesActive = true;
+		tablesActive = true; periodicActive = false;
 		rushMode = mode === 'rush';
 		justMastered = false;
 		selectedDifficulty = mode;
@@ -126,15 +130,95 @@
 	}
 
 	function tableLabel() { return selectedTable === 0 ? 'Mixed tables' : `Table of ${selectedTable}`; }
+	function periodicLabel() {
+		if (!periodicActive) return '';
+		const d = PERIODIC_DIFFICULTIES.find(x => x.id === selectedPeriodicMax);
+		return d ? `Periodic · ${d.label} (${d.range})` : 'Periodic Table';
+	}
 	function displayAccuracy() {
-		if (tablesActive && !rushMode) return Math.round(((uniqueTotal - uniqueWrong.length) / Math.max(uniqueTotal, 1)) * 100);
+		if ((tablesActive || periodicActive) && !rushMode) return Math.round(((uniqueTotal - uniqueWrong.length) / Math.max(uniqueTotal, 1)) * 100);
 		return accuracy();
 	}
 	function displayCorrect() {
-		if (tablesActive && !rushMode) return `${uniqueTotal - uniqueWrong.length}/${uniqueTotal}`;
+		if ((tablesActive || periodicActive) && !rushMode) return `${uniqueTotal - uniqueWrong.length}/${uniqueTotal}`;
 		return `${correctCount}/${questions.length}`;
 	}
 	function rushColor() { return rushLeft > 20 ? '#0E7C71' : rushLeft > 10 ? '#B45309' : '#C2381B'; }
+
+	// ── Periodic table ──
+	function makeElementQ(max: number): GenQ {
+		const pool = ELEMENTS.filter(e => e.z <= max);
+		const el = pool[Math.floor(Math.random() * pool.length)];
+		const tier: 'easy' | 'medium' | 'hard' = max <= 30 ? 'easy' : max <= 60 ? 'medium' : 'hard';
+		type QKind = 'sym' | 'z' | 'nameBySym' | 'nameByZ' | 'class' | 'family' | 'period';
+		let kinds: QKind[];
+		if (tier === 'easy') kinds = ['sym', 'z', 'nameBySym'];
+		else if (tier === 'medium') kinds = ['sym', 'z', 'nameBySym', 'nameByZ', 'class'];
+		else kinds = ['sym', 'z', 'nameBySym', 'nameByZ', 'class', 'family', 'period'];
+		const kind = kinds[Math.floor(Math.random() * kinds.length)];
+		let qtext = '';
+		let correct = '';
+		let distractors: string[] = [];
+		if (kind === 'sym') {
+			qtext = `What is the symbol of ${el.name}?`;
+			correct = el.sym;
+			distractors = shuffle(pool.filter(x => x.sym !== correct).map(x => x.sym)).slice(0, 3);
+		} else if (kind === 'z') {
+			qtext = `What is the atomic number of ${el.name}?`;
+			correct = String(el.z);
+			const nums = [String(el.z + 1), String(Math.max(1, el.z - 1)), String(el.z + 2), String(el.z + 5), String(el.z + 10)];
+			distractors = shuffle(nums.filter(n => n !== correct)).slice(0, 3);
+		} else if (kind === 'nameBySym') {
+			qtext = `Which element has the symbol ${el.sym}?`;
+			correct = el.name;
+			distractors = shuffle(pool.filter(x => x.name !== correct).map(x => x.name)).slice(0, 3);
+		} else if (kind === 'nameByZ') {
+			qtext = `Which element has atomic number ${el.z}?`;
+			correct = el.name;
+			distractors = shuffle(pool.filter(x => x.name !== correct).map(x => x.name)).slice(0, 3);
+		} else if (kind === 'class') {
+			qtext = `${el.name} is a…`;
+			correct = elementClass(el.cat);
+			distractors = shuffle(['Metal', 'Non-metal', 'Metalloid'].filter(c => c !== correct));
+		} else if (kind === 'family') {
+			qtext = `${el.name} belongs to which family?`;
+			correct = CATEGORY_LABELS[el.cat];
+			const cats = [...new Set(pool.filter(x => x.cat !== el.cat && x.cat !== 'unknown').map(x => CATEGORY_LABELS[x.cat]))];
+			distractors = shuffle(cats).slice(0, 3);
+		} else {
+			qtext = `Which period is ${el.name} in?`;
+			const p = elementPeriod(el.z);
+			correct = String(p);
+			distractors = shuffle(['1', '2', '3', '4', '5', '6', '7'].filter(x => x !== correct)).slice(0, 3);
+		}
+		const opts = shuffle([correct, ...distractors].slice(0, 4)).map((v, i) => ({ key: 'ABCD'[i], value: v, correct: v === correct }));
+		return { question_text: qtext, options: opts, uid: ++qUid, isRepeat: false } as GenQ;
+	}
+
+	function genPeriodicQuestions(max: number, n = 10): GenQ[] {
+		const out: GenQ[] = [];
+		const used = new Set<string>();
+		let attempts = 0;
+		while (out.length < n && attempts < n * 10) {
+			const q = makeElementQ(max);
+			if (!used.has(q.question_text)) { used.add(q.question_text); out.push(q); }
+			attempts++;
+		}
+		while (out.length < n) out.push(makeElementQ(max));
+		return out;
+	}
+
+	function startPeriodicQuiz(mode: 'practice' | 'rush') {
+		playClick();
+		periodicActive = true; tablesActive = false; rushMode = mode === 'rush';
+		justMastered = false; selectedDifficulty = mode;
+		uniqueTotal = 10; uniqueWrong = [];
+		questions = genPeriodicQuestions(selectedPeriodicMax, 10);
+		currentIndex = 0; score = 0; streak = 0; bestStreak = 0; correctCount = 0;
+		selectedKey = ''; answered = false; startTime = Date.now();
+		phase = 'quiz';
+		if (rushMode) startRushTimer(); else startTimer();
+	}
 
 	const CONFETTI_COLORS = ['#FFC233', '#D8F3E3', '#0E7C71', '#FBDAD3', '#6B3FA0', '#FDE9C2'];
 
@@ -201,7 +285,7 @@
 
 	async function loadClasses() {
 		playClick();
-		tablesActive = false;
+		tablesActive = false; periodicActive = false;
 		rushMode = false;
 		quizEntry = 'subject';
 		loading = true;
@@ -235,7 +319,7 @@
 
 	async function loadGK() {
 		playClick();
-		tablesActive = false; rushMode = false;
+		tablesActive = false; periodicActive = false; rushMode = false;
 		selectedClass = null;
 		loading = true;
 		const subs = (await api<PlaySubject[]>('GET', '/play/subjects')) ?? [];
@@ -249,7 +333,7 @@
 
 	async function loadCA() {
 		playClick();
-		tablesActive = false; rushMode = false;
+		tablesActive = false; periodicActive = false; rushMode = false;
 		selectedClass = null;
 		loading = true;
 		const subs = (await api<PlaySubject[]>('GET', '/play/subjects')) ?? [];
@@ -266,6 +350,7 @@
 
 	async function startQuiz(difficulty: string) {
 		playClick();
+		tablesActive = false; periodicActive = false; rushMode = false;
 		selectedDifficulty = difficulty;
 		loading = true;
 		const classParam = selectedClass ? `class_id=${selectedClass.id}&` : '';
@@ -315,8 +400,8 @@
 		answerBounce = true;
 		setTimeout(() => { answerBounce = false; }, 300);
 		if (!rushMode) clearInterval(timerInterval);
-		// Tables practice: re-queue wrong questions a few positions later (active recall)
-		if (tablesActive && !rushMode) {
+		// Tables / Periodic practice: re-queue wrong questions a few positions later (active recall)
+		if ((tablesActive || periodicActive) && !rushMode) {
 			const q = questions[currentIndex];
 			if (!q.isRepeat) {
 				if (!isCorrect && !uniqueWrong.includes(q.uid)) uniqueWrong = [...uniqueWrong, q.uid];
@@ -334,11 +419,15 @@
 		if (phase !== 'quiz') return;
 		if (rushMode) {
 			currentIndex++; selectedKey = ''; answered = false;
-			const [a, b] = randPair();
-			questions = [...questions, makeTableQ(a, b)];
+			if (periodicActive) {
+				questions = [...questions, makeElementQ(selectedPeriodicMax)];
+			} else {
+				const [a, b] = randPair();
+				questions = [...questions, makeTableQ(a, b)];
+			}
 			return;
 		}
-		if (tablesActive) {
+		if (tablesActive || periodicActive) {
 			if (currentIndex >= questions.length - 1) { finishQuiz(); return; }
 			currentIndex++; selectedKey = ''; answered = false; startTimer();
 			return;
@@ -356,11 +445,14 @@
 				justMastered = true;
 			}
 		}
-		if (tablesActive && rushMode) {
+		if (periodicActive && rushMode) {
+			const key = `p${selectedPeriodicMax}`;
+			if (score > (bestRush[key] || 0)) bestRush = { ...bestRush, [key]: score };
+		} else if (tablesActive && rushMode) {
 			const key = selectedTable === 0 ? 'mixed' : String(selectedTable);
 			if (score > (bestRush[key] || 0)) bestRush = { ...bestRush, [key]: score };
 		}
-		if (tablesActive) saveTables();
+		if (tablesActive || periodicActive) saveTables();
 		playComplete();
 		spawnConfetti();
 		phase = 'results';
@@ -374,6 +466,7 @@
 		}
 		const back: Partial<Record<Phase, Phase>> = {
 			mode: 'welcome', classes: 'mode', subjects: 'classes', tables: 'mode', 'tables-ready': 'tables',
+			periodic: 'gk', 'periodic-ready': 'periodic',
 			gk: 'mode', 'coming-soon': 'mode',
 			quiz: 'welcome', results: 'welcome'
 		};
@@ -387,7 +480,7 @@
 		if (phase === 'welcome') goto('/');
 		else confirmExit();
 	}
-	function playAgain() { playClick(); phase = tablesActive ? 'tables-ready' : 'topics'; }
+	function playAgain() { playClick(); phase = periodicActive ? 'periodic-ready' : tablesActive ? 'tables-ready' : 'topics'; }
 
 	function timeColor() { return timeLeft > 10 ? '#0E7C71' : timeLeft > 5 ? '#B45309' : '#C2381B'; }
 	function progressWidth() { return questions.length ? `${((currentIndex + 1) / questions.length) * 100}%` : '0%'; }
@@ -496,10 +589,15 @@
 				</div>
 			</div>
 			<div class="mode-grid">
-				<button onclick={() => { playClick(); tablesActive = true; rushMode = false; phase = 'tables'; }} class="pick-card mode-card">
+				<button onclick={() => { playClick(); tablesActive = true; periodicActive = false; rushMode = false; phase = 'tables'; }} class="pick-card mode-card">
 					<span class="pick-icon"><Hash size={18} /></span>
 					<span class="pick-name">Times Tables</span>
 					<span class="pick-meta">Learn · Practice · Rush</span>
+				</button>
+				<button onclick={() => { playClick(); periodicActive = false; tablesActive = false; selectedPeriodicMax = 0; phase = 'periodic'; }} class="pick-card mode-card">
+					<span class="pick-icon"><Atom size={18} /></span>
+					<span class="pick-name">Periodic Table</span>
+					<span class="pick-meta">Elements · Easy to Hard</span>
 				</button>
 				{#if loading}
 					<div class="empty" style="grid-column:1/-1">Loading…</div>
@@ -538,6 +636,14 @@
 					<p class="section-sub">Master 2 to 10 first, then take the challenge</p>
 				</div>
 			</div>
+			<div class="tchip-grid">
+				{#each [2, 3, 4, 5, 6, 7, 8, 9, 10] as n (n)}
+					<button onclick={() => { playClick(); selectedTable = n; phase = 'tables-ready'; }} class="tchip {mastered.includes(n) ? 'tchip-done' : ''}">
+						{n}
+						{#if mastered.includes(n)}<span class="tchip-check"><Check size={12} strokeWidth={3} /></span>{/if}
+					</button>
+				{/each}
+			</div>
 			<p class="tchip-label">Challenge · 11 to 20</p>
 			<div class="tchip-grid">
 				{#each [11, 12, 13, 14, 15, 16, 17, 18, 19, 20] as n (n)}
@@ -549,6 +655,55 @@
 			</div>
 			<button onclick={() => { playClick(); selectedTable = 0; phase = 'tables-ready'; }} class="btn-ghost btn-block" style="margin-top:1rem">Mixed — random from 2 to 10</button>
 			<p class="hint">Get 9 or more right in Practice to master a table ✓</p>
+		</div>
+
+	<!-- ═══ PERIODIC PICK ═══ -->
+	{:else if phase === 'periodic'}
+		<div class="stack fade-in">
+			<div class="section-head">
+				<button onclick={goBack} class="back-btn" aria-label="Back">←</button>
+				<div>
+					<h2 class="section-title">Periodic Table</h2>
+					<p class="section-sub">30 easy · 60 medium · 118 hard</p>
+				</div>
+			</div>
+			<div class="diff-stack">
+				{#each PERIODIC_DIFFICULTIES as d (d.id)}
+					<button onclick={() => { playClick(); selectedPeriodicMax = d.id; phase = 'periodic-ready'; }} class="diff-btn {d.id === 30 ? 'diff-easy' : d.id === 60 ? 'diff-medium' : 'diff-hard'}">
+						<span class="diff-left"><Atom size={16} /> {d.label} — {d.range}</span>
+						<span class="diff-meta">{d.desc}</span>
+					</button>
+				{/each}
+			</div>
+		</div>
+
+	<!-- ═══ PERIODIC READY / LEARN ═══ -->
+	{:else if phase === 'periodic-ready'}
+		<div class="center fade-in">
+			<div class="q-card" style="max-width:560px;width:100%">
+				<div class="section-head" style="margin:0 0 0.9rem">
+					<button onclick={goBack} class="back-btn" aria-label="Back">←</button>
+					<div>
+						<h2 class="section-title">Periodic Table — {PERIODIC_DIFFICULTIES.find(x => x.id === selectedPeriodicMax)?.label ?? ''}</h2>
+						<p class="section-sub">{PERIODIC_DIFFICULTIES.find(x => x.id === selectedPeriodicMax)?.range ?? ''} · {selectedPeriodicMax === 30 ? 'Symbols & numbers' : selectedPeriodicMax === 60 ? 'Plus metal vs non-metal' : 'All families & periods'}</p>
+					</div>
+				</div>
+				{#if selectedPeriodicMax}
+					{@const elems = ELEMENTS.filter(e => e.z <= selectedPeriodicMax).slice(0, 30)}
+					<div class="tt-grid" style="grid-template-columns: repeat(3, 1fr);">
+						{#each elems as el (el.z)}
+							<div class="tt-row" style="justify-content:space-between"><span class="tt-expr">{el.z}. {el.sym}</span><span class="tt-val" style="font-size:0.95rem">{el.name}</span></div>
+						{/each}
+					</div>
+					{#if selectedPeriodicMax > 30}
+						<p class="hint" style="margin-top:0.5rem">Showing first 30 of {selectedPeriodicMax} — the quiz draws from the full set.</p>
+					{/if}
+				{/if}
+				<div class="welcome-form">
+					<button onclick={() => startPeriodicQuiz('practice')} class="btn-primary btn-block">Practice — 10 questions →</button>
+					<button onclick={() => startPeriodicQuiz('rush')} class="btn-ghost btn-block"><Zap size={16} /> Rush — 60 seconds</button>
+				</div>
+			</div>
 		</div>
 
 	<!-- ═══ TABLES READY / LEARN ═══ -->
@@ -686,6 +841,10 @@
 							<span class="tag">Times tables</span>
 							<span class="tag">{tableLabel()}</span>
 							<span class="tag tag-difficulty">{rushMode ? 'Rush · 60s' : 'Practice'}</span>
+						{:else if periodicActive}
+							<span class="tag">Periodic Table</span>
+							<span class="tag">{periodicLabel()}</span>
+							<span class="tag tag-difficulty">{rushMode ? 'Rush · 60s' : 'Practice'}</span>
 						{:else}
 							{#if selectedClass}<span class="tag">{selectedClass.name}</span>{/if}
 							<span class="tag">{selectedSubject?.name}</span>
@@ -797,7 +956,7 @@
 				<p class="score-label">Points</p>
 				<p class="score-name">{playerName}</p>
 				<p class="score-meta">
-					{#if tablesActive}{tableLabel()} · {rushMode ? 'Rush' : 'Practice'}{:else}{#if selectedClass}{selectedClass.name} · {/if}{selectedSubject?.name}{selectedTopic ? ` · ${selectedTopic}` : ''} · {selectedDifficulty}{/if}
+					{#if tablesActive}{tableLabel()} · {rushMode ? 'Rush' : 'Practice'}{:else if periodicActive}{periodicLabel()} · {rushMode ? 'Rush' : 'Practice'}{:else}{#if selectedClass}{selectedClass.name} · {/if}{selectedSubject?.name}{selectedTopic ? ` · ${selectedTopic}` : ''} · {selectedDifficulty}{/if}
 				</p>
 				{#if justMastered}
 					<span class="master-badge"><Check size={14} strokeWidth={3} /> Table mastered!</span>
@@ -809,17 +968,17 @@
 					<div class="s-sep"></div>
 					<div class="s-stat"><span class="s-v mono">{displayCorrect()}</span><span class="s-k">Correct</span></div>
 				</div>
-				{#if tablesActive && rushMode}
-					<p class="score-time">Personal best: {Math.max(score, bestRush[selectedTable === 0 ? 'mixed' : String(selectedTable)] || 0).toLocaleString()}</p>
+				{#if (tablesActive || periodicActive) && rushMode}
+					<p class="score-time">Personal best: {Math.max(score, bestRush[(periodicActive ? `p${selectedPeriodicMax}` : selectedTable === 0 ? 'mixed' : String(selectedTable))] || 0).toLocaleString()}</p>
 				{:else}
-					<p class="score-time">{formatTime(Date.now() - startTime)} · {tablesActive ? `${uniqueTotal} questions` : `${questions.length} questions`}</p>
+					<p class="score-time">{formatTime(Date.now() - startTime)} · {(tablesActive || periodicActive) ? `${uniqueTotal} questions` : `${questions.length} questions`}</p>
 				{/if}
-				{#if tablesActive && !rushMode && uniqueWrong.length > 0}
+				{#if (tablesActive || periodicActive) && !rushMode && uniqueWrong.length > 0}
 					<p class="score-time">Practise these: {uniqueWrong.slice(0, 4).map(uid => { const q = questions.find(qq => qq.uid === uid); return q ? q.question_text.replace('What is ', '').replace('?', '') : ''; }).filter(Boolean).join(' · ')}</p>
 				{/if}
 				<div class="score-actions">
 					<button onclick={playAgain} class="btn-primary btn-block">Play again →</button>
-					<button onclick={() => { playClick(); phase = tablesActive ? 'tables' : 'mode'; }} class="btn-ghost btn-block">Choose {tablesActive ? 'table' : 'quiz'}</button>
+					<button onclick={() => { playClick(); phase = periodicActive ? 'periodic' : tablesActive ? 'tables' : 'mode'; }} class="btn-ghost btn-block">Choose {periodicActive ? 'level' : tablesActive ? 'table' : 'quiz'}</button>
 					<a href="/" class="btn-ghost btn-block" style="text-align:center; text-decoration:none; display:flex; justify-content:center;">Back to home</a>
 				</div>
 				<p class="hint">Take a screenshot to share your score.</p>
