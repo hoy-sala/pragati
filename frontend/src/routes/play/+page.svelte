@@ -688,20 +688,15 @@
 						<p class="section-sub">{PERIODIC_DIFFICULTIES.find(x => x.id === selectedPeriodicMax)?.range ?? ''} · {selectedPeriodicMax === 30 ? 'Symbols & numbers' : selectedPeriodicMax === 60 ? 'Plus metal vs non-metal' : 'All families & periods'}</p>
 					</div>
 				</div>
-				{#if selectedPeriodicMax}
-					{@const elems = ELEMENTS.filter(e => e.z <= selectedPeriodicMax).slice(0, 30)}
-					<div class="tt-grid" style="grid-template-columns: repeat(3, 1fr);">
-						{#each elems as el (el.z)}
-							<div class="tt-row" style="justify-content:space-between"><span class="tt-expr">{el.z}. {el.sym}</span><span class="tt-val" style="font-size:0.95rem">{el.name}</span></div>
-						{/each}
-					</div>
-					{#if selectedPeriodicMax > 30}
-						<p class="hint" style="margin-top:0.5rem">Showing first 30 of {selectedPeriodicMax} — the quiz draws from the full set.</p>
-					{/if}
-				{/if}
+				<div class="p-info">
+					<div class="p-info-row"><span class="p-info-k">Pool</span><span class="p-info-v">{PERIODIC_DIFFICULTIES.find(x => x.id === selectedPeriodicMax)?.range ?? ''}</span></div>
+					<div class="p-info-row"><span class="p-info-k">Focus</span><span class="p-info-v">{selectedPeriodicMax === 30 ? 'Symbols & atomic numbers' : selectedPeriodicMax === 60 ? 'Plus Metal / Non-metal / Metalloid' : 'Families & periods — high-school level'}</span></div>
+					<div class="p-info-row"><span class="p-info-k">Example</span><span class="p-info-v p-info-ex">{selectedPeriodicMax === 30 ? 'What is the symbol of Oxygen? → O' : selectedPeriodicMax === 60 ? 'Sodium is a… → Metal' : 'Which family is Iodine in? → Halogen'}</span></div>
+				</div>
 				<div class="welcome-form">
 					<button onclick={() => startPeriodicQuiz('practice')} class="btn-primary btn-block">Practice — 10 questions →</button>
 					<button onclick={() => startPeriodicQuiz('rush')} class="btn-ghost btn-block"><Zap size={16} /> Rush — 60 seconds</button>
+					<p class="hint">Practice shuffles the pool. Rush adds new questions non-stop for 60 seconds.</p>
 				</div>
 			</div>
 		</div>
@@ -1139,6 +1134,13 @@
 	.tt-expr { font-weight: 600; color: var(--ink-soft); min-width: 4.2rem; }
 	.tt-eq { color: var(--ink-soft); }
 	.tt-val { font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; color: var(--ink); }
+
+	/* periodic preview */
+	.p-info { background: var(--cream); border: 2px solid var(--ink); border-radius: 12px; padding: 0.9rem 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+	.p-info-row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; font-size: 0.92rem; }
+	.p-info-k { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
+	.p-info-v { font-weight: 600; color: var(--ink); text-align: right; }
+	.p-info-ex { font-family: var(--font-mono); font-size: 0.85rem; color: var(--plum); font-weight: 600; }
 
 	/* mastery badge */
 	.master-badge {
