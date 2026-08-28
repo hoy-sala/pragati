@@ -120,10 +120,10 @@
 				<button class="about-close" onclick={() => aboutOpen = false} aria-label="Close">✕</button>
 				<h2 class="about-title">About ಪ್ರಗತಿ</h2>
 				<div class="about-body">
-					<p>Hi, I'm <strong>Hoysala T</strong> — Computer Science Teacher at <strong>MDRS (SC-32) Bahaddurghatta</strong>.</p>
-					<p>I built <span class="font-kannada">ಪ್ರಗತಿ</span> — Pragati (progress) — as a simple, safe home for our children: your timetable, quick quizzes, and your progress, all in one place.</p>
-					<p>Quizzes are practice, not exams. Questions come from what you learn in class. Pick your level, play at your pace — alone or with friends. No ads, no tracking, just learning together.</p>
-					<p><a href="/play">Try a quiz</a> or <button class="link-btn" onclick={() => { aboutOpen = false; view = 'login'; }}>sign in</button> to see your dashboard.</p>
+					<p>Dear Students,</p>
+					<p>We — the staff of <strong>MDRS (SC-32) Bahaddurghatta</strong> — built <span class="font-kannada">ಪ್ರಗತಿ</span> — Pragati (progress) — for you. It's a simple, safe place for your timetable, fun quizzes and your progress.</p>
+					<p>Our quizzes are practice, not pressure. They come straight from what you learn in class. Choose your level, play at your own pace, and learn a little every day. No ads, no tracking — just learning together.</p>
+					<p>Ready to begin? <a href="/play">Try a quiz</a> or <button class="link-btn" onclick={() => { aboutOpen = false; view = 'login'; }}>sign in</button> with your class.</p>
 				</div>
 			</div>
 		{/if}
