@@ -121,9 +121,9 @@
 				<h2 class="about-title">About ಪ್ರಗತಿ</h2>
 				<div class="about-body">
 					<p>Dear Students,</p>
-					<p>We — the staff of <strong>MDRS (SC-32) Bahaddurghatta</strong> — built <span class="font-kannada">ಪ್ರಗತಿ</span> — Pragati (progress) — for you. It's a simple, safe place for your timetable, fun quizzes and your progress.</p>
-					<p>Our quizzes are practice, not pressure. They come straight from what you learn in class. Choose your level, play at your own pace, and learn a little every day. No ads, no tracking — just learning together.</p>
-					<p>Ready to begin? <a href="/play">Try a quiz</a> or <button class="link-btn" onclick={() => { aboutOpen = false; view = 'login'; }}>sign in</button> with your class.</p>
+					<p>We — the staff of <strong>MDRS (SC-32) Bahaddurghatta</strong> — built <span class="font-kannada">ಪ್ರಗತಿ</span> — Pragati — for you. A simple, safe place for your timetable, your quizzes and your progress.</p>
+					<p>Our quizzes are practice, not pressure. They come straight from what you learn in class. Pick your level, play at your pace, and learn a little every single day.</p>
+					<p>Let's build a learning revolution — one question, one day at a time. It starts with you. <a href="/play">Try a quiz</a> or <button class="link-btn" onclick={() => { aboutOpen = false; view = 'login'; }}>sign in</button> with your class.</p>
 				</div>
 			</div>
 		{/if}
