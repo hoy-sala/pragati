@@ -58,13 +58,12 @@ for d in ["Bidar","Yadgir","Raichur","Dharwad","Gadag","Uttara Kannada","Udupi",
 # famous-for
 famous = [
  ("Mysuru","Palaces and Dasara"),("Kodagu","Coffee plantations"),("Udupi","Ashta Mathas and temple town"),("Uttara Kannada","Forests and coastline"),("Kolar","Gold fields (KGF)"),
- ("Belagavi","Border district with bilingual heritage"),("Kalaburagi","Kalaburagi Fort and Sufi shrines"),("Ballari","Mining and Hampi region"),("Hassan","Hoysala temples of Belur-Halebidu"),("Dharwad","Educational hub and Dharwad pedha"),
- ("Shivamogga","Malnad and Jog Falls"),("Chikkamagaluru","Coffee was first grown in India at Baba Budangiri"),("Mandya","Sugarcane belt"),("Raichur","Thermal power and Raichur Fort"),("Tumakuru","Coconut city"),
+ ("Belagavi","Border district with bilingual heritage"),("Kalaburagi","Historic fort and Sufi shrines (Haft Gumbaz)"),("Ballari","Mining and Hampi region"),("Hassan","Hoysala temples of Belur-Halebidu"),("Dharwad","Educational hub and the famous pedha sweet"),
+ ("Shivamogga","Malnad and Jog Falls"),("Chikkamagaluru","Coffee was first grown in India at Baba Budangiri"),("Mandya","Sugarcane belt"),("Raichur","Thermal power plant and historic fort on the Krishna"),("Tumakuru","Coconut city"),
  ("Bidar","Bidriware metal craft"),("Vijayapura","Gol Gumbaz"),("Gadag","Tontadarya Math and Hampi-era temples"),("Davangere","Benne dosa"),("Yadgir","Newer north Karnataka district"),
 ]
 for d, feat in famous:
-    distract = random.sample([f for _,f in famous if f!=feat], 3)
-    add(qs, f"Which district is famous for: {feat}?", d, random.sample([x for x in districts if x!=d],3) if random.random()<0.3 else distract, "medium","Karnataka:Districts",["karnataka","districts"])
+    add(qs, f"Which district is famous for: {feat}?", d, random.sample([x for x in districts if x!=d],3), "medium","Karnataka:Districts",["karnataka","districts"])
     if len(qs) >= 70: break
 # pad to 70
 extras = [
