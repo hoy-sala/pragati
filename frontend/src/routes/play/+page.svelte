@@ -832,12 +832,18 @@
 			{#if loading}
 				<div class="empty">Loading…</div>
 			{:else}
-				<div class="topics">
-					<button onclick={() => { playClick(); selectedTopic = ''; }} class="topic {selectedTopic === '' ? 'topic-selected' : ''}">All topics</button>
-					{#each topics as topic (topic.name)}
-						<button onclick={() => { playClick(); selectedTopic = topic.name; }} class="topic {selectedTopic === topic.name ? 'topic-selected' : ''}">{topic.name}</button>
-					{/each}
-				</div>
+				{@const topicFamily = selectedTopic.includes(':') ? selectedTopic.split(':')[0] : ''}
+				{@const visibleTopics = topicFamily && (topicFamily === 'Karnataka' || topicFamily === 'Freedom') ? topics.filter(t => t.name.startsWith(topicFamily + ':')) : topics}
+				{#if !(quizEntry === 'gk' && selectedTopic)}
+					<div class="topics">
+						<button onclick={() => { playClick(); selectedTopic = ''; }} class="topic {selectedTopic === '' ? 'topic-selected' : ''}">All topics</button>
+						{#each visibleTopics as topic (topic.name)}
+							<button onclick={() => { playClick(); selectedTopic = topic.name; }} class="topic {selectedTopic === topic.name ? 'topic-selected' : ''}">{topic.name.replace('Karnataka:','').replace('Freedom:','')}</button>
+						{/each}
+					</div>
+				{:else}
+					<p class="section-sub" style="margin:0 0 0.6rem; color:var(--ink-soft)">{selectedTopic.replace('Karnataka:','').replace('Freedom:','')} · choose difficulty to start</p>
+				{/if}
 				<div class="diff-stack" style="margin-top:1.25rem">
 					<button onclick={() => startQuiz('easy')} class="diff-btn diff-easy">
 						<span class="diff-left">Easy</span>
