@@ -568,7 +568,7 @@
 				<button onclick={loadGK} class="pick-card mode-card">
 					<span class="pick-icon"><Globe size={18} /></span>
 					<span class="pick-name">General Knowledge</span>
-					<span class="pick-meta">500 Karnataka · Tables · Periodic · 528 Qs</span>
+					<span class="pick-meta">1000 Freedom · 500 Karnataka · 1528 Qs</span>
 				</button>
 				<button onclick={loadCA} class="pick-card mode-card">
 					<span class="pick-icon"><Newspaper size={18} /></span>
@@ -581,8 +581,10 @@
 	<!-- ═══ GK HUB ═══ -->
 	{:else if phase === 'gk'}
 		{@const ktopics = topics.filter(t => t.name.startsWith('Karnataka:'))}
-		{@const otherTopics = topics.filter(t => !t.name.startsWith('Karnataka:'))}
+		{@const ftopics = topics.filter(t => t.name.startsWith('Freedom:'))}
+		{@const otherTopics = topics.filter(t => !t.name.startsWith('Karnataka:') && !t.name.startsWith('Freedom:'))}
 		{@const kLabels: Record<string,string> = {'Karnataka:Districts':'Districts & Divisions','Karnataka:Geography':'Geography & Nature','Karnataka:History':'History & Kingdoms','Karnataka:Culture':'Culture & Heritage','Karnataka:Language':'Language & Literature','Karnataka:Wildlife':'Wildlife & Reserves','Karnataka:Symbols':'Government & Symbols','Karnataka:Legends':'Legends & Today'}}
+		{@const fLabels: Record<string,string> = {'Freedom:1857':'1857 & Early Resistance','Freedom:1885-1905':'INC & Swadeshi (1885-1905)','Freedom:1905-1919':'Revolutionary & Home Rule','Freedom:Gandhian-I':'Gandhian I: NCM','Freedom:Gandhian-II':'Gandhian II: CDM & 1935','Freedom:Revolutionary-INA':'Revolutionaries & INA','Freedom:Leadership':'Leaders & Personalities','Freedom:Endgame':'Quit India & Partition'}}
 		<div class="stack fade-in">
 			<div class="section-head">
 				<button onclick={goBack} class="back-btn" aria-label="Back">←</button>
@@ -615,6 +617,20 @@
 									<span class="pick-icon"><Globe size={18} /></span>
 									<span class="pick-name">{kLabels[topic.name] ?? topic.name.replace('Karnataka:','')}</span>
 									<span class="pick-meta">Karnataka · Quiz · Easy to Hard</span>
+								</button>
+							{/each}
+						</div>
+					</div>
+				{/if}
+				{#if ftopics.length}
+					<div style="margin-top:1.1rem">
+						<p class="tchip-label" style="margin:0 0 0.5rem">Indian Freedom Movement · 1000 questions</p>
+						<div class="mode-grid">
+							{#each ftopics as topic (topic.name)}
+								<button onclick={() => { playClick(); selectedTopic = topic.name; quizEntry = 'gk'; phase = 'topics'; }} class="pick-card mode-card">
+									<span class="pick-icon"><Globe size={18} /></span>
+									<span class="pick-name">{fLabels[topic.name] ?? topic.name.replace('Freedom:','')}</span>
+									<span class="pick-meta">Freedom · Quiz · Easy to Hard</span>
 								</button>
 							{/each}
 						</div>
