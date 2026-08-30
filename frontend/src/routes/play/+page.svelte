@@ -568,7 +568,7 @@
 				<button onclick={loadGK} class="pick-card mode-card">
 					<span class="pick-icon"><Globe size={18} /></span>
 					<span class="pick-name">General Knowledge</span>
-					<span class="pick-meta">Tables · States &amp; Capitals</span>
+					<span class="pick-meta">500 Karnataka · Tables · Periodic · 528 Qs</span>
 				</button>
 				<button onclick={loadCA} class="pick-card mode-card">
 					<span class="pick-icon"><Newspaper size={18} /></span>
@@ -580,12 +580,15 @@
 
 	<!-- ═══ GK HUB ═══ -->
 	{:else if phase === 'gk'}
+		{@const ktopics = topics.filter(t => t.name.startsWith('Karnataka:'))}
+		{@const otherTopics = topics.filter(t => !t.name.startsWith('Karnataka:'))}
+		{@const kLabels: Record<string,string> = {'Karnataka:Districts':'Districts & Divisions','Karnataka:Geography':'Geography & Nature','Karnataka:History':'History & Kingdoms','Karnataka:Culture':'Culture & Heritage','Karnataka:Language':'Language & Literature','Karnataka:Wildlife':'Wildlife & Reserves','Karnataka:Symbols':'Government & Symbols','Karnataka:Legends':'Legends & Today'}}
 		<div class="stack fade-in">
 			<div class="section-head">
 				<button onclick={goBack} class="back-btn" aria-label="Back">←</button>
 				<div>
 					<h2 class="section-title">General Knowledge</h2>
-					<p class="section-sub">Pick a challenge, {playerName}</p>
+					<p class="section-sub">Pick a challenge, {playerName} · {topics.length} topics</p>
 				</div>
 			</div>
 			<div class="mode-grid">
@@ -599,18 +602,39 @@
 					<span class="pick-name">Periodic Table</span>
 					<span class="pick-meta">Elements · Easy to Hard</span>
 				</button>
-				{#if loading}
-					<div class="empty" style="grid-column:1/-1">Loading…</div>
-				{:else}
-					{#each topics as topic (topic.name)}
-						<button onclick={() => { playClick(); selectedTopic = topic.name; quizEntry = 'gk'; phase = 'topics'; }} class="pick-card mode-card">
-							<span class="pick-icon"><Globe size={18} /></span>
-							<span class="pick-name">{topic.name}</span>
-							<span class="pick-meta">Quiz · Easy to Hard</span>
-						</button>
-					{/each}
-				{/if}
 			</div>
+			{#if loading}
+				<div class="empty">Loading…</div>
+			{:else}
+				{#if ktopics.length}
+					<div style="margin-top:1.1rem">
+						<p class="tchip-label" style="margin:0 0 0.5rem">Karnataka — Namma Nadu · 500 questions</p>
+						<div class="mode-grid">
+							{#each ktopics as topic (topic.name)}
+								<button onclick={() => { playClick(); selectedTopic = topic.name; quizEntry = 'gk'; phase = 'topics'; }} class="pick-card mode-card">
+									<span class="pick-icon"><Globe size={18} /></span>
+									<span class="pick-name">{kLabels[topic.name] ?? topic.name.replace('Karnataka:','')}</span>
+									<span class="pick-meta">Karnataka · Quiz · Easy to Hard</span>
+								</button>
+							{/each}
+						</div>
+					</div>
+				{/if}
+				{#if otherTopics.length}
+					<div style="margin-top:1.1rem">
+						<p class="tchip-label" style="margin:0 0 0.5rem">India & More</p>
+						<div class="mode-grid">
+							{#each otherTopics as topic (topic.name)}
+								<button onclick={() => { playClick(); selectedTopic = topic.name; quizEntry = 'gk'; phase = 'topics'; }} class="pick-card mode-card">
+									<span class="pick-icon"><Globe size={18} /></span>
+									<span class="pick-name">{topic.name}</span>
+									<span class="pick-meta">Quiz · Easy to Hard</span>
+								</button>
+							{/each}
+						</div>
+					</div>
+				{/if}
+			{/if}
 		</div>
 
 	<!-- ═══ COMING SOON ═══ -->
