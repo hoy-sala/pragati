@@ -6,7 +6,7 @@
 	import { ELEMENTS, CATEGORY_LABELS, elementClass, elementPeriod, PERIODIC_DIFFICULTIES } from '$lib/data/elements';
 	import MathText from '$lib/components/MathText.svelte';
 
-	type Phase = 'welcome' | 'mode' | 'classes' | 'subjects' | 'topics' | 'tables' | 'tables-ready' | 'gk' | 'coming-soon' | 'periodic' | 'periodic-ready' | 'quiz' | 'results' | 'team-create' | 'team-play';
+	type Phase = 'welcome' | 'mode' | 'classes' | 'subjects' | 'topics' | 'tables' | 'tables-ready' | 'gk' | 'coming-soon' | 'periodic' | 'periodic-ready' | 'quiz' | 'results' | 'team-create' | 'team-created' | 'team-play';
 	type GenQ = PlayQuestion & { uid: number; isRepeat?: boolean };
 	type QuizEntry = 'subject' | 'gk' | 'ca';
 
@@ -33,6 +33,7 @@
 	let subjectTopicsMap = $state<Record<string, PlayTopic[]>>({});
 	let teamCreating = $state(false);
 	let teamError = $state('');
+	let createdTeamQuiz = $state<any>(null);
 
 	let currentIndex = $state(0);
 	let score = $state(0);
@@ -391,9 +392,8 @@
 			const json = await res.json();
 			if (!res.ok) { teamError = (json as any)?.message || (json as any)?.error || JSON.stringify(json) || 'Failed to create'; teamCreating = false; return; }
 			teamCreating = false;
-			// go to play with generated quiz id - for now just show success and go to mode
-			phase = 'mode';
-			// store id for host view if needed
+			createdTeamQuiz = (json as any)?.data ?? json;
+			phase = 'team-created';
 		} catch (e) { teamError = 'Network error'; teamCreating = false; }
 	}
 
@@ -517,7 +517,7 @@
 			mode: 'welcome', classes: 'mode', subjects: 'classes', tables: 'mode', 'tables-ready': 'tables',
 			periodic: 'gk', 'periodic-ready': 'periodic',
 			gk: 'mode', 'coming-soon': 'mode',
-			'team-create': 'mode', 'team-play': 'mode',
+			'team-create': 'mode', 'team-created': 'team-create', 'team-play': 'mode',
 			quiz: 'welcome', results: 'welcome'
 		};
 		phase = back[phase] ?? 'welcome';
@@ -684,6 +684,26 @@
 				{#if teamError}<div class="feedback feedback-bad" style="margin:0"><p class="feedback-text">{teamError}</p></div>{/if}
 				<button onclick={createTeamQuiz} disabled={teamCreating || !teamTitle.trim() || teamChapters.length===0} class="btn-primary btn-block">{teamCreating ? 'Creating…' : 'Create Team Quiz →'}</button>
 				<p class="hint">Public — appears under Quizzes. Host projects, teams A/B/C answer orally.</p>
+			</div>
+		</div>
+
+	<!-- ═══ TEAM CREATED ═══ -->
+	{:else if phase === 'team-created'}
+		<div class="center fade-in">
+			<div class="q-card" style="max-width:520px;width:100%;text-align:center">
+				<div class="welcome-icon" aria-hidden="true"><Trophy size={28} /></div>
+				<h2 class="welcome-title" style="font-size:1.5rem">Team Quiz Created!</h2>
+				<p class="welcome-sub" style="margin-top:0.5rem">{createdTeamQuiz?.title ?? teamTitle} · {createdTeamQuiz?.teams ?? teamCount} teams ({Array.from({length: (createdTeamQuiz?.teams ?? teamCount)},(_,i)=>String.fromCharCode(65+i)).join(', ')}) · {createdTeamQuiz?.per_team ?? perTeam} Qs each · 10 pts per correct</p>
+				<div style="background:var(--cream);border:2px solid var(--ink);border-radius:12px;padding:0.8rem;margin:1rem 0;text-align:left">
+					<p class="field-label" style="margin:0 0 0.3rem">Chapters</p>
+					<p style="font-size:0.9rem;line-height:1.5">{(createdTeamQuiz?.chapters ?? teamChapters).join(', ')}</p>
+					<p class="hint" style="text-align:left;margin-top:0.5rem">Total {(createdTeamQuiz?.teams ?? teamCount) * (createdTeamQuiz?.per_team ?? perTeam)} questions · No repeats · Difficulty balanced · Round-robin A→B→C</p>
+				</div>
+				<div style="display:flex;flex-direction:column;gap:0.6rem">
+					<button onclick={() => { playClick(); phase = 'mode'; }} class="btn-primary btn-block">Back to Quizzes →</button>
+					<button onclick={() => { playClick(); phase = 'team-create'; }} class="btn-ghost btn-block">Create Another</button>
+				</div>
+				<p class="hint" style="margin-top:0.8rem">Find it under Quizzes → Team Quizzes. Host on projector, 30s per Q.</p>
 			</div>
 		</div>
 
