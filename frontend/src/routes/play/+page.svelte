@@ -855,12 +855,13 @@
 							{#each cur.q.options as opt}
 								{@const isSelected = teamPlayAnswered && opt.key === teamPlaySelectedKey}
 								{@const isCorrectOpt = !!opt.correct}
-								<label class="opt {teamPlayAnswered && isSelected ? (teamPlayIsCorrect ? 'opt-correct' : 'opt-incorrect') : ''} {teamPlayAnswered && !isSelected && isCorrectOpt ? 'opt-correct' : ''} {!teamPlayAnswered && teamPlaySelectedKey === opt.key ? 'opt-selected' : ''}">
+								{@const showCorrect = (teamPlayAnswered || teamPlayRevealed) && !isSelected && isCorrectOpt}
+								<label class="opt {teamPlayAnswered && isSelected ? (teamPlayIsCorrect ? 'opt-correct' : 'opt-incorrect') : ''} {showCorrect ? 'opt-correct' : ''} {!teamPlayAnswered && !teamPlayRevealed && teamPlaySelectedKey === opt.key ? 'opt-selected' : ''}">
 									<input type="radio" name="tq{teamPlayIndex}" value={opt.key} disabled={teamPlayAnswered} checked={teamPlaySelectedKey === opt.key} onchange={() => handleTeamAnswer(opt.key)} class="opt-input" />
 									<span class="opt-row">
 										<span class="opt-radio"><span class="opt-dot"></span></span>
 										<span class="opt-text"><MathText text={opt.value} /></span>
-										{#if teamPlayAnswered && isSelected}<span class="opt-state">{teamPlayIsCorrect ? '✓' : '✕'}</span>{:else if teamPlayAnswered && isCorrectOpt}<span class="opt-state">✓</span>{/if}
+										{#if teamPlayAnswered && isSelected}<span class="opt-state">{teamPlayIsCorrect ? '✓' : '✕'}</span>{:else if showCorrect}<span class="opt-state">✓</span>{/if}
 									</span>
 								</label>
 							{/each}
@@ -874,10 +875,21 @@
 								<span class="streak-chip">Team {cur.team}</span>
 							</div>
 						</div>
+					{:else if teamPlayRevealed}
+						<div class="feedback">
+							<div class="feedback-head">
+								<span class="feedback-badge">✓</span>
+								<span class="feedback-title">Answer revealed</span>
+								<span class="streak-chip">Team {cur.team}</span>
+							</div>
+							<p class="feedback-text">Correct answer highlighted above. Tap a team’s answer to award 10 points.</p>
+						</div>
 					{/if}
 					<div style="display:flex;gap:0.6rem;margin-top:1rem">
-						{#if !teamPlayAnswered}
+						{#if !teamPlayAnswered && !teamPlayRevealed}
 							<button onclick={() => { teamPlayRevealed = true; clearInterval(timerInterval); }} class="btn-ghost" style="flex:1">Reveal Answer</button>
+						{:else if teamPlayRevealed && !teamPlayAnswered}
+							<button onclick={() => { teamPlayRevealed = false; startTeamTimer(); }} class="btn-ghost" style="flex:1">Hide Answer</button>
 						{/if}
 						<button onclick={nextTeamQuestion} class="btn-primary" style="flex:1">{teamPlayIndex >= teamPlayOrder.length - 1 ? 'Finish →' : 'Next →'}</button>
 					</div>
