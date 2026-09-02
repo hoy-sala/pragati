@@ -42,7 +42,8 @@ func (h *TeamQuizHandler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 	var input TeamQuizCreateInput
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
-		renderJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid body"})
+		log.Error().Err(err).Msg("team quiz: decode failed")
+		renderJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid body: " + err.Error()})
 		return
 	}
 	if input.Title == "" {
