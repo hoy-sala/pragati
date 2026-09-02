@@ -801,7 +801,7 @@
 					<button onclick={() => { playClick(); phase = 'mode'; }} class="btn-primary btn-block">Back to Quizzes →</button>
 					<button onclick={() => { playClick(); phase = 'team-create'; }} class="btn-ghost btn-block">Create Another</button>
 				</div>
-				<p class="hint" style="margin-top:0.8rem">Find it under Quizzes → Team Quizzes. Host on projector, 30s per Q.</p>
+				<p class="hint" style="margin-top:0.8rem">Starts immediately — round-robin on projector, 30s per Q, 10 pts.</p>
 			</div>
 		</div>
 
