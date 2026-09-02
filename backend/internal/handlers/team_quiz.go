@@ -159,7 +159,7 @@ func (h *TeamQuizHandler) Create(w http.ResponseWriter, r *http.Request) {
 		var id string
 		err = h.db.QueryRow(r.Context(), `
 			INSERT INTO team_quizzes (school_id, title, description, teams, per_team, timer_sec, chapters, questions, created_by)
-			VALUES ($1,$2,$3,$4,$5,$6,$7::jsonb,$8::jsonb,$9) RETURNING id
+			VALUES ($1,$2,$3,$4,$5,$6,$7::jsonb,$8::jsonb, NULLIF($9,'')::uuid) RETURNING id
 		`, schoolID, input.Title, input.Description, input.Teams, input.PerTeam, input.TimerSec, string(chaptersJSON), string(questionsJSON), userID).Scan(&id)
 		if err != nil {
 			log.Error().Err(err).Msg("team quiz: insert failed")
@@ -197,7 +197,7 @@ func (h *TeamQuizHandler) Create(w http.ResponseWriter, r *http.Request) {
 	var id string
 	err = h.db.QueryRow(r.Context(), `
 		INSERT INTO team_quizzes (school_id, title, description, teams, per_team, timer_sec, chapters, questions, created_by)
-		VALUES ($1,$2,$3,$4,$5,$6,$7::jsonb,$8::jsonb,$9) RETURNING id
+		VALUES ($1,$2,$3,$4,$5,$6,$7::jsonb,$8::jsonb, NULLIF($9,'')::uuid) RETURNING id
 	`, schoolID, input.Title, input.Description, input.Teams, input.PerTeam, input.TimerSec, string(chaptersJSON), string(questionsJSON), userID).Scan(&id)
 	if err != nil {
 		log.Error().Err(err).Msg("team quiz: insert failed")
