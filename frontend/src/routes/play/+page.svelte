@@ -433,13 +433,14 @@
 		else teamChapters = [...teamChapters, ch];
 	}
 	async function createTeamQuiz() {
-		if (!teamTitle.trim() || teamChapters.length === 0) { teamError = 'Add title and pick at least one chapter.'; return; }
+		if (teamChapters.length === 0) { teamError = 'Pick at least one chapter.'; return; }
+		const titleToSend = teamTitle.trim() || `Custom Quiz — ${teamChapters.slice(0,2).join(', ')}${teamChapters.length>2?'…':''}`;
 		teamCreating = true; teamError = '';
 		try {
 			const res = await fetch(apiUrl('/team-quizzes/'), {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ title: teamTitle.trim(), description: '', teams: teamCount, per_team: perTeam, chapters: teamChapters, timer_sec: 30 })
+				body: JSON.stringify({ title: titleToSend, description: '', teams: teamCount, per_team: perTeam, chapters: teamChapters, timer_sec: 30 })
 			});
 			const json = await res.json();
 			if (!res.ok) { teamError = (json as any)?.message || (json as any)?.error || JSON.stringify(json) || 'Failed to create'; teamCreating = false; return; }
@@ -743,8 +744,8 @@
 			</div>
 			<div class="q-card" style="display:flex;flex-direction:column;gap:1rem">
 				<label class="field">
-					<span class="field-label">Quiz title</span>
-					<input bind:value={teamTitle} placeholder="e.g. Science Ch1-2 Team Battle" maxlength={80} class="input" />
+					<span class="field-label">Quiz title (optional)</span>
+					<input bind:value={teamTitle} placeholder="e.g. Science Ch1-2 Team Battle — leave blank for auto" maxlength={80} class="input" />
 				</label>
 				<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem">
 					<label class="field">
@@ -780,7 +781,7 @@
 					</div>
 				{/if}
 				{#if teamError}<div class="feedback feedback-bad" style="margin:0"><p class="feedback-text">{teamError}</p></div>{/if}
-				<button onclick={createTeamQuiz} disabled={teamCreating || !teamTitle.trim() || teamChapters.length===0} class="btn-primary btn-block">{teamCreating ? 'Starting…' : 'Start Custom Quiz →'}</button>
+				<button onclick={createTeamQuiz} disabled={teamCreating || teamChapters.length===0} class="btn-primary btn-block">{teamCreating ? 'Starting…' : 'Start Custom Quiz →'}</button>
 				<p class="hint">Starts immediately — round-robin · No repeats · Difficulty balanced · 10 pts</p>
 			</div>
 		</div>

@@ -50,8 +50,7 @@ func (h *TeamQuizHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if input.Title == "" {
-		renderJSON(w, http.StatusBadRequest, map[string]string{"error": "title required"})
-		return
+		input.Title = "Custom Quiz"
 	}
 	if input.Teams < 2 || input.Teams > 8 {
 		renderJSON(w, http.StatusBadRequest, map[string]string{"error": "teams must be 2-8"})
