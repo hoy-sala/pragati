@@ -210,7 +210,7 @@
 				{/if}
 			</div>
 
-			<p class="login-foot">Protected by KREIS.</p>
+
 		</div>
 	{/if}
 </div>
