@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { apiUrl } from '$lib/api/client.svelte';
 	import { goto } from '$app/navigation';
-	import { Building2, GraduationCap, BookOpen, Layers, Sparkles, Hash, Zap, Check, Globe, Newspaper, Clock, Atom } from 'lucide-svelte';
+	import { Building2, GraduationCap, BookOpen, Layers, Sparkles, Hash, Zap, Check, Globe, Newspaper, Clock, Atom, Users, Trophy } from 'lucide-svelte';
 	import type { PlayClass, PlaySubject, PlayTopic, PlayQuestion } from '$lib/types';
 	import { ELEMENTS, CATEGORY_LABELS, elementClass, elementPeriod, PERIODIC_DIFFICULTIES } from '$lib/data/elements';
 
-	type Phase = 'welcome' | 'mode' | 'classes' | 'subjects' | 'topics' | 'tables' | 'tables-ready' | 'gk' | 'coming-soon' | 'periodic' | 'periodic-ready' | 'quiz' | 'results';
+	type Phase = 'welcome' | 'mode' | 'classes' | 'subjects' | 'topics' | 'tables' | 'tables-ready' | 'gk' | 'coming-soon' | 'periodic' | 'periodic-ready' | 'quiz' | 'results' | 'team-create' | 'team-play';
 	type GenQ = PlayQuestion & { uid: number; isRepeat?: boolean };
 	type QuizEntry = 'subject' | 'gk' | 'ca';
 
@@ -22,6 +22,16 @@
 	let loading = $state(false);
 	let quizEntry = $state<QuizEntry>('subject');
 	let comingSoonLabel = $state('');
+
+	// ── Team quiz create (public) ──
+	let teamTitle = $state('');
+	let teamCount = $state(4);
+	let perTeam = $state(5);
+	let teamChapters = $state<string[]>([]);
+	let allSubjectsForTeam = $state<PlaySubject[]>([]);
+	let subjectTopicsMap = $state<Record<string, PlayTopic[]>>({});
+	let teamCreating = $state(false);
+	let teamError = $state('');
 
 	let currentIndex = $state(0);
 	let score = $state(0);
@@ -348,6 +358,44 @@
 		phase = 'topics';
 	}
 
+	async function openTeamCreate() {
+		playClick();
+		teamError = '';
+		phase = 'team-create';
+		if (allSubjectsForTeam.length === 0) {
+			loading = true;
+			const subs = (await api<PlaySubject[]>('GET', '/play/subjects')) ?? [];
+			allSubjectsForTeam = subs.filter(s => !/current\s*affairs/i.test(s.name));
+			for (const s of allSubjectsForTeam) {
+				const t = (await api<PlayTopic[]>('GET', `/play/topics?subject_id=${s.id}`)) ?? [];
+				subjectTopicsMap[s.id] = t;
+			}
+			loading = false;
+		}
+	}
+	function toggleTeamChapter(ch: string) {
+		playClick();
+		if (teamChapters.includes(ch)) teamChapters = teamChapters.filter(c => c !== ch);
+		else teamChapters = [...teamChapters, ch];
+	}
+	async function createTeamQuiz() {
+		if (!teamTitle.trim() || teamChapters.length === 0) { teamError = 'Add title and pick at least one chapter.'; return; }
+		teamCreating = true; teamError = '';
+		try {
+			const res = await fetch(apiUrl('/team-quizzes'), {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ title: teamTitle.trim(), description: '', teams: teamCount, per_team: perTeam, chapters: teamChapters, timer_sec: 30 })
+			});
+			const json = await res.json();
+			if (!res.ok) { teamError = json?.error || json?.message || 'Failed to create'; teamCreating = false; return; }
+			teamCreating = false;
+			// go to play with generated quiz id - for now just show success and go to mode
+			phase = 'mode';
+			// store id for host view if needed
+		} catch (e) { teamError = 'Network error'; teamCreating = false; }
+	}
+
 	async function startQuiz(difficulty: string) {
 		playClick();
 		tablesActive = false; periodicActive = false; rushMode = false;
@@ -468,6 +516,7 @@
 			mode: 'welcome', classes: 'mode', subjects: 'classes', tables: 'mode', 'tables-ready': 'tables',
 			periodic: 'gk', 'periodic-ready': 'periodic',
 			gk: 'mode', 'coming-soon': 'mode',
+			'team-create': 'mode', 'team-play': 'mode',
 			quiz: 'welcome', results: 'welcome'
 		};
 		phase = back[phase] ?? 'welcome';
@@ -575,6 +624,69 @@
 					<span class="pick-name">Current Affairs</span>
 					<span class="pick-meta">What's happening around the world</span>
 				</button>
+				<button onclick={openTeamCreate} class="pick-card mode-card">
+					<span class="pick-icon"><Trophy size={18} /></span>
+					<span class="pick-name">Create Team Quiz</span>
+					<span class="pick-meta">Teams A/B/C · 30s · Public</span>
+				</button>
+			</div>
+		</div>
+
+	<!-- ═══ TEAM CREATE (public) ═══ -->
+	{:else if phase === 'team-create'}
+		<div class="stack fade-in">
+			<div class="section-head">
+				<button onclick={goBack} class="back-btn" aria-label="Back">←</button>
+				<div>
+					<h2 class="section-title">Create Team Quiz</h2>
+					<p class="section-sub">Public · Host on projector · 30s per question · Score 100 flat</p>
+				</div>
+			</div>
+			<div class="q-card" style="display:flex;flex-direction:column;gap:1rem">
+				<label class="field">
+					<span class="field-label">Quiz title</span>
+					<input bind:value={teamTitle} placeholder="e.g. Science Ch1-2 Team Battle" maxlength={80} class="input" />
+				</label>
+				<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem">
+					<label class="field">
+						<span class="field-label">Number of teams</span>
+						<select bind:value={teamCount} class="input">
+							{#each [2,3,4,5,6,7,8] as n}<option value={n}>{n} teams ({Array.from({length:n},(_,i)=>String.fromCharCode(65+i)).join(', ')})</option>{/each}
+						</select>
+					</label>
+					<label class="field">
+						<span class="field-label">Questions per team</span>
+						<select bind:value={perTeam} class="input">
+							{#each [5,10,15,20] as n}<option value={n}>{n} (multiples of 5)</option>{/each}
+						</select>
+						<span class="hint" style="text-align:left">Total {teamCount * perTeam} questions · Round-robin</span>
+					</label>
+				</div>
+				<div style="display:flex;gap:0.6rem;align-items:center">
+					<span class="tag" style="background:var(--amber)"><Clock size={12}/> 30s timer</span>
+					<span class="tag">No bonus — timer expiry doesn’t reveal answer</span>
+				</div>
+				{#if loading}
+					<div class="empty">Loading chapters…</div>
+				{:else}
+					<div style="border:2px solid var(--ink);border-radius:12px;padding:0.85rem;background:var(--cream)">
+						<p class="field-label" style="margin:0 0 0.6rem">Chapters — tick at least one (grouped by subject)</p>
+						{#each allSubjectsForTeam as subj}
+							<div style="margin:0.7rem 0 0.35rem;font-weight:700;font-family:var(--font-display);font-size:0.95rem">{subj.name}</div>
+							<div class="topics" style="margin:0">
+								{#each (subjectTopicsMap[subj.id] ?? []) as t}
+									{@const full = t.name}
+									<button onclick={() => toggleTeamChapter(full)} class="topic {teamChapters.includes(full) ? 'topic-selected' : ''}">{full.replace('Karnataka:','').replace('Freedom:','')}</button>
+								{/each}
+								{#if (subjectTopicsMap[subj.id] ?? []).length===0}<span class="hint">No chapters</span>{/if}
+							</div>
+						{/each}
+						<p class="hint" style="margin-top:0.7rem;text-align:left">{teamChapters.length} chapter(s) selected</p>
+					</div>
+				{/if}
+				{#if teamError}<div class="feedback feedback-bad" style="margin:0"><p class="feedback-text">{teamError}</p></div>{/if}
+				<button onclick={createTeamQuiz} disabled={teamCreating || !teamTitle.trim() || teamChapters.length===0} class="btn-primary btn-block">{teamCreating ? 'Creating…' : 'Create Team Quiz →'}</button>
+				<p class="hint">Public — appears under Quizzes. Host projects, teams A/B/C answer orally.</p>
 			</div>
 		</div>
 

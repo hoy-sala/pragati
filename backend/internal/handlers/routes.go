@@ -45,6 +45,7 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
  	reportsH := NewReportsHandler(db)
 	certH := NewCertificateHandler(db, cfg.UploadDir)
 	playH := NewPlayHandler(db)
+	teamQuizH := NewTeamQuizHandler(db)
 
 	roleMw := middleware.NewRoleMiddleware(jwtService)
 	loginLimiter := middleware.NewRateLimiter(10, time.Minute)
@@ -189,6 +190,14 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
 			r.Post("/attempts/{attemptId}/submit", quizH.SubmitAttempt)
 			r.Get("/attempts/{attemptId}/result", quizH.GetResult)
 			r.Post("/attempts/{attemptId}/grade", roleMw.RequireRole("admin", "principal", "teacher")(http.HandlerFunc(quizH.GradeShortAnswer)))
+		})
+
+		r.Route("/team-quizzes", func(r chi.Router) {
+			// Public for creation/listing under quizzes — school_id defaults if unauthenticated
+			r.Post("/", teamQuizH.Create)
+			r.Get("/", teamQuizH.List)
+			r.Get("/{id}", teamQuizH.Get)
+			r.Delete("/{id}", teamQuizH.Delete)
 		})
 
 		r.Route("/hpc", func(r chi.Router) {
