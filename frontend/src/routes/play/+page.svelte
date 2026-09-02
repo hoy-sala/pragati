@@ -466,7 +466,7 @@
 			teamPlayAnswered = false;
 			teamPlaySelectedKey = '';
 			phase = 'team-play';
-			startTeamTimer();
+			clearInterval(timerInterval); timeLeft = 30;
 		} catch (e) { teamError = 'Network error'; teamCreating = false; }
 	}
 	function startTeamTimer() {
@@ -493,7 +493,7 @@
 		teamPlayRevealed = false;
 		teamPlayAnswered = false;
 		teamPlaySelectedKey = '';
-		startTeamTimer();
+		clearInterval(timerInterval); timeLeft = 30;
 	}
 
 	async function startQuiz(difficulty: string) {
@@ -743,10 +743,6 @@
 				</div>
 			</div>
 			<div class="q-card" style="display:flex;flex-direction:column;gap:1rem">
-				<label class="field">
-					<span class="field-label">Quiz title (optional)</span>
-					<input bind:value={teamTitle} placeholder="e.g. Science Ch1-2 Team Battle — leave blank for auto" maxlength={80} class="input" />
-				</label>
 				<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem">
 					<label class="field">
 						<span class="field-label">Number of teams</span>
@@ -900,8 +896,17 @@
 			<aside class="quiz-side">
 				<div class="side-card">
 					<div class="side-row"><span class="side-label">Current Team</span><span class="side-value mono">{cur.team}</span></div>
-					<div class="timer-head"><span class="side-label">Time</span><span class="timer-num mono" style="color:{timeColor()}">{Math.ceil(timeLeft)}s</span></div>
+					<div class="timer-head">
+						<span class="side-label">Time</span>
+						<div style="display:flex;align-items:center;gap:0.5rem">
+							<span class="timer-num mono" style="color:{timeColor()}">{Math.ceil(timeLeft)}s</span>
+							<button onclick={startTeamTimer} class="btn-ghost" style="min-height:32px;padding:0.25rem 0.5rem;border-radius:8px" title="Start 30s timer after reading">
+								<Clock size={16} />
+							</button>
+						</div>
+					</div>
 					<div class="timer-track"><div class="timer-fill" style="width:{(timeLeft/30)*100}%;background:{timeColor()}"></div></div>
+					<p class="hint" style="font-size:0.75rem;margin:0">Host: click <Clock size={12} style="display:inline;vertical-align:middle" /> after reading Q & options</p>
 				</div>
 				<div class="side-card">
 					<p class="side-label" style="margin-bottom:0.5rem">Scores (10 pts each)</p>
