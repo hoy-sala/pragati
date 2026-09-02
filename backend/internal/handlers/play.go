@@ -159,7 +159,7 @@ func (h *PlayHandler) ListTopics(w http.ResponseWriter, r *http.Request) {
 		FROM questions q
 		WHERE q.subject_id = $1
 		AND q.deleted_at IS NULL AND q.is_active = true
-		AND q.chapters != '[]'::jsonb AND q.chapters IS NOT NULL
+		AND q.chapters IS NOT NULL AND jsonb_typeof(q.chapters) = 'array' AND q.chapters != '[]'::jsonb
 	`
 	args := []interface{}{subjectID}
 	if classID != "" {
