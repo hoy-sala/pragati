@@ -2,9 +2,8 @@ DO $$ DECLARE
   gk_id UUID;
   sid UUID := '00000000-0000-0000-0000-000000000001';
 BEGIN
-  INSERT INTO subjects (id, name, code, school_id) VALUES (gen_random_uuid(), 'General Knowledge', 'GK', sid) ON CONFLICT DO NOTHING;
+  INSERT INTO subjects (id, name, code, school_id) SELECT gen_random_uuid(), 'General Knowledge', 'GK', sid WHERE NOT EXISTS (SELECT 1 FROM subjects WHERE code='GK' AND school_id=sid AND deleted_at IS NULL);
   SELECT id INTO gk_id FROM subjects WHERE code='GK' AND deleted_at IS NULL LIMIT 1;
-  INSERT INTO class_subjects (class_id, subject_id) SELECT c.id, gk_id FROM classes c WHERE c.deleted_at IS NULL ON CONFLICT DO NOTHING;
   DELETE FROM questions WHERE chapters::text LIKE '%Freedom:%';
   INSERT INTO questions (school_id, subject_id, question_type, question_text, options, answer, marks, difficulty, chapters, tags, is_active) VALUES
   (sid, gk_id, 'mcq', 'The Revolt of 1857 began at which place?', '[{"key": "A", "value": "Jhansi", "correct": false}, {"key": "B", "value": "Delhi", "correct": false}, {"key": "C", "value": "Meerut", "correct": true}, {"key": "D", "value": "Kanpur", "correct": false}]', 'C', 1, 'easy', '["Freedom:1857"]', '["freedom", "1857"]', true),

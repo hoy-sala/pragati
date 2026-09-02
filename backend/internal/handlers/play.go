@@ -80,8 +80,10 @@ func (h *PlayHandler) ListClasses(w http.ResponseWriter, r *http.Request) {
 		FROM classes c
 		JOIN class_subjects cs ON cs.class_id = c.id
 		JOIN questions q ON q.subject_id = cs.subject_id
+		JOIN subjects s ON s.id = q.subject_id
 		WHERE c.school_id = $1 AND c.deleted_at IS NULL
 		AND q.deleted_at IS NULL AND q.is_active = true
+		AND s.code != 'GK'
 		GROUP BY c.id, c.name
 		ORDER BY c.sort_order, c.name
 	`, schoolID)

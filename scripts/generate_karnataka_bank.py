@@ -524,10 +524,9 @@ assert len(qs) == 500, f"Expected 500 got {len(qs)} — buckets: districts 70 ge
 OUT.parent.mkdir(parents=True, exist_ok=True)
 with open(OUT, "w", encoding="utf-8") as f:
     f.write("DO $$ DECLARE\n  gk_id UUID;\n  sid UUID := '00000000-0000-0000-0000-000000000001';\nBEGIN\n")
-    f.write("  INSERT INTO subjects (id, name, code, school_id) VALUES (gen_random_uuid(), 'General Knowledge', 'GK', sid) ON CONFLICT DO NOTHING;\n")
+    f.write("  INSERT INTO subjects (id, name, code, school_id) SELECT gen_random_uuid(), 'General Knowledge', 'GK', sid WHERE NOT EXISTS (SELECT 1 FROM subjects WHERE code='GK' AND school_id=sid AND deleted_at IS NULL);\n")
     f.write("  SELECT id INTO gk_id FROM subjects WHERE code='GK' AND deleted_at IS NULL LIMIT 1;\n")
-    f.write("  INSERT INTO class_subjects (class_id, subject_id) SELECT c.id, gk_id FROM classes c WHERE c.deleted_at IS NULL ON CONFLICT DO NOTHING;\n")
-    f.write("  -- 500 Karnataka trivia — idempotent on (question_text, subject_id)\n")
+    f.write("  -- 500 Karnataka trivia — idempotent on (question_text, subject_id) — GK is NOT linked to classes (class-independent)\n")
     # delete existing Karnataka: chapters to allow re-seed cleanly (optional)
     f.write("  DELETE FROM questions WHERE chapters::text LIKE '%Karnataka:%';\n")
     f.write("  INSERT INTO questions (school_id, subject_id, question_type, question_text, options, answer, marks, difficulty, chapters, tags, is_active) VALUES\n")
