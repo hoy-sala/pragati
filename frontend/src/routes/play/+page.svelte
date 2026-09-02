@@ -639,7 +639,7 @@
 				<button onclick={goBack} class="back-btn" aria-label="Back">←</button>
 				<div>
 					<h2 class="section-title">Create Team Quiz</h2>
-					<p class="section-sub">Public · Host on projector · 30s per question · Score 100 flat</p>
+					<p class="section-sub">Public · Host on projector · 10 points per correct</p>
 				</div>
 			</div>
 			<div class="q-card" style="display:flex;flex-direction:column;gap:1rem">
@@ -661,10 +661,6 @@
 						</select>
 						<span class="hint" style="text-align:left">Total {teamCount * perTeam} questions · Round-robin</span>
 					</label>
-				</div>
-				<div style="display:flex;gap:0.6rem;align-items:center">
-					<span class="tag" style="background:var(--amber)"><Clock size={12}/> 30s timer</span>
-					<span class="tag">No bonus — timer expiry doesn’t reveal answer</span>
 				</div>
 				{#if loading}
 					<div class="empty">Loading chapters…</div>
