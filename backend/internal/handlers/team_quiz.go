@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"math/rand"
 	"net/http"
 
@@ -109,7 +110,7 @@ func (h *TeamQuizHandler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 	needed := input.Teams * input.PerTeam
 	if len(allQs) < needed {
-		renderJSON(w, http.StatusBadRequest, map[string]string{"error": "not enough questions for selection"})
+		renderJSON(w, http.StatusBadRequest, map[string]interface{}{"error": "not enough questions", "need": needed, "found": len(allQs), "message": fmt.Sprintf("Not enough questions for selected chapters. Need %d, found %d. Select more chapters or reduce per team.", needed, len(allQs))})
 		return
 	}
 	// Ensure no repeats and difficulty equally distributed per team

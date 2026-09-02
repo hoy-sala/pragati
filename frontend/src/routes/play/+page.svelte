@@ -383,13 +383,13 @@
 		if (!teamTitle.trim() || teamChapters.length === 0) { teamError = 'Add title and pick at least one chapter.'; return; }
 		teamCreating = true; teamError = '';
 		try {
-			const res = await fetch(apiUrl('/team-quizzes'), {
+			const res = await fetch(apiUrl('/team-quizzes/'), {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ title: teamTitle.trim(), description: '', teams: teamCount, per_team: perTeam, chapters: teamChapters, timer_sec: 30 })
 			});
 			const json = await res.json();
-			if (!res.ok) { teamError = json?.error || json?.message || 'Failed to create'; teamCreating = false; return; }
+			if (!res.ok) { teamError = (json as any)?.message || (json as any)?.error || JSON.stringify(json) || 'Failed to create'; teamCreating = false; return; }
 			teamCreating = false;
 			// go to play with generated quiz id - for now just show success and go to mode
 			phase = 'mode';
