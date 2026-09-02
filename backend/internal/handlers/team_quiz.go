@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math/rand"
 	"net/http"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -226,7 +227,7 @@ func (h *TeamQuizHandler) List(w http.ResponseWriter, r *http.Request) {
 		var id, title, desc string
 		var teams, perTeam, timer int
 		var chapters []byte
-		var createdAt string
+		var createdAt time.Time
 		rows.Scan(&id, &title, &desc, &teams, &perTeam, &timer, &chapters, &createdAt)
 		var ch []string
 		json.Unmarshal(chapters, &ch)
@@ -241,8 +242,9 @@ func (h *TeamQuizHandler) List(w http.ResponseWriter, r *http.Request) {
 func (h *TeamQuizHandler) Get(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	log.Info().Str("team_quiz_get_id", id).Msg("team quiz get")
-	var title, desc, chaptersJSON, questionsJSON, createdAt string
+	var title, desc, chaptersJSON, questionsJSON string
 	var teams, perTeam, timer int
+	var createdAt time.Time
 	err := h.db.QueryRow(r.Context(), `SELECT title, description, teams, per_team, timer_sec, chapters::text, questions::text, created_at FROM team_quizzes WHERE id=$1 AND deleted_at IS NULL`, id).Scan(&title, &desc, &teams, &perTeam, &timer, &chaptersJSON, &questionsJSON, &createdAt)
 	if err != nil {
 		log.Error().Err(err).Str("id", id).Msg("team quiz get failed")
