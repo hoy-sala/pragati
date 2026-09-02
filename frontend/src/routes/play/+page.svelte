@@ -725,25 +725,20 @@
 				</button>
 				<button onclick={openTeamCreate} class="pick-card mode-card">
 					<span class="pick-icon"><Trophy size={18} /></span>
-					<span class="pick-name">Create Team Quiz</span>
-					<span class="pick-meta">Teams A/B/C · 30s · Public</span>
-				</button>
-				<button onclick={openTeamList} class="pick-card mode-card">
-					<span class="pick-icon"><Users size={18} /></span>
-					<span class="pick-name">Team Quizzes</span>
-					<span class="pick-meta">Play existing · Round-robin</span>
+					<span class="pick-name">Custom Quiz</span>
+					<span class="pick-meta">Teams A/B/C · 10 pts · 30s</span>
 				</button>
 			</div>
 		</div>
 
-	<!-- ═══ TEAM CREATE (public) ═══ -->
+	<!-- ═══ CUSTOM QUIZ (team, immediate) ═══ -->
 	{:else if phase === 'team-create'}
 		<div class="stack fade-in">
 			<div class="section-head">
 				<button onclick={goBack} class="back-btn" aria-label="Back">←</button>
 				<div>
-					<h2 class="section-title">Create Team Quiz</h2>
-					<p class="section-sub">Public · Host on projector · 10 points per correct</p>
+					<h2 class="section-title">Custom Quiz</h2>
+					<p class="section-sub">Teams A/B/C · 10 pts · 30s · Starts immediately</p>
 				</div>
 			</div>
 			<div class="q-card" style="display:flex;flex-direction:column;gap:1rem">
@@ -785,8 +780,8 @@
 					</div>
 				{/if}
 				{#if teamError}<div class="feedback feedback-bad" style="margin:0"><p class="feedback-text">{teamError}</p></div>{/if}
-				<button onclick={createTeamQuiz} disabled={teamCreating || !teamTitle.trim() || teamChapters.length===0} class="btn-primary btn-block">{teamCreating ? 'Creating…' : 'Create Team Quiz →'}</button>
-				<p class="hint">Public — appears under Quizzes. Host projects, teams A/B/C answer orally.</p>
+				<button onclick={createTeamQuiz} disabled={teamCreating || !teamTitle.trim() || teamChapters.length===0} class="btn-primary btn-block">{teamCreating ? 'Starting…' : 'Start Custom Quiz →'}</button>
+				<p class="hint">Starts immediately — round-robin · No repeats · Difficulty balanced · 10 pts</p>
 			</div>
 		</div>
 
