@@ -4,6 +4,7 @@
 	import { Building2, GraduationCap, BookOpen, Layers, Sparkles, Hash, Zap, Check, Globe, Newspaper, Clock, Atom, Users, Trophy } from 'lucide-svelte';
 	import type { PlayClass, PlaySubject, PlayTopic, PlayQuestion } from '$lib/types';
 	import { ELEMENTS, CATEGORY_LABELS, elementClass, elementPeriod, PERIODIC_DIFFICULTIES } from '$lib/data/elements';
+	import MathText from '$lib/components/MathText.svelte';
 
 	type Phase = 'welcome' | 'mode' | 'classes' | 'subjects' | 'topics' | 'tables' | 'tables-ready' | 'gk' | 'coming-soon' | 'periodic' | 'periodic-ready' | 'quiz' | 'results' | 'team-create' | 'team-play';
 	type GenQ = PlayQuestion & { uid: number; isRepeat?: boolean };
@@ -1006,7 +1007,7 @@
 
 				<div class="q-card q-question {answerBounce ? 'answer-pop' : ''}">
 					<fieldset class="q-fieldset">
-						<legend class="q-legend">{q.question_text}</legend>
+						<legend class="q-legend"><MathText text={q.question_text} /></legend>
 						<div class="options">
 							{#each q.options as opt, oi (`${currentIndex}-${opt.key}`)}
 								{@const isSelected = answered && opt.key === selectedKey}
@@ -1019,7 +1020,7 @@
 									<input type="radio" name="q{currentIndex}" value={opt.key} disabled={answered} checked={selectedKey === opt.key} onchange={() => handleAnswer(opt.key)} class="opt-input" />
 									<span class="opt-row">
 										<span class="opt-radio"><span class="opt-dot"></span></span>
-										<span class="opt-text">{opt.value}</span>
+										<span class="opt-text"><MathText text={opt.value} /></span>
 										{#if answered && isSelected}
 											<span class="opt-state">{isCorrect ? '✓' : '✕'}</span>
 										{:else if answered && isCorrectOpt}
