@@ -891,7 +891,9 @@
 						{:else if teamPlayRevealed && !teamPlayAnswered}
 							<button onclick={() => { teamPlayRevealed = false; startTeamTimer(); }} class="btn-ghost" style="flex:1">Hide Answer</button>
 						{/if}
-						<button onclick={nextTeamQuestion} class="btn-primary" style="flex:1">{teamPlayIndex >= teamPlayOrder.length - 1 ? 'Finish →' : 'Next →'}</button>
+						{#if teamPlayAnswered || teamPlayRevealed}
+							<button onclick={nextTeamQuestion} class="btn-primary" style="flex:1">{teamPlayIndex >= teamPlayOrder.length - 1 ? 'Finish →' : 'Next →'}</button>
+						{/if}
 					</div>
 				</div>
 			</div>
