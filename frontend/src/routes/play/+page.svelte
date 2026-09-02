@@ -1567,7 +1567,7 @@
 	}
 	.opt-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--ink); transform: scale(0); transition: transform 120ms; }
 	.opt-input:checked + .opt-row .opt-dot { transform: scale(1); }
-	.opt-text { flex: 1; min-width: 0; font-size: 0.96rem; line-height: 1.4; font-weight: 500; overflow-wrap: anywhere; word-break: break-word; }
+	.opt-text { flex: 1; min-width: 0; font-size: 1.02rem; line-height: 1.5; font-weight: 700; color: var(--ink); overflow-wrap: anywhere; word-break: break-word; letter-spacing: -0.01em; }
 	.opt-state { width: 26px; height: 26px; display: grid; place-items: center; font-weight: 800; flex: none; }
 	.opt-selected { border-color: var(--plum); background: var(--amber-tint); }
 	.opt-correct { border-color: var(--teal); background: var(--mint); }
