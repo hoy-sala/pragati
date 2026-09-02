@@ -6,7 +6,7 @@
 	import { ELEMENTS, CATEGORY_LABELS, elementClass, elementPeriod, PERIODIC_DIFFICULTIES } from '$lib/data/elements';
 	import MathText from '$lib/components/MathText.svelte';
 
-	type Phase = 'welcome' | 'mode' | 'classes' | 'subjects' | 'topics' | 'tables' | 'tables-ready' | 'gk' | 'coming-soon' | 'periodic' | 'periodic-ready' | 'quiz' | 'results' | 'team-create' | 'team-created' | 'team-play';
+	type Phase = 'welcome' | 'mode' | 'classes' | 'subjects' | 'topics' | 'tables' | 'tables-ready' | 'gk' | 'coming-soon' | 'periodic' | 'periodic-ready' | 'quiz' | 'results' | 'team-create' | 'team-created' | 'team-list' | 'team-play';
 	type GenQ = PlayQuestion & { uid: number; isRepeat?: boolean };
 	type QuizEntry = 'subject' | 'gk' | 'ca';
 
@@ -34,6 +34,17 @@
 	let teamCreating = $state(false);
 	let teamError = $state('');
 	let createdTeamQuiz = $state<any>(null);
+	// ── Team play (round-robin, 10 pts, 30s) ──
+	let teamPlayQuestions = $state<Record<string, any[]>>({});
+	let teamPlayOrder = $state<{team:string, q:any}[]>([]);
+	let teamPlayIndex = $state(0);
+	let teamScores = $state<Record<string, number>>({});
+	let teamPlayRevealed = $state(false);
+	let teamPlayAnswered = $state(false);
+	let teamPlaySelectedKey = $state('');
+	let teamPlayIsCorrect = $state(false);
+	let teamQuizzes = $state<any[]>([]);
+	let teamQuizzesLoading = $state(false);
 
 	let currentIndex = $state(0);
 	let score = $state(0);
@@ -375,6 +386,47 @@
 			loading = false;
 		}
 	}
+	async function openTeamList() {
+		playClick();
+		phase = 'team-list';
+		teamQuizzesLoading = true;
+		try {
+			const res = await fetch(apiUrl('/team-quizzes/'));
+			const json = await res.json();
+			teamQuizzes = (json as any)?.data ?? json ?? [];
+			if (!Array.isArray(teamQuizzes)) teamQuizzes = [];
+		} catch { teamQuizzes = []; }
+		teamQuizzesLoading = false;
+	}
+	async function openTeamQuiz(id: string) {
+		playClick();
+		loading = true;
+		try {
+			const res = await fetch(apiUrl(`/team-quizzes/${id}`));
+			const json = await res.json();
+			const data: any = (json as any)?.data ?? json;
+			teamPlayQuestions = data.questions_by_team ?? {};
+			teamPlayOrder = [];
+			teamScores = {};
+			const teamNames = Object.keys(teamPlayQuestions).sort();
+			for (const n of teamNames) teamScores[n] = 0;
+			const maxPer = Math.max(...teamNames.map(n => teamPlayQuestions[n].length));
+			for (let r = 0; r < maxPer; r++) {
+				for (const n of teamNames) {
+					const q = teamPlayQuestions[n][r];
+					if (q) teamPlayOrder.push({ team: n, q: { ...q, options: shuffle(q.options ?? []) } });
+				}
+			}
+			teamPlayIndex = 0;
+			teamPlayRevealed = false;
+			teamPlayAnswered = false;
+			teamPlaySelectedKey = '';
+			createdTeamQuiz = data;
+			phase = 'team-play';
+			startTeamTimer();
+		} catch { teamError = 'Failed to load'; }
+		loading = false;
+	}
 	function toggleTeamChapter(ch: string) {
 		playClick();
 		if (teamChapters.includes(ch)) teamChapters = teamChapters.filter(c => c !== ch);
@@ -392,9 +444,55 @@
 			const json = await res.json();
 			if (!res.ok) { teamError = (json as any)?.message || (json as any)?.error || JSON.stringify(json) || 'Failed to create'; teamCreating = false; return; }
 			teamCreating = false;
-			createdTeamQuiz = (json as any)?.data ?? json;
-			phase = 'team-created';
+			const data: any = (json as any)?.data ?? json;
+			createdTeamQuiz = data;
+			// Immediately start round-robin play
+			const qbt: Record<string, any[]> = data.questions_by_team ?? data.questions ?? {};
+			teamPlayQuestions = qbt;
+			teamPlayOrder = [];
+			teamScores = {};
+			const teamNames = Object.keys(qbt).sort();
+			for (const n of teamNames) teamScores[n] = 0;
+			const maxPer = Math.max(...teamNames.map(n => qbt[n].length));
+			for (let r = 0; r < maxPer; r++) {
+				for (const n of teamNames) {
+					const q = qbt[n][r];
+					if (q) teamPlayOrder.push({ team: n, q: { ...q, options: shuffle(q.options ?? []) } });
+				}
+			}
+			teamPlayIndex = 0;
+			teamPlayRevealed = false;
+			teamPlayAnswered = false;
+			teamPlaySelectedKey = '';
+			phase = 'team-play';
+			startTeamTimer();
 		} catch (e) { teamError = 'Network error'; teamCreating = false; }
+	}
+	function startTeamTimer() {
+		clearInterval(timerInterval);
+		timeLeft = 30;
+		timerInterval = setInterval(() => {
+			timeLeft -= 0.1;
+			if (timeLeft <= 0) { timeLeft = 0; clearInterval(timerInterval); }
+		}, 100);
+	}
+	function handleTeamAnswer(key: string) {
+		if (teamPlayAnswered) return;
+		teamPlayAnswered = true;
+		teamPlaySelectedKey = key;
+		const cur = teamPlayOrder[teamPlayIndex];
+		const correct = cur.q.options.find((o: any) => o.correct)?.key;
+		teamPlayIsCorrect = key === correct;
+		if (teamPlayIsCorrect) teamScores[cur.team] = (teamScores[cur.team] ?? 0) + 10;
+		clearInterval(timerInterval);
+	}
+	function nextTeamQuestion() {
+		if (teamPlayIndex >= teamPlayOrder.length - 1) { clearInterval(timerInterval); phase = 'team-created'; return; }
+		teamPlayIndex++;
+		teamPlayRevealed = false;
+		teamPlayAnswered = false;
+		teamPlaySelectedKey = '';
+		startTeamTimer();
 	}
 
 	async function startQuiz(difficulty: string) {
@@ -517,7 +615,7 @@
 			mode: 'welcome', classes: 'mode', subjects: 'classes', tables: 'mode', 'tables-ready': 'tables',
 			periodic: 'gk', 'periodic-ready': 'periodic',
 			gk: 'mode', 'coming-soon': 'mode',
-			'team-create': 'mode', 'team-created': 'team-create', 'team-play': 'mode',
+			'team-create': 'mode', 'team-created': 'team-create', 'team-list': 'mode', 'team-play': 'team-list',
 			quiz: 'welcome', results: 'welcome'
 		};
 		phase = back[phase] ?? 'welcome';
@@ -630,6 +728,11 @@
 					<span class="pick-name">Create Team Quiz</span>
 					<span class="pick-meta">Teams A/B/C · 30s · Public</span>
 				</button>
+				<button onclick={openTeamList} class="pick-card mode-card">
+					<span class="pick-icon"><Users size={18} /></span>
+					<span class="pick-name">Team Quizzes</span>
+					<span class="pick-meta">Play existing · Round-robin</span>
+				</button>
 			</div>
 		</div>
 
@@ -705,6 +808,99 @@
 				</div>
 				<p class="hint" style="margin-top:0.8rem">Find it under Quizzes → Team Quizzes. Host on projector, 30s per Q.</p>
 			</div>
+		</div>
+
+	<!-- ═══ TEAM LIST ═══ -->
+	{:else if phase === 'team-list'}
+		<div class="stack fade-in">
+			<div class="section-head">
+				<button onclick={goBack} class="back-btn" aria-label="Back">←</button>
+				<div>
+					<h2 class="section-title">Team Quizzes</h2>
+					<p class="section-sub">Public · Round-robin · 10 pts · Tap to play</p>
+				</div>
+			</div>
+			{#if teamQuizzesLoading}
+				<div class="empty">Loading…</div>
+			{:else if teamQuizzes.length === 0}
+				<div class="empty">No team quizzes yet.</div>
+				<button onclick={openTeamCreate} class="btn-primary btn-block" style="margin-top:1rem">Create Team Quiz →</button>
+			{:else}
+				<div class="mode-grid">
+					{#each teamQuizzes as tq}
+						<button onclick={() => openTeamQuiz(tq.id)} class="pick-card mode-card">
+							<span class="pick-icon"><Trophy size={18} /></span>
+							<span class="pick-name">{tq.title}</span>
+							<span class="pick-meta">{tq.teams} teams · {tq.per_team} each · {(tq.chapters ?? []).slice(0,2).join(', ')}{(tq.chapters?.length>2?'…':'')}</span>
+						</button>
+					{/each}
+				</div>
+			{/if}
+		</div>
+
+	<!-- ═══ TEAM PLAY (round-robin, 30s, 10 pts) ═══ -->
+	{:else if phase === 'team-play' && teamPlayOrder.length > 0}
+		{@const cur = teamPlayOrder[teamPlayIndex]}
+		{@const teamLabels = Object.keys(teamScores).sort()}
+		<div class="quiz-shell fade-in">
+			<div class="quiz-main">
+				<div class="q-meta">
+					<div class="q-tags">
+						<span class="tag">Team {cur.team}</span>
+						<span class="tag">{createdTeamQuiz?.title ?? 'Team Quiz'}</span>
+						<span class="tag tag-difficulty">30s</span>
+					</div>
+					<span class="counter">{teamPlayIndex + 1} / {teamPlayOrder.length} · Team {cur.team}'s turn</span>
+				</div>
+				<div class="q-card q-question">
+					<fieldset class="q-fieldset">
+						<legend class="q-legend"><MathText text={cur.q.question_text} /></legend>
+						<div class="options">
+							{#each cur.q.options as opt}
+								{@const isSelected = teamPlayAnswered && opt.key === teamPlaySelectedKey}
+								{@const isCorrectOpt = !!opt.correct}
+								<label class="opt {teamPlayAnswered && isSelected ? (teamPlayIsCorrect ? 'opt-correct' : 'opt-incorrect') : ''} {teamPlayAnswered && !isSelected && isCorrectOpt ? 'opt-correct' : ''} {!teamPlayAnswered && teamPlaySelectedKey === opt.key ? 'opt-selected' : ''}">
+									<input type="radio" name="tq{teamPlayIndex}" value={opt.key} disabled={teamPlayAnswered} checked={teamPlaySelectedKey === opt.key} onchange={() => handleTeamAnswer(opt.key)} class="opt-input" />
+									<span class="opt-row">
+										<span class="opt-radio"><span class="opt-dot"></span></span>
+										<span class="opt-text"><MathText text={opt.value} /></span>
+										{#if teamPlayAnswered && isSelected}<span class="opt-state">{teamPlayIsCorrect ? '✓' : '✕'}</span>{:else if teamPlayAnswered && isCorrectOpt}<span class="opt-state">✓</span>{/if}
+									</span>
+								</label>
+							{/each}
+						</div>
+					</fieldset>
+					{#if teamPlayAnswered}
+						<div class="feedback {teamPlayIsCorrect ? '' : 'feedback-bad'}">
+							<div class="feedback-head">
+								<span class="feedback-badge">{teamPlayIsCorrect ? '✓' : '✕'}</span>
+								<span class="feedback-title">{teamPlayIsCorrect ? 'Correct! +10' : 'Not quite'}</span>
+								<span class="streak-chip">Team {cur.team}</span>
+							</div>
+						</div>
+					{/if}
+					<div style="display:flex;gap:0.6rem;margin-top:1rem">
+						{#if !teamPlayAnswered}
+							<button onclick={() => { teamPlayRevealed = true; clearInterval(timerInterval); }} class="btn-ghost" style="flex:1">Reveal Answer</button>
+						{/if}
+						<button onclick={nextTeamQuestion} class="btn-primary" style="flex:1">{teamPlayIndex >= teamPlayOrder.length - 1 ? 'Finish →' : 'Next →'}</button>
+					</div>
+				</div>
+			</div>
+			<aside class="quiz-side">
+				<div class="side-card">
+					<div class="side-row"><span class="side-label">Current Team</span><span class="side-value mono">{cur.team}</span></div>
+					<div class="timer-head"><span class="side-label">Time</span><span class="timer-num mono" style="color:{timeColor()}">{Math.ceil(timeLeft)}s</span></div>
+					<div class="timer-track"><div class="timer-fill" style="width:{(timeLeft/30)*100}%;background:{timeColor()}"></div></div>
+				</div>
+				<div class="side-card">
+					<p class="side-label" style="margin-bottom:0.5rem">Scores (10 pts each)</p>
+					{#each teamLabels as t}
+						<div class="side-row"><span class="side-label">Team {t}</span><span class="side-value mono">{teamScores[t] ?? 0}</span></div>
+					{/each}
+				</div>
+				<div class="side-card side-muted"><p class="side-hint">Host reads aloud. Timer expiry does not reveal answer. Mark correct to award 10.</p></div>
+			</aside>
 		</div>
 
 	<!-- ═══ GK HUB ═══ -->
