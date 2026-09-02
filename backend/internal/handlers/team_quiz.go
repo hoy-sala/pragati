@@ -240,10 +240,12 @@ func (h *TeamQuizHandler) List(w http.ResponseWriter, r *http.Request) {
 
 func (h *TeamQuizHandler) Get(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
+	log.Info().Str("team_quiz_get_id", id).Msg("team quiz get")
 	var title, desc, chaptersJSON, questionsJSON, createdAt string
 	var teams, perTeam, timer int
 	err := h.db.QueryRow(r.Context(), `SELECT title, description, teams, per_team, timer_sec, chapters::text, questions::text, created_at FROM team_quizzes WHERE id=$1 AND deleted_at IS NULL`, id).Scan(&title, &desc, &teams, &perTeam, &timer, &chaptersJSON, &questionsJSON, &createdAt)
 	if err != nil {
+		log.Error().Err(err).Str("id", id).Msg("team quiz get failed")
 		renderJSON(w, http.StatusNotFound, map[string]string{"error": "not found"})
 		return
 	}
