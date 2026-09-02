@@ -4,6 +4,7 @@ DO $$ DECLARE
   c10_id UUID := 'aca6ed6e-2263-4841-be61-10db6a280f21';
 BEGIN
   INSERT INTO class_subjects (class_id, subject_id) VALUES (c10_id, soc_id) ON CONFLICT DO NOTHING;
+  DELETE FROM quiz_questions WHERE question_id IN (SELECT id FROM questions WHERE subject_id=soc_id);
   DELETE FROM questions WHERE subject_id=soc_id AND deleted_at IS NULL;
   INSERT INTO questions (school_id, subject_id, question_type, question_text, options, answer, marks, difficulty, chapters, tags, is_active) VALUES
   (sid, soc_id, 'mcq', 'The ''Gateway of European'' trade in the Middle Ages was', '[{"key": "A", "value": "Rome", "correct": false}, {"key": "B", "value": "Constantinople", "correct": true}, {"key": "C", "value": "Paris", "correct": false}, {"key": "D", "value": "Venice", "correct": false}]', 'B', 1, 'medium', '["THE ADVENT OF EUROPEANS TO INDIA"]', '["history", "europeans", "trade"]', true),
