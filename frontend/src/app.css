@@ -49,10 +49,11 @@
   --coral: #C2381B;
   --coral-tint: #FBDAD3;
   --plum: #6B3FA0;
-  --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
+  --font-display: 'Bricolage Grotesque', 'Anek Kannada', 'Noto Sans Devanagari', system-ui, sans-serif;
+  --font-body: 'Inter', 'Noto Sans Devanagari', 'Anek Kannada', 'Mukta', system-ui, sans-serif;
   --font-mono: 'Geist Mono', 'JetBrains Mono', ui-monospace, monospace;
   --font-hindi: 'Noto Sans Devanagari', 'Mukta', system-ui, sans-serif;
+  --font-kannada: 'Anek Kannada', 'Noto Sans Devanagari', system-ui, sans-serif;
 }
 
 @layer base {
@@ -81,7 +82,13 @@
 }
 
 .font-kannada {
-  font-family: 'Anek Kannada', system-ui, sans-serif;
+  font-family: var(--font-kannada);
+  line-height: 1.7;
+}
+/* Auto-apply Anek Kannada to Kannada-script text (U+0C80–U+0CFF) anywhere.
+   Font fallback chain already covers it, this ensures weight/line-height. */
+:lang(kn) {
+  font-family: var(--font-kannada);
 }
 .font-hindi {
   font-family: var(--font-hindi);
