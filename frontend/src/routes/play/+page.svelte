@@ -50,6 +50,7 @@
 	let teamTimerSec = $state(30);
 	let lifelineUsed = $state<Record<string, boolean>>({});
 	let hiddenOptKeys = $state<string[]>([]);
+	let teamFinished = $state(false);
 
 	let currentIndex = $state(0);
 	let score = $state(0);
@@ -436,6 +437,7 @@
 			teamPlayRevealed = false;
 			teamPlayAnswered = false;
 			teamPlaySelectedKey = '';
+			teamFinished = false;
 			createdTeamQuiz = data;
 			phase = 'team-play';
 			if (teamTimerSec > 0) startTeamTimer(); else { clearInterval(timerInterval); timeLeft = 0; }
@@ -485,6 +487,7 @@
 			teamPlayRevealed = false;
 			teamPlayAnswered = false;
 			teamPlaySelectedKey = '';
+			teamFinished = false;
 			phase = 'team-play';
 			if (teamTimerSec > 0) { clearInterval(timerInterval); timeLeft = teamTimerSec; } else { clearInterval(timerInterval); timeLeft = 0; }
 		} catch (e) { teamError = 'Network error'; teamCreating = false; }
@@ -528,7 +531,7 @@
 		playClick();
 	}
 	function nextTeamQuestion() {
-		if (teamPlayIndex >= teamPlayOrder.length - 1) { clearInterval(timerInterval); playComplete(); spawnConfetti(); phase = 'team-created'; return; }
+		if (teamPlayIndex >= teamPlayOrder.length - 1) { clearInterval(timerInterval); playComplete(); spawnConfetti(); teamFinished = true; phase = 'team-created'; return; }
 		teamPlayIndex++;
 		teamPlayRevealed = false;
 		teamPlayAnswered = false;
@@ -657,7 +660,7 @@
 			mode: 'welcome', classes: 'mode', subjects: 'classes', tables: 'mode', 'tables-ready': 'tables',
 			periodic: 'gk', 'periodic-ready': 'periodic',
 			gk: 'mode', 'coming-soon': 'mode',
-			'team-create': 'mode', 'team-created': 'team-create', 'team-list': 'mode', 'team-play': 'team-list',
+			'team-create': 'mode', 'team-created': 'mode', 'team-list': 'mode', 'team-play': 'team-create',
 			quiz: 'welcome', results: 'welcome'
 		};
 		phase = back[phase] ?? 'welcome';
@@ -768,7 +771,7 @@
 				<button onclick={openTeamCreate} class="pick-card mode-card">
 					<span class="pick-icon"><Trophy size={18} /></span>
 					<span class="pick-name">Custom Quiz</span>
-					<span class="pick-meta">Teams A/B/C · 10 pts · 30s</span>
+					<span class="pick-meta">Teams · 10 pts · Your timer</span>
 				</button>
 			</div>
 		</div>
@@ -780,7 +783,7 @@
 				<button onclick={goBack} class="back-btn" aria-label="Back">←</button>
 				<div>
 					<h2 class="section-title">Custom Quiz</h2>
-					<p class="section-sub">Teams A/B/C · 10 pts · 30s · Starts immediately</p>
+					<p class="section-sub">Teams · 10 pts · Your timer · Starts immediately</p>
 				</div>
 			</div>
 			<div class="q-card" style="display:flex;flex-direction:column;gap:1rem">
@@ -843,23 +846,39 @@
 			</div>
 		</div>
 
-	<!-- ═══ TEAM CREATED ═══ -->
+	<!-- ═══ TEAM CREATED / FINISHED ═══ -->
 	{:else if phase === 'team-created'}
+		{@const finishOrder = Object.keys(teamScores).sort((a,b)=>(teamScores[b]??0)-(teamScores[a]??0))}
+		{@const topScore = finishOrder.length ? (teamScores[finishOrder[0]] ?? 0) : 0}
+		{@const winners = finishOrder.filter(t => (teamScores[t] ?? 0) === topScore)}
 		<div class="center fade-in">
-			<div class="q-card" style="max-width:520px;width:100%;text-align:center">
+			<div class="q-card millionaire-stage" style="max-width:560px;width:100%;text-align:center">
 				<div class="welcome-icon" aria-hidden="true"><Trophy size={28} /></div>
-				<h2 class="welcome-title" style="font-size:1.5rem">Team Quiz Created!</h2>
-				<p class="welcome-sub" style="margin-top:0.5rem">{createdTeamQuiz?.title ?? teamTitle} · {createdTeamQuiz?.teams ?? teamCount} teams ({Array.from({length: (createdTeamQuiz?.teams ?? teamCount)},(_,i)=>String.fromCharCode(65+i)).join(', ')}) · {createdTeamQuiz?.per_team ?? perTeam} Qs each · 10 pts per correct</p>
-				<div style="background:var(--cream);border:2px solid var(--ink);border-radius:12px;padding:0.8rem;margin:1rem 0;text-align:left">
-					<p class="field-label" style="margin:0 0 0.3rem">Chapters</p>
-					<p style="font-size:0.9rem;line-height:1.5">{(createdTeamQuiz?.chapters ?? teamChapters).join(', ')}</p>
-					<p class="hint" style="text-align:left;margin-top:0.5rem">Total {(createdTeamQuiz?.teams ?? teamCount) * (createdTeamQuiz?.per_team ?? perTeam)} questions · No repeats · Difficulty balanced · Round-robin A→B→C</p>
-				</div>
+				{#if teamFinished && finishOrder.length}
+					<h2 class="welcome-title" style="font-size:1.5rem">🏆 {winners.length > 1 ? `Tie: ${winners.join(' & ')}!` : `${winners[0]} Wins!`}</h2>
+					<p class="welcome-sub" style="margin-top:0.5rem">Final scores · 10 pts per correct</p>
+					<div style="display:flex;flex-direction:column;gap:0.5rem;margin:1rem 0;text-align:left">
+						{#each finishOrder as t, i}
+							<div class="side-row m-ladder-row" style="background:{i===0?'rgba(255,194,51,0.2)':'transparent'};border-radius:8px;padding:0.4rem 0.6rem">
+								<span class="side-label">{i+1}. {t} {#if i===0}🏆{/if}</span>
+								<span class="side-value mono">{teamScores[t] ?? 0} pts · ₹{((teamScores[t] ?? 0)*1000).toLocaleString('en-IN')}</span>
+							</div>
+						{/each}
+					</div>
+				{:else}
+					<h2 class="welcome-title" style="font-size:1.5rem">Team Quiz Created!</h2>
+					<p class="welcome-sub" style="margin-top:0.5rem">{createdTeamQuiz?.title ?? teamTitle} · {createdTeamQuiz?.teams ?? teamCount} teams · {createdTeamQuiz?.per_team ?? perTeam} Qs each · 10 pts per correct</p>
+					<div style="background:var(--cream);border:2px solid var(--ink);border-radius:12px;padding:0.8rem;margin:1rem 0;text-align:left">
+						<p class="field-label" style="margin:0 0 0.3rem">Chapters</p>
+						<p style="font-size:0.9rem;line-height:1.5">{(createdTeamQuiz?.chapters ?? teamChapters).join(', ')}</p>
+						<p class="hint" style="text-align:left;margin-top:0.5rem">Total {(createdTeamQuiz?.teams ?? teamCount) * (createdTeamQuiz?.per_team ?? perTeam)} questions · No repeats · Difficulty balanced · Round-robin</p>
+					</div>
+				{/if}
 				<div style="display:flex;flex-direction:column;gap:0.6rem">
 					<button onclick={() => { playClick(); phase = 'mode'; }} class="btn-primary btn-block">Back to Quizzes →</button>
-					<button onclick={() => { playClick(); phase = 'team-create'; }} class="btn-ghost btn-block">Create Another</button>
+					<button onclick={() => { playClick(); teamFinished = false; phase = 'team-create'; }} class="btn-ghost btn-block">Create Another</button>
 				</div>
-				<p class="hint" style="margin-top:0.8rem">Starts immediately — round-robin on projector, 30s per Q, 10 pts.</p>
+				<p class="hint" style="margin-top:0.8rem">Round-robin on projector · 10 pts · Expiry never reveals answer.</p>
 			</div>
 		</div>
 
@@ -973,7 +992,7 @@
 						<span class="side-label">Time</span>
 						<div style="display:flex;align-items:center;gap:0.5rem">
 							<span class="timer-num mono" style="color:{timeColor()}">{Math.ceil(timeLeft)}s</span>
-							<button onclick={startTeamTimer} class="btn-ghost m-timer-btn" title="Start {teamTimerSec}s timer after reading">
+							<button onclick={startTeamTimer} class="btn-ghost m-timer-btn" title="Start {teamTimerLabel()} timer after reading">
 								<Clock size={16} />
 							</button>
 						</div>
