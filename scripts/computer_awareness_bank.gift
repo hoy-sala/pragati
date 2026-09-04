@@ -1,0 +1,4042 @@
+::Computer Language Origin::
+The word computer has been derived from which of the following languages? {#2}
+[difficulty:easy]
+[chapter:Introduction to Computer]
+[tags:history,terminology]
+{
+    ~Greek
+    ~English
+    ~French
+    =Latin
+}
+
+::Computer System Definition::
+Input, output and processing devices grouped together represent a(n): {#2}
+[difficulty:easy]
+[chapter:Introduction to Computer]
+[tags:fundamentals]
+{
+    ~mobile device
+    ~information processing cycle
+    ~circuit board
+    =computer system
+}
+
+::Computer Functions Order::
+Which of the following is the correct order of the four major functions of a computer? {#2}
+[difficulty:medium]
+[chapter:Introduction to Computer]
+[tags:fundamentals,process_cycle]
+{
+    ~Process, Output, Input, Storage
+    ~Input, Output, Process, Storage
+    ~Process, Storage, Input, Output
+    =Input, Process, Output, Storage
+}
+
+::Data to Information::
+Collecting raw data and converting it into meaningful information is called: {#2}
+[difficulty:easy]
+[chapter:Introduction to Computer]
+[tags:fundamentals,data_processing]
+{
+    =processing
+    ~compiling
+    ~importing
+    ~exporting
+    ~None of these
+}
+
+::Computer Human Limitation::
+Which of the following is a function that a computer CANNOT perform? {#2}
+[difficulty:easy]
+[chapter:Introduction to Computer]
+[tags:limitations]
+{
+    ~input
+    ~output
+    =thinking
+    ~processing
+}
+
+::Unprocessed Items::
+A collection of raw, unprocessed items is referred to as: {#2}
+[difficulty:easy]
+[chapter:Introduction to Computer]
+[tags:fundamentals,data]
+{
+    ~information
+    =data
+    ~memory
+    ~reports
+    ~None of these
+}
+
+::Information Definition::
+Data that has been organized, structured, and presented in a meaningful fashion is known as: {#2}
+[difficulty:easy]
+[chapter:Introduction to Computer]
+[tags:fundamentals,information]
+{
+    ~A process
+    ~Software
+    ~Storage
+    =Information
+    ~Data
+}
+
+::Earliest Calculating Device::
+The earliest historical calculating device is which of the following? {#2}
+[difficulty:easy]
+[chapter:Introduction to Computer]
+[tags:history,calculators]
+{
+    ~calculator
+    =abacus
+    ~difference engine
+    ~analytical engine
+    ~None of the above
+}
+
+::Abacus Operations::
+Which mathematical operations can the traditional abacus perform? {#2}
+[difficulty:medium]
+[chapter:Introduction to Computer]
+[tags:history,abacus]
+{
+    ~addition
+    ~subtraction
+    ~multiplication
+    =Both addition and subtraction
+}
+
+::Pascaline Nickname::
+The Pascaline mechanical calculator, invented by Blaise Pascal, is also commonly known as the: {#2}
+[difficulty:medium]
+[chapter:Introduction to Computer]
+[tags:history,pascaline]
+{
+    ~abacus
+    =adding machine
+    ~division machine
+    ~difference machine
+}
+
+::Father of Computer::
+Who is widely recognized historically as the 'Father of Computer'? {#2}
+[difficulty:easy]
+[chapter:Introduction to Computer]
+[tags:history,charles_babbage]
+{
+    ~Dennis Ritchie
+    ~John Napier
+    =Charles Babbage
+    ~Alan Turing
+}
+
+::Analytical Engine Designer::
+The Analytical Engine, which laid the conceptual framework for modern general-purpose digital computers, was designed by: {#2}
+[difficulty:easy]
+[chapter:Introduction to Computer]
+[tags:history,babbage]
+{
+    ~Blaise Pascal
+    =Charles Babbage
+    ~Dennis Ritchie
+    ~Alan Turing
+}
+
+::First Electronic Computer ENIAC Designers::
+Who designed the first high-speed electronic general-purpose computer, the ENIAC? {#2}
+[difficulty:medium]
+[chapter:Introduction to Computer]
+[tags:history,eniac]
+{
+    ~John Von Neumann
+    ~Joseph M Jacquard
+    =J. Presper Eckert and John W. Mauchly
+    ~All of the above
+}
+
+::First Computer with Storage::
+Which was the first computer that provided storage capacity for both instructions and data in its memory? {#2}
+[difficulty:medium]
+[chapter:Introduction to Computer]
+[tags:history,edsac]
+{
+    =EDSAC
+    ~EDVAC
+    ~ENIAC
+    ~UNIVAC
+}
+
+::First General Purpose Computer::
+Name the first commercially produced general-purpose electronic computer: {#2}
+[difficulty:medium]
+[chapter:Introduction to Computer]
+[tags:history,univac]
+{
+    ~ADVAC
+    ~ADSAC
+    =UNIVAC
+    ~EDVAC
+    ~None of these
+}
+
+::First Generation Component::
+First-generation computers (1940-1956) were based on which of the following switching technologies? {#2}
+[difficulty:easy]
+[chapter:Introduction to Computer]
+[tags:generations,hardware]
+{
+    ~transistors
+    ~conductors
+    ~integrated circuits
+    =vacuum tubes
+}
+
+::First Generation Language::
+First-generation computers were programmed using which of the following programming languages? {#2}
+[difficulty:easy]
+[chapter:Introduction to Computer]
+[tags:generations,languages]
+{
+    =machine language
+    ~assembly language
+    ~high-level language
+    ~compiler language
+}
+
+::Second Generation Switching Device::
+Which switching device was used in the second generation of computers (1956-1963)? {#2}
+[difficulty:easy]
+[chapter:Introduction to Computer]
+[tags:generations,hardware]
+{
+    ~Vacuum tubes
+    =Transistors
+    ~Integrated Circuits
+    ~Microprocessors
+}
+
+::Third Generation Component::
+Third-generation computers (1964-1971) were manufactured using which of the following core technologies? {#2}
+[difficulty:easy]
+[chapter:Introduction to Computer]
+[tags:generations,hardware]
+{
+    ~vacuum tubes
+    ~transistors
+    =integrated circuits (ICs)
+    ~microprocessors
+    ~discrete components
+}
+
+::Common IC Nickname::
+An integrated circuit (IC) or silicon chip used in computer systems is commonly nicknamed a: {#2}
+[difficulty:easy]
+[chapter:Introduction to Computer]
+[tags:hardware,terminology]
+{
+    ~transistor
+    ~resistor
+    =chip
+    ~semiconductor
+    ~None of these
+}
+
+::Silicon Chip Material::
+Integrated circuits (ICs) or computer chips are typically manufactured using which of the following materials? {#2}
+[difficulty:easy]
+[chapter:Introduction to Computer]
+[tags:hardware,materials]
+{
+    ~copper
+    ~aluminium
+    ~gold
+    =silicon
+    ~silver
+}
+
+::Fourth Generation Microprocessors::
+Personal computers (PCs) are considered fourth-generation systems and contain which of the following main components? {#2}
+[difficulty:easy]
+[chapter:Introduction to Computer]
+[tags:generations,hardware]
+{
+    ~information
+    ~data
+    ~vacuum tubes
+    =microprocessors
+    ~transistors
+}
+
+::First Indian Computer::
+What was the name of the first computer developed indigenously in India? {#2}
+[difficulty:easy]
+[chapter:Introduction to Computer]
+[tags:india,history]
+{
+    ~PARAM
+    =Siddhartha
+    ~IBM-370
+    ~CRAY-1
+}
+
+::Basic Computer Architecture Creator::
+The foundational logical architecture of the modern digital computer was developed by which mathematician? {#2}
+[difficulty:medium]
+[chapter:Introduction to Computer]
+[tags:history,john_von_neumann]
+{
+    =John Von Neumann
+    ~Charles Babbage
+    ~Blaise Pascal
+    ~Jordan Murn
+}
+
+::Integrated Chip Developer::
+Who developed the first integrated circuit (IC) chip in 1958? {#2}
+[difficulty:medium]
+[chapter:Introduction to Computer]
+[tags:history,hardware]
+{
+    ~Robert Nayak
+    ~Charles Babbage
+    =J. S. Kilby
+    ~C. V. Raman
+}
+
+::Laptop Definition::
+Computers that are highly portable, lightweight, and convenient for users who travel are known as: {#2}
+[difficulty:easy]
+[chapter:Introduction to Computer]
+[tags:classifications,hardware]
+{
+    ~supercomputers
+    ~minicomputers
+    ~mainframe computers
+    =laptops
+}
+
+::Mainframe Terminal Access::
+Users generally apply which of the following devices to access a large centralized mainframe or supercomputer? {#2}
+[difficulty:medium]
+[chapter:Introduction to Computer]
+[tags:hardware,networking]
+{
+    =terminal
+    ~node
+    ~desktop
+    ~handheld
+}
+
+::First Indian Supercomputer::
+What is the name of the first supercomputer developed in India by C-DAC? {#2}
+[difficulty:easy]
+[chapter:Introduction to Computer]
+[tags:india,supercomputers]
+{
+    =PARAM
+    ~CRAY-1
+    ~PARAM ISHAN
+    ~EPRAM
+}
+
+::Hybrid Computer Definition::
+A hybrid computer is structurally defined as having the combined operational properties of which two computers? {#2}
+[difficulty:medium]
+[chapter:Introduction to Computer]
+[tags:classifications,hybrid]
+{
+    ~super and microcomputers
+    ~mini and microcomputers
+    =analog and digital computers
+    ~super and mini computers
+    ~None of the above
+}
+
+::Hospital Hybrid Equipment::
+Which of the following types of computers are used in hospitals to control sensitive medical monitoring machines like ECG and Dialysis? {#2}
+[difficulty:medium]
+[chapter:Introduction to Computer]
+[tags:classifications,applications]
+{
+    ~Digital
+    =Hybrid
+    ~Analog
+    ~Microcomputer
+}
+
+::Artificial Intelligence Definition::
+Which branch of computer science attempts to produce systems that display the same type of cognitive intelligence that humans do? {#2}
+[difficulty:easy]
+[chapter:Introduction to Computer]
+[tags:ai,terminology]
+{
+    ~Nano science
+    ~Nano technology
+    ~Simulation
+    =Artificial Intelligence (AI)
+}
+
+::First Computer Architecture Date::
+The first formal computer architecture model was introduced in which year? {#2}
+[difficulty:hard]
+[chapter:Computer Architecture]
+[tags:history,fundamentals]
+{
+    =1970
+    ~1968
+    ~1971
+    ~1973
+}
+
+::System Unit Case::
+Which of the following is the metal or plastic chassis/case that holds all the physical parts of the computer? {#2}
+[difficulty:easy]
+[chapter:Computer Architecture]
+[tags:hardware,system_unit]
+{
+    =System unit
+    ~CPU
+    ~Mainframe
+    ~Platform
+    ~Microprocessor
+}
+
+::Brain of Computer::
+Which component is widely known as the 'brain' of the computer, responsible for processing data? {#2}
+[difficulty:easy]
+[chapter:Computer Architecture]
+[tags:cpu,hardware]
+{
+    ~Keyboard
+    ~Mouse
+    =CPU
+    ~Printer
+}
+
+::CPU Composition::
+The Central Processing Unit (CPU) consists of which of the following three main units? {#2}
+[difficulty:medium]
+[chapter:Computer Architecture]
+[tags:cpu,structure]
+{
+    ~input, output and processing
+    ~control unit, primary storage and secondary storage
+    =control unit, arithmetic logic unit, memory unit
+    ~All of the above
+}
+
+::ALU Meaning::
+In the computing domain, what does the abbreviation 'ALU' stand for? {#2}
+[difficulty:easy]
+[chapter:Computer Architecture]
+[tags:cpu,alu,terminology]
+{
+    ~Application and Logic Unit
+    ~Algorithm Logic Unit
+    ~Arithmetic Layered Unit
+    ~Arithmetic Legal Unit
+    =Arithmetic Logic Unit
+}
+
+::Register Definition::
+Which small, extremely high-speed storage location is embedded directly within the computer processor to hold intermediate execution data or instructions? {#2}
+[difficulty:medium]
+[chapter:Computer Architecture]
+[tags:cpu,registers]
+{
+    =Register
+    ~WAN
+    ~Bus
+    ~Address
+    ~Processor
+}
+
+::Control Unit Role::
+The portion of the CPU that directs and coordinates the activities of all the other computer components is the: {#2}
+[difficulty:medium]
+[chapter:Computer Architecture]
+[tags:cpu,control_unit]
+{
+    ~motherboard
+    ~coordination board
+    =control unit
+    ~arithmetic logic unit
+    ~None of these
+}
+
+::CPU Nerve Centre::
+Because of its role in regulating signals and data flow, the Control Unit of a digital computer is often called the: {#2}
+[difficulty:medium]
+[chapter:Computer Architecture]
+[tags:cpu,control_unit]
+{
+    ~clock
+    =nerve centre
+    ~Both '1' and '2'
+    ~IC
+}
+
+::First Microprocessor Inventor::
+Who invented the world's first single-chip commercial microprocessor, the Intel 4004? {#2}
+[difficulty:hard]
+[chapter:Computer Architecture]
+[tags:history,microprocessor]
+{
+    ~Vint Cerf
+    ~Terence Percival
+    ~John Mauchly
+    =Ted Hoff
+}
+
+::System Board motherboard::
+The main electronic circuit board in the computer that connects and facilitates communication between all hardware parts is the: {#2}
+[difficulty:easy]
+[chapter:Computer Architecture]
+[tags:motherboard,hardware]
+{
+    ~bus
+    ~line
+    ~media
+    =motherboard
+    ~None of these
+}
+
+::Address Bus Role::
+The exact location address of an I/O device or specific memory slot is carried through the motherboard by the: {#2}
+[difficulty:medium]
+[chapter:Computer Architecture]
+[tags:motherboard,buses]
+{
+    ~data bus
+    ~expansion bus
+    =address bus
+    ~system bus
+}
+
+::UPS Backup Device::
+A device that provides surge protection and furnishes a computer with battery backup power during a main electrical blackout is a(n): {#2}
+[difficulty:easy]
+[chapter:Computer Architecture]
+[tags:hardware,power]
+{
+    ~Battery strip
+    =UPS
+    ~Surge strip
+    ~USB
+    ~Memory
+}
+
+::DMA Acronym::
+What is the full form of the computing acronym 'DMA'? {#2}
+[difficulty:medium]
+[chapter:Computer Architecture]
+[tags:cpu,memory,terminology]
+{
+    =Direct Memory Access
+    ~Dynamic Memory Access
+    ~Direct Method Access
+    ~Double Memory Access
+}
+
+::Machine Cycle Phases::
+What are the four active phases contained in a standard computer hardware machine cycle? {#2}
+[difficulty:medium]
+[chapter:Computer Architecture]
+[tags:execution,machine_cycle]
+{
+    ~fetch, decode, execute, store
+    ~fetch, execute, compile, store
+    ~load, run, output, save
+    =fetch, decode, execute, and store
+}
+
+::Execution phase carrying out::
+In computer systems, the process of carrying out compiled hardware instructions is formally called: {#2}
+[difficulty:easy]
+[chapter:Computer Architecture]
+[tags:execution]
+{
+    ~Fetching
+    ~Storing
+    ~Decoding
+    =Executing
+}
+
+::Physical Components Hardware::
+Any physical, tangible component of a computer system that a user can see and touch is classified as: {#2}
+[difficulty:easy]
+[chapter:Computer Hardware]
+[tags:terminology,hardware]
+{
+    ~software
+    ~peripheral
+    ~storage
+    ~CPU
+    =hardware
+}
+
+::Common Modifier Keys::
+Which of the following categories do the keys Shift, Ctrl, and Alt belong to on a computer keyboard? {#2}
+[difficulty:easy]
+[chapter:Computer Hardware]
+[tags:keyboard,hardware]
+{
+    =Modifier Keys
+    ~Primary Keys
+    ~Function Keys
+    ~Alternate Keys
+    ~Candidate Keys
+}
+
+::Mouse Inventor::
+Who built the very first prototype of the computer mouse in the 1960s? {#2}
+[difficulty:hard]
+[chapter:Computer Hardware]
+[tags:history,hardware]
+{
+    =Douglas Engelbart
+    ~William English
+    ~Daniel Coogher
+    ~Robert Zawacki
+}
+
+::Public ATM Touchscreen::
+Which pointing/input interface is standard for public access devices such as Bank ATMs, hospital kiosks, and airline check-ins? {#2}
+[difficulty:easy]
+[chapter:Computer Hardware]
+[tags:hardware,interfaces]
+{
+    ~Light pen
+    =Touch screen
+    ~Joystick
+    ~Trackball
+}
+
+::Barcode Reader Type::
+A barcode reader, which is used at retail checkout counters to read product codes, is classified as a(n): {#2}
+[difficulty:easy]
+[chapter:Computer Hardware]
+[tags:hardware,scanners]
+{
+    ~processing device
+    ~storage device
+    =input device
+    ~output device
+}
+
+::MICR Acronym::
+What is the full form of 'MICR', a technology used primarily by the banking industry to read checks? {#2}
+[difficulty:medium]
+[chapter:Computer Hardware]
+[tags:hardware,scanners,terminology]
+{
+    =Magnetic Ink Character Recognition
+    ~Magnetic Ink Code Reader
+    ~Mechanical Ink Character Reader
+    ~Modern Ink Code Recognition
+}
+
+::CRT Shape::
+The physical glass screen of a classic Cathode Ray Tube (CRT) computer monitor is structurally: {#2}
+[difficulty:medium]
+[chapter:Computer Hardware]
+[tags:hardware,monitors]
+{
+    ~circular
+    =rectangular
+    ~eclipse
+    ~conical
+    ~None of these
+}
+
+::Printer Speed Measurement::
+What is the standard unit used to measure the printing speed of high-speed modern laser or page printers? {#2}
+[difficulty:easy]
+[chapter:Computer Hardware]
+[tags:hardware,printers]
+{
+    ~CPM (Characters Per Minute)
+    ~DPI (Dots Per Inch)
+    =PPM (Pages Per Minute)
+    ~BIT (Binary Digit)
+    ~None of these
+}
+
+::Non-Impact Printer Example::
+Which of the following pairs represents examples of non-impact printers? {#2}
+[difficulty:medium]
+[chapter:Computer Hardware]
+[tags:hardware,printers]
+{
+    ~Laser and Dot matrix
+    =Inkjet and Laser
+    ~Inkjet and Dot matrix
+    ~Dot matrix and Daisy wheel
+    ~None of these
+}
+
+::Plotter Role::
+Which device is designed specifically to output large-scale engineering blueprints, architectural plans, and high-quality drawings? {#2}
+[difficulty:medium]
+[chapter:Computer Hardware]
+[tags:hardware,output_devices]
+{
+    ~Printer
+    =Plotter
+    ~MICR reader
+    ~OCR scanner
+}
+
+::USB Definition::
+What does the abbreviation 'USB' stand for in computer data cables and ports? {#2}
+[difficulty:easy]
+[chapter:Computer Hardware]
+[tags:ports,interfaces,terminology]
+{
+    ~Unicode Smart Bus
+    ~Universal Structural Bus
+    ~Unicode Serial Bus
+    ~Universal Smart Bus
+    =Universal Serial Bus
+}
+
+::Audio Compression MP3::
+Which file format compression reduces an audio file to approximately one-tenth \(1/10\) of its original size while preserving sound quality? {#2}
+[difficulty:medium]
+[chapter:Computer Hardware]
+[tags:compression,multimedia]
+{
+    ~DOC
+    ~PNG
+    ~GIF
+    =MP3
+    ~VMEG
+}
+
+::Volatile Memory Definition::
+What is the correct operational definition of volatile memory in computer systems? {#2}
+[difficulty:medium]
+[chapter:Computer Memory]
+[tags:memory,fundamentals]
+{
+    ~It retains data at high temperatures
+    ~It must be kept in airtight casings
+    =It loses all stored data upon power failure
+    ~It does not lose data on power failure
+}
+
+::Memory Power Loss::
+Because they lose their contents when power is turned off, cache and main memory (RAM) are classified as: {#2}
+[difficulty:easy]
+[chapter:Computer Memory]
+[tags:memory,fundamentals]
+{
+    ~dynamic
+    ~static
+    =volatile
+    ~non-volatile
+    ~faulty
+}
+
+::Virtual Memory supplementation::
+Virtual memory allocates space on which component to supplement the limited physical RAM of the computer? {#2}
+[difficulty:medium]
+[chapter:Computer Memory]
+[tags:memory,virtual_memory]
+{
+    ~ROM
+    ~EPROM
+    ~The registers
+    ~Extended memory
+    =hard disk (secondary storage)
+}
+
+::SRAM vs DRAM Speed::
+Between Static RAM (SRAM) and Dynamic RAM (DRAM), which memory chip technology is physically faster? {#2}
+[difficulty:medium]
+[chapter:Computer Memory]
+[tags:memory,ram_types]
+{
+    ~There is no certainty
+    ~DRAM
+    =SRAM
+    ~Both operate at identical speeds
+}
+
+::DRAM Advantage::
+What is the primary commercial advantage of using Dynamic RAM (DRAM) over Static RAM (SRAM)? {#2}
+[difficulty:medium]
+[chapter:Computer Memory]
+[tags:memory,ram_types]
+{
+    =It is cheaper and can store more data per unit area
+    ~It is physically much faster than SRAM
+    ~It does not require periodic electrical refreshing
+    ~It consumes significantly less power
+}
+
+::Invalid ROM Type::
+Which of the following is NOT a valid type of Read Only Memory (ROM)? {#2}
+[difficulty:medium]
+[chapter:Computer Memory]
+[tags:memory,rom_types]
+{
+    ~PROM
+    ~EPROM
+    ~EEPROM
+    =EDPROM
+}
+
+::Startup Boot ROM::
+When you first turn on your computer system, the CPU is preset to execute startup instructions stored in the: {#2}
+[difficulty:medium]
+[chapter:Computer Memory]
+[tags:booting,rom]
+{
+    ~RAM
+    ~flash memory
+    =ROM
+    ~CD-ROM
+    ~ALU
+}
+
+::Memory vs Storage Distinction::
+Based on general computer fundamentals, what is the key distinction between computer memory and computer storage? {#2}
+[difficulty:easy]
+[chapter:Computer Memory]
+[tags:terminology,fundamentals]
+{
+    =Memory is temporary, whereas storage is permanent
+    ~Memory is permanent, whereas storage is temporary
+    ~Memory is slow, whereas storage is fast
+    ~Memory is non-volatile, whereas storage is volatile
+    ~None of the above
+}
+
+::Cache Placement::
+Cache memory is designed to act as a high-speed buffer directly between which two core components? {#2}
+[difficulty:easy]
+[chapter:Computer Memory]
+[tags:memory,cache]
+{
+    =the CPU and the RAM
+    ~the RAM and the ROM
+    ~the CPU and the hard disk
+    ~the hard disk and secondary storage
+}
+
+::Virtual Memory Definition::
+Which of the following statements provides the correct definition of virtual memory? {#2}
+[difficulty:medium]
+[chapter:Computer Memory]
+[tags:memory,virtual_memory]
+{
+    ~an extremely large physical RAM main memory
+    ~an extremely large secondary memory drive
+    =an illusion of an extremely large main memory
+    ~a special cache memory used only in supercomputers
+    ~None of the above
+}
+
+::Storage Device Main Folder::
+What is the primary, top-level directory folder on a computer storage device, in which other folders are organized? {#2}
+[difficulty:medium]
+[chapter:Computer Memory]
+[tags:storage,file_systems]
+{
+    =Root directory
+    ~Interface
+    ~Device driver
+    ~Platform
+    ~Main directory
+}
+
+::Floppy Disk divisions::
+The concentric circles on a magnetic floppy disk platter are divided into smaller structural arcs called: {#2}
+[difficulty:easy]
+[chapter:Computer Memory]
+[tags:storage,floppy_disk]
+{
+    ~tracks
+    =sectors
+    ~cylinders
+    ~circles
+}
+
+::Floppy Disk Capacity::
+What is the standard storage capacity of a classic \(3.5\)-inch high-density floppy disk? {#2}
+[difficulty:medium]
+[chapter:Computer Memory]
+[tags:storage,floppy_disk]
+{
+    ~\(1.40\text{ MB}\)
+    ~\(1.44\text{ GB}\)
+    ~\(1.40\text{ GB}\)
+    ~\(1.45\text{ MB}\)
+    =\(1.44\text{ MB}\)
+}
+
+::Disk Formatting Process::
+What is the technical term for the process of dividing a blank physical disk into logical tracks and sectors? {#2}
+[difficulty:easy]
+[chapter:Computer Memory]
+[tags:storage,formatting]
+{
+    ~Tracking
+    =Formatting
+    ~Crashing
+    ~Allotting
+    ~None of these
+}
+
+::Bit Etymology::
+The fundamental unit of computer data, 'bit', is a short portmanteau for which of the following terms? {#2}
+[difficulty:easy]
+[chapter:Computer Memory]
+[tags:terminology,data]
+{
+    ~megabyte
+    ~binary language
+    =binary digit
+    ~binary number
+    ~None of these
+}
+
+::Nibble Definition::
+In computer systems, a grouping of exactly 4 binary bits is known as a: {#2}
+[difficulty:easy]
+[chapter:Computer Memory]
+[tags:data,units]
+{
+    =Nibble
+    ~Byte
+    ~Kilobyte
+    ~Megabyte
+    ~PetaByte
+}
+
+::Bytes in Kilobyte::
+How many bytes of storage are contained in exactly \(1\text{ Kilobyte (KB)}\)? {#2}
+[difficulty:easy]
+[chapter:Computer Memory]
+[tags:data,units]
+{
+    ~1000
+    ~1035
+    ~100
+    ~1008
+    =1024
+}
+
+::Megabyte Definition Size::
+A Megabyte (MB) is approximately equal to how many bytes of data? {#2}
+[difficulty:easy]
+[chapter:Computer Memory]
+[tags:data,units]
+{
+    ~one thousand bytes
+    ~one hundred bytes
+    =one million bytes
+    ~one billion bytes
+    ~None of these
+}
+
+::Gigabyte Definition Size::
+A Gigabyte (GB) is approximately equal to how many bytes of data? {#2}
+[difficulty:easy]
+[chapter:Computer Memory]
+[tags:data,units]
+{
+    ~one thousand bytes
+    ~one million bytes
+    =one billion bytes
+    ~one trillion bytes
+    ~None of the above
+}
+
+::Storage Units Hierarchy::
+Which of the following options correctly lists data storage size units from SMALLEST to LARGEST? {#2}
+[difficulty:medium]
+[chapter:Computer Memory]
+[tags:data,units]
+{
+    ~Petabyte, Kilobyte, Megabyte, Gigabyte, Terabyte
+    ~Kilobyte, Megabyte, Terabyte, Petabyte, Gigabyte
+    ~Megabyte, Terabyte, Gigabyte, Kilobyte, Petabyte
+    =Kilobyte, Megabyte, Gigabyte, Terabyte, Petabyte
+}
+
+::Unique Combinations 8 Bits::
+In binary computer language, each letter of the alphabet and each symbol is made of a unique combination of: {#2}
+[difficulty:easy]
+[chapter:Data Representation]
+[tags:binary,data]
+{
+    ~8 bytes
+    ~8 KB
+    ~8 characters
+    =8 bits
+}
+
+::Binary Number Validation::
+Which of the following is NOT a valid binary number? {#2}
+[difficulty:easy]
+[chapter:Data Representation]
+[tags:binary,numbers]
+{
+    ~001
+    ~101
+    =202
+    ~110
+    ~011
+}
+
+::Binary Equivalent of 98::
+What is the binary representation of the decimal number \(98\)? {#2}
+[difficulty:medium]
+[chapter:Data Representation]
+[tags:binary,math]
+{
+    ~1110001
+    ~1110100
+    =1100010
+    ~1111001
+    ~None of these
+}
+
+::Binary Equivalent of 71::
+What is the binary representation of the decimal number \(71\)? {#2}
+[difficulty:medium]
+[chapter:Data Representation]
+[tags:binary,math]
+{
+    ~110011
+    =1110011
+    ~0110011
+    ~1000111
+    ~None of these
+}
+
+::Binary 1111 Decimal Equivalent::
+What is the decimal equivalent of the binary number \(1111_2\)? {#2}
+[difficulty:medium]
+[chapter:Data Representation]
+[tags:binary,math]
+{
+    ~11
+    ~10
+    ~1
+    =15
+    ~13
+}
+
+::Octal 456 Decimal Equivalent::
+What is the decimal equivalent of the octal number \(456_8\)? {#2}
+[difficulty:medium]
+[chapter:Data Representation]
+[tags:octal,math]
+{
+    ~203
+    =302
+    ~400
+    ~402
+}
+
+::Decimal 15 Hexadecimal::
+What is the hexadecimal representation of the decimal number \(15\)? {#2}
+[difficulty:easy]
+[chapter:Data Representation]
+[tags:hexadecimal,math]
+{
+    ~14
+    ~13
+    =F
+    ~7
+}
+
+::MSD Acronym::
+In computer arithmetic and data representation, what does the abbreviation 'MSD' stand for? {#2}
+[difficulty:easy]
+[chapter:Data Representation]
+[tags:terminology,data]
+{
+    =Most Significant Digit
+    ~Many Significant Digit
+    ~Multiple Significant Digit
+    ~Most Significant Decimal
+}
+
+::ASCII Acronym::
+What does the widely used standard computer code 'ASCII' stand for? {#2}
+[difficulty:easy]
+[chapter:Data Representation]
+[tags:ascii,terminology]
+{
+    ~American Special Computer for Information Interaction
+    ~American Standard Computer for Information Interchange
+    ~American Special Code for Information Interchange
+    =American Standard Code for Information Interchange
+}
+
+::Unicode Font Support::
+Which character encoding standard supports complex international fonts, such as Japanese and Chinese characters? {#2}
+[difficulty:medium]
+[chapter:Data Representation]
+[tags:unicode,fonts]
+{
+    ~EBCDIC
+    ~ASCII
+    ~BC
+    ~ECBI
+    =UNICODE
+}
+
+::NAND Gate Logic Output::
+The two logical inputs A and B of a NAND gate will yield an output of 0 if and only if: {#2}
+[difficulty:medium]
+[chapter:Data Representation]
+[tags:logic_gates,boolean]
+{
+    ~A is 0
+    ~B is 0
+    ~both inputs are 0
+    =both inputs are 1
+}
+
+::XOR Gate Output High::
+Which logic gate yields an output of 1 ONLY when its two inputs are different from each other (one is 1, and the other is 0)? {#2}
+[difficulty:medium]
+[chapter:Data Representation]
+[tags:logic_gates,boolean]
+{
+    ~AND
+    ~NOT
+    ~OR
+    =XOR
+}
+
+::NOR Gate Inputs::
+The output of a two-input NOR gate will be high (1) if the input values are: {#2}
+[difficulty:medium]
+[chapter:Data Representation]
+[tags:logic_gates,boolean]
+{
+    =00
+    ~01
+    ~10
+    ~11
+    ~None of these
+}
+
+::Universal Gates::
+Which of the following pairs of logic gates are known as 'universal gates' because they can implement any boolean function? {#2}
+[difficulty:medium]
+[chapter:Data Representation]
+[tags:logic_gates,boolean]
+{
+    =NAND & NOR
+    ~AND & OR
+    ~XOR & OR
+    ~AND & NOT
+}
+
+::Intangible Software Definition::
+What is the term used to describe the intangible set of instructions that tell the computer hardware what to do? {#2}
+[difficulty:easy]
+[chapter:Computer Software]
+[tags:software,fundamentals]
+{
+    ~hardware
+    =software
+    ~storage
+    ~input/output
+    ~None of these
+}
+
+::Primary Software Purpose::
+The primary operational purpose of any software program is to process raw data into: {#2}
+[difficulty:easy]
+[chapter:Computer Software]
+[tags:software,fundamentals]
+{
+    =information
+    ~programs
+    ~objects
+    ~charts
+    ~websites
+}
+
+::Two Main Software Categories::
+What are the two broad, primary categories of computer software? {#2}
+[difficulty:easy]
+[chapter:Computer Software]
+[tags:software,classifications]
+{
+    ~word processing and spreadsheet
+    ~transaction and database
+    ~Windows and Mac OS
+    =system and application
+}
+
+::Operating System Boot Requirement::
+A computer system cannot successfully complete the process of 'booting' if it lacks which of the following? {#2}
+[difficulty:easy]
+[chapter:Computer Software]
+[tags:booting,os]
+{
+    ~A compiler
+    ~A loader
+    =An operating system
+    ~An assembler
+    ~None of these
+}
+
+::BIOS Acronym::
+In computer systems, what does the abbreviation 'BIOS' stand for? {#2}
+[difficulty:easy]
+[chapter:Computer Software]
+[tags:bios,booting,terminology]
+{
+    ~Basic Input/Outer System
+    ~Basic Internal Output System
+    ~Basic Inner/Output System
+    ~Basic Input/Output Systemisation
+    =Basic Input/Output System
+}
+
+::Device Driver Purpose::
+A specialized software utility that must be installed to allow a specific peripheral (like a printer) to interact with the OS is called a: {#2}
+[difficulty:easy]
+[chapter:Computer Software]
+[tags:system_software,drivers]
+{
+    =device driver
+    ~user interface
+    ~internet utility
+    ~relocator
+}
+
+::Active Loader::
+Which system software utility is responsible for taking an executable file from disk, placing it into main memory, and starting its execution? {#2}
+[difficulty:medium]
+[chapter:Computer Software]
+[tags:system_software,loader]
+{
+    =loader
+    ~linker
+    ~translator
+    ~text editor
+    ~None of these
+}
+
+::Spreadsheet Utility Accounts::
+Which general-purpose application software is designed to let users easily enter numbers, perform mathematical/financial formulas, and manage simple accounts? {#2}
+[difficulty:easy]
+[chapter:Computer Software]
+[tags:application_software,spreadsheets]
+{
+    ~Word processing program
+    =Spreadsheet program
+    ~Presentation program
+    ~Database program
+}
+
+::DTP Acronym::
+DTP is a powerful tool for graphic designers to create professional page layouts. What does 'DTP' stand for? {#2}
+[difficulty:easy]
+[chapter:Computer Software]
+[tags:application_software,dtp,terminology]
+{
+    ~Device Transfer Protocol
+    =Desktop Publishing
+    ~Device Transfer Programs
+    ~All of the above
+}
+
+::File Compression Purpose::
+Which of the following software utilities is used to store multiple files into a single, smaller package that is faster to transfer over the Internet? {#2}
+[difficulty:easy]
+[chapter:Computer Software]
+[tags:utilities,compression]
+{
+    =Compression software
+    ~Defragmentation software
+    ~Unzipped utility
+    ~Abstraction tool
+    ~Encapsulation tool
+}
+
+::Disk Defragmenter Role::
+Which Windows system utility program optimizes disk speed by rearranging fragmented file blocks into contiguous storage spaces? {#2}
+[difficulty:medium]
+[chapter:Computer Software]
+[tags:utilities,defragmentor]
+{
+    ~Backup
+    ~Disk cleanup
+    =Disk defragmenter
+    ~Restore
+    ~Disk restorer
+}
+
+::Backup Definition::
+What is the technical definition of a data 'backup'? {#2}
+[difficulty:easy]
+[chapter:Computer Software]
+[tags:utilities,backup]
+{
+    ~Connecting more components to a network
+    =Copying files from their original source to another destination to prevent loss
+    ~Filtering out old data structures from new ones
+    ~Accessing data blocks directly from magnetic tape
+    ~None of the above
+}
+
+::CAD Acronym::
+In computer systems and technical design drawing software, what does 'CAD' stand for? {#2}
+[difficulty:easy]
+[chapter:Computer Software]
+[tags:applications,cad,terminology]
+{
+    ~Computer Applied Design
+    ~Computer Algorithm and Design
+    ~Computer Application Design
+    =Computer Aided Design
+    ~Other than those given as options
+}
+
+::Operating System Definition::
+An Operating System (OS) is best defined as a program that: {#2}
+[difficulty:easy]
+[chapter:Operating System]
+[tags:os,fundamentals]
+{
+    ~manages accounting ledgers
+    ~acts as application software for printing letters
+    =acts as an interface between the computer hardware and the user
+    ~is a hardware component inside the motherboard
+}
+
+::Active Process OS::
+In modern multitasking operating systems, a program that is currently in a state of active execution is called a: {#2}
+[difficulty:medium]
+[chapter:Operating System]
+[tags:os,processes]
+{
+    =process
+    ~instruction
+    ~procedure
+    ~function
+}
+
+::Firm Transaction Batching::
+Grouping and processing all of a business's transactions at a single scheduled time is called: {#2}
+[difficulty:medium]
+[chapter:Operating System]
+[tags:os,processing_types]
+{
+    ~database management
+    =batch processing
+    ~real-time system processing
+    ~on-time system processing
+    ~None of these
+}
+
+::Time Sharing Definition::
+Which OS scheduling feature allocates rapid CPU time slices to allow multiple interactive users to share a system simultaneously? {#2}
+[difficulty:medium]
+[chapter:Operating System]
+[tags:os,cpu_scheduling]
+{
+    =Time sharing
+    ~Multisharing
+    ~Time tracing
+    ~Multiprocessing
+    ~None of these
+}
+
+::Booting OS Loading::
+What physical event happens when a user boots up a personal computer? {#2}
+[difficulty:medium]
+[chapter:Operating System]
+[tags:booting,os]
+{
+    =Portions of the operating system are copied from disk storage into RAM
+    ~Portions of the operating system are written from RAM onto the disk drive
+    ~The system compiles all operating system codes into machine binary
+    ~The BIOS starts writing direct memory access sectors
+}
+
+::Warm Booting::
+What is the technical term for restarting a computer using keyboard shortcut keys (like Ctrl+Alt+Del) when the system is already turned on? {#2}
+[difficulty:easy]
+[chapter:Operating System]
+[tags:booting]
+{
+    ~cold booting
+    =warm booting
+    ~shut down
+    ~logging off
+    ~None of these
+}
+
+::Open Source Linux::
+Which of the following statements regarding the Linux operating system is TRUE? {#2}
+[difficulty:easy]
+[chapter:Operating System]
+[tags:os,linux]
+{
+    ~It is a shareware program
+    ~It is a proprietary commercial system
+    ~It is sold by Apple
+    =It is a free and open-source operating system
+}
+
+::Unix Component Kernel Shell::
+Which of the following is NOT an internal architectural part of the UNIX operating system? {#2}
+[difficulty:medium]
+[chapter:Operating System]
+[tags:os,unix]
+{
+    ~Kernel
+    ~Shell
+    ~Programs
+    =Linux
+}
+
+::DOS Output Redirection::
+In MS-DOS commands, which character symbol is used to redirect the output of a command to a file or device instead of the screen? {#2}
+[difficulty:hard]
+[chapter:Operating System]
+[tags:dos,commands]
+{
+    ~'<' symbol
+    ~'=' symbol
+    ='>' symbol
+    ~'|' symbol
+    ~None of these
+}
+
+::DOS Delete Command::
+Which internal command in MS-DOS is used to delete one or more files from a directory? {#2}
+[difficulty:easy]
+[chapter:Operating System]
+[tags:dos,commands]
+{
+    ~REN
+    =DEL
+    ~CD
+    ~MD
+    ~None of these
+}
+
+::Algorithm Logic Syntax::
+Which of the following contains the specific grammatical rules and keywords that express the logical steps of an algorithm? {#2}
+[difficulty:medium]
+[chapter:Programming Concepts]
+[tags:programming,syntax]
+{
+    ~Programming language
+    =Syntax
+    ~Programming structure
+    ~Logical chart
+    ~Flow chart
+}
+
+::Executable Program HLL::
+A translated programming file that is compiled and ready to run on a computer without requiring further changes is a(n): {#2}
+[difficulty:easy]
+[chapter:Programming Concepts]
+[tags:programming,compilation]
+{
+    ~interpreter file
+    ~high-level code file
+    ~compiler program
+    ~COBOL source file
+    =executable file
+}
+
+::Machine Language Dependence::
+Which of the following statements about machine language is TRUE? {#2}
+[difficulty:medium]
+[chapter:Programming Concepts]
+[tags:languages,machine_language]
+{
+    ~It is the original language in which programs were first written
+    ~It is the only language natively understood by a computer's CPU
+    ~It differs significantly from one processor architecture to another
+    =All of the above
+}
+
+::Assembly Code Assembler::
+The utility program that translates mnemonic assembly language codes into binary machine language instructions is called a(n): {#2}
+[difficulty:easy]
+[chapter:Programming Concepts]
+[tags:languages,translators]
+{
+    ~compiler
+    ~interpreter
+    ~linker
+    ~loader
+    =assembler
+}
+
+::Scientific Language Fortran::
+Which high-level computer language was mathematically oriented and designed specifically to solve scientific and engineering problems? {#2}
+[difficulty:medium]
+[chapter:Programming Concepts]
+[tags:languages,history]
+{
+    =Fortran
+    ~Cobol
+    ~Lisp
+    ~Prolog
+}
+
+::FORTRAN Acronym::
+In computer programming history, what does the acronym 'FORTRAN' stand for? {#2}
+[difficulty:easy]
+[chapter:Programming Concepts]
+[tags:languages,terminology]
+{
+    ~Formal Translation
+    ~Formative Translation
+    ~Formal Transaction
+    ~Formula Transaction
+    =Formula Translation
+}
+
+::C Language Creator::
+The C programming language was created at Bell Labs in 1972 by which computer scientist? {#2}
+[difficulty:medium]
+[chapter:Programming Concepts]
+[tags:history,languages]
+{
+    =Dennis Ritchie
+    ~Charles Babbage
+    ~Niklaus Wirth
+    ~Bjarne Stroustrup
+    ~John McCarthy
+}
+
+::C Plus Plus Creator::
+Which computer scientist created the C++ programming language as an extension of C in 1979? {#2}
+[difficulty:medium]
+[chapter:Programming Concepts]
+[tags:history,languages]
+{
+    ~Dennis Ritchie
+    ~Charles Babbage
+    ~Niklaus Wirth
+    =Bjarne Stroustrup
+    ~John McCarthy
+}
+
+::Applet Creator Language::
+Which programming language was developed by Sun Microsystems specifically to create portable, secure programs like web 'Applets'? {#2}
+[difficulty:easy]
+[chapter:Programming Concepts]
+[tags:languages,java]
+{
+    =Java
+    ~Cable
+    ~Domain code
+    ~Net programming
+    ~COBOL
+}
+
+::Program Bug Error::
+An error or flaw embedded in a computer program that causes it to malfunction is called a: {#2}
+[difficulty:easy]
+[chapter:Programming Concepts]
+[tags:terminology,errors]
+{
+    =bug
+    ~debug
+    ~virus
+    ~noise
+}
+
+::Step-by-Step Procedure::
+A structured, finite set of step-by-step mathematical or logical procedures designed to accomplish a specific task is known as a(n): {#2}
+[difficulty:easy]
+[chapter:Programming Concepts]
+[tags:methodology,algorithms]
+{
+    =Algorithm
+    ~Hardware program
+    ~Software package
+    ~Firmware program
+    ~None of the above
+}
+
+::Reserved Words::
+Specific keywords that a programming language has set aside exclusively for its own functional and syntactic use are called: {#2}
+[difficulty:easy]
+[chapter:Programming Concepts]
+[tags:syntax,terminology]
+{
+    ~Control words
+    ~Control structures
+    =Reserved words
+    ~Reserved keys
+    ~None of these
+}
+
+::Pseudocode Definition::
+An informal notation that combines elements of natural language with structural programming logic is called: {#2}
+[difficulty:easy]
+[chapter:Programming Concepts]
+[tags:methodology,pseudocode]
+{
+    =Pseudocode
+    ~Java
+    ~The Java Virtual Machine
+    ~The compiler
+    ~None of the above
+}
+
+::Looping Statement Loop::
+In computer programming, the process of repeating a specific set of block statements is referred to as: {#2}
+[difficulty:easy]
+[chapter:Programming Concepts]
+[tags:control_structures,looping]
+{
+    =looping
+    ~control structuring
+    ~compiling
+    ~defining structures
+}
+
+::Windows NT Definition::
+In the Microsoft operating system line 'Windows NT', what does the 'NT' stand for? {#2}
+[difficulty:medium]
+[chapter:Microsoft Windows]
+[tags:history,os]
+{
+    ~New Terminology
+    ~New Technique
+    =New Technology
+    ~Normal Technique
+}
+
+::Windows OS Upgrade::
+If you replace your Windows 98 operating system with Windows XP, you are performing a system: {#2}
+[difficulty:easy]
+[chapter:Microsoft Windows]
+[tags:terminology,installation]
+{
+    ~push up
+    ~China installation
+    ~patching
+    ~pull down
+    =update (upgrade)
+}
+
+::Windows ME Acronym::
+In the Microsoft OS edition 'Windows ME', what does the abbreviation 'ME' stand for? {#2}
+[difficulty:medium]
+[chapter:Microsoft Windows]
+[tags:history,os,terminology]
+{
+    =Millennium Edition
+    ~Micro Expert
+    ~Macro Expert
+    ~Multi Expert
+}
+
+::Windows Explorer Role::
+What is the primary function of the built-in utility known as 'Windows Explorer'? {#2}
+[difficulty:easy]
+[chapter:Microsoft Windows]
+[tags:utilities,file_explorer]
+{
+    ~Personal Computer terminal
+    ~Network client
+    =File Manager
+    ~Hard drive
+    ~Web Browser
+}
+
+::Background Image Desktop::
+The background image displayed on your computer screen's desktop is called the: {#2}
+[difficulty:easy]
+[chapter:Microsoft Windows]
+[tags:gui,desktop]
+{
+    ~graphics overlay
+    ~deskcover
+    ~wallback
+    =wallpaper
+}
+
+::Blinking Cursor Indicator::
+A blinking visual indicator on your computer screen that shows where your next typing action will happen is a: {#2}
+[difficulty:easy]
+[chapter:Microsoft Windows]
+[tags:gui,terminology]
+{
+    ~CPU status
+    =cursor
+    ~toolbar
+    ~boot status
+}
+
+::GUI Picture Icons::
+Small graphical pictures displayed on the desktop that represent files, folders, or programs are called: {#2}
+[difficulty:easy]
+[chapter:Microsoft Windows]
+[tags:gui,icons]
+{
+    ~task bars
+    ~windows
+    ~desktop zones
+    =icons
+    ~None of these
+}
+
+::Dragging Mouse Action::
+The action of placing your mouse pointer on an icon, holding the left button down, and moving the mouse across the screen is called: {#2}
+[difficulty:easy]
+[chapter:Microsoft Windows]
+[tags:mouse,actions]
+{
+    ~double clicking
+    ~highlighting
+    =dragging
+    ~pointing
+}
+
+::Recycle Bin Purpose::
+All files that are deleted by a user on a Windows system are temporarily stored in the: {#2}
+[difficulty:easy]
+[chapter:Microsoft Windows]
+[tags:gui,recycle_bin]
+{
+    =Recycle Bin
+    ~Task Bar
+    ~Tool Bar
+    ~Computer main storage
+}
+
+::Taskbar Location::
+By default, the Windows Taskbar is located at which position on the computer screen? {#2}
+[difficulty:easy]
+[chapter:Microsoft Windows]
+[tags:gui,taskbar]
+{
+    ~on the Start menu
+    =at the bottom of the screen
+    ~on the quick launch toolbar
+    ~at the top of the screen
+}
+
+::Active Window DARK Title::
+In split window or multi-window modes, why does one window's title bar look darker than the others? {#2}
+[difficulty:medium]
+[chapter:Microsoft Windows]
+[tags:gui,windows]
+{
+    ~A darker title bar indicates a window not in active use
+    =A darker title bar indicates the currently active window
+    ~A darker title bar indicates an unavailable corrupted window
+    ~Both '1' and '2'
+}
+
+::Desktop Date Time::
+Where are the system date and time typically displayed on your computer desktop? {#2}
+[difficulty:easy]
+[chapter:Microsoft Windows]
+[tags:gui,taskbar]
+{
+    ~Keyboard panel
+    ~Recycle Bin
+    ~My Computer menu
+    =Task Bar (Notification Area)
+    ~None of these
+}
+
+::Minimize Window::
+To shrink a window down to an icon on the taskbar, which button must you click? {#2}
+[difficulty:easy]
+[chapter:Microsoft Windows]
+[tags:gui,windows]
+{
+    ~open group button
+    =minimize button
+    ~maximize button
+    ~restore button
+}
+
+::Word Document Extension::
+What is the default file extension for all Microsoft Word document files created in classic editions? {#2}
+[difficulty:easy]
+[chapter:Microsoft Windows]
+[tags:files,extensions]
+{
+    ~WRD
+    ~TXT
+    =DOC
+    ~FIL
+    ~WD
+}
+
+::File Folder Organization::
+In a computer file system, individual files are organized and stored in named containers called: {#2}
+[difficulty:easy]
+[chapter:Microsoft Windows]
+[tags:files,folders]
+{
+    ~archives
+    ~lists
+    ~indexes
+    =folders
+    ~None of these
+}
+
+::Undo Shortcut Key::
+Which keyboard shortcut is used in Windows applications to undo your last action? {#2}
+[difficulty:easy]
+[chapter:Microsoft Windows]
+[tags:shortcuts]
+{
+    ~Ctrl + C
+    ~Ctrl + X
+    ~Ctrl + Y
+    =Ctrl + Z
+}
+
+::Delete Key Left Leftward::
+Which key is used to delete characters to the immediate LEFT of the blinking cursor? {#2}
+[difficulty:easy]
+[chapter:Microsoft Windows]
+[tags:keyboard,actions]
+{
+    ~Alt + Delete
+    ~Shift
+    ~Esc
+    ~Delete
+    =Backspace
+}
+
+::Warm Boot Shortcut Keys::
+Which combination of keyboard keys is pressed to restart a computer system during a warm boot? {#2}
+[difficulty:easy]
+[chapter:Microsoft Windows]
+[tags:shortcuts,booting]
+{
+    ~Del + Ctrl
+    ~Backspace + Ctrl
+    ~Esc + Ctrl
+    ~Insert + Esc
+    =Ctrl + Alt + Del
+}
+
+::MS Office Developers::
+Microsoft Office was developed by Microsoft Inc. in which year? {#2}
+[difficulty:medium]
+[chapter:Microsoft Office]
+[tags:history,ms_office]
+{
+    ~1970s
+    =1980s (specifically 1988/1989)
+    ~1990s
+    ~1960s
+}
+
+::MS Word Category::
+Microsoft Word is classified under which category of computer software? {#2}
+[difficulty:easy]
+[chapter:Microsoft Office]
+[tags:ms_word,software]
+{
+    ~tabular data formatting
+    =Word processing software
+    ~presentation software
+    ~E-mail client
+}
+
+::Spell Check Tab MS Word::
+In modern ribbon-based Microsoft Word, the 'Spelling & Grammar Check' feature is located under which tab? {#2}
+[difficulty:medium]
+[chapter:Microsoft Office]
+[tags:ms_word,features]
+{
+    ~File
+    ~Home
+    ~Insert
+    =Review
+    ~References
+}
+
+::Portrait and Landscape Orientation::
+In document formatting, what are the layout options Portrait and Landscape called? {#2}
+[difficulty:easy]
+[chapter:Microsoft Office]
+[tags:ms_word,layout]
+{
+    =page orientation
+    ~paper size
+    ~page layout
+    ~page margin
+    ~page gap
+}
+
+::Force Page Break Shortcut::
+In Microsoft Word, what is the keyboard shortcut to force a page break at the cursor position? {#2}
+[difficulty:medium]
+[chapter:Microsoft Office]
+[tags:ms_word,shortcuts]
+{
+    ~position cursor and press F1
+    =position cursor and press Ctrl + Enter
+    ~use insert section break
+    ~change font size
+}
+
+::Blinking Insert Point::
+The blinking vertical bar that shows your active position inside typed text is called the: {#2}
+[difficulty:easy]
+[chapter:Microsoft Office]
+[tags:ms_word,terminology]
+{
+    =cursor
+    ~blinker
+    ~positioner
+    ~state indicator
+    ~placeholder
+}
+
+::Excel Cell Intersection::
+In a Microsoft Excel spreadsheet, the intersection of a column and a row is called a: {#2}
+[difficulty:easy]
+[chapter:Microsoft Office]
+[tags:ms_excel,terminology]
+{
+    =cell
+    ~grid
+    ~table
+    ~box
+    ~None of these
+}
+
+::Excel Active Cell::
+Which of the following terms refers to the cell that is currently selected and highlighted with a bold boundary in Excel? {#2}
+[difficulty:easy]
+[chapter:Microsoft Office]
+[tags:ms_excel,terminology]
+{
+    =Active cell
+    ~Formula cell
+    ~Range
+    ~Cell address
+    ~None of these
+}
+
+::Workbook Definition Excel::
+A compiled collection of one or more worksheets in an Excel file is called a: {#2}
+[difficulty:easy]
+[chapter:Microsoft Office]
+[tags:ms_excel,terminology]
+{
+    ~Excel book
+    ~Worksheets sheet
+    ~Excel sheets
+    =Workbook
+    ~None of these
+}
+
+::Excel Cell Address::
+The letter and number identifier of an intersecting column and row (e.g., A1) is called the: {#2}
+[difficulty:easy]
+[chapter:Microsoft Office]
+[tags:ms_excel,terminology]
+{
+    ~cell location
+    ~cell position
+    =cell address
+    ~cell coordinates
+    ~cell contents
+}
+
+::Excel TODAY Function::
+In Microsoft Excel, what does the formula function TODAY() enter into a cell? {#2}
+[difficulty:medium]
+[chapter:Microsoft Office]
+[tags:ms_excel,functions]
+{
+    ~system time in a cell
+    ~system date and time in a cell
+    =system date only
+    ~the file opening time
+}
+
+::Excel Active Row Hide Shortcut::
+In a worksheet in MS-Excel, what is the shortcut key to hide the entire active row? {#2}
+[difficulty:hard]
+[chapter:Microsoft Office]
+[tags:ms_excel,shortcuts]
+{
+    ~Ctrl + 2
+    =Ctrl + 9
+    ~Ctrl + N
+    ~Ctrl + -
+    ~Ctrl + Shift
+}
+
+::Powerpoint Extension 2007::
+What is the standard file extension for Microsoft PowerPoint presentations in Office 2007 and later? {#2}
+[difficulty:easy]
+[chapter:Microsoft Office]
+[tags:ms_powerpoint,files]
+{
+    ~.ptp
+    =.pptx
+    ~.ppx
+    ~.ptx
+    ~.pt
+}
+
+::Powerpoint Slide Sorter Thumbnail::
+Which PowerPoint view displays each slide as a thumbnail on one screen, making it easy to rearrange slides? {#2}
+[difficulty:medium]
+[chapter:Microsoft Office]
+[tags:ms_powerpoint,views]
+{
+    =Slide Sorter View
+    ~Notes Page View
+    ~Slide Show View
+    ~Handout View
+    ~Design View
+}
+
+::Access Primary Key Limitation::
+In Microsoft Access, how many primary keys can a single database table have? {#2}
+[difficulty:medium]
+[chapter:Microsoft Office]
+[tags:ms_access,databases]
+{
+    =One
+    ~Two
+    ~Three
+    ~Four
+    ~None of these
+}
+
+::Access Picture OLE::
+Which database data type must be selected in Microsoft Access to include image or picture data in a field? {#2}
+[difficulty:medium]
+[chapter:Microsoft Office]
+[tags:ms_access,data_types]
+{
+    =OLE Object
+    ~hyperlink
+    ~Yes/No
+    ~picture field
+    ~None of these
+}
+
+::Outlook Client Feature::
+Which Microsoft Office suite package serves primarily as an E-mail client and personal information manager? {#2}
+[difficulty:easy]
+[chapter:Microsoft Office]
+[tags:ms_outlook,software]
+{
+    ~MS-Word
+    ~MS-Excel
+    ~MS-PowerPoint
+    ~MS-Access
+    =MS-Outlook
+}
+
+::Interrelated Records Database::
+A logically organized collection of interrelated files or records stored electronically is called a(n): {#2}
+[difficulty:easy]
+[chapter:Database Concepts]
+[tags:databases,fundamentals]
+{
+    ~utility file
+    ~management information system
+    =database
+    ~spreadsheet
+    ~datasheet
+}
+
+::Database Table Rows Tuples::
+In a relational database model, the horizontal rows of a table are technically called: {#2}
+[difficulty:medium]
+[chapter:Database Concepts]
+[tags:relational_model,tuples]
+{
+    ~relations
+    =tuples (or records)
+    ~attributes
+    ~fields
+}
+
+::Database Table Columns Fields::
+In a relational database model, the vertical columns of a table are referred to as: {#2}
+[difficulty:easy]
+[chapter:Database Concepts]
+[tags:relational_model,fields]
+{
+    ~tuples
+    =fields (or attributes)
+    ~records
+    ~tables
+}
+
+::Smallest Database Unit::
+What is the smallest logical unit of information about a single record in a database table? {#2}
+[difficulty:medium]
+[chapter:Database Concepts]
+[tags:databases,structure]
+{
+    ~cell
+    =field
+    ~record
+    ~query
+}
+
+::Tuple Cardinality Relation::
+In relational database theory, the cardinality of a relation represents the: {#2}
+[difficulty:medium]
+[chapter:Database Concepts]
+[tags:theory,cardinality]
+{
+    =number of tuples (rows)
+    ~number of attributes (columns)
+    ~number of database tables
+    ~number of integrity constraints
+    ~None of the above
+}
+
+::Database Schema Definition::
+In database systems, what does the term 'schema' represent? {#2}
+[difficulty:medium]
+[chapter:Database Concepts]
+[tags:databases,schema]
+{
+    ~the actual physical data stored on disk
+    =the logical structure and design of the database
+    ~the system backup log files
+    ~a query language utility program
+}
+
+::Data Duplication Inconsistency::
+Data duplication is wasteful of storage space, but it also promotes a more serious database problem called: {#2}
+[difficulty:medium]
+[chapter:Database Concepts]
+[tags:databases,data_integrity]
+{
+    ~isolated program execution
+    =data inconsistency
+    ~program dependency
+    ~separated database systems
+}
+
+::Primary Key Purpose::
+What is the primary constraint and purpose of a primary key in a relational database? {#2}
+[difficulty:medium]
+[chapter:Database Concepts]
+[tags:relational_model,keys]
+{
+    ~to lock the database structures
+    ~to provide a graphical map of the tables
+    =to uniquely identify each record in a table, and its value cannot be null
+    ~to establish connection logs
+}
+
+::Foreign Key Definition::
+A field in one database table that points to and references the primary key of another table is called a: {#2}
+[difficulty:medium]
+[chapter:Database Concepts]
+[tags:relational_model,keys]
+{
+    ~Physical key
+    ~Primary key
+    =Foreign key
+    ~Logical key
+    ~None of the above
+}
+
+::ER Diagram Entity Representation::
+In an Entity-Relationship (E-R) diagram, entity sets are represented graphically by which of the following shapes? {#2}
+[difficulty:easy]
+[chapter:Database Concepts]
+[tags:er_model,diagrams]
+{
+    =rectangle
+    ~square
+    ~ellipse
+    ~triangle
+    ~circle
+}
+
+::ER Diagram Attributes Representation::
+In an Entity-Relationship (E-R) diagram, the attributes (characteristics) of an entity are represented by: {#2}
+[difficulty:easy]
+[chapter:Database Concepts]
+[tags:er_model,diagrams]
+{
+    ~rectangles
+    ~squares
+    =ellipses
+    ~circles
+}
+
+::ER Diagram Relationship Representation::
+In an Entity-Relationship (E-R) diagram, the relationships between entities are represented by: {#2}
+[difficulty:easy]
+[chapter:Database Concepts]
+[tags:er_model,diagrams]
+{
+    ~ellipses
+    ~dashed ellipses
+    ~rectangles
+    =diamonds
+    ~None of these
+}
+
+::Weak Entity Set Definition::
+An entity set in an E-R model that does not have sufficient attributes to form its own primary key is called a: {#2}
+[difficulty:medium]
+[chapter:Database Concepts]
+[tags:er_model,entities]
+{
+    ~strong entity set
+    =weak entity set
+    ~simple entity set
+    ~primary entity set
+    ~None of these
+}
+
+::Data Communication Transmission::
+The transmission of data, signals, and messages between two or more computers over communication links is called: {#2}
+[difficulty:easy]
+[chapter:Data Communication and Networking]
+[tags:networking,fundamentals]
+{
+    ~Communication
+    ~Networking
+    =Data communication
+    ~Data networking
+}
+
+::Simplex Transmission Channel::
+In which type of communication channel can data flow in one direction only (unidirectional)? {#2}
+[difficulty:easy]
+[chapter:Data Communication and Networking]
+[tags:channels,simplex]
+{
+    =simplex
+    ~half-duplex
+    ~full-duplex
+    ~multicast
+}
+
+::Walkie Talkie Channel::
+A Walkie-Talkie is an example of which type of communication channel? {#2}
+[difficulty:easy]
+[chapter:Data Communication and Networking]
+[tags:channels,half_duplex]
+{
+    ~Simplex
+    =Half duplex
+    ~Full duplex
+    ~None of these
+}
+
+::Mobile Phone Channel::
+A cellular mobile phone is an example of which type of communication channel? {#2}
+[difficulty:easy]
+[chapter:Data Communication and Networking]
+[tags:channels,full_duplex]
+{
+    ~Simplex
+    ~Half duplex
+    =Full duplex
+    ~None of these
+}
+
+::Twisted Pair Jacket::
+In twisted-pair network cabling, the outer protective sheath that surrounds the wire bundle is called the: {#2}
+[difficulty:medium]
+[chapter:Data Communication and Networking]
+[tags:cabling,hardware]
+{
+    ~frame
+    ~cover
+    ~disk
+    ~block
+    =jacket
+}
+
+::Optic Fibre Transmission High Speed::
+Fibre optic cables are capable of transmitting data at extremely high speeds because they carry signals as: {#2}
+[difficulty:medium]
+[chapter:Data Communication and Networking]
+[tags:cabling,hardware]
+{
+    ~electrical pulses
+    ~sound waves
+    ~magnetic fields
+    =light waves
+}
+
+::Bandwidth Definition::
+In computer networking and communication media, the term 'bandwidth' refers to: {#2}
+[difficulty:medium]
+[chapter:Data Communication and Networking]
+[tags:networking,bandwidth]
+{
+    ~the physical cost of laying network cables
+    ~the storage capacity of network nodes
+    ~the geographical distance spanned by a WAN
+    =the maximum amount of information a medium can transfer in a given amount of time
+}
+
+::First Network Seed ARPANET::
+Which historical computer network was funded by the US DoD and is credited as the seed that grew into the global Internet? {#2}
+[difficulty:easy]
+[chapter:Data Communication and Networking]
+[tags:history,networking]
+{
+    =ARPANET
+    ~NSFnet
+    ~V-net
+    ~I-net
+}
+
+::Ethernet MAC Address Size::
+How many bits are contained in a standard hardware Ethernet (MAC) address? {#2}
+[difficulty:medium]
+[chapter:Data Communication and Networking]
+[tags:networking,hardware]
+{
+    ~64 bits
+    =48 bits
+    ~32 bits
+    ~16 bits
+    ~None of these
+}
+
+::OSI 4th Layer::
+Which of the following represents the fourth layer of the standard Open Systems Interconnection (OSI) network reference model? {#2}
+[difficulty:medium]
+[chapter:Data Communication and Networking]
+[tags:osi_model]
+{
+    ~Application layer
+    ~Data link layer
+    =Transport layer
+    ~Session layer
+    ~None of these
+}
+
+::OSI Routing Layer::
+In the standard OSI network model, the routing of data packets across multiple networks is performed by which layer? {#2}
+[difficulty:medium]
+[chapter:Data Communication and Networking]
+[tags:osi_model]
+{
+    =Network layer
+    ~Data link layer
+    ~Transport layer
+    ~Session layer
+    ~None of these
+}
+
+::OSI Switch Layer::
+At which layer of the standard OSI network reference model do network switches primarily operate? {#2}
+[difficulty:medium]
+[chapter:Data Communication and Networking]
+[tags:osi_model,hardware]
+{
+    =Data link layer
+    ~Physical layer
+    ~Transport layer
+    ~Network layer
+    ~Application layer
+}
+
+::OSI Repeater Layer::
+In IT networking, a physical signal repeater operates at which layer of the OSI model? {#2}
+[difficulty:medium]
+[chapter:Data Communication and Networking]
+[tags:osi_model,hardware]
+{
+    =Physical layer
+    ~Data link layer
+    ~Network layer
+    ~Transport layer
+}
+
+::Multiplexing Channels::
+The transmission technique known as multiplexing involves sharing which of the following over a common medium? {#2}
+[difficulty:medium]
+[chapter:Data Communication and Networking]
+[tags:networking,multiplexing]
+{
+    ~one path and one channel
+    =one path and multiple channels
+    ~multiple paths and one channel
+    ~multiple paths and multiple channels
+    ~None of these
+}
+
+::Token Ring Token::
+In Token Ring network topologies, a 'token' is defined as a: {#2}
+[difficulty:medium]
+[chapter:Data Communication and Networking]
+[tags:topologies,token_ring]
+{
+    =small message used to pass control between network stations
+    ~unit of binary file data
+    ~character code byte
+    ~physical cable connector
+}
+
+::ISP Acronym::
+In computer networking, what does the abbreviation 'ISP' stand for? {#2}
+[difficulty:easy]
+[chapter:Internet and its Services]
+[tags:internet,terminology]
+{
+    ~Internal Service Provider
+    ~International Service Provider
+    =Internet Service Provider
+    ~Internet Service Providing
+    ~Internet Service Provision
+}
+
+::Internet Standard Protocol Suite::
+What is the foundational standard communication protocol suite utilized by the global Internet? {#2}
+[difficulty:easy]
+[chapter:Internet and its Services]
+[tags:internet,protocols]
+{
+    =TCP/IP
+    ~Java
+    ~HTML
+    ~flash
+    ~None of these
+}
+
+::IP Acronym Definition::
+In the context of computer networking and the Internet, what does the abbreviation 'IP' stand for? {#2}
+[difficulty:easy]
+[chapter:Internet and its Services]
+[tags:internet,terminology]
+{
+    ~International Pin
+    =Internet Protocol
+    ~Invalid Pin
+    ~Insert Pin
+}
+
+::IPv4 Address Bit Length::
+Under the IPv4 standard, a standard computer IP address is represented as a binary number of what bit length? {#2}
+[difficulty:easy]
+[chapter:Internet and its Services]
+[tags:internet,ip_addresses]
+{
+    ~8 bits
+    ~16 bits
+    =32 bits
+    ~64 bits
+}
+
+::HTML Tag Brackets::
+In HTML source code, structural formatting tags consist of keywords enclosed within: {#2}
+[difficulty:easy]
+[chapter:Internet and its Services]
+[tags:html,web_development]
+{
+    ~flower brackets
+    =angular brackets \(<>\)
+    ~parentheses \(()\)
+    ~square brackets \([]\)
+}
+
+::Telnet Protocol Text::
+The remote-login network protocol Telnet operates primarily as which type of interface standard? {#2}
+[difficulty:medium]
+[chapter:Internet and its Services]
+[tags:internet,protocols]
+{
+    ~sound-based
+    =text-based
+    ~image-based
+    ~animation-based
+    ~digit-based
+}
+
+::WWW Definition::
+In internet terminology, what does the classic abbreviation 'WWW' stand for? {#2}
+[difficulty:easy]
+[chapter:Internet and its Services]
+[tags:internet,terminology]
+{
+    ~World Wide Wizard
+    =World Wide Web
+    ~World Wide Wonder
+    ~Wide World Web
+    ~None of these
+}
+
+::Website Definition::
+A Website is structurally defined as a collection of: {#2}
+[difficulty:easy]
+[chapter:Internet and its Services]
+[tags:internet,websites]
+{
+    ~graphics portfolios
+    ~programs
+    ~algorithms
+    =Web pages
+    ~charts
+}
+
+::URL Address Definition::
+What is the correct definition of a Uniform Resource Locator (URL)? {#2}
+[difficulty:medium]
+[chapter:Internet and its Services]
+[tags:internet,url,terminology]
+{
+    ~A computer system utility program
+    ~A specialized programming object
+    =The unique address of a document or page on the World Wide Web
+    ~An acronym for Unlimited Resource for Learning
+}
+
+::Commercial Business Domain::
+Which of the following top-level domain extensions is designated specifically for commercial profit businesses? {#2}
+[difficulty:easy]
+[chapter:Internet and its Services]
+[tags:internet,domains]
+{
+    =.com
+    ~.edu
+    ~.mil
+    ~.net
+    ~.org
+}
+
+::Search Engine Program::
+Specialized programs that assist internet users in locating targeted information on the World Wide Web are called: {#2}
+[difficulty:easy]
+[chapter:Internet and its Services]
+[tags:internet,search_engines]
+{
+    ~information engines
+    ~locator engines
+    ~Web browsers
+    ~resource locators
+    =search engines
+}
+
+::Web Bookmark Purpose::
+A saved hyperlink reference to a specific Web page designed to enable quick and easy user retrieval later is a: {#2}
+[difficulty:easy]
+[chapter:Internet and its Services]
+[tags:browsers,bookmarks]
+{
+    ~WP-Link
+    =Bookmark
+    ~Field
+    ~Length
+    ~None of these
+}
+
+::Encryption Cryptography::
+In cryptographic security, what is the term used to describe the process of converting readable plain text into coded cipher text? {#2}
+[difficulty:easy]
+[chapter:Computer Security]
+[tags:security,cryptography]
+{
+    ~Decryption
+    =Encryption
+    ~Stenography
+    ~Scrambling
+    ~Permuting
+}
+
+::Malware Software Term::
+Any software intentionally designed to disrupt computer operations, gather sensitive data, or compromise system security (such as Viruses, Worms, and Trojans) is collectively called: {#2}
+[difficulty:easy]
+[chapter:Computer Security]
+[tags:security,malware]
+{
+    =Malicious software (malware)
+    ~adware
+    ~scareware
+    ~spyware
+    ~firewall
+}
+
+::Computer Virus Definition::
+A computer virus is fundamentally classified under which of the following categories? {#2}
+[difficulty:easy]
+[chapter:Computer Security]
+[tags:security,malware]
+{
+    ~a hardware peripheral component
+    ~a windows system diagnostics tool
+    =a malicious computer program
+    ~a core system software utility
+    ~None of the above
+}
+
+::Infinite Reboot Malware Symptom::
+If a computer system unexpectedly enters an infinite loop of rebooting itself, it is highly likely that: {#2}
+[difficulty:medium]
+[chapter:Computer Security]
+[tags:security,malware]
+{
+    =it has been infected with a virus
+    ~it does not have enough physical RAM memory
+    ~there is no printer connected to the port
+    ~there has been a sudden power surge
+    ~it needs a CD-ROM drive installed
+}
+
+::Worm Propagation Definition::
+What is the primary operational difference between a computer worm and a computer virus? {#2}
+[difficulty:medium]
+[chapter:Computer Security]
+[tags:security,malware]
+{
+    ~A worm infects hardware components directly
+    =A worm is self-replicating and spreads across networks without needing to attach to a host file
+    ~A worm requires active human intervention to copy itself
+    ~A worm is harmless and does not carry payloads
+}
+
+::Trojan Horse Definition::
+A malicious program designed to masquerade and trick a user into downloading it by pretending to be a useful application is called a: {#2}
+[difficulty:easy]
+[chapter:Computer Security]
+[tags:security,malware]
+{
+    =Trojan horse
+    ~Keylogger
+    ~Worm
+    ~Cracker
+}
+
+::IP Spoofing Entry::
+What is the term for a hacking technique where an unauthorized user gains entry to a network by pretending to be a legitimate, trusted computer? {#2}
+[difficulty:medium]
+[chapter:Computer Security]
+[tags:hacking,techniques]
+{
+    ~spoofing
+    ~forging
+    =IP spoofing
+    ~All of these
+}
+
+::Phishing Scams Definition::
+What is the term for sending fraudulent e-mails or creating fake web pages designed to trick individuals into revealing sensitive financial or login passwords? {#2}
+[difficulty:easy]
+[chapter:Computer Security]
+[tags:security,phishing]
+{
+    =Phishing scams
+    ~Spam mail
+    ~Hacking attacks
+    ~Cracking software
+}
+
+::Junk E-mail::
+Unsolicited bulk e-mails sent to a large number of recipients over the Internet are commonly called: {#2}
+[difficulty:easy]
+[chapter:Computer Security]
+[tags:internet,security]
+{
+    =spam
+    ~spoof
+    ~sniffer scripts
+    ~spool
+    ~None of these
+}
+
+::Firewall Role::
+Which software utility or hardware system acts as a barrier to screen incoming and outgoing network traffic and protect a system from outside hacker intrusions? {#2}
+[difficulty:easy]
+[chapter:Computer Security]
+[tags:security,firewall]
+{
+    =firewall
+    ~mailer
+    ~macro
+    ~script
+    ~None of these
+}
+
+::Coded Passwords Access::
+Coded entries consisting of alphanumeric characters used to gain access to a secure computer account are called: {#2}
+[difficulty:easy]
+[chapter:Computer Security]
+[tags:security,access_control]
+{
+    ~Entry codes
+    =Passwords
+    ~Security commands
+    ~Codewords
+}
+
+::Eavesdropping Interception::
+The unauthorized real-time interception of private communications, such as phone calls or instant messages, is known as: {#2}
+[difficulty:medium]
+[chapter:Computer Security]
+[tags:security,attacks]
+{
+    ~replay
+    =eavesdropping
+    ~patches
+    ~payloads
+    ~None of these
+}
+
+::First PC Boot Sector Virus::
+Which of the following is widely recognized historically as the first PC boot sector virus? {#2}
+[difficulty:hard]
+[chapter:Computer Security]
+[tags:history,malware]
+{
+    ~Creeper
+    ~Payload
+    ~Bomb
+    =Brain
+}
+
+::Software Piracy::
+What is the term for the unauthorized, illegal copying, use, or distribution of copyrighted software applications? {#2}
+[difficulty:easy]
+[chapter:Computer Security]
+[tags:legal,copyright]
+{
+    ~Hacking
+    =Software piracy
+    ~Software literacy
+    ~Cracking
+    ~Copyrighting
+}
+
+::Supercomputer FLOPS speed::
+The operating processing speed of modern supercomputers is measured in which of the following units? {#2}
+[difficulty:medium]
+[chapter:Practice Set Questions]
+[tags:supercomputers,speed_units]
+{
+    ~KB
+    =FLOPS
+    ~GB
+    ~EB
+    ~None of these
+}
+
+::Biometrics security verification::
+What type of technology allows you to use your unique physical features (like fingerprints, iris scans, or voice prints) to secure resources? {#2}
+[difficulty:easy]
+[chapter:Practice Set Questions]
+[tags:security,biometrics]
+{
+    ~Haptics
+    ~Caves
+    =Biometrics
+    ~RFID
+    ~All of these
+}
+
+::VGA full form::
+In computer display graphics, what does the abbreviation 'VGA' stand for? {#2}
+[difficulty:medium]
+[chapter:Practice Set Questions]
+[tags:graphics,terminology]
+{
+    =Video Graphics Array
+    ~Visual Graphics Adapter
+    ~Virtual Graphics Access
+    ~Volatile Graphics Adapter
+    ~None of the above
+}
+
+::VisiCalc historical spreadsheet::
+Which of the following historical software packages is recognized as the world's very first electronic spreadsheet application? {#2}
+[difficulty:hard]
+[chapter:Practice Set Questions]
+[tags:history,spreadsheets]
+{
+    =VisiCalc
+    ~Lotus 1-2-3
+    ~Excel
+    ~Multiplan
+    ~None of these
+}
+
+::Esc key cancel function::
+What is the primary default operational function of the Escape (Esc) key in Windows programs? {#2}
+[difficulty:easy]
+[chapter:Practice Set Questions]
+[tags:keyboard,actions]
+{
+    =to cancel or end the current action
+    ~to go to the last action
+    ~to repeat the last action
+    ~to begin a program execution
+}
+
+::hospital ecg hybrid computers detail::
+Machines used in hospital environments like ECG and Dialysis are combination of analog and digital signals. These are classified as: {#2}
+[difficulty:medium]
+[chapter:Introduction to Computer]
+[tags:classifications,applications]
+{
+    ~Digital Computers
+    ~Analog Computers
+    =Hybrid Computers
+    ~Microcomputers
+}
+
+::robotics scientific engineering branch::
+Which branch of engineering and science deals with the design, construction, operation, and structural use of robots, as well as computer systems for their control? {#2}
+[difficulty:easy]
+[chapter:Introduction to Computer]
+[tags:robotics,terminology]
+{
+    =Robotics
+    ~Artificial Intelligence
+    ~Nano computing
+    ~Quantum computing
+}
+
+::first commercial microprocessor intel 4004 date::
+The Intel 4004, the world's first single-chip commercial microprocessor, was released in which year by scientist Ted Hoff and engineer Federico Faggin? {#2}
+[difficulty:hard]
+[chapter:Computer Architecture]
+[tags:history,hardware]
+{
+    ~1970
+    =1971
+    ~1972
+    ~1973
+}
+
+::omr optical mark reader operational method::
+An Optical Mark Reader (OMR) scanner detects marks on a paper form by using which of the following physical mechanisms? {#2}
+[difficulty:medium]
+[chapter:Computer Hardware]
+[tags:hardware,scanners]
+{
+    ~a mechanical roller system
+    =a beam of light reflected off the paper to capture presence/absence of marks
+    ~a magnetic strip sensing head
+    ~an electrical current conduction sensor
+}
+
+::ocr scanned printing text ascii conversion::
+Optical Character Recognition (OCR) technology scans a printed page and translates the graphic array of dots into editable text in which format? {#2}
+[difficulty:medium]
+[chapter:Computer Hardware]
+[tags:hardware,scanners]
+{
+    =ASCII text
+    ~uncompressed image bitmap
+    ~binary machine code
+    ~relational database tuple
+    ~JPEG format
+}
+
+::ebcdic character capacity max size::
+In the Extended Binary Coded Decimal Interchange Code (EBCDIC) coding standard, what is the maximum possible character set size? {#2}
+[difficulty:hard]
+[chapter:Data Representation]
+[tags:ebcdic,units,math]
+{
+    ~128 characters
+    =256 characters
+    ~512 characters
+    ~1024 characters
+}
+
+::linker loader compilation differences::
+Which system program takes compiled individual object modules and links them with standard libraries to form a single executable program? {#2}
+[difficulty:medium]
+[chapter:Computer Software]
+[tags:compilation,linker]
+{
+    ~loader
+    =linker
+    ~compiler
+    ~assembler
+    ~interpreter
+}
+
+::operating system thread definition::
+In modern operating system architecture, what is a 'thread'? {#2}
+[difficulty:medium]
+[chapter:Operating System]
+[tags:os,processes]
+{
+    ~the physical connection bus wire on the motherboard
+    =a light-weight task that runs concurrently with other tasks within the same process
+    ~a compiled high-level programming language code block
+    ~a physical track division on a formatted disk drive
+}
+
+::operating system shell definition::
+In Unix, Linux, or MS-DOS command environments, what is the 'shell'? {#2}
+[difficulty:medium]
+[chapter:Operating System]
+[tags:os,terminology]
+{
+    ~the physical exterior plastic casing of the system unit
+    =the specialized system program that interprets and executes commands entered by the user
+    ~the kernel code that resides permanently in main memory
+    ~the BIOS boot sector record
+}
+
+::ms dos delete tree directories command::
+Which MS-DOS internal command is used to delete an entire folder directory along with all of its sub-directories and files in one operation? {#2}
+[difficulty:medium]
+[chapter:Operating System]
+[tags:dos,commands]
+{
+    ~DELETE
+    ~DEL
+    =DELTREE
+    ~REMOVE
+    ~None of these
+}
+
+::ms excel relative cell address representation::
+In Microsoft Excel formulas, which cell reference address represents a relative cell reference that updates automatically when copied? {#2}
+[difficulty:medium]
+[chapter:Microsoft Office]
+[tags:ms_excel,formulas]
+{
+    ~\($A$4\)
+    =\(A4\)
+    ~\($A4\)
+    ~\(A$4\)
+}
+
+::ms excel absolute cell address dollar representation::
+In Microsoft Excel formulas, which cell reference address represents an absolute cell reference that remains locked when copied? {#2}
+[difficulty:medium]
+[chapter:Microsoft Office]
+[tags:ms_excel,formulas]
+{
+    =\($A$4\)
+    ~\(A4\)
+    ~\($A4\)
+    ~\(A$4\)
+}
+
+::ms excel mixed cell address reference::
+In Microsoft Excel formulas, cell reference addresses like \($A4\) or \(A$4\) are classified as which reference type? {#2}
+[difficulty:medium]
+[chapter:Microsoft Office]
+[tags:ms_excel,formulas]
+{
+    =mixed cell reference
+    ~absolute cell reference
+    ~relative cell reference
+    ~None of these
+}
+
+::pie chart single data series restriction::
+In Microsoft Excel charting, which of the following chart types restricts the user to plotting exactly one single data series? {#2}
+[difficulty:medium]
+[chapter:Microsoft Office]
+[tags:ms_excel,charts]
+{
+    =pie chart
+    ~line chart
+    ~bar chart
+    ~column chart
+    ~scatter plot
+}
+
+::database record cardinality tuple definition::
+In relational database systems, the term 'cardinality' refers specifically to which of the following metrics? {#2}
+[difficulty:medium]
+[chapter:Database Concepts]
+[tags:relational_model,cardinality]
+{
+    ~the total number of attributes (columns)
+    =the total number of tuples (rows)
+    ~the total number of linked tables
+    ~the index key count
+}
+
+::relational database degree attribute count::
+In relational database systems, the 'degree' of a relation table refers specifically to which of the following? {#2}
+[difficulty:medium]
+[chapter:Database Concepts]
+[tags:relational_model,degree]
+{
+    ~the total number of records (rows)
+    =the total number of attributes (columns)
+    ~the database size in Megabytes
+    ~the integrity rules count
+}
+
+::database schema instance distinction::
+In relational databases, the actual physical structure design of a database is the schema, while the actual data stored in it at a given point in time is the: {#2}
+[difficulty:medium]
+[chapter:Database Concepts]
+[tags:relational_model,terminology]
+{
+    =instance
+    ~relation
+    ~attribute
+    ~query log
+}
+
+::twisted pair ground reference signaling::
+In standard copper twisted-pair network cabling, what is the functional purpose of twisting the two physical wires together? {#2}
+[difficulty:medium]
+[chapter:Data Communication and Networking]
+[tags:cabling,hardware]
+{
+    ~to double the physical strength of the copper lines
+    =to minimize electromagnetic interference, where one wire carries the signal and the other is a ground reference
+    ~to allow bi-directional simplex transmissions
+    ~to convert analog signals to digital signals
+}
+
+::hybrid hard disk drive hhdd flash cache::
+A technology where a conventional mechanical hard disk drive is integrated with a solid-state non-volatile flash memory cache (typically 128 MB or more) is called a: {#2}
+[difficulty:medium]
+[chapter:Computer Memory]
+[tags:hardware,hhdd]
+{
+    ~Hyper Hard Disk Drive
+    =Hybrid Hard Disk Drive
+    ~Hybrid Helium Disk Drive
+    ~Hyper Helium Disk Drive
+}
+
+::packet switching digital networking packets::
+What is the network communication method that splits transmitted data blocks into suitable sized segments called 'packets' for routing? {#2}
+[difficulty:medium]
+[chapter:Data Communication and Networking]
+[tags:networking,packet_switching]
+{
+    ~circuit switching
+    =packet switching
+    ~message switching
+    ~multiplexing
+}
+
+::cryptography plain text cipher text::
+In cryptographic data security systems, the original readable message and the encrypted unreadable output are referred to as, respectively: {#2}
+[difficulty:easy]
+[chapter:Computer Security]
+[tags:security,cryptography]
+{
+    =Plain text and Cipher text
+    ~Cipher text and Plain text
+    ~Source code and Object code
+    ~Encryption key and Decryption key
+}
+
+::logic bomb slag code Delayed payload::
+A malicious piece of code intentionally inserted into a software program that remains dormant until setting off a malicious function when specified criteria are met is called a: {#2}
+[difficulty:medium]
+[chapter:Computer Security]
+[tags:security,malware]
+{
+    ~Trojan horse
+    =Logic bomb (or slag code)
+    ~Spyware application
+    ~Hacking virus
+}
+
+::proxy server intercept firewall::
+Which specialized server is used to intercept all network messages entering and leaving, effectively hiding the true internal IP addresses? {#2}
+[difficulty:medium]
+[chapter:Computer Security]
+[tags:security,networking]
+{
+    ~Logic bomb
+    ~Firewall host
+    ~Antivirus server
+    =Proxy server
+}
+
+::pratyush supercomputer flops india weather::
+India's first multi-petaflops (PF) supercomputer, Pratyush, is dedicated primarily to which scientific application? {#2}
+[difficulty:medium]
+[chapter:Practice Set Questions]
+[tags:supercomputers,india,applications]
+{
+    ~multimedia gaming rendering
+    =weather forecasting and climate research
+    ~military encryption breaking
+    ~aerospace space calculations
+}
+
+::e learning internet computer education::
+The structured mode of acquiring knowledge, training, or formal educational courses by electronic means using the Internet is called: {#2}
+[difficulty:easy]
+[chapter:Practice Set Questions]
+[tags:applications,e_learning]
+{
+    ~Isolated learning
+    ~Mobile commerce
+    =E-learning
+    ~Direct learning
+}
+
+::Napier Rabdologia Technology::
+The calculating technology developed by John Napier that used rods with numbers carved on them is called: {#1}
+[difficulty:medium]
+[chapter:Introduction to Computer]
+[tags:history,napier,calculators]
+{
+    =Rabdologia
+    ~Naptologia
+    ~Vibologia
+    ~Semiconductor
+}
+
+::Punched Cards Introduction::
+Punched cards, used to input data and control automatic looms, were first introduced historically by: {#1}
+[difficulty:medium]
+[chapter:Introduction to Computer]
+[tags:history,punched_cards]
+{
+    =Joseph Marie Jacquard
+    ~Herman Hollerith
+    ~Blaise Pascal
+    ~Charles Babbage
+}
+
+::Analytical Engine Memory Unit::
+The Analytical Engine, designed by Charles Babbage, planned to use which of the following as its primary memory unit? {#1}
+[difficulty:hard]
+[chapter:Introduction to Computer]
+[tags:history,babbage,hardware]
+{
+    =counter wheels
+    ~RAM
+    ~floppy disks
+    ~magnetic cores
+    ~cards
+}
+
+::Tabulating Machine Developer::
+The first electromechanical punched-card tabulating machine was developed for the US Census by: {#1}
+[difficulty:medium]
+[chapter:Introduction to Computer]
+[tags:history,calculators]
+{
+    =Herman Hollerith
+    ~Howard Aiken
+    ~Blaise Pascal
+    ~John Napier
+}
+
+::First Indian Computer Siddhartha::
+What was the name of the very first computer developed indigenously in India? {#1}
+[difficulty:easy]
+[chapter:Introduction to Computer]
+[tags:history,india]
+{
+    =Siddhartha
+    ~PARAM
+    ~CRAY-1
+    ~PARAM ISHAN
+    ~Saraswati
+}
+
+::Analog Computer Continuous Pulses::
+An analog computer is a type of computing machine that operates primarily on the continuous supply of: {#1}
+[difficulty:medium]
+[chapter:Introduction to Computer]
+[tags:fundamentals,analog]
+{
+    =continuous electrical pulses
+    ~discrete magnetic signals
+    ~magnetic strength
+    ~binary digits
+}
+
+::Seismograph Computer Category::
+Which type of computer classification does a seismograph belong to, based on its operational principles? {#1}
+[difficulty:easy]
+[chapter:Introduction to Computer]
+[tags:fundamentals,analog,classification]
+{
+    =Analog computer
+    ~Digital computer
+    ~Hybrid computer
+    ~Special purpose computer
+}
+
+::Hybrid Computer Medical Usage::
+Which type of computer is commonly deployed in medical settings to monitor intensive care equipment (like ECG and dialysis machines)? {#1}
+[difficulty:medium]
+[chapter:Introduction to Computer]
+[tags:fundamentals,hybrid,medical]
+{
+    =Hybrid computer
+    ~Digital computer
+    ~Analog computer
+    ~Microcomputer
+}
+
+::Special Purpose Aircraft Landing::
+Which category of computer is specifically designed and configured to handle automatic aircraft landing? {#1}
+[difficulty:medium]
+[chapter:Introduction to Computer]
+[tags:fundamentals,classification]
+{
+    =Special purpose computer
+    ~General purpose computer
+    ~Supercomputer
+    ~Microcomputer
+}
+
+::Quantum Computer Brain Working::
+Which class of experimental computers is designed to work by imitating the functioning of the human brain, offering massive parallel processing? {#1}
+[difficulty:hard]
+[chapter:Introduction to Computer]
+[tags:classification,quantum]
+{
+    =Quantum computer
+    ~Supercomputer
+    ~Param-10000
+    ~IBM chips
+    ~None of these
+}
+
+::Robotics Definition Study::
+The branch of science and engineering that specifically deals with the design, construction, operation, and application of autonomous systems is called: {#1}
+[difficulty:easy]
+[chapter:Introduction to Computer]
+[tags:classification,robotics]
+{
+    =Robotics
+    ~Artificial Intelligence
+    ~Nano computer
+    ~Simulation
+}
+
+::First Computer Architecture Year::
+In which historical year was the first standard computer architecture formally introduced? {#1}
+[difficulty:hard]
+[chapter:Computer Architecture]
+[tags:history,architecture]
+{
+    =1970
+    ~1968
+    ~1971
+    ~1973
+}
+
+::Motherboard PCB Definition::
+The main circuit board that acts as the hardware backbone, used in all electronic systems like computers and calculators, is a: {#1}
+[difficulty:medium]
+[chapter:Computer Architecture]
+[tags:hardware,motherboard]
+{
+    =Printed Circuit Board (PCB)
+    ~Architecture Board
+    ~Value Register
+    ~Control Plate
+}
+
+::System Unit Container::
+The metal or plastic protective case that houses all the central electronic components of a computer is called the: {#1}
+[difficulty:easy]
+[chapter:Computer Architecture]
+[tags:hardware,fundamentals]
+{
+    =System unit
+    ~CPU
+    ~Motherboard
+    ~Chassis
+}
+
+::DMA Bypass CPU::
+What is the term for the method that allows an input/output peripheral device to send or receive data directly to or from the main memory, completely bypassing the CPU? {#1}
+[difficulty:medium]
+[chapter:Computer Architecture]
+[tags:hardware,dma,cpu]
+{
+    =Direct Memory Access (DMA)
+    ~Dynamic Memory Access
+    ~Double Memory Access
+    ~Direct Method Access
+}
+
+::CPU Fabricated Single Chip::
+When the entire circuitry of a computer's Central Processing Unit is fabricated on a single integrated circuit chip, it is known as a: {#1}
+[difficulty:easy]
+[chapter:Computer Architecture]
+[tags:hardware,microprocessor,cpu]
+{
+    =microprocessor
+    ~motherboard
+    ~ALU
+    ~control unit
+}
+
+::First Microprocessor Intel 4004 Year::
+In which year was the first commercial single-chip microprocessor, the Intel 4004, designed and released? {#1}
+[difficulty:hard]
+[chapter:Computer Architecture]
+[tags:history,microprocessor]
+{
+    =1971
+    ~1970
+    ~1968
+    ~1973
+}
+
+::First Microprocessor Inventors::
+Who were the key scientists and engineers credited with inventing the first commercial microprocessor (Intel 4004)? {#1}
+[difficulty:hard]
+[chapter:Computer Architecture]
+[tags:history,microprocessor]
+{
+    =Ted Hoff and Federico Faggin
+    ~John Von Neumann and Alan Turing
+    ~Jack Kilby and Robert Noyce
+    ~Dennis Ritchie and Ken Thompson
+}
+
+::Processor Clock Speed Units::
+The speed of a computer processor, which represents its internal clock cycle, is typically measured in: {#1}
+[difficulty:easy]
+[chapter:Computer Architecture]
+[tags:hardware,speed,performance]
+{
+    =Megahertz (MHz) or Gigahertz (GHz)
+    ~Bits per second (bps)
+    ~Lines per minute (LPM)
+    ~Millions of instructions per cycle
+}
+
+::Pipelining Prefetch Strategy::
+Which computer execution strategy speeds up instruction cycles by prefetching and running several instructions in parallel stages? {#1}
+[difficulty:medium]
+[chapter:Computer Architecture]
+[tags:hardware,pipelining,execution]
+{
+    =Pipelining
+    ~Looping
+    ~Multitasking
+    ~DMA
+}
+
+::Toggle Keys Keyboard::
+Which of the following keys on a standard QWERTY computer keyboard function as 'toggle keys' because they change modes? {#1}
+[difficulty:easy]
+[chapter:Computer Hardware]
+[tags:keyboard,hardware]
+{
+    =Both Caps Lock and Num Lock
+    ~Caps Lock only
+    ~Num Lock only
+    ~Shift and Alt
+}
+
+::Modifier Keys Keyboard::
+Keys such as Shift, Ctrl, and Alt are collectively classified in computer hardware as: {#1}
+[difficulty:easy]
+[chapter:Computer Hardware]
+[tags:keyboard,hardware]
+{
+    =Modifier Keys
+    ~Function Keys
+    ~Toggle Keys
+    ~Alternate Keys
+    ~Candidate Keys
+}
+
+::QWERTY Keyboard Layout Origin::
+The standard arrangement of alphanumeric keys on most modern computer keyboards is based on which layout? {#1}
+[difficulty:easy]
+[chapter:Computer Hardware]
+[tags:keyboard,layout]
+{
+    =QWERTY
+    ~AZERTY
+    ~DVORAK
+    ~ABCDE
+}
+
+::Joystick Angular Movement Range::
+To provide full navigational control in computer gaming, a standard joystick allows physical movement in which angular range? {#1}
+[difficulty:medium]
+[chapter:Computer Hardware]
+[tags:joystick,gaming]
+{
+    =360°
+    ~90°
+    ~180°
+    ~45°
+}
+
+::Cheque Processing Technology MICR::
+Which magnetic character recognition technology is universally used by banking industries to process high volumes of paper cheques? {#1}
+[difficulty:easy]
+[chapter:Computer Hardware]
+[tags:hardware,micr,banking]
+{
+    =Magnetic Ink Character Recognition (MICR)
+    ~Optical Character Recognition (OCR)
+    ~Optical Mark Reader (OMR)
+    ~Barcode Scanning
+}
+
+::OCR Editable Text Conversion::
+Which optical reading technology translates scanned images of handwritten or printed characters into editable \(ASCII\) text? {#1}
+[difficulty:medium]
+[chapter:Computer Hardware]
+[tags:hardware,ocr,text]
+{
+    =Optical Character Recognition (OCR)
+    ~Optical Mark Reader (OMR)
+    ~Bar Code Reader
+    ~Magnetic Ink Character Recognition (MICR)
+}
+
+::Biometric Sensor Physical Traits::
+A device that scans and recognizes an individual's unique physical traits (such as fingerprint, iris pattern, or voiceprint) for security is a: {#1}
+[difficulty:easy]
+[chapter:Computer Hardware]
+[tags:hardware,security,biometrics]
+{
+    =Biometric sensor
+    ~Smart card
+    ~OCR scanner
+    ~Barcode reader
+}
+
+::CRT Monitor Shape::
+Historically, the screen of a Cathode Ray Tube (CRT) computer monitor is structurally designed in what shape? {#1}
+[difficulty:medium]
+[chapter:Computer Hardware]
+[tags:monitors,crt]
+{
+    =rectangular
+    ~circular
+    ~eclipse
+    ~conical
+}
+
+::CRT Monitor Tube Type::
+A Cathode Ray Tube (CRT) monitor relies on which internal physical component to project electrons on a screen? {#1}
+[difficulty:medium]
+[chapter:Computer Hardware]
+[tags:monitors,crt]
+{
+    =vacuum tube
+    ~hollow tube
+    ~long tube
+    ~liquid crystal panels
+}
+
+::Printer Speed Units::
+The operational throughput and speed of a typical computer printer are quantified in which units? {#1}
+[difficulty:easy]
+[chapter:Computer Hardware]
+[tags:printers,speed]
+{
+    =Pages Per Minute (PPM)
+    ~Dots Per Inch (DPI)
+    ~Characters Per Minute (CPM)
+    ~Bits Per Second (BPS)
+}
+
+::Dot Matrix Printer Class::
+What type of computer printer is a dot-matrix printer classified as, based on its physical printing mechanism? {#1}
+[difficulty:easy]
+[chapter:Computer Hardware]
+[tags:printers,dot_matrix]
+{
+    =Impact printer
+    ~Non-impact printer
+    ~Laser printer
+    ~Inkjet printer
+}
+
+::Plotter Large Scale Drawings::
+Which specialized output device is used to produce high-resolution, large-scale vector drawings such as engineering blueprints and construction plans? {#1}
+[difficulty:medium]
+[chapter:Computer Hardware]
+[tags:hardware,plotter]
+{
+    =Plotter
+    ~Impact printer
+    ~Laser printer
+    ~3D Printer
+}
+
+::Audio MP3 Compression Ratio::
+The popular MP3 audio format uses lossy compression to reduce the storage footprint size of raw audio files by approximately what ratio, while keeping acceptable sound quality? {#1}
+[difficulty:hard]
+[chapter:Computer Hardware]
+[tags:audio,compression,mp3]
+{
+    =one-tenth of its original size
+    ~one-half of its original size
+    ~one-fourth of its original size
+    ~one-twentieth of its original size
+}
+
+::Dynamic RAM Cell Components::
+In computer hardware memory, a single dynamic memory cell in a DRAM chip is structurally made of: {#1}
+[difficulty:hard]
+[chapter:Computer Memory]
+[tags:dram,hardware,memory]
+{
+    =one capacitor and one transistor
+    ~two transistors
+    ~one resistor and one capacitor
+    ~logic gates
+}
+
+::Virtual Memory Supplement::
+Virtual memory is a computing technique that allocates space on which component to supplement the physical Random Access Memory (RAM)? {#1}
+[difficulty:medium]
+[chapter:Computer Memory]
+[tags:virtual_memory,ram,storage]
+{
+    =Hard disk drive (HDD)
+    ~Read Only Memory (ROM)
+    ~The CPU registers
+    ~Cache memory
+}
+
+::Floppy Disk Concentric Circles::
+In magnetic storage geometry, the concentric circular rings on a formatted magnetic floppy disk are known as: {#1}
+[difficulty:easy]
+[chapter:Computer Memory]
+[tags:floppy,storage,geometry]
+{
+    =tracks
+    ~sectors
+    ~cylinders
+    ~rounders
+}
+
+::Floppy Disk Sector Divisions::
+The concentric tracks of a magnetic floppy disk are logically subdivided into smaller structural units called: {#1}
+[difficulty:easy]
+[chapter:Computer Memory]
+[tags:floppy,storage,geometry]
+{
+    =sectors
+    ~tracks
+    ~cylinders
+    ~circles
+}
+
+::Formatting Disk Geometry Process::
+The technical process of logically dividing a physical disk into readable tracks and sectors to prepare it for file storage is: {#1}
+[difficulty:easy]
+[chapter:Computer Memory]
+[tags:disk,formatting,storage]
+{
+    =Formatting
+    ~Tracking
+    ~Crashing
+    ~Allotting
+}
+
+::Capacity 3.5 Inch Floppy::
+What is the standard data storage capacity of a traditional 3.5-inch High-Density physical floppy disk? {#1}
+[difficulty:easy]
+[chapter:Computer Memory]
+[tags:floppy,storage,capacity]
+{
+    =1.44 MB
+    ~1.44 GB
+    ~1.40 MB
+    ~1.45 MB
+    ~720 KB
+}
+
+::Memory Nibble Definition::
+In computer data representation, a group of 4 contiguous bits is referred to as a: {#1}
+[difficulty:easy]
+[chapter:Computer Memory]
+[tags:units,fundamentals,nibble]
+{
+    =Nibble
+    ~Byte
+    ~Kilobyte
+    ~Megabyte
+    ~Half-bit
+}
+
+::Memory Byte Distinct Values::
+Mathematically, a single 8-bit byte can represent how many unique, distinct binary code values (such as integer numbers from 0 to 255)? {#1}
+[difficulty:medium]
+[chapter:Computer Memory]
+[tags:units,bytes,math]
+{
+    =256
+    ~255
+    ~128
+    ~1024
+}
+
+::Hybrid Hard Disk Drive HHDD::
+What technology combines a traditional rotating magnetic platter disk drive with a non-volatile flash memory cache (typically 128 MB or more) to boost read/write performance? {#1}
+[difficulty:medium]
+[chapter:Computer Memory]
+[tags:storage,hhdd,hybrid]
+{
+    =Hybrid Hard Disk Drive (HHDD)
+    ~Hyper Hard Disk Drive
+    ~Hybrid Helium Disk Drive
+    ~Solid State Platter Drive
+}
+
+::Boolean Logic Universal Gates::
+In computer digital logic circuits, which of the following logic gates are classified as 'universal gates' because they can implement any other Boolean function? {#1}
+[difficulty:medium]
+[chapter:Data Representation]
+[tags:logic,logic_gates,boolean]
+{
+    =NAND and NOR
+    ~AND and OR
+    ~XOR and XNOR
+    ~AND and NOT
+}
+
+::NAND Gate Zero Output::
+For a standard two-input NAND gate (with inputs A and B), what input configuration will produce a logical 0 (LOW) output? {#1}
+[difficulty:medium]
+[chapter:Data Representation]
+[tags:logic,logic_gates,boolean]
+{
+    =both inputs A and B are 1
+    ~both inputs A and B are 0
+    ~input A is 0 and input B is 1
+    ~input A is 1 and input B is 0
+}
+
+::UNICODE Character Representation::
+Which comprehensive character encoding standard represents characters with 16 or 32 bits, allowing support for non-English alphabets such as Japanese and Chinese fonts? {#1}
+[difficulty:easy]
+[chapter:Data Representation]
+[tags:encoding,unicode,characters]
+{
+    =UNICODE
+    ~ASCII
+    ~EBCDIC
+    ~BCD
+}
+
+::Binary Conversion Twenty Three::
+What is the mathematical binary notation representation of the decimal integer number 23? {#1}
+[difficulty:medium]
+[chapter:Data Representation]
+[tags:binary,conversions,math]
+{
+    =\(10111_2\)
+    ~\(11111_2\)
+    ~\(10011_2\)
+    ~\(11011_2\)
+}
+
+::Device Drivers System Software::
+A system software utility that is designed to configure and enable the computer's operating system to communicate with connected hardware peripherals is a: {#1}
+[difficulty:easy]
+[chapter:Computer Software]
+[tags:software,drivers,hardware]
+{
+    =device driver
+    ~user interface
+    ~database program
+    ~word processor
+}
+
+::Linker Program Resolve References::
+Which system utility software is responsible for linking a compiled program with other dependent library files to resolve references and produce a single executable file? {#1}
+[difficulty:medium]
+[chapter:Computer Software]
+[tags:software,linker,compilation]
+{
+    =linker
+    ~compiler
+    ~interpreter
+    ~loader
+}
+
+::Loader Program Memory::
+A kind of system software that is responsible for loading and relocating an executable program into physical main memory for processing is called a: {#1}
+[difficulty:medium]
+[chapter:Computer Software]
+[tags:software,loader,execution]
+{
+    =loader
+    ~linker
+    ~translator
+    ~text editor
+}
+
+::DTP Publishing Abbreviation::
+In graphical layout design and media production, what does the acronym 'DTP' stand for? {#1}
+[difficulty:easy]
+[chapter:Computer Software]
+[tags:abbreviations,dtp,software]
+{
+    =Desktop Publishing
+    ~Device Transfer Protocol
+    ~Device Transfer Programs
+    ~Data Transfer Port
+}
+
+::Operating System Interface::
+The core system software program that manages computer hardware resources and acts as an interface between users and physical hardware is the: {#1}
+[difficulty:easy]
+[chapter:Operating System]
+[tags:os,fundamentals]
+{
+    =Operating System (OS)
+    ~Device Driver
+    ~BIOS
+    ~Application Interface
+}
+
+::Process Execution Definition::
+In modern multi-tasking operating systems, a 'program in execution' is formally referred to as a: {#1}
+[difficulty:medium]
+[chapter:Operating System]
+[tags:os,processes]
+{
+    =process
+    ~thread
+    ~task
+    ~instruction
+}
+
+::Multiprocessing Multi Processors::
+The simultaneous execution of two or more programs or instructions on a computer system using multiple processors (CPUs) is: {#1}
+[difficulty:easy]
+[chapter:Operating System]
+[tags:os,multiprocessing]
+{
+    =Multiprocessing
+    ~Multitasking
+    ~Multiprogramming
+    ~Time-sharing
+}
+
+::Warm Booting Restart::
+What is the term for restarting a computer system using keyboard shortcuts (like Ctrl+Alt+Del) when the system is already powered ON? {#1}
+[difficulty:easy]
+[chapter:Operating System]
+[tags:booting,warm_boot]
+{
+    =warm booting
+    ~cold booting
+    ~shut down
+    ~logging off
+}
+
+::First Version Unix Developer::
+Which computer scientist is historically credited with developing the first version of the Unix operating system at Bell Labs? {#1}
+[difficulty:hard]
+[chapter:Operating System]
+[tags:history,unix,os]
+{
+    =Ken Thompson
+    ~Linus Torvalds
+    ~Dennis Ritchie
+    ~John Von Neumann
+}
+
+::Linux Open Source Class::
+Linux, whose kernel was originally released by Linus Torvalds, is structurally classified under which category of software? {#1}
+[difficulty:easy]
+[chapter:Operating System]
+[tags:os,linux,open_source]
+{
+    =open source
+    ~proprietary
+    ~commercial
+    ~shareware
+}
+
+::Deltree MS-DOS Command::
+In legacy MS-DOS, which internal/external command is used to delete a directory along with all of its sub-directories and nested files in a single action? {#1}
+[difficulty:medium]
+[chapter:Operating System]
+[tags:dos,commands]
+{
+    =DELTREE
+    ~DEL
+    ~CD
+    ~RD
+    ~REMOVE
+}
+
+::Assembler Translation Function::
+A system translation program whose primary function is to convert mnemonic assembly language code into machine-executable binary code is a(n): {#1}
+[difficulty:easy]
+[chapter:Programming Concepts]
+[tags:translators,assembly,assembler]
+{
+    =assembler
+    ~compiler
+    ~interpreter
+    ~linker
+}
+
+::Compiler Executable Creation::
+Which software translation utility compiles an entire source program written in a high-level language into machine code in a single batch, producing an executable file? {#1}
+[difficulty:easy]
+[chapter:Programming Concepts]
+[tags:translators,compiler]
+{
+    =compiler
+    ~interpreter
+    ~assembler
+    ~loader
+}
+
+::Interpreter Line Execution::
+A software translator that parses, translates, and executes high-level source code line-by-line in real-time, without producing a standalone executable file, is a(n): {#1}
+[difficulty:easy]
+[chapter:Programming Concepts]
+[tags:translators,interpreter]
+{
+    =interpreter
+    ~compiler
+    ~assembler
+    ~linker
+}
+
+::Applet Creation Java::
+Which object-oriented programming language, highly popular on the early Internet, was specifically designed to create small interactive client-side web programs called 'Applets'? {#1}
+[difficulty:easy]
+[chapter:Programming Concepts]
+[tags:languages,java,web]
+{
+    =Java
+    ~Pascal
+    ~COBOL
+    ~BASIC
+}
+
+::Database Cardinality Definition::
+In the relational database model, the term 'cardinality' of a database relation (table) refers to the total: {#1}
+[difficulty:medium]
+[chapter:Database Concepts]
+[tags:db,rdbms,cardinality]
+{
+    =number of tuples (rows)
+    ~number of attributes (columns)
+    ~number of key fields
+    ~number of tables
+}
+
+::Database Degree Definition::
+In database design, the term 'degree' of a relation (table) describes the total: {#1}
+[difficulty:medium]
+[chapter:Database Concepts]
+[tags:db,rdbms,degree]
+{
+    =number of fields (columns)
+    ~number of tuples (rows)
+    ~number of primary keys
+    ~number of constraints
+}
+
+::Foreign Key Relationships::
+A primary key field of one database table that appears in another database table to establish logical link relationships between the tables is called a: {#1}
+[difficulty:easy]
+[chapter:Database Concepts]
+[tags:db,keys,relationships]
+{
+    =foreign key
+    ~primary key
+    ~composite key
+    ~secondary key
+}
+
+::ER Diagram Rectangle::
+In Entity-Relationship (E-R) schema diagrams, entity sets are graphically represented using which geometric shape? {#1}
+[difficulty:easy]
+[chapter:Database Concepts]
+[tags:db,er_diagram,design]
+{
+    =rectangle
+    ~ellipse
+    ~diamond
+    ~circle
+}
+
+::ER Diagram Ellipse::
+In Entity-Relationship (E-R) schema diagrams, the properties or 'attributes' of an entity are graphically represented using which geometric shape? {#1}
+[difficulty:easy]
+[chapter:Database Concepts]
+[tags:db,er_diagram,design]
+{
+    =ellipse
+    ~rectangle
+    ~diamond
+    ~triangle
+}
+
+::ER Diagram Diamond::
+In Entity-Relationship (E-R) schema diagrams, the relationship types between entity sets are graphically represented using which geometric shape? {#1}
+[difficulty:easy]
+[chapter:Database Concepts]
+[tags:db,er_diagram,design]
+{
+    =diamond
+    ~ellipse
+    ~rectangle
+    ~circle
+}
+
+::Weak Entity Set ER::
+An entity set that does not have sufficient attributes to form a unique primary key of its own is known as a: {#1}
+[difficulty:medium]
+[chapter:Database Concepts]
+[tags:db,er_diagram,design]
+{
+    =weak entity set
+    ~strong entity set
+    ~simple entity set
+    ~primary entity set
+}
+
+::Mesh Topology Reliability::
+Which computer network physical topology provides the absolute highest level of reliability and fault tolerance because every single node is interconnected to every other node? {#1}
+[difficulty:medium]
+[chapter:Data Communication and Networking]
+[tags:networking,topologies,reliability]
+{
+    =Mesh topology
+    ~Tree topology
+    ~Bus topology
+    ~Star topology
+}
+
+::Ethernet Hardware Address bits::
+An Ethernet Media Access Control (MAC) physical hardware address is represented as a binary number of what bit length? {#1}
+[difficulty:medium]
+[chapter:Data Communication and Networking]
+[tags:networking,ethernet,mac_address]
+{
+    =48 bits
+    ~32 bits
+    ~64 bits
+    ~16 bits
+}
+
+::Token Ring Small Message::
+In local area token ring networks, the small, highly structured control message passed between stations to grant transmission rights is a: {#1}
+[difficulty:easy]
+[chapter:Data Communication and Networking]
+[tags:networking,token_ring]
+{
+    =Token
+    ~Byte
+    ~Packet
+    ~Header
+}
+
+::Supercomputing Unit FLOPS::
+The computational processing speed of modern scientific supercomputers is standardly measured in which unit? {#1}
+[difficulty:medium]
+[chapter:Practice Set Questions]
+[tags:supercomputers,performance,flops]
+{
+    =FLOPS (Floating Point Operations Per Second)
+    ~Megahertz
+    ~Gigabytes
+    ~MIPS
+}
+
+::EDI Acronym Networking::
+In digital commercial systems, what does the networking acronym 'EDI' stand for? {#1}
+[difficulty:medium]
+[chapter:Practice Set Questions]
+[tags:abbreviations,edi,commerce]
+{
+    =Electronic Data Interchange
+    ~Electronic Data Internet
+    ~Electric Device Internet
+    ~Electric Data Interchange
+}
+
+::Permanently Delete Shortcut::
+In Microsoft Windows desktop environments, which keyboard shortcut combination allows you to permanently delete selected files or folders, completely bypassing the Recycle Bin? {#1}
+[difficulty:easy]
+[chapter:Practice Set Questions]
+[tags:windows,shortcuts,files]
+{
+    =Shift + Delete
+    ~Ctrl + Delete
+    ~Alt + Delete
+    ~Delete key only
+}
+
+::Mosaic Browser History::
+Which of the following is historically recognized as the very first graphical Web browser released to the public? {#1}
+[difficulty:hard]
+[chapter:Practice Set Questions]
+[tags:history,browser,internet]
+{
+    =Mosaic
+    ~CERN
+    ~Gopher
+    ~WAIS
+    ~Internet Explorer
+}
+
+::C Plus Plus Language Creator::
+The popular object-oriented C++ programming language, which extends the C language, was designed and developed by: {#1}
+[difficulty:medium]
+[chapter:Practice Set Questions]
+[tags:languages,c++,history]
+{
+    =Bjarne Stroustrup
+    ~Dennis Ritchie
+    ~Niklaus Wirth
+    ~John McCarthy
+}
+
+::Grammar Error Color Word::
+In Microsoft Word, automatic spelling errors are highlighted with a wavy red underline, whereas grammatical errors are highlighted in which color? {#1}
+[difficulty:easy]
+[chapter:Practice Set Questions]
+[tags:word,formatting,errors]
+{
+    =Green
+    ~Blue
+    ~Yellow
+    ~Black
+}
+
+::Mobile Commerce Definition::
+Which of the following descriptions best defines the business concept of mobile commerce (m-commerce)? {#1}
+[difficulty:easy]
+[chapter:Practice Set Questions]
+[tags:commerce,m-commerce,mobile]
+{
+    =buying and selling goods or services through wireless handheld devices
+    ~transporting products over networks
+    ~using desktop computer terminals in marketing
+    ~exchanging digital cassettes
+}

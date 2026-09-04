@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { apiUrl } from '$lib/api/client.svelte';
 	import { goto } from '$app/navigation';
-	import { Building2, GraduationCap, BookOpen, Layers, Sparkles, Hash, Zap, Check, Globe, Newspaper, Clock, Atom, Users, Trophy } from 'lucide-svelte';
+	import { Building2, GraduationCap, BookOpen, Layers, Sparkles, Hash, Zap, Check, Globe, Newspaper, Clock, Atom, Users, Trophy, Cpu } from 'lucide-svelte';
 	import type { PlayClass, PlaySubject, PlayTopic, PlayQuestion } from '$lib/types';
 	import { ELEMENTS, CATEGORY_LABELS, elementClass, elementPeriod, PERIODIC_DIFFICULTIES } from '$lib/data/elements';
 	import MathText from '$lib/components/MathText.svelte';
@@ -433,6 +433,23 @@
 		phase = 'topics';
 	}
 
+	async function loadComputerAwareness() {
+		playClick();
+		tablesActive = false; periodicActive = false; rushMode = false;
+		selectedClass = null;
+		loading = true;
+		const subs = (await api<PlaySubject[]>('GET', '/play/subjects')) ?? [];
+		const caw = subs.find(s => /computer\s*awareness/i.test(s.name));
+		if (!caw) { loading = false; comingSoonLabel = 'Computer Awareness'; phase = 'coming-soon'; return; }
+		selectedSubject = caw;
+		topics = (await api<PlayTopic[]>('GET', `/play/topics?subject_id=${caw.id}`)) ?? [];
+		loading = false;
+		if (topics.length === 0) { comingSoonLabel = 'Computer Awareness'; phase = 'coming-soon'; return; }
+		quizEntry = 'ca';
+		selectedTopic = '';
+		phase = 'topics';
+	}
+
 	async function openTeamCreate() {
 		playClick();
 		teamError = '';
@@ -830,6 +847,11 @@
 					<span class="pick-icon"><Newspaper size={18} /></span>
 					<span class="pick-name">Current Affairs</span>
 					<span class="pick-meta">What's happening around the world</span>
+				</button>
+				<button onclick={loadComputerAwareness} class="pick-card mode-card">
+					<span class="pick-icon"><Cpu size={18} /></span>
+					<span class="pick-name">Computer Awareness</span>
+					<span class="pick-meta">Hardware · Software · Internet</span>
 				</button>
 				<button onclick={openTeamCreate} class="pick-card mode-card">
 					<span class="pick-icon"><Trophy size={18} /></span>
