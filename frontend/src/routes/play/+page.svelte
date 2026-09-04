@@ -149,11 +149,14 @@
 		if (rushMode) startRushTimer(); else startTimer();
 	}
 
+	let lastTickSecond = 99;
 	function startRushTimer() {
 		clearInterval(timerInterval);
-		rushLeft = 60;
+		rushLeft = 60; lastTickSecond = 99;
 		timerInterval = setInterval(() => {
 			rushLeft -= 0.1;
+			const s = Math.ceil(rushLeft);
+			if (s !== lastTickSecond) { lastTickSecond = s; if (s <= 5 && s > 0) playTick(); }
 			if (rushLeft <= 0) { rushLeft = 0; clearInterval(timerInterval); finishQuiz(); }
 		}, 100);
 	}
@@ -261,31 +264,84 @@
 	}
 
 	let audioCtx: AudioContext | null = null;
+	let masterGain: GainNode | null = null;
+	let soundMuted = $state(false);
+	if (typeof window !== 'undefined') {
+		try { soundMuted = localStorage.getItem('pragati:sound:muted') === '1'; } catch { soundMuted = false; }
+	}
 	function getAudio() {
 		if (!audioCtx && typeof window !== 'undefined') {
 			audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+			masterGain = audioCtx.createGain();
+			masterGain.gain.value = soundMuted ? 0 : 0.9;
+			masterGain.connect(audioCtx.destination);
 		}
+		if (masterGain) masterGain.gain.value = soundMuted ? 0 : 0.9;
 		return audioCtx;
 	}
-
-	function playTone(freq: number, dur: number, type: OscillatorType = 'sine', vol = 0.12) {
-		const ctx = getAudio();
-		if (!ctx) return;
-		if (ctx.state === 'suspended') ctx.resume();
-		const osc = ctx.createOscillator();
-		const gain = ctx.createGain();
-		osc.connect(gain); gain.connect(ctx.destination);
-		osc.type = type; osc.frequency.value = freq;
-		gain.gain.setValueAtTime(vol, ctx.currentTime);
-		gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
-		osc.start(ctx.currentTime); osc.stop(ctx.currentTime + dur);
+	function toggleMute() {
+		soundMuted = !soundMuted;
+		try { localStorage.setItem('pragati:sound:muted', soundMuted ? '1' : '0'); } catch { /* ignore */ }
+		if (masterGain && audioCtx) masterGain.gain.setValueAtTime(soundMuted ? 0 : 0.9, audioCtx.currentTime);
+		if (!soundMuted) playClick();
 	}
 
-	function playCorrect() { playTone(523, 0.1); setTimeout(() => playTone(659, 0.1), 80); setTimeout(() => playTone(784, 0.2), 160); }
-	function playWrong() { playTone(200, 0.3, 'sawtooth', 0.08); }
-	function playStreak() { playTone(600, 0.08); setTimeout(() => playTone(800, 0.08), 60); setTimeout(() => playTone(1000, 0.15), 120); }
-	function playComplete() { [523, 659, 784, 1047].forEach((f, i) => setTimeout(() => playTone(f, 0.25), i * 120)); }
-	function playClick() { playTone(440, 0.06, 'sine', 0.06); }
+	function playTone(freq: number, dur: number, type: OscillatorType = 'sine', vol = 0.1, delayMs = 0, slideTo?: number) {
+		if (soundMuted) return;
+		const ctx = getAudio();
+		if (!ctx || !masterGain) return;
+		if (ctx.state === 'suspended') ctx.resume();
+		const t0 = ctx.currentTime + delayMs / 1000;
+		const osc = ctx.createOscillator();
+		const gain = ctx.createGain();
+		osc.connect(gain); gain.connect(masterGain);
+		osc.type = type;
+		osc.frequency.setValueAtTime(freq, t0);
+		if (slideTo) osc.frequency.exponentialRampToValueAtTime(slideTo, t0 + dur);
+		// Soft attack + smooth decay (no clicks / harsh edges)
+		gain.gain.setValueAtTime(0.0001, t0);
+		gain.gain.exponentialRampToValueAtTime(Math.max(vol, 0.001), t0 + 0.015);
+		gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+		osc.start(t0); osc.stop(t0 + dur + 0.05);
+	}
+
+	// Polished game sounds — warm chimes, never harsh
+	function playClick() { playTone(660, 0.07, 'triangle', 0.05); }
+	function playCorrect() {
+		// Warm rising chime: E5 → B5 with soft harmonic
+		playTone(659, 0.14, 'triangle', 0.09);
+		playTone(987, 0.22, 'triangle', 0.08, 90);
+		playTone(1318, 0.18, 'sine', 0.04, 90);
+	}
+	function playWrong() {
+		// Gentle descending "uh-oh": two soft sine steps, no buzz
+		playTone(233, 0.16, 'sine', 0.08);
+		playTone(174, 0.24, 'sine', 0.08, 130);
+	}
+	function playStreak() {
+		// Sparkle run for streaks
+		playTone(784, 0.09, 'triangle', 0.07);
+		playTone(987, 0.09, 'triangle', 0.07, 70);
+		playTone(1174, 0.2, 'triangle', 0.08, 140);
+	}
+	function playComplete() {
+		// Little fanfare: C–E–G–C with warm overlap
+		playTone(523, 0.18, 'triangle', 0.08);
+		playTone(659, 0.18, 'triangle', 0.08, 130);
+		playTone(784, 0.18, 'triangle', 0.08, 260);
+		playTone(1046, 0.34, 'triangle', 0.09, 390);
+		playTone(1318, 0.3, 'sine', 0.04, 390);
+	}
+	function playTick() { playTone(1180, 0.05, 'sine', 0.045); }
+	function playReveal() {
+		// Soft shimmer when answer is revealed
+		playTone(520, 0.12, 'sine', 0.05, 0, 780);
+		playTone(780, 0.14, 'sine', 0.04, 80);
+	}
+	function playTimeUp() {
+		playTone(392, 0.16, 'triangle', 0.07);
+		playTone(311, 0.26, 'triangle', 0.07, 140);
+	}
 
 	function spawnConfetti() {
 		const pieces = [];
@@ -496,10 +552,12 @@
 		if (teamTimerSec === 0) { clearInterval(timerInterval); timeLeft = 0; return; }
 		playClick();
 		clearInterval(timerInterval);
-		timeLeft = teamTimerSec;
+		timeLeft = teamTimerSec; lastTickSecond = 99;
 		timerInterval = setInterval(() => {
 			timeLeft -= 0.1;
-			if (timeLeft <= 0) { timeLeft = 0; clearInterval(timerInterval); playWrong(); }
+			const s = Math.ceil(timeLeft);
+			if (s !== lastTickSecond) { lastTickSecond = s; if (s <= 5 && s > 0) playTick(); }
+			if (timeLeft <= 0) { timeLeft = 0; clearInterval(timerInterval); playTimeUp(); }
 		}, 100);
 	}
 	function handleTeamAnswer(key: string) {
@@ -563,10 +621,12 @@
 
 	function startTimer() {
 		clearInterval(timerInterval);
-		timeLeft = 30;
+		timeLeft = 30; lastTickSecond = 99;
 		timerInterval = setInterval(() => {
 			timeLeft -= 0.1;
-			if (timeLeft <= 0) { timeLeft = 0; clearInterval(timerInterval); handleAnswer(''); }
+			const s = Math.ceil(timeLeft);
+			if (s !== lastTickSecond) { lastTickSecond = s; if (s <= 5 && s > 0) playTick(); }
+			if (timeLeft <= 0) { timeLeft = 0; clearInterval(timerInterval); playTimeUp(); handleAnswer(''); }
 		}, 100);
 	}
 
@@ -703,9 +763,12 @@
 			<span class="qh-wordmark qh-wordmark-kannada">ಪ್ರಗತಿ</span>
 			<span class="qh-sub">MDRS (SC-32) Bahaddurghatta</span>
 		</button>
-		{#if phase !== 'results'}
-			<button onclick={confirmExit} class="qh-home">← Home</button>
-		{/if}
+		<div style="display:flex;gap:0.5rem;align-items:center">
+			<button onclick={toggleMute} class="qh-home" aria-label={soundMuted ? 'Unmute sounds' : 'Mute sounds'} title={soundMuted ? 'Unmute sounds' : 'Mute sounds'}>{soundMuted ? '🔇' : '🔊'}</button>
+			{#if phase !== 'results'}
+				<button onclick={confirmExit} class="qh-home">← Home</button>
+			{/if}
+		</div>
 	</header>
 
 	{#if showExitConfirm}
@@ -977,7 +1040,7 @@
 					{/if}
 					<div style="display:flex;gap:0.6rem;margin-top:1rem">
 						{#if !teamPlayAnswered && !teamPlayRevealed}
-							<button onclick={() => { teamPlayRevealed = true; clearInterval(timerInterval); }} class="btn-ghost" style="flex:1">Reveal Answer</button>
+							<button onclick={() => { teamPlayRevealed = true; clearInterval(timerInterval); playReveal(); }} class="btn-ghost" style="flex:1">Reveal Answer</button>
 						{:else if teamPlayRevealed && !teamPlayAnswered}
 							<button onclick={() => { teamPlayRevealed = false; if (teamTimerSec>0) startTeamTimer(); }} class="btn-ghost" style="flex:1">Hide Answer</button>
 						{/if}
