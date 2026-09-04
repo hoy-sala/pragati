@@ -857,16 +857,16 @@
 		{@const topScore = finishOrder.length ? (teamScores[finishOrder[0]] ?? 0) : 0}
 		{@const winners = finishOrder.filter(t => (teamScores[t] ?? 0) === topScore)}
 		<div class="center fade-in">
-			<div class="q-card millionaire-stage" style="max-width:560px;width:100%;text-align:center">
+			<div class="q-card" style="max-width:560px;width:100%;text-align:center">
 				<div class="welcome-icon" aria-hidden="true"><Trophy size={28} /></div>
 				{#if teamFinished && finishOrder.length}
 					<h2 class="welcome-title" style="font-size:1.5rem">🏆 {winners.length > 1 ? `Tie: ${winners.join(' & ')}!` : `${winners[0]} Wins!`}</h2>
 					<p class="welcome-sub" style="margin-top:0.5rem">Final scores · 10 pts per correct</p>
 					<div style="display:flex;flex-direction:column;gap:0.5rem;margin:1rem 0;text-align:left">
 						{#each finishOrder as t, i}
-							<div class="side-row m-ladder-row" style="background:{i===0?'rgba(255,194,51,0.2)':'transparent'};border-radius:8px;padding:0.4rem 0.6rem">
+							<div class="side-row" style="background:{i===0?'var(--amber-tint)':'transparent'};border-radius:8px;padding:0.4rem 0.6rem">
 								<span class="side-label">{i+1}. {t} {#if i===0}🏆{/if}</span>
-								<span class="side-value mono">{teamScores[t] ?? 0} pts · ₹{((teamScores[t] ?? 0)*1000).toLocaleString('en-IN')}</span>
+								<span class="side-value mono">{teamScores[t] ?? 0} pts</span>
 							</div>
 						{/each}
 					</div>
@@ -915,42 +915,40 @@
 			{/if}
 		</div>
 
-	<!-- ═══ TEAM PLAY — MILLIONAIRE STAGE (round-robin, 10 pts) ═══ -->
+	<!-- ═══ TEAM PLAY (round-robin, 10 pts) ═══ -->
 	{:else if phase === 'team-play' && teamPlayOrder.length > 0}
 		{@const cur = teamPlayOrder[teamPlayIndex]}
 		{@const teamLabels = Object.keys(teamScores).sort()}
 		{@const curLifelineDone = !!lifelineUsed[cur.team]}
-		<div class="millionaire-stage fade-in">
-			<div class="m-spotlight" aria-hidden="true"></div>
-			<div class="quiz-shell">
+		<div class="quiz-shell fade-in">
 			<div class="quiz-main">
 				<div class="q-meta">
 					<div class="q-tags">
-						<span class="tag m-team">★ {cur.team}</span>
+						<span class="tag">Team {cur.team}</span>
 						<span class="tag">{createdTeamQuiz?.title ?? 'Custom Quiz'}</span>
 						<span class="tag tag-difficulty">{teamTimerSec === 0 ? 'No timer' : `${teamTimerSec}s`}</span>
 						<span class="tag">Q {teamPlayIndex + 1}/{teamPlayOrder.length}</span>
 					</div>
 					<span class="counter">{cur.team}'s turn · 10 pts</span>
 				</div>
-				<div class="q-card q-question m-question">
-					<div class="m-lifelines">
-						<button onclick={useFiftyFifty} disabled={curLifelineDone || teamPlayAnswered} class="m-lifeline {curLifelineDone ? 'used' : ''}" title="50:50 — remove two wrong options (once per team)">50:50 {#if curLifelineDone}✓{:else}· {cur.team}{/if}</button>
-						<span class="m-prize">₹ {(teamScores[cur.team] ?? 0) * 1000} · {teamScores[cur.team] ?? 0} pts</span>
+				<div class="q-card q-question">
+					<div style="display:flex;justify-content:space-between;align-items:center;gap:0.6rem;margin-bottom:0.8rem">
+						<button onclick={useFiftyFifty} disabled={curLifelineDone || teamPlayAnswered} class="btn-ghost" style="min-height:36px;padding:0.3rem 0.8rem;border-radius:999px;opacity:{curLifelineDone ? 0.5 : 1}" title="50:50 — remove two wrong options (once per team)">50:50 {#if curLifelineDone}✓{:else}· {cur.team}{/if}</button>
+						<span class="counter">{teamScores[cur.team] ?? 0} pts</span>
 					</div>
 					<fieldset class="q-fieldset">
 						<legend class="q-legend"><MathText text={cur.q.question_text} /></legend>
-						<div class="options m-options">
+						<div class="options">
 							{#each cur.q.options as opt}
 								{@const isSelected = teamPlayAnswered && opt.key === teamPlaySelectedKey}
 								{@const isCorrectOpt = !!opt.correct}
 								{@const showCorrect = (teamPlayAnswered || teamPlayRevealed) && !isSelected && isCorrectOpt}
 								{@const hidden = hiddenOptKeys.includes(opt.key)}
 								{#if !hidden}
-								<label class="opt m-opt {teamPlayAnswered && isSelected ? (teamPlayIsCorrect ? 'opt-correct' : 'opt-incorrect') : ''} {showCorrect ? 'opt-correct' : ''} {!teamPlayAnswered && !teamPlayRevealed && teamPlaySelectedKey === opt.key ? 'opt-selected' : ''}">
+								<label class="opt {teamPlayAnswered && isSelected ? (teamPlayIsCorrect ? 'opt-correct' : 'opt-incorrect') : ''} {showCorrect ? 'opt-correct' : ''} {!teamPlayAnswered && !teamPlayRevealed && teamPlaySelectedKey === opt.key ? 'opt-selected' : ''}">
 									<input type="radio" name="tq{teamPlayIndex}" value={opt.key} disabled={teamPlayAnswered} checked={teamPlaySelectedKey === opt.key} onchange={() => handleTeamAnswer(opt.key)} class="opt-input" />
 									<span class="opt-row">
-										<span class="m-key">{opt.key}</span>
+										<span class="opt-radio"><span class="opt-dot"></span></span>
 										<span class="opt-text"><MathText text={opt.value} /></span>
 										{#if teamPlayAnswered && isSelected}<span class="opt-state">{teamPlayIsCorrect ? '✓' : '✕'}</span>{:else if showCorrect}<span class="opt-state">✓</span>{/if}
 									</span>
@@ -960,15 +958,15 @@
 						</div>
 					</fieldset>
 					{#if teamPlayAnswered}
-						<div class="feedback m-feedback {teamPlayIsCorrect ? '' : 'feedback-bad'}">
+						<div class="feedback {teamPlayIsCorrect ? '' : 'feedback-bad'}">
 							<div class="feedback-head">
 								<span class="feedback-badge">{teamPlayIsCorrect ? '✓' : '✕'}</span>
-								<span class="feedback-title">{teamPlayIsCorrect ? 'Correct! +10 🎉' : 'Not quite'}</span>
+								<span class="feedback-title">{teamPlayIsCorrect ? 'Correct! +10' : 'Not quite'}</span>
 								<span class="streak-chip">{cur.team}</span>
 							</div>
 						</div>
 					{:else if teamPlayRevealed}
-						<div class="feedback m-feedback">
+						<div class="feedback">
 							<div class="feedback-head">
 								<span class="feedback-badge">✓</span>
 								<span class="feedback-title">Answer revealed</span>
@@ -990,14 +988,14 @@
 				</div>
 			</div>
 			<aside class="quiz-side">
-				<div class="side-card m-ladder">
-					<div class="side-row"><span class="side-label">On Stage</span><span class="side-value mono">★ {cur.team}</span></div>
+				<div class="side-card">
+					<div class="side-row"><span class="side-label">Current Team</span><span class="side-value mono">{cur.team}</span></div>
 					{#if teamTimerSec > 0}
 					<div class="timer-head">
 						<span class="side-label">Time</span>
 						<div style="display:flex;align-items:center;gap:0.5rem">
 							<span class="timer-num mono" style="color:{timeColor()}">{Math.ceil(timeLeft)}s</span>
-							<button onclick={startTeamTimer} class="btn-ghost m-timer-btn" title="Start {teamTimerLabel()} timer after reading">
+							<button onclick={startTeamTimer} class="btn-ghost" style="min-height:32px;padding:0.25rem 0.5rem;border-radius:8px" title="Start {teamTimerLabel()} timer after reading">
 								<Clock size={16} />
 							</button>
 						</div>
@@ -1008,15 +1006,14 @@
 					<p class="hint" style="font-size:0.8rem;margin:0">No timer — host controls pace. Click an answer to award 10.</p>
 					{/if}
 				</div>
-				<div class="side-card m-ladder">
-					<p class="side-label" style="margin-bottom:0.5rem">💰 Money Ladder (10 pts = ₹10,000)</p>
+				<div class="side-card">
+					<p class="side-label" style="margin-bottom:0.5rem">Scores (10 pts each)</p>
 					{#each [...teamLabels].sort((a,b)=>(teamScores[b]??0)-(teamScores[a]??0)) as t, i}
-						<div class="side-row m-ladder-row {t===cur.team?'active':''}"><span class="side-label">{i+1}. {t} {lifelineUsed[t] ? '· 50:50 ✓' : ''}</span><span class="side-value mono">₹{((teamScores[t] ?? 0)*1000).toLocaleString('en-IN')}</span></div>
+						<div class="side-row"><span class="side-label">{i+1}. {t} {lifelineUsed[t] ? '· 50:50 ✓' : ''}</span><span class="side-value mono">{teamScores[t] ?? 0}</span></div>
 					{/each}
 				</div>
-				<div class="side-card side-muted"><p class="side-hint">🎤 Host reads aloud. ⏱ Expiry never reveals answer. ✅ Correct = +10 with sound & confetti.</p></div>
+				<div class="side-card side-muted"><p class="side-hint">Host reads aloud. Timer expiry does not reveal answer. Correct = +10 with sound & confetti.</p></div>
 			</aside>
-			</div>
 		</div>
 
 	<!-- ═══ GK HUB ═══ -->
@@ -1796,38 +1793,6 @@
 	@keyframes scoreFloat { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-90px) scale(1.05); } }
 	.shake { animation: shakeIt 0.45s ease-out; }
 	@keyframes shakeIt { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } }
-
-	/* Millionaire stage */
-	.millionaire-stage { position: relative; background: radial-gradient(1200px 500px at 50% -10%, #2b2a6b 0%, #14143a 55%, #0b0b24 100%); border: 2.5px solid var(--ink); border-radius: 20px; padding: 1rem; box-shadow: 6px 6px 0 var(--ink); overflow: hidden; }
-	.m-spotlight { position: absolute; inset: -40px; background: radial-gradient(500px 220px at 50% 0%, rgba(255,194,51,0.35), transparent 70%); pointer-events: none; }
-	.millionaire-stage .quiz-shell { position: relative; }
-	.millionaire-stage .q-card { background: #101032; color: #fff; border-color: #FFC233; box-shadow: 4px 4px 0 #FFC233; }
-	.millionaire-stage .q-legend { color: #fff; }
-	.millionaire-stage .opt { background: #1a1a4d; border-color: #FFC233; color: #fff; }
-	.millionaire-stage .opt:hover { background: #26266e; }
-	.millionaire-stage .opt-text { color: #fff; }
-	.millionaire-stage .opt-radio { border-color: #FFC233; background: transparent; }
-	.millionaire-stage .opt-dot { background: #FFC233; }
-	.millionaire-stage .opt-correct { background: #0E7C71; border-color: #FFC233; }
-	.millionaire-stage .opt-incorrect { background: #7f1d1d; border-color: #FFC233; }
-	.millionaire-stage .side-card { background: #101032; color: #fff; border-color: #FFC233; box-shadow: 3px 3px 0 #FFC233; }
-	.millionaire-stage .side-label, .millionaire-stage .side-hint, .millionaire-stage .hint { color: #e8e6ff; }
-	.millionaire-stage .side-value, .millionaire-stage .timer-num { color: #FFC233; }
-	.millionaire-stage .tag { background: #1a1a4d; color: #FFC233; border-color: #FFC233; }
-	.millionaire-stage .counter { color: #FFC233; }
-	.m-team { background: #FFC233 !important; color: #14143a !important; }
-	.m-question { position: relative; }
-	.m-lifelines { display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; margin-bottom: 0.8rem; }
-	.m-lifeline { font-weight: 800; border: 2px solid #FFC233; background: #1a1a4d; color: #FFC233; border-radius: 999px; padding: 0.35rem 0.8rem; cursor: pointer; }
-	.m-lifeline.used { opacity: 0.45; cursor: not-allowed; }
-	.m-lifeline:not(.used):hover { background: #FFC233; color: #14143a; }
-	.m-prize { font-family: var(--font-mono); color: #FFC233; font-weight: 800; }
-	.m-options .m-opt { clip-path: polygon(24px 0, 100% 0, 100% calc(100% - 0px), calc(100% - 24px) 100%, 0 100%, 0 0); }
-	.m-key { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #FFC233; color: #FFC233; display: grid; place-items: center; font-weight: 800; flex: none; }
-	.m-feedback { background: #1a1a4d !important; border-color: #FFC233 !important; color: #fff; }
-	.m-feedback .feedback-title, .m-feedback .feedback-text { color: #fff; }
-	.m-ladder-row.active { background: rgba(255,194,51,0.15); border-radius: 8px; padding: 0.15rem 0.4rem; }
-	.m-timer-btn { border-color: #FFC233 !important; color: #FFC233 !important; background: transparent !important; }
 
 	@media (prefers-reduced-motion: reduce) { .fade-in, .answer-pop, .shake, .confetti-piece, .score-popup { animation: none; transition: none; } }
 </style>
