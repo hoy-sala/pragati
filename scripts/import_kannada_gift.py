@@ -1,5 +1,5 @@
 import re, json, pathlib
-candidates = [pathlib.Path(r"C:\Users\MDRS Bahaddurghatta\Downloads\10th_std_kannada_lba_all_mcqs.gift"), pathlib.Path("scripts/kannada_bank.gift")]
+candidates = [pathlib.Path("scripts/kannada_bank.gift"), pathlib.Path(r"C:\Users\MDRS Bahaddurghatta\Downloads\10th_std_kannada_lba_all_mcqs-v2.gift"), pathlib.Path(r"C:\Users\MDRS Bahaddurghatta\Downloads\10th_std_kannada_lba_all_mcqs.gift")]
 gift_path = None
 for p in candidates:
     if p.exists():
