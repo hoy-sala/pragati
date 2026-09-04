@@ -60,7 +60,7 @@
 	let selectedKey = $state('');
 	let answered = $state(false);
 	let isCorrect = $state(false);
-	let timeLeft = $state(15);
+	let timeLeft = $state(30);
 	let timerInterval = $state<ReturnType<typeof setInterval> | undefined>();
 	let startTime = $state(0);
 	let showExitConfirm = $state(false);
@@ -563,7 +563,7 @@
 
 	function startTimer() {
 		clearInterval(timerInterval);
-		timeLeft = 15;
+		timeLeft = 30;
 		timerInterval = setInterval(() => {
 			timeLeft -= 0.1;
 			if (timeLeft <= 0) { timeLeft = 0; clearInterval(timerInterval); handleAnswer(''); }
@@ -675,7 +675,7 @@
 	}
 	function playAgain() { playClick(); phase = periodicActive ? 'periodic-ready' : tablesActive ? 'tables-ready' : 'topics'; }
 
-	function timeColor() { return timeLeft > 10 ? '#0E7C71' : timeLeft > 5 ? '#B45309' : '#C2381B'; }
+	function timeColor() { return timeLeft > 20 ? '#0E7C71' : timeLeft > 10 ? '#B45309' : '#C2381B'; }
 	function progressWidth() { return questions.length ? `${((currentIndex + 1) / questions.length) * 100}%` : '0%'; }
 	function accuracy() { return questions.length ? Math.round((correctCount / questions.length) * 100) : 0; }
 	function formatTime(ms: number) { const s = ms / 1000; return s < 60 ? `${s.toFixed(1)}s` : `${Math.floor(s / 60)}m ${Math.floor(s % 60)}s`; }
@@ -1411,7 +1411,7 @@
 						<span class="timer-num mono" style="color:{rushMode ? rushColor() : timeColor()}">{Math.ceil(rushMode ? rushLeft : timeLeft)}s</span>
 					</div>
 					<div class="timer-track">
-						<div class="timer-fill" style="width:{(rushMode ? rushLeft / 60 : timeLeft / 15) * 100}%; background:{rushMode ? rushColor() : timeColor()}"></div>
+						<div class="timer-fill" style="width:{(rushMode ? rushLeft / 60 : timeLeft / 30) * 100}%; background:{rushMode ? rushColor() : timeColor()}"></div>
 					</div>
 					{#if streak >= 2}
 						<div class="streak-box">{streak}× streak</div>
