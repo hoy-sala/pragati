@@ -828,16 +828,21 @@
 				{:else}
 					<div style="border:2px solid var(--ink);border-radius:12px;padding:0.85rem;background:var(--cream)">
 						<p class="field-label" style="margin:0 0 0.6rem">Chapters — tick at least one (grouped by subject)</p>
-						{#each allSubjectsForTeam.filter(s => (subjectTopicsMap[s.id] ?? []).length > 0) as subj}
-							<div style="margin:0.7rem 0 0.35rem;font-weight:700;font-family:var(--font-display);font-size:0.95rem">{subj.name} ({(subjectTopicsMap[subj.id] ?? []).length})</div>
+						{#each allSubjectsForTeam as subj}
+							{@const chapCount = (subjectTopicsMap[subj.id] ?? []).length}
+							<div style="margin:0.7rem 0 0.35rem;font-weight:700;font-family:var(--font-display);font-size:0.95rem;opacity:{chapCount===0?0.55:1}">{subj.name} ({chapCount}) {#if chapCount===0}<span class="tag" style="margin-left:0.4rem;font-size:0.7rem">No chapters yet</span>{/if}</div>
+							{#if chapCount > 0}
 							<div class="topics" style="margin:0">
 								{#each (subjectTopicsMap[subj.id] ?? []) as t}
 									{@const full = t.name}
 									<button onclick={() => toggleTeamChapter(full)} class="topic {teamChapters.includes(full) ? 'topic-selected' : ''}">{full.replace('Karnataka:','').replace('Freedom:','')}</button>
 								{/each}
 							</div>
+							{:else}
+							<p class="hint" style="text-align:left;margin:0 0 0.3rem">No chapters yet — add questions with [chapter:...] to enable.</p>
+							{/if}
 						{/each}
-						<p class="hint" style="margin-top:0.7rem;text-align:left">{teamChapters.length} chapter(s) selected · Social (32), Science, English, Hindi, Maths, GK included · Kannada has no chapters yet</p>
+						<p class="hint" style="margin-top:0.7rem;text-align:left">{teamChapters.length} chapter(s) selected</p>
 					</div>
 				{/if}
 				{#if teamError}<div class="feedback feedback-bad" style="margin:0"><p class="feedback-text">{teamError}</p></div>{/if}
