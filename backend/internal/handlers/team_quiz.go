@@ -28,6 +28,7 @@ type TeamQuizCreateInput struct {
 	PerTeam     int      `json:"per_team"`
 	Chapters    []string `json:"chapters"`
 	TimerSec    int      `json:"timer_sec"`
+	TeamNames   []string `json:"team_names"`
 }
 
 func (h *TeamQuizHandler) Create(w http.ResponseWriter, r *http.Request) {
@@ -64,11 +65,43 @@ func (h *TeamQuizHandler) Create(w http.ResponseWriter, r *http.Request) {
 		renderJSON(w, http.StatusBadRequest, map[string]string{"error": "select at least one chapter"})
 		return
 	}
-	if input.TimerSec == 0 {
+	// Timer: 0 = no timer, else 30/45/60
+	if input.TimerSec != 0 && input.TimerSec != 30 && input.TimerSec != 45 && input.TimerSec != 60 {
 		input.TimerSec = 30
 	}
-	if input.TimerSec != 30 {
-		input.TimerSec = 30
+	// Team names: use provided or default A,B,C (sanitized, unique)
+	teamNamesInput := make([]string, input.Teams)
+	seen := map[string]bool{}
+	for i := 0; i < input.Teams; i++ {
+		n := ""
+		if i < len(input.TeamNames) {
+			n = input.TeamNames[i]
+		}
+		// trim, limit length, fallback to letter
+		if len(n) > 20 {
+			// truncate by runes
+			r := []rune(n)
+			n = string(r[:20])
+		}
+		// basic trim spaces
+		for len(n) > 0 && (n[0] == ' ' || n[0] == '\t') {
+			n = n[1:]
+		}
+		for len(n) > 0 && (n[len(n)-1] == ' ' || n[len(n)-1] == '\t') {
+			n = n[:len(n)-1]
+		}
+		if n == "" {
+			n = string(rune('A' + i))
+		}
+		// ensure unique
+		orig := n
+		suffix := 2
+		for seen[n] {
+			n = orig + " " + string(rune('0'+suffix))
+			suffix++
+		}
+		seen[n] = true
+		teamNamesInput[i] = n
 	}
 
 	// Fetch questions for selected chapters, distinct
@@ -143,11 +176,10 @@ func (h *TeamQuizHandler) Create(w http.ResponseWriter, r *http.Request) {
 	totalHardNeeded := hardPer * input.Teams
 	if len(byDiff["easy"]) < totalEasyNeeded || len(byDiff["medium"]) < totalMediumNeeded || len(byDiff["hard"]) < totalHardNeeded {
 		// fallback: random distinct without balancing
-		teamNames := []string{"A", "B", "C", "D", "E", "F", "G", "H"}
 		questionsByTeam := map[string][]Q{}
 		idx := 0
 		for t := 0; t < input.Teams; t++ {
-			name := teamNames[t]
+			name := teamNamesInput[t]
 			questionsByTeam[name] = []Q{}
 			for i := 0; i < input.PerTeam; i++ {
 				questionsByTeam[name] = append(questionsByTeam[name], allQs[idx])
@@ -156,25 +188,25 @@ func (h *TeamQuizHandler) Create(w http.ResponseWriter, r *http.Request) {
 		}
 		questionsJSON, _ := json.Marshal(questionsByTeam)
 		chaptersJSON, _ := json.Marshal(input.Chapters)
+		teamNamesJSON, _ := json.Marshal(teamNamesInput)
 		var id string
 		err = h.db.QueryRow(r.Context(), `
-			INSERT INTO team_quizzes (school_id, title, description, teams, per_team, timer_sec, chapters, questions, created_by)
-			VALUES ($1,$2,$3,$4,$5,$6,$7::jsonb,$8::jsonb, NULLIF($9,'')::uuid) RETURNING id
-		`, schoolID, input.Title, input.Description, input.Teams, input.PerTeam, input.TimerSec, string(chaptersJSON), string(questionsJSON), userID).Scan(&id)
+			INSERT INTO team_quizzes (school_id, title, description, teams, per_team, timer_sec, chapters, questions, team_names, created_by)
+			VALUES ($1,$2,$3,$4,$5,$6,$7::jsonb,$8::jsonb,$9::jsonb, NULLIF($10,'')::uuid) RETURNING id
+		`, schoolID, input.Title, input.Description, input.Teams, input.PerTeam, input.TimerSec, string(chaptersJSON), string(questionsJSON), string(teamNamesJSON), userID).Scan(&id)
 		if err != nil {
 			log.Error().Err(err).Msg("team quiz: insert failed")
 			renderJSON(w, http.StatusInternalServerError, map[string]string{"error": "create failed"})
 			return
 		}
-		renderJSON(w, http.StatusCreated, map[string]interface{}{"id": id, "questions_by_team": questionsByTeam})
+		renderJSON(w, http.StatusCreated, map[string]interface{}{"id": id, "questions_by_team": questionsByTeam, "team_names": teamNamesInput, "timer_sec": input.TimerSec})
 		return
 	}
 	// Balanced distribution, no repeat
-	teamNames := []string{"A", "B", "C", "D", "E", "F", "G", "H"}
 	questionsByTeam := map[string][]Q{}
 	eIdx, mIdx, hIdx := 0, 0, 0
 	for t := 0; t < input.Teams; t++ {
-		name := teamNames[t]
+		name := teamNamesInput[t]
 		teamQs := []Q{}
 		for i := 0; i < easyPer; i++ {
 			teamQs = append(teamQs, byDiff["easy"][eIdx])
@@ -193,18 +225,19 @@ func (h *TeamQuizHandler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 	questionsJSON, _ := json.Marshal(questionsByTeam)
 	chaptersJSON, _ := json.Marshal(input.Chapters)
+	teamNamesJSON, _ := json.Marshal(teamNamesInput)
 
 	var id string
 	err = h.db.QueryRow(r.Context(), `
-		INSERT INTO team_quizzes (school_id, title, description, teams, per_team, timer_sec, chapters, questions, created_by)
-		VALUES ($1,$2,$3,$4,$5,$6,$7::jsonb,$8::jsonb, NULLIF($9,'')::uuid) RETURNING id
-	`, schoolID, input.Title, input.Description, input.Teams, input.PerTeam, input.TimerSec, string(chaptersJSON), string(questionsJSON), userID).Scan(&id)
+		INSERT INTO team_quizzes (school_id, title, description, teams, per_team, timer_sec, chapters, questions, team_names, created_by)
+		VALUES ($1,$2,$3,$4,$5,$6,$7::jsonb,$8::jsonb,$9::jsonb, NULLIF($10,'')::uuid) RETURNING id
+	`, schoolID, input.Title, input.Description, input.Teams, input.PerTeam, input.TimerSec, string(chaptersJSON), string(questionsJSON), string(teamNamesJSON), userID).Scan(&id)
 	if err != nil {
 		log.Error().Err(err).Msg("team quiz: insert failed")
 		renderJSON(w, http.StatusInternalServerError, map[string]string{"error": "create failed"})
 		return
 	}
-	renderJSON(w, http.StatusCreated, map[string]interface{}{"id": id, "questions_by_team": questionsByTeam})
+	renderJSON(w, http.StatusCreated, map[string]interface{}{"id": id, "questions_by_team": questionsByTeam, "team_names": teamNamesInput, "timer_sec": input.TimerSec})
 }
 
 func (h *TeamQuizHandler) List(w http.ResponseWriter, r *http.Request) {
@@ -215,7 +248,7 @@ func (h *TeamQuizHandler) List(w http.ResponseWriter, r *http.Request) {
 	} else if v := r.URL.Query().Get("school_id"); v != "" {
 		schoolID = v
 	}
-	rows, err := h.db.Query(r.Context(), `SELECT id, title, description, teams, per_team, timer_sec, chapters, created_at FROM team_quizzes WHERE school_id=$1 AND deleted_at IS NULL ORDER BY created_at DESC`, schoolID)
+	rows, err := h.db.Query(r.Context(), `SELECT id, title, description, teams, per_team, timer_sec, chapters, COALESCE(team_names,'[]'::jsonb), created_at FROM team_quizzes WHERE school_id=$1 AND deleted_at IS NULL ORDER BY created_at DESC`, schoolID)
 	if err != nil {
 		renderJSON(w, http.StatusInternalServerError, map[string]string{"error": "list failed"})
 		return
@@ -226,11 +259,14 @@ func (h *TeamQuizHandler) List(w http.ResponseWriter, r *http.Request) {
 		var id, title, desc string
 		var teams, perTeam, timer int
 		var chapters []byte
+		var teamNamesRaw []byte
 		var createdAt time.Time
-		rows.Scan(&id, &title, &desc, &teams, &perTeam, &timer, &chapters, &createdAt)
+		rows.Scan(&id, &title, &desc, &teams, &perTeam, &timer, &chapters, &teamNamesRaw, &createdAt)
 		var ch []string
 		json.Unmarshal(chapters, &ch)
-		list = append(list, map[string]interface{}{"id": id, "title": title, "description": desc, "teams": teams, "per_team": perTeam, "timer_sec": timer, "chapters": ch, "created_at": createdAt})
+		var tn []string
+		json.Unmarshal(teamNamesRaw, &tn)
+		list = append(list, map[string]interface{}{"id": id, "title": title, "description": desc, "teams": teams, "per_team": perTeam, "timer_sec": timer, "chapters": ch, "team_names": tn, "created_at": createdAt})
 	}
 	if list == nil {
 		list = []map[string]interface{}{}
@@ -241,10 +277,10 @@ func (h *TeamQuizHandler) List(w http.ResponseWriter, r *http.Request) {
 func (h *TeamQuizHandler) Get(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	log.Info().Str("team_quiz_get_id", id).Msg("team quiz get")
-	var title, desc, chaptersJSON, questionsJSON string
+	var title, desc, chaptersJSON, questionsJSON, teamNamesJSON string
 	var teams, perTeam, timer int
 	var createdAt time.Time
-	err := h.db.QueryRow(r.Context(), `SELECT title, description, teams, per_team, timer_sec, chapters::text, questions::text, created_at FROM team_quizzes WHERE id=$1 AND deleted_at IS NULL`, id).Scan(&title, &desc, &teams, &perTeam, &timer, &chaptersJSON, &questionsJSON, &createdAt)
+	err := h.db.QueryRow(r.Context(), `SELECT title, description, teams, per_team, timer_sec, chapters::text, questions::text, COALESCE(team_names,'[]'::jsonb)::text, created_at FROM team_quizzes WHERE id=$1 AND deleted_at IS NULL`, id).Scan(&title, &desc, &teams, &perTeam, &timer, &chaptersJSON, &questionsJSON, &teamNamesJSON, &createdAt)
 	if err != nil {
 		log.Error().Err(err).Str("id", id).Msg("team quiz get failed")
 		renderJSON(w, http.StatusNotFound, map[string]string{"error": "not found"})
@@ -252,10 +288,12 @@ func (h *TeamQuizHandler) Get(w http.ResponseWriter, r *http.Request) {
 	}
 	var chapters []string
 	var questions map[string]interface{}
+	var teamNames []string
 	json.Unmarshal([]byte(chaptersJSON), &chapters)
 	json.Unmarshal([]byte(questionsJSON), &questions)
+	json.Unmarshal([]byte(teamNamesJSON), &teamNames)
 	renderJSON(w, http.StatusOK, map[string]interface{}{
-		"id": id, "title": title, "description": desc, "teams": teams, "per_team": perTeam, "timer_sec": timer, "chapters": chapters, "questions_by_team": questions, "created_at": createdAt,
+		"id": id, "title": title, "description": desc, "teams": teams, "per_team": perTeam, "timer_sec": timer, "chapters": chapters, "questions_by_team": questions, "team_names": teamNames, "created_at": createdAt,
 	})
 }
 

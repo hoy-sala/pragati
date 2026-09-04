@@ -24,7 +24,7 @@
 	let quizEntry = $state<QuizEntry>('subject');
 	let comingSoonLabel = $state('');
 
-	// ── Team quiz create (public) ──
+	// ── Team quiz create (public) — Custom Quiz / Millionaire ──
 	let teamTitle = $state('');
 	let teamCount = $state(4);
 	let perTeam = $state(5);
@@ -34,7 +34,9 @@
 	let teamCreating = $state(false);
 	let teamError = $state('');
 	let createdTeamQuiz = $state<any>(null);
-	// ── Team play (round-robin, 10 pts, 30s) ──
+	let customTeamNames = $state<string[]>(['A','B','C','D']);
+	let timerChoice = $state(30);
+	// ── Team play (round-robin, 10 pts, Millionaire) ──
 	let teamPlayQuestions = $state<Record<string, any[]>>({});
 	let teamPlayOrder = $state<{team:string, q:any}[]>([]);
 	let teamPlayIndex = $state(0);
@@ -45,6 +47,9 @@
 	let teamPlayIsCorrect = $state(false);
 	let teamQuizzes = $state<any[]>([]);
 	let teamQuizzesLoading = $state(false);
+	let teamTimerSec = $state(30);
+	let lifelineUsed = $state<Record<string, boolean>>({});
+	let hiddenOptKeys = $state<string[]>([]);
 
 	let currentIndex = $state(0);
 	let score = $state(0);
@@ -374,17 +379,17 @@
 	async function openTeamCreate() {
 		playClick();
 		teamError = '';
+		syncCustomNames();
 		phase = 'team-create';
-		if (allSubjectsForTeam.length === 0) {
-			loading = true;
-			const subs = (await api<PlaySubject[]>('GET', '/play/subjects')) ?? [];
-			allSubjectsForTeam = subs.filter(s => !/current\s*affairs/i.test(s.name));
-			for (const s of allSubjectsForTeam) {
-				const t = (await api<PlayTopic[]>('GET', `/play/topics?subject_id=${s.id}`)) ?? [];
-				subjectTopicsMap[s.id] = t;
-			}
-			loading = false;
+		loading = true;
+		const subs = (await api<PlaySubject[]>('GET', '/play/subjects')) ?? [];
+		// Show all except Current Affairs — including Kannada (may have 0 topics) and Social (32 topics)
+		allSubjectsForTeam = subs.filter(s => !/current\s*affairs/i.test(s.name));
+		for (const s of allSubjectsForTeam) {
+			const t = (await api<PlayTopic[]>('GET', `/play/topics?subject_id=${s.id}`)) ?? [];
+			subjectTopicsMap[s.id] = t;
 		}
+		loading = false;
 	}
 	async function openTeamList() {
 		playClick();
@@ -398,6 +403,13 @@
 		} catch { teamQuizzes = []; }
 		teamQuizzesLoading = false;
 	}
+	function syncCustomNames() {
+		const want = teamCount;
+		const cur = [...customTeamNames];
+		while (cur.length < want) cur.push(String.fromCharCode(65 + cur.length));
+		customTeamNames = cur.slice(0, want);
+	}
+	function teamTimerLabel() { return teamTimerSec === 0 ? 'No timer' : `${teamTimerSec}s`; }
 	async function openTeamQuiz(id: string) {
 		playClick();
 		loading = true;
@@ -408,8 +420,11 @@
 			teamPlayQuestions = data.questions_by_team ?? {};
 			teamPlayOrder = [];
 			teamScores = {};
+			lifelineUsed = {};
+			hiddenOptKeys = [];
+			teamTimerSec = data.timer_sec ?? 30;
 			const teamNames = Object.keys(teamPlayQuestions).sort();
-			for (const n of teamNames) teamScores[n] = 0;
+			for (const n of teamNames) { teamScores[n] = 0; lifelineUsed[n] = false; }
 			const maxPer = Math.max(...teamNames.map(n => teamPlayQuestions[n].length));
 			for (let r = 0; r < maxPer; r++) {
 				for (const n of teamNames) {
@@ -423,7 +438,7 @@
 			teamPlaySelectedKey = '';
 			createdTeamQuiz = data;
 			phase = 'team-play';
-			startTeamTimer();
+			if (teamTimerSec > 0) startTeamTimer(); else { clearInterval(timerInterval); timeLeft = 0; }
 		} catch { teamError = 'Failed to load'; }
 		loading = false;
 	}
@@ -434,13 +449,15 @@
 	}
 	async function createTeamQuiz() {
 		if (teamChapters.length === 0) { teamError = 'Pick at least one chapter.'; return; }
+		syncCustomNames();
+		const namesToSend = customTeamNames.slice(0, teamCount).map((n,i)=> (n||'').trim() || String.fromCharCode(65+i));
 		const titleToSend = teamTitle.trim() || `Custom Quiz — ${teamChapters.slice(0,2).join(', ')}${teamChapters.length>2?'…':''}`;
 		teamCreating = true; teamError = '';
 		try {
 			const res = await fetch(apiUrl('/team-quizzes/'), {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ title: titleToSend, description: '', teams: teamCount, per_team: perTeam, chapters: teamChapters, timer_sec: 30 })
+				body: JSON.stringify({ title: titleToSend, description: '', teams: teamCount, per_team: perTeam, chapters: teamChapters, timer_sec: timerChoice, team_names: namesToSend })
 			});
 			const json = await res.json();
 			if (!res.ok) { teamError = (json as any)?.message || (json as any)?.error || JSON.stringify(json) || 'Failed to create'; teamCreating = false; return; }
@@ -452,8 +469,11 @@
 			teamPlayQuestions = qbt;
 			teamPlayOrder = [];
 			teamScores = {};
+			lifelineUsed = {};
+			hiddenOptKeys = [];
+			teamTimerSec = data.timer_sec ?? timerChoice ?? 30;
 			const teamNames = Object.keys(qbt).sort();
-			for (const n of teamNames) teamScores[n] = 0;
+			for (const n of teamNames) { teamScores[n] = 0; lifelineUsed[n] = false; }
 			const maxPer = Math.max(...teamNames.map(n => qbt[n].length));
 			for (let r = 0; r < maxPer; r++) {
 				for (const n of teamNames) {
@@ -466,15 +486,17 @@
 			teamPlayAnswered = false;
 			teamPlaySelectedKey = '';
 			phase = 'team-play';
-			clearInterval(timerInterval); timeLeft = 30;
+			if (teamTimerSec > 0) { clearInterval(timerInterval); timeLeft = teamTimerSec; } else { clearInterval(timerInterval); timeLeft = 0; }
 		} catch (e) { teamError = 'Network error'; teamCreating = false; }
 	}
 	function startTeamTimer() {
+		if (teamTimerSec === 0) { clearInterval(timerInterval); timeLeft = 0; return; }
+		playClick();
 		clearInterval(timerInterval);
-		timeLeft = 30;
+		timeLeft = teamTimerSec;
 		timerInterval = setInterval(() => {
 			timeLeft -= 0.1;
-			if (timeLeft <= 0) { timeLeft = 0; clearInterval(timerInterval); }
+			if (timeLeft <= 0) { timeLeft = 0; clearInterval(timerInterval); playWrong(); }
 		}, 100);
 	}
 	function handleTeamAnswer(key: string) {
@@ -484,16 +506,35 @@
 		const cur = teamPlayOrder[teamPlayIndex];
 		const correct = cur.q.options.find((o: any) => o.correct)?.key;
 		teamPlayIsCorrect = key === correct;
-		if (teamPlayIsCorrect) teamScores[cur.team] = (teamScores[cur.team] ?? 0) + 10;
+		if (teamPlayIsCorrect) {
+			teamScores[cur.team] = (teamScores[cur.team] ?? 0) + 10;
+			playCorrect();
+			if ((teamScores[cur.team] ?? 0) % 30 === 0) playStreak();
+			spawnConfetti();
+			addPopup(10);
+		} else {
+			playWrong();
+			screenShake = true;
+			setTimeout(() => { screenShake = false; }, 500);
+		}
 		clearInterval(timerInterval);
 	}
+	function useFiftyFifty() {
+		const cur = teamPlayOrder[teamPlayIndex];
+		if (!cur || teamPlayAnswered || lifelineUsed[cur.team]) return;
+		const wrongs = cur.q.options.filter((o: any) => !o.correct).map((o: any) => o.key);
+		hiddenOptKeys = shuffle(wrongs).slice(0, 2);
+		lifelineUsed[cur.team] = true;
+		playClick();
+	}
 	function nextTeamQuestion() {
-		if (teamPlayIndex >= teamPlayOrder.length - 1) { clearInterval(timerInterval); phase = 'team-created'; return; }
+		if (teamPlayIndex >= teamPlayOrder.length - 1) { clearInterval(timerInterval); playComplete(); spawnConfetti(); phase = 'team-created'; return; }
 		teamPlayIndex++;
 		teamPlayRevealed = false;
 		teamPlayAnswered = false;
 		teamPlaySelectedKey = '';
-		clearInterval(timerInterval); timeLeft = 30;
+		hiddenOptKeys = [];
+		if (teamTimerSec > 0) { clearInterval(timerInterval); timeLeft = teamTimerSec; } else { clearInterval(timerInterval); timeLeft = 0; }
 	}
 
 	async function startQuiz(difficulty: string) {
@@ -743,11 +784,11 @@
 				</div>
 			</div>
 			<div class="q-card" style="display:flex;flex-direction:column;gap:1rem">
-				<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem">
+				<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem">
 					<label class="field">
 						<span class="field-label">Number of teams</span>
-						<select bind:value={teamCount} class="input">
-							{#each [2,3,4,5,6,7,8] as n}<option value={n}>{n} teams ({Array.from({length:n},(_,i)=>String.fromCharCode(65+i)).join(', ')})</option>{/each}
+						<select bind:value={teamCount} onchange={() => syncCustomNames()} class="input">
+							{#each [2,3,4,5,6,7,8] as n}<option value={n}>{n} teams</option>{/each}
 						</select>
 					</label>
 					<label class="field">
@@ -755,25 +796,45 @@
 						<select bind:value={perTeam} class="input">
 							{#each [5,10,15,20] as n}<option value={n}>{n} (multiples of 5)</option>{/each}
 						</select>
-						<span class="hint" style="text-align:left">Total {teamCount * perTeam} questions · Round-robin</span>
+						<span class="hint" style="text-align:left">Total {teamCount * perTeam} · Round-robin</span>
 					</label>
+					<label class="field">
+						<span class="field-label">Timer</span>
+						<select bind:value={timerChoice} class="input">
+							<option value={0}>No timer</option>
+							<option value={30}>30s</option>
+							<option value={45}>45s</option>
+							<option value={60}>60s</option>
+						</select>
+						<span class="hint" style="text-align:left">Expiry never reveals answer</span>
+					</label>
+				</div>
+				<div style="border:2px dashed var(--ink);border-radius:12px;padding:0.85rem;background:var(--paper)">
+					<p class="field-label" style="margin:0 0 0.6rem">Team names — editable</p>
+					<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem">
+						{#each Array.from({length: teamCount}, (_, i) => i) as i}
+							<label class="field">
+								<span class="field-label">Team {String.fromCharCode(65+i)}</span>
+								<input bind:value={customTeamNames[i]} placeholder="Team {String.fromCharCode(65+i)}" maxlength={20} class="input" oninput={() => syncCustomNames()} />
+							</label>
+						{/each}
+					</div>
 				</div>
 				{#if loading}
 					<div class="empty">Loading chapters…</div>
 				{:else}
 					<div style="border:2px solid var(--ink);border-radius:12px;padding:0.85rem;background:var(--cream)">
 						<p class="field-label" style="margin:0 0 0.6rem">Chapters — tick at least one (grouped by subject)</p>
-						{#each allSubjectsForTeam as subj}
-							<div style="margin:0.7rem 0 0.35rem;font-weight:700;font-family:var(--font-display);font-size:0.95rem">{subj.name}</div>
+						{#each allSubjectsForTeam.filter(s => (subjectTopicsMap[s.id] ?? []).length > 0) as subj}
+							<div style="margin:0.7rem 0 0.35rem;font-weight:700;font-family:var(--font-display);font-size:0.95rem">{subj.name} ({(subjectTopicsMap[subj.id] ?? []).length})</div>
 							<div class="topics" style="margin:0">
 								{#each (subjectTopicsMap[subj.id] ?? []) as t}
 									{@const full = t.name}
 									<button onclick={() => toggleTeamChapter(full)} class="topic {teamChapters.includes(full) ? 'topic-selected' : ''}">{full.replace('Karnataka:','').replace('Freedom:','')}</button>
 								{/each}
-								{#if (subjectTopicsMap[subj.id] ?? []).length===0}<span class="hint">No chapters</span>{/if}
 							</div>
 						{/each}
-						<p class="hint" style="margin-top:0.7rem;text-align:left">{teamChapters.length} chapter(s) selected</p>
+						<p class="hint" style="margin-top:0.7rem;text-align:left">{teamChapters.length} chapter(s) selected · Social (32), Science, English, Hindi, Maths, GK included · Kannada has no chapters yet</p>
 					</div>
 				{/if}
 				{#if teamError}<div class="feedback feedback-bad" style="margin:0"><p class="feedback-text">{teamError}</p></div>{/if}
@@ -830,53 +891,64 @@
 			{/if}
 		</div>
 
-	<!-- ═══ TEAM PLAY (round-robin, 30s, 10 pts) ═══ -->
+	<!-- ═══ TEAM PLAY — MILLIONAIRE STAGE (round-robin, 10 pts) ═══ -->
 	{:else if phase === 'team-play' && teamPlayOrder.length > 0}
 		{@const cur = teamPlayOrder[teamPlayIndex]}
 		{@const teamLabels = Object.keys(teamScores).sort()}
-		<div class="quiz-shell fade-in">
+		{@const curLifelineDone = !!lifelineUsed[cur.team]}
+		<div class="millionaire-stage fade-in">
+			<div class="m-spotlight" aria-hidden="true"></div>
+			<div class="quiz-shell">
 			<div class="quiz-main">
 				<div class="q-meta">
 					<div class="q-tags">
-						<span class="tag">Team {cur.team}</span>
-						<span class="tag">{createdTeamQuiz?.title ?? 'Team Quiz'}</span>
-						<span class="tag tag-difficulty">30s</span>
+						<span class="tag m-team">★ {cur.team}</span>
+						<span class="tag">{createdTeamQuiz?.title ?? 'Custom Quiz'}</span>
+						<span class="tag tag-difficulty">{teamTimerSec === 0 ? 'No timer' : `${teamTimerSec}s`}</span>
+						<span class="tag">Q {teamPlayIndex + 1}/{teamPlayOrder.length}</span>
 					</div>
-					<span class="counter">{teamPlayIndex + 1} / {teamPlayOrder.length} · Team {cur.team}'s turn</span>
+					<span class="counter">{cur.team}'s turn · 10 pts</span>
 				</div>
-				<div class="q-card q-question">
+				<div class="q-card q-question m-question">
+					<div class="m-lifelines">
+						<button onclick={useFiftyFifty} disabled={curLifelineDone || teamPlayAnswered} class="m-lifeline {curLifelineDone ? 'used' : ''}" title="50:50 — remove two wrong options (once per team)">50:50 {#if curLifelineDone}✓{:else}· {cur.team}{/if}</button>
+						<span class="m-prize">₹ {(teamScores[cur.team] ?? 0) * 1000} · {teamScores[cur.team] ?? 0} pts</span>
+					</div>
 					<fieldset class="q-fieldset">
 						<legend class="q-legend"><MathText text={cur.q.question_text} /></legend>
-						<div class="options">
+						<div class="options m-options">
 							{#each cur.q.options as opt}
 								{@const isSelected = teamPlayAnswered && opt.key === teamPlaySelectedKey}
 								{@const isCorrectOpt = !!opt.correct}
 								{@const showCorrect = (teamPlayAnswered || teamPlayRevealed) && !isSelected && isCorrectOpt}
-								<label class="opt {teamPlayAnswered && isSelected ? (teamPlayIsCorrect ? 'opt-correct' : 'opt-incorrect') : ''} {showCorrect ? 'opt-correct' : ''} {!teamPlayAnswered && !teamPlayRevealed && teamPlaySelectedKey === opt.key ? 'opt-selected' : ''}">
+								{@const hidden = hiddenOptKeys.includes(opt.key)}
+								{#if !hidden}
+								<label class="opt m-opt {teamPlayAnswered && isSelected ? (teamPlayIsCorrect ? 'opt-correct' : 'opt-incorrect') : ''} {showCorrect ? 'opt-correct' : ''} {!teamPlayAnswered && !teamPlayRevealed && teamPlaySelectedKey === opt.key ? 'opt-selected' : ''}">
 									<input type="radio" name="tq{teamPlayIndex}" value={opt.key} disabled={teamPlayAnswered} checked={teamPlaySelectedKey === opt.key} onchange={() => handleTeamAnswer(opt.key)} class="opt-input" />
 									<span class="opt-row">
-										<span class="opt-radio"><span class="opt-dot"></span></span>
+										<span class="m-key">{opt.key}</span>
 										<span class="opt-text"><MathText text={opt.value} /></span>
 										{#if teamPlayAnswered && isSelected}<span class="opt-state">{teamPlayIsCorrect ? '✓' : '✕'}</span>{:else if showCorrect}<span class="opt-state">✓</span>{/if}
 									</span>
 								</label>
+								{/if}
 							{/each}
 						</div>
 					</fieldset>
 					{#if teamPlayAnswered}
-						<div class="feedback {teamPlayIsCorrect ? '' : 'feedback-bad'}">
+						<div class="feedback m-feedback {teamPlayIsCorrect ? '' : 'feedback-bad'}">
 							<div class="feedback-head">
 								<span class="feedback-badge">{teamPlayIsCorrect ? '✓' : '✕'}</span>
-								<span class="feedback-title">{teamPlayIsCorrect ? 'Correct! +10' : 'Not quite'}</span>
-								<span class="streak-chip">Team {cur.team}</span>
+								<span class="feedback-title">{teamPlayIsCorrect ? 'Correct! +10 🎉' : 'Not quite'}</span>
+								<span class="streak-chip">{cur.team}</span>
 							</div>
 						</div>
 					{:else if teamPlayRevealed}
-						<div class="feedback">
+						<div class="feedback m-feedback">
 							<div class="feedback-head">
 								<span class="feedback-badge">✓</span>
 								<span class="feedback-title">Answer revealed</span>
-								<span class="streak-chip">Team {cur.team}</span>
+								<span class="streak-chip">{cur.team}</span>
 							</div>
 							<p class="feedback-text">Correct answer highlighted above. Tap a team’s answer to award 10 points.</p>
 						</div>
@@ -885,7 +957,7 @@
 						{#if !teamPlayAnswered && !teamPlayRevealed}
 							<button onclick={() => { teamPlayRevealed = true; clearInterval(timerInterval); }} class="btn-ghost" style="flex:1">Reveal Answer</button>
 						{:else if teamPlayRevealed && !teamPlayAnswered}
-							<button onclick={() => { teamPlayRevealed = false; startTeamTimer(); }} class="btn-ghost" style="flex:1">Hide Answer</button>
+							<button onclick={() => { teamPlayRevealed = false; if (teamTimerSec>0) startTeamTimer(); }} class="btn-ghost" style="flex:1">Hide Answer</button>
 						{/if}
 						{#if teamPlayAnswered || teamPlayRevealed}
 							<button onclick={nextTeamQuestion} class="btn-primary" style="flex:1">{teamPlayIndex >= teamPlayOrder.length - 1 ? 'Finish →' : 'Next →'}</button>
@@ -894,28 +966,33 @@
 				</div>
 			</div>
 			<aside class="quiz-side">
-				<div class="side-card">
-					<div class="side-row"><span class="side-label">Current Team</span><span class="side-value mono">{cur.team}</span></div>
+				<div class="side-card m-ladder">
+					<div class="side-row"><span class="side-label">On Stage</span><span class="side-value mono">★ {cur.team}</span></div>
+					{#if teamTimerSec > 0}
 					<div class="timer-head">
 						<span class="side-label">Time</span>
 						<div style="display:flex;align-items:center;gap:0.5rem">
 							<span class="timer-num mono" style="color:{timeColor()}">{Math.ceil(timeLeft)}s</span>
-							<button onclick={startTeamTimer} class="btn-ghost" style="min-height:32px;padding:0.25rem 0.5rem;border-radius:8px" title="Start 30s timer after reading">
+							<button onclick={startTeamTimer} class="btn-ghost m-timer-btn" title="Start {teamTimerSec}s timer after reading">
 								<Clock size={16} />
 							</button>
 						</div>
 					</div>
-					<div class="timer-track"><div class="timer-fill" style="width:{(timeLeft/30)*100}%;background:{timeColor()}"></div></div>
+					<div class="timer-track"><div class="timer-fill" style="width:{(timeLeft/Math.max(teamTimerSec,1))*100}%;background:{timeColor()}"></div></div>
 					<p class="hint" style="font-size:0.75rem;margin:0">Host: click <Clock size={12} style="display:inline;vertical-align:middle" /> after reading Q & options</p>
+					{:else}
+					<p class="hint" style="font-size:0.8rem;margin:0">No timer — host controls pace. Click an answer to award 10.</p>
+					{/if}
 				</div>
-				<div class="side-card">
-					<p class="side-label" style="margin-bottom:0.5rem">Scores (10 pts each)</p>
-					{#each teamLabels as t}
-						<div class="side-row"><span class="side-label">Team {t}</span><span class="side-value mono">{teamScores[t] ?? 0}</span></div>
+				<div class="side-card m-ladder">
+					<p class="side-label" style="margin-bottom:0.5rem">💰 Money Ladder (10 pts = ₹10,000)</p>
+					{#each [...teamLabels].sort((a,b)=>(teamScores[b]??0)-(teamScores[a]??0)) as t, i}
+						<div class="side-row m-ladder-row {t===cur.team?'active':''}"><span class="side-label">{i+1}. {t} {lifelineUsed[t] ? '· 50:50 ✓' : ''}</span><span class="side-value mono">₹{((teamScores[t] ?? 0)*1000).toLocaleString('en-IN')}</span></div>
 					{/each}
 				</div>
-				<div class="side-card side-muted"><p class="side-hint">Host reads aloud. Timer expiry does not reveal answer. Mark correct to award 10.</p></div>
+				<div class="side-card side-muted"><p class="side-hint">🎤 Host reads aloud. ⏱ Expiry never reveals answer. ✅ Correct = +10 with sound & confetti.</p></div>
 			</aside>
+			</div>
 		</div>
 
 	<!-- ═══ GK HUB ═══ -->
@@ -1695,6 +1772,38 @@
 	@keyframes scoreFloat { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-90px) scale(1.05); } }
 	.shake { animation: shakeIt 0.45s ease-out; }
 	@keyframes shakeIt { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } }
+
+	/* Millionaire stage */
+	.millionaire-stage { position: relative; background: radial-gradient(1200px 500px at 50% -10%, #2b2a6b 0%, #14143a 55%, #0b0b24 100%); border: 2.5px solid var(--ink); border-radius: 20px; padding: 1rem; box-shadow: 6px 6px 0 var(--ink); overflow: hidden; }
+	.m-spotlight { position: absolute; inset: -40px; background: radial-gradient(500px 220px at 50% 0%, rgba(255,194,51,0.35), transparent 70%); pointer-events: none; }
+	.millionaire-stage .quiz-shell { position: relative; }
+	.millionaire-stage .q-card { background: #101032; color: #fff; border-color: #FFC233; box-shadow: 4px 4px 0 #FFC233; }
+	.millionaire-stage .q-legend { color: #fff; }
+	.millionaire-stage .opt { background: #1a1a4d; border-color: #FFC233; color: #fff; }
+	.millionaire-stage .opt:hover { background: #26266e; }
+	.millionaire-stage .opt-text { color: #fff; }
+	.millionaire-stage .opt-radio { border-color: #FFC233; background: transparent; }
+	.millionaire-stage .opt-dot { background: #FFC233; }
+	.millionaire-stage .opt-correct { background: #0E7C71; border-color: #FFC233; }
+	.millionaire-stage .opt-incorrect { background: #7f1d1d; border-color: #FFC233; }
+	.millionaire-stage .side-card { background: #101032; color: #fff; border-color: #FFC233; box-shadow: 3px 3px 0 #FFC233; }
+	.millionaire-stage .side-label, .millionaire-stage .side-hint, .millionaire-stage .hint { color: #e8e6ff; }
+	.millionaire-stage .side-value, .millionaire-stage .timer-num { color: #FFC233; }
+	.millionaire-stage .tag { background: #1a1a4d; color: #FFC233; border-color: #FFC233; }
+	.millionaire-stage .counter { color: #FFC233; }
+	.m-team { background: #FFC233 !important; color: #14143a !important; }
+	.m-question { position: relative; }
+	.m-lifelines { display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; margin-bottom: 0.8rem; }
+	.m-lifeline { font-weight: 800; border: 2px solid #FFC233; background: #1a1a4d; color: #FFC233; border-radius: 999px; padding: 0.35rem 0.8rem; cursor: pointer; }
+	.m-lifeline.used { opacity: 0.45; cursor: not-allowed; }
+	.m-lifeline:not(.used):hover { background: #FFC233; color: #14143a; }
+	.m-prize { font-family: var(--font-mono); color: #FFC233; font-weight: 800; }
+	.m-options .m-opt { clip-path: polygon(24px 0, 100% 0, 100% calc(100% - 0px), calc(100% - 24px) 100%, 0 100%, 0 0); }
+	.m-key { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #FFC233; color: #FFC233; display: grid; place-items: center; font-weight: 800; flex: none; }
+	.m-feedback { background: #1a1a4d !important; border-color: #FFC233 !important; color: #fff; }
+	.m-feedback .feedback-title, .m-feedback .feedback-text { color: #fff; }
+	.m-ladder-row.active { background: rgba(255,194,51,0.15); border-radius: 8px; padding: 0.15rem 0.4rem; }
+	.m-timer-btn { border-color: #FFC233 !important; color: #FFC233 !important; background: transparent !important; }
 
 	@media (prefers-reduced-motion: reduce) { .fade-in, .answer-pop, .shake, .confetti-piece, .score-popup { animation: none; transition: none; } }
 </style>
