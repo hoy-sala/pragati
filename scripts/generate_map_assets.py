@@ -128,11 +128,10 @@ add("Kalpakkam (MAPS)", "power", "Nuclear & Power", "india", 12.55, 80.17, "Tami
 add("Rawatbhata Nuclear Plant", "power", "Nuclear & Power", "india", 24.87, 76.60, "Rajasthan", "", "RAPS", None, U)
 add("Pavagada Solar Park", "power", "Nuclear & Power", "india", 14.28, 77.27, "Karnataka", "Tumakuru", "2 GW solar park", None, K)
 add("Khavda Solar Park", "power", "Nuclear & Power", "india", 23.55, 68.85, "Gujarat", "", "World's largest RE park", "2024-02-01", U)
-add("Tehri Dam", "power", "Nuclear & Power", "india", 30.37, 78.47, "Uttarakhand", "", "Tallest dam (260 m)", None, S)
-add("Bhakra Nangal Dam", "power", "Nuclear & Power", "india", 31.41, 76.43, "Punjab", "", "Sutlej; multipurpose", None, S)
-add("Sardar Sarovar Dam", "power", "Nuclear & Power", "india", 21.83, 73.74, "Gujarat", "", "Narmada", None, S)
-add("Hirakud Dam", "power", "Nuclear & Power", "india", 21.57, 83.87, "Odisha", "", "Mahanadi; longest dam", None, S)
-add("Nagarjuna Sagar Dam", "power", "Nuclear & Power", "india", 16.57, 79.31, "Telangana", "", "Krishna", None, S)
+add("Narora Atomic Plant", "power", "Nuclear & Power", "india", 28.15, 78.40, "Uttar Pradesh", "", "NAPS", None, S)
+add("Kakrapar Atomic Plant", "power", "Nuclear & Power", "india", 21.23, 73.35, "Gujarat", "", "700 MW PHWR in news", "2024-01-01", U)
+add("Jaitapur Nuclear Project", "power", "Nuclear & Power", "india", 16.58, 73.33, "Maharashtra", "", "Proposed EPR; in news", "2024-01-01", U)
+add("Chutka Nuclear Project", "power", "Nuclear & Power", "india", 22.45, 80.10, "Madhya Pradesh", "", "Proposed 1400 MW", None, S)
 
 # IITs & Institutions (india) — 23 IITs + IISc
 add("IIT Bombay", "institute", "IITs & Institutions", "india", 19.13, 72.91, "Maharashtra", "Mumbai", "197 institutions: 1958", None, U)
