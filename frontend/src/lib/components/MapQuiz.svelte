@@ -28,6 +28,7 @@
 	} = $props();
 
 	let outlines = $state<{ id: string; d: string }[]>([]);
+	let states = $state<{ name: string; d: string }[]>([]);
 	let viewBox = $state('0 0 760 860');
 	let baseVB = $state({ x: 0, y: 0, w: 760, h: 860 });
 	let zoom = $state(1);
@@ -45,12 +46,13 @@
 			})
 			.then((j) => {
 				outlines = j.outlines ?? [];
+				states = j.states ?? [];
 				const vb = j.viewBox ?? [0, 0, 760, 860];
 				baseVB = { x: vb[0], y: vb[1], w: vb[2], h: vb[3] };
 				viewBox = `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`;
 				schematic = !!j.schematic;
 			})
-			.catch(() => { loadError = true; outlines = []; });
+			.catch(() => { loadError = true; outlines = []; states = []; });
 	});
 
 	function applyZoom() {
@@ -125,6 +127,9 @@
 			{:else}
 				{#each outlines as o (o.id)}
 					<path d={o.d} fill="#FFFBEC" stroke="#1F1A2E" stroke-width="3" stroke-linejoin="round" filter="url(#landShadow)" />
+				{/each}
+				{#each states as s (s.name)}
+					<path d={s.d} fill="none" stroke="#1F1A2E" stroke-width="1" opacity="0.4" stroke-linejoin="round" />
 				{/each}
 			{/if}
 

@@ -66,6 +66,72 @@ def path_d(outline, proj):
     "note": "Schematic outline for practice, not to survey scale.",
 }, ensure_ascii=False), encoding="utf-8")
 
+# ——— India state boundaries (official-style internal borders) ———
+# Source: click-that-hood india.geojson (OSM-derived), Douglas-Peucker
+# simplified. J&K omitted: that file follows the LoC, while our outer
+# outline shows full J&K per India's official map — drawing its LoC
+# boundary inside would contradict it.
+def dp_simplify(pts, tol):
+    """Douglas-Peucker on [(x,y)] in degree space. Returns reduced list."""
+    if len(pts) < 3:
+        return pts
+    def perp(p, a, b):
+        dx, dy = b[0] - a[0], b[1] - a[1]
+        denom = dx * dx + dy * dy
+        if denom == 0:
+            return math.hypot(p[0] - a[0], p[1] - a[1])
+        t = max(0.0, min(1.0, ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / denom))
+        return math.hypot(p[0] - (a[0] + t * dx), p[1] - (a[1] + t * dy))
+    keep = [False] * len(pts)
+    keep[0] = keep[-1] = True
+    stack = [(0, len(pts) - 1)]
+    while stack:
+        s, e = stack.pop()
+        dmax, imax = 0.0, -1
+        for i in range(s + 1, e):
+            d = perp(pts[i], pts[s], pts[e])
+            if d > dmax:
+                dmax, imax = d, i
+        if dmax > tol and imax > 0:
+            keep[imax] = True
+            stack.append((s, imax))
+            stack.append((imax, e))
+    return [p for p, k in zip(pts, keep) if k]
+
+STATES_RAW = pathlib.Path(r"C:\Users\MDRS Bahaddurghatta\.local\share\opencode\tool-output\tool_072b00b50001Hwn9jCotd1q0Fm")
+states_out = []
+if STATES_RAW.exists():
+    fc = json.loads(STATES_RAW.read_text(encoding="utf-8"))
+    for feat in fc["features"]:
+        name = (feat.get("properties") or {}).get("name", "")
+        if not name or name == "Jammu and Kashmir":
+            continue
+        geom = feat["geometry"]
+        polys = []
+        if geom["type"] == "Polygon":
+            polys = [geom["coordinates"]]
+        elif geom["type"] == "MultiPolygon":
+            polys = geom["coordinates"]
+        d_parts = []
+        for poly in polys:
+            for ring in poly:
+                pts = [(c[0], c[1]) for c in ring]
+                if len(pts) < 4:
+                    continue
+                simp = dp_simplify(pts, 0.07)
+                if len(simp) < 4:
+                    continue
+                sp = [india_proj(lng, lat) for lng, lat in simp]
+                d_parts.append("M " + " L ".join(f"{x} {y}" for x, y in sp) + " Z")
+        if d_parts:
+            states_out.append({"name": name, "d": " ".join(d_parts)})
+
+india_json_path = MAP_DIR / "india.json"
+india_data = json.loads(india_json_path.read_text(encoding="utf-8"))
+india_data["states"] = states_out
+india_json_path.write_text(json.dumps(india_data, ensure_ascii=False), encoding="utf-8")
+print(f"added {len(states_out)} state boundaries")
+
 print("wrote map JSON assets")
 
 # ——— Places: (name, kind, category, map, lat, lng, state, district, why_in_news, news_date, exam_tags) ———
