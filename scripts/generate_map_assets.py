@@ -220,7 +220,7 @@ if GOVT and KA_DISTRICTS:
     for _dname, _rings in KA_DISTRICTS:
         _parts = []
         for _ring in _rings:
-            _simp = dp_simplify([(x, y) for x, y in _ring], 0.004)
+            _simp = dp_simplify([(x, y) for x, y in _ring], 0.002)
             if len(_simp) < 4:
                 continue
             _sp = [ka_proj(lng, lat) for lng, lat in _simp]
@@ -350,7 +350,7 @@ add("Kolar Gold Fields", "industrial", "Karnataka Special", "karnataka", 12.96, 
 add("Shravanabelagola", "heritage", "Karnataka Special", "karnataka", 12.85, 76.48, "Karnataka", "Hassan", "Gomateshwara", None, K)
 add("Ballari", "city", "Karnataka Special", "karnataka", 15.14, 76.92, "Karnataka", "Ballari", "Steel; Vijayanagara district split", None, K)
 add("Raichur", "city", "Karnataka Special", "karnataka", 16.20, 77.35, "Karnataka", "Raichur", "Thermal power; Maski nearby", None, K)
-add("Bidar", "city", "Karnataka Special", "karnataka", 15.91, 77.51, "Karnataka", "Bidar", "Bidriware; fort", None, K)
+add("Bidar", "city", "Karnataka Special", "karnataka", 17.91, 77.53, "Karnataka", "Bidar", "Bidriware; fort", None, K)
 add("Shivamogga", "city", "Karnataka Special", "karnataka", 14.16, 75.63, "Karnataka", "Shivamogga", "Malnad gateway; Agumbe", None, K)
 add("Tumakuru", "city", "Karnataka Special", "karnataka", 13.33, 77.10, "Karnataka", "Tumakuru", "Pavagada solar nearby", None, K)
 
@@ -445,7 +445,7 @@ add("Girnar Edict", "edict", "Ashokan Edicts", "india", 21.52, 70.45, "Gujarat",
 add("Dhauli Edict", "edict", "Ashokan Edicts", "india", 20.19, 85.84, "Odisha", "", "Kalinga; elephant carving", None, U)
 add("Jaugada Edict", "edict", "Ashokan Edicts", "india", 19.55, 84.95, "Odisha", "", "Major rock edict", None, U)
 add("Kalsi Edict", "edict", "Ashokan Edicts", "india", 30.52, 77.85, "Uttarakhand", "", "Only complete set of 14", None, U)
-add("Shahbazgarhi Edict", "edict", "Ashokan Edicts", "india", 34.00, 72.60, "Pakistan (historic India)", "", "Kharosthi script", None, U)
+# Shahbazgarhi (Mardan, Pakistan) omitted: outside India's official boundary — unplaceable on the map quiz.
 add("Sarnath Pillar", "edict", "Ashokan Edicts", "india", 25.37, 83.02, "Uttar Pradesh", "", "Lion capital = emblem", None, U)
 add("Lauriya Nandangarh", "edict", "Ashokan Edicts", "india", 26.55, 84.40, "Bihar", "", "Pillar edicts", None, U)
 
@@ -456,7 +456,7 @@ add("Hallur", "neolithic", "Neolithic Sites", "india", 15.02, 75.63, "Karnataka"
 add("Hire Benakal", "neolithic", "Neolithic Sites", "india", 15.45, 76.47, "Karnataka", "Raichur", "Megalithic dolmens", None, K)
 add("Burzahom", "neolithic", "Neolithic Sites", "india", 34.16, 74.90, "J&K", "", "Pit dwellings", None, U)
 add("Chirand", "neolithic", "Neolithic Sites", "india", 25.73, 85.33, "Bihar", "", "Neolithic-Chalcolithic", None, U)
-add("Mehrgarh", "neolithic", "Neolithic Sites", "india", 29.38, 67.61, "Baluchistan (historic)", "", "9000-yr farming (context)", None, U)
+# Mehrgarh (Baluchistan, Pakistan) omitted: outside India's official boundary — unplaceable on the map quiz.
 add("Utnur", "neolithic", "Neolithic Sites", "india", 16.53, 77.33, "Karnataka", "Raichur", "Cattle pastoralism", None, K)
 add("Budhihal", "neolithic", "Neolithic Sites", "india", 15.05, 76.55, "Karnataka", "Ballari", "Ashmound site", None, K)
 add("Kupgal", "neolithic", "Neolithic Sites", "india", 15.15, 76.90, "Karnataka", "Ballari", "Rock art + Neolithic", None, K)
