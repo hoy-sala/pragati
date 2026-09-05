@@ -80,8 +80,9 @@
 			...o,
 			px: o.svg_x,
 			py: o.svg_y,
-			lx: o.svg_x + 20,
-			ly: o.svg_y + 5,
+			// Label slot as offsets relative to the pin (the <g> is translated to px,py)
+			ldx: 20,
+			ldy: 5,
 			lanchor: 'start' as 'start' | 'middle' | 'end',
 			leader: null as null | { x1: number; y1: number; x2: number; y2: number }
 		}));
@@ -138,17 +139,17 @@
 				?? cands.map(boxOf).find((r) => !overlaps(r.box))
 				?? boxOf(cands[0]);
 			boxes.push(pick.box);
-			p.lx = Math.round(pick.lx * 10) / 10;
-			p.ly = Math.round(pick.ly * 10) / 10;
+			p.ldx = pick.c.dx;
+			p.ldy = pick.c.dy;
 			p.lanchor = pick.c.anchor as 'start' | 'middle' | 'end';
 			if (Math.abs(pick.c.dy) >= 20) {
 				const len = Math.hypot(pick.c.dx, pick.c.dy);
 				const ux = pick.c.dx / len, uy = pick.c.dy / len;
 				p.leader = {
-					x1: Math.round((p.px + ux * 16) * 10) / 10,
-					y1: Math.round((p.py + uy * 16) * 10) / 10,
-					x2: Math.round((pick.lx - ux * 3) * 10) / 10,
-					y2: Math.round((pick.ly - 5 - uy * 3) * 10) / 10
+					x1: Math.round(ux * 16 * 10) / 10,
+					y1: Math.round(uy * 16 * 10) / 10,
+					x2: Math.round((pick.c.dx - ux * 3) * 10) / 10,
+					y2: Math.round((pick.c.dy - 5 - uy * 3) * 10) / 10
 				};
 			}
 		}
@@ -236,7 +237,7 @@
 					{#if p.leader}
 						<line x1={p.leader.x1} y1={p.leader.y1} x2={p.leader.x2} y2={p.leader.y2} class="leader" />
 					{/if}
-					<text x={p.lx} y={p.ly} text-anchor={p.lanchor} class="pin-label">{p.label}</text>
+					<text x={p.ldx} y={p.ldy} text-anchor={p.lanchor} class="pin-label">{p.label}</text>
 				{/if}
 				</g>
 			{/each}
