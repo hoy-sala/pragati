@@ -117,10 +117,7 @@
 				<pattern id="mapDots" width="18" height="18" patternUnits="userSpaceOnUse">
 					<circle cx="2" cy="2" r="1.1" fill="#1F1A2E" opacity="0.06" />
 				</pattern>
-				<filter id="landShadow" x="-20%" y="-20%" width="140%" height="140%">
-					<feDropShadow dx="4" dy="4" stdDeviation="0" flood-color="#1F1A2E" flood-opacity="0.9" />
-				</filter>
-				<filter id="pinGlow" x="-80%" y="-80%" width="260%" height="260%">
+			<filter id="pinGlow" x="-80%" y="-80%" width="260%" height="260%">
 					<feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#0E7C71" flood-opacity="0.85" />
 				</filter>
 			</defs>
@@ -139,7 +136,6 @@
 					stroke-width="3"
 					stroke-linejoin="round"
 					fill-rule={fillRule}
-					filter="url(#landShadow)"
 				/>
 			{/each}
 			{#each states as s (s.name)}
