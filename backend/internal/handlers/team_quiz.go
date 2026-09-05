@@ -104,6 +104,17 @@ func (h *TeamQuizHandler) Create(w http.ResponseWriter, r *http.Request) {
 		teamNamesInput[i] = n
 	}
 
+	// Split map chapters (served from map_places) from plain question chapters
+	mapCats := []string{}
+	plainChapters := []string{}
+	for _, ch := range input.Chapters {
+		if len(ch) > 5 && ch[:5] == "Maps:" {
+			mapCats = append(mapCats, ch)
+		} else {
+			plainChapters = append(plainChapters, ch)
+		}
+	}
+
 	// Fetch questions for selected chapters, distinct
 	// Use jsonb array overlap
 	rows, err := h.db.Query(r.Context(), `
@@ -113,7 +124,7 @@ func (h *TeamQuizHandler) Create(w http.ResponseWriter, r *http.Request) {
 		AND EXISTS (SELECT 1 FROM jsonb_array_elements_text(q.chapters) AS ch WHERE ch = ANY($2))
 		AND jsonb_typeof(q.chapters) = 'array'
 		ORDER BY RANDOM()
-	`, schoolID, input.Chapters)
+	`, schoolID, plainChapters)
 	if err != nil {
 		log.Error().Err(err).Msg("team quiz: fetch questions failed")
 		renderJSON(w, http.StatusInternalServerError, map[string]string{"error": "fetch failed"})
@@ -140,6 +151,71 @@ func (h *TeamQuizHandler) Create(w http.ResponseWriter, r *http.Request) {
 		q.Options = opts
 		q.Chapters = ch
 		allQs = append(allQs, q)
+	}
+	// Map chapters (Maps:*) come from map_places, not questions
+	if len(mapCats) > 0 {
+		mrows, merr := h.db.Query(r.Context(), `
+			SELECT id, name, category, map, COALESCE(svg_x,0), COALESCE(svg_y,0), COALESCE(why_in_news,'')
+			FROM map_places
+			WHERE deleted_at IS NULL AND is_active = true AND category = ANY($1)
+			ORDER BY RANDOM()
+		`, mapCats)
+		if merr == nil {
+			type MP struct {
+				ID, Name, Cat, Map, News string
+				X, Y                     float64
+			}
+			mps := []MP{}
+			for mrows.Next() {
+				var m MP
+				if err := mrows.Scan(&m.ID, &m.Name, &m.Cat, &m.Map, &m.X, &m.Y, &m.News); err != nil {
+					continue
+				}
+				mps = append(mps, m)
+			}
+			mrows.Close()
+			// Build 4-pin map questions: correct + 3 same-category distractors.
+			// Difficulty cycles easy/medium/hard so team balancing keeps working.
+			diffs := []string{"easy", "medium", "hard"}
+			mi := 0
+			for _, m := range mps {
+				ds := []MP{}
+				for _, o := range mps {
+					if o.ID != m.ID && o.Cat == m.Cat && o.Map == m.Map && len(ds) < 3 {
+						ds = append(ds, o)
+					}
+				}
+				if len(ds) < 3 {
+					continue
+				}
+				type MO struct {
+					Key     string  `json:"key"`
+					Label   string  `json:"label"`
+					Value   string  `json:"value"`
+					PlaceID string  `json:"place_id"`
+					SvgX    float64 `json:"svg_x"`
+					SvgY    float64 `json:"svg_y"`
+					Map     string  `json:"map"`
+					Correct bool    `json:"correct"`
+				}
+				pool := []MO{{Label: m.Name, Value: m.Name, PlaceID: m.ID, SvgX: m.X, SvgY: m.Y, Map: m.Map, Correct: true}}
+				for _, d := range ds {
+					pool = append(pool, MO{Label: d.Name, Value: d.Name, PlaceID: d.ID, SvgX: d.X, SvgY: d.Y, Map: m.Map})
+				}
+				rand.Shuffle(len(pool), func(i, j int) { pool[i], pool[j] = pool[j], pool[i] })
+				for i := range pool {
+					pool[i].Key = string(rune('A' + i))
+				}
+				obytes, _ := json.Marshal(pool)
+				chbytes, _ := json.Marshal([]string{m.Cat})
+				qtext := "Click the location of " + m.Name
+				if m.News != "" {
+					qtext += " (" + m.News + ")"
+				}
+				allQs = append(allQs, Q{ID: m.ID, Text: qtext, Type: "map_point", Options: obytes, Diff: diffs[mi%3], Chapters: chbytes})
+				mi++
+			}
+		}
 	}
 	needed := input.Teams * input.PerTeam
 	if len(allQs) < needed {

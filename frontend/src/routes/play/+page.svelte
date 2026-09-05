@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { apiUrl } from '$lib/api/client.svelte';
 	import { goto } from '$app/navigation';
-	import { Building2, GraduationCap, BookOpen, Layers, Sparkles, Hash, Zap, Check, Globe, Newspaper, Clock, Atom, Users, Trophy, Cpu } from 'lucide-svelte';
+	import { Building2, GraduationCap, BookOpen, Layers, Sparkles, Hash, Zap, Check, Globe, Newspaper, Clock, Atom, Users, Trophy, Cpu, Map } from 'lucide-svelte';
 	import type { PlayClass, PlaySubject, PlayTopic, PlayQuestion } from '$lib/types';
 	import { ELEMENTS, CATEGORY_LABELS, elementClass, elementPeriod, PERIODIC_DIFFICULTIES } from '$lib/data/elements';
 	import MathText from '$lib/components/MathText.svelte';
+	import MapQuiz from '$lib/components/MapQuiz.svelte';
 
-	type Phase = 'welcome' | 'mode' | 'classes' | 'subjects' | 'topics' | 'tables' | 'tables-ready' | 'gk' | 'coming-soon' | 'periodic' | 'periodic-ready' | 'quiz' | 'results' | 'team-create' | 'team-created' | 'team-list' | 'team-play';
+	type Phase = 'welcome' | 'mode' | 'classes' | 'subjects' | 'topics' | 'tables' | 'tables-ready' | 'gk' | 'coming-soon' | 'periodic' | 'periodic-ready' | 'quiz' | 'results' | 'team-create' | 'team-created' | 'team-list' | 'team-play' | 'maphub' | 'mapplay' | 'mapresults';
 	type GenQ = PlayQuestion & { uid: number; isRepeat?: boolean };
 	type QuizEntry = 'subject' | 'gk' | 'ca';
 
@@ -47,6 +48,21 @@
 	let teamPlayIsCorrect = $state(false);
 	let teamQuizzes = $state<any[]>([]);
 	let teamQuizzesLoading = $state(false);
+	// ── Map quiz (4 pins on outline map) ──
+	type MapCat = { category: string; label: string; map: string; count: number };
+	type MapQ = { question_text: string; place_id: string; category: string; map: string; explanation?: string; options: { key: string; label: string; place_id: string; svg_x: number; svg_y: number; map?: string; correct: boolean }[] };
+	let mapCats = $state<MapCat[]>([]);
+	let mapSel = $state<'india' | 'karnataka'>('india');
+	let mapQuestions = $state<MapQ[]>([]);
+	let mapIndex = $state(0);
+	let mapScore = $state(0);
+	let mapStreak = $state(0);
+	let mapBest = $state(0);
+	let mapCorrect = $state(0);
+	let mapAnswered = $state(false);
+	let mapSelectedKey = $state('');
+	let mapIsCorrect = $state(false);
+	let mapCategory = $state('');
 	let teamTimerSec = $state(30);
 	let lifelineUsed = $state<Record<string, boolean>>({});
 	let hiddenOptKeys = $state<string[]>([]);
@@ -463,6 +479,15 @@
 			const t = (await api<PlayTopic[]>('GET', `/play/topics?subject_id=${s.id}`)) ?? [];
 			subjectTopicsMap[s.id] = t;
 		}
+		// Maps group (exam-category pin quizzes) as a pseudo-subject
+		try {
+			const mcats = (await api<{ category: string; label: string; map: string; count: number }[]>('GET', '/play/map-categories')) ?? [];
+			if (mcats.length > 0) {
+				const mapsSubj = { id: '__maps__', name: `Maps (${mcats.length} categories)` } as PlaySubject;
+				allSubjectsForTeam = [...allSubjectsForTeam, mapsSubj];
+				subjectTopicsMap['__maps__'] = mcats.map(c => ({ name: c.category }));
+			}
+		} catch { /* maps optional */ }
 		loading = false;
 	}
 	async function openTeamList() {
@@ -484,6 +509,74 @@
 		customTeamNames = cur.slice(0, want);
 	}
 	function teamTimerLabel() { return teamTimerSec === 0 ? 'No timer' : `${teamTimerSec}s`; }
+	async function openMapHub() {
+		playClick();
+		phase = 'maphub';
+		if (mapCats.length === 0) {
+			loading = true;
+			mapCats = (await api<MapCat[]>('GET', '/play/map-categories')) ?? [];
+			loading = false;
+		}
+	}
+	async function startMapQuiz(category: string) {
+		playClick();
+		mapCategory = category;
+		loading = true;
+		const data = await api<MapQ[]>('GET', `/play/map-quiz?category=${encodeURIComponent(category)}&map=${mapSel}&limit=10`);
+		loading = false;
+		if (!data || data.length === 0) {
+			comingSoonLabel = category.replace('Maps:', '');
+			phase = 'coming-soon';
+			return;
+		}
+		mapQuestions = data;
+		mapIndex = 0; mapScore = 0; mapStreak = 0; mapBest = 0; mapCorrect = 0;
+		mapAnswered = false; mapSelectedKey = ''; startTime = Date.now();
+		phase = 'mapplay';
+		startMapTimer();
+	}
+	function startMapTimer() {
+		clearInterval(timerInterval);
+		timeLeft = 30; lastTickSecond = 99;
+		timerInterval = setInterval(() => {
+			timeLeft -= 0.1;
+			const s = Math.ceil(timeLeft);
+			if (s !== lastTickSecond) { lastTickSecond = s; if (s <= 5 && s > 0) playTick(); }
+			if (timeLeft <= 0) { timeLeft = 0; clearInterval(timerInterval); playTimeUp(); handleMapAnswer(''); }
+		}, 100);
+	}
+	function handleMapAnswer(key: string) {
+		if (mapAnswered) return;
+		mapAnswered = true; mapSelectedKey = key;
+		const correct = mapQuestions[mapIndex].options.find(o => o.correct);
+		mapIsCorrect = key !== '' && key === correct?.key;
+		if (mapIsCorrect) {
+			mapCorrect++; mapStreak++;
+			if (mapStreak > mapBest) mapBest = mapStreak;
+			const pts = (100 + Math.round(timeLeft * 10)) * Math.min(mapStreak, 4);
+			mapScore += pts;
+			addPopup(pts);
+			if (mapStreak >= 3) playStreak(); else playCorrect();
+			if (mapStreak >= 5) spawnConfetti();
+		} else {
+			mapStreak = 0;
+			screenShake = true;
+			playWrong();
+			setTimeout(() => { screenShake = false; }, 500);
+		}
+		clearInterval(timerInterval);
+	}
+	function nextMapQuestion() {
+		if (phase !== 'mapplay') return;
+		if (mapIndex >= mapQuestions.length - 1) {
+			clearInterval(timerInterval);
+			playComplete(); spawnConfetti();
+			phase = 'mapresults';
+			return;
+		}
+		mapIndex++; mapAnswered = false; mapSelectedKey = ''; startMapTimer();
+	}
+	function mapAccuracy() { return mapQuestions.length ? Math.round((mapCorrect / mapQuestions.length) * 100) : 0; }
 	async function openTeamQuiz(id: string) {
 		playClick();
 		loading = true;
@@ -738,6 +831,7 @@
 			periodic: 'gk', 'periodic-ready': 'periodic',
 			gk: 'mode', 'coming-soon': 'mode',
 			'team-create': 'mode', 'team-created': 'mode', 'team-list': 'mode', 'team-play': 'team-create',
+			maphub: 'mode', mapplay: 'maphub', mapresults: 'maphub',
 			quiz: 'welcome', results: 'welcome'
 		};
 		phase = back[phase] ?? 'welcome';
@@ -857,6 +951,11 @@
 					<span class="pick-icon"><Trophy size={18} /></span>
 					<span class="pick-name">Custom Quiz</span>
 					<span class="pick-meta">Teams · 10 pts · Your timer</span>
+				</button>
+				<button onclick={openMapHub} class="pick-card mode-card">
+					<span class="pick-icon"><Map size={18} /></span>
+					<span class="pick-name">Map Quiz</span>
+					<span class="pick-meta">Locate places · UPSC/KPSC</span>
 				</button>
 			</div>
 		</div>
@@ -1005,6 +1104,7 @@
 		{@const cur = teamPlayOrder[teamPlayIndex]}
 		{@const teamLabels = Object.keys(teamScores).sort()}
 		{@const curLifelineDone = !!lifelineUsed[cur.team]}
+		{@const curIsMap = cur.q.options?.[0]?.svg_x !== undefined && cur.q.options?.[0]?.map}
 		<div class="quiz-shell fade-in">
 			<div class="quiz-main">
 				<div class="q-meta">
@@ -1023,6 +1123,9 @@
 					</div>
 					<fieldset class="q-fieldset">
 						<legend class="q-legend"><MathText text={cur.q.question_text} /></legend>
+						{#if curIsMap}
+							<MapQuiz mapName={cur.q.options[0].map} options={cur.q.options.map((o: any) => ({ key: o.key, label: o.label ?? o.value, svg_x: o.svg_x, svg_y: o.svg_y, correct: !!o.correct }))} selectedKey={teamPlaySelectedKey} answered={teamPlayAnswered} revealed={teamPlayRevealed} hiddenKeys={hiddenOptKeys} onPick={handleTeamAnswer} />
+						{:else}
 						<div class="options">
 							{#each cur.q.options as opt}
 								{@const isSelected = teamPlayAnswered && opt.key === teamPlaySelectedKey}
@@ -1041,6 +1144,7 @@
 								{/if}
 							{/each}
 						</div>
+						{/if}
 					</fieldset>
 					{#if teamPlayAnswered}
 						<div class="feedback {teamPlayIsCorrect ? '' : 'feedback-bad'}">
@@ -1099,6 +1203,144 @@
 				</div>
 				<div class="side-card side-muted"><p class="side-hint">Host reads aloud. Timer expiry does not reveal answer. Correct = +10 with sound & confetti.</p></div>
 			</aside>
+		</div>
+
+	<!-- ═══ MAP HUB ═══ -->
+	{:else if phase === 'maphub'}
+		{@const indiaCats = mapCats.filter(c => c.map === 'india')}
+		{@const kaCats = mapCats.filter(c => c.map === 'karnataka')}
+		{@const shownCats = mapCats.filter(c => c.map === mapSel)}
+		<div class="stack fade-in">
+			<div class="section-head">
+				<button onclick={goBack} class="back-btn" aria-label="Back">←</button>
+				<div>
+					<h2 class="section-title">Map Quiz</h2>
+					<p class="section-sub">Tap the correct pin · {playerName}</p>
+				</div>
+			</div>
+			<div class="topics" style="margin-bottom:1rem">
+				<button onclick={() => { playClick(); mapSel = 'india'; }} class="topic {mapSel === 'india' ? 'topic-selected' : ''}">🇮🇳 India ({indiaCats.reduce((a, c) => a + c.count, 0)} places)</button>
+				<button onclick={() => { playClick(); mapSel = 'karnataka'; }} class="topic {mapSel === 'karnataka' ? 'topic-selected' : ''}">Karnataka ({kaCats.reduce((a, c) => a + c.count, 0)} places)</button>
+			</div>
+			{#if loading}
+				<div class="empty">Loading…</div>
+			{:else if shownCats.length === 0}
+				<div class="empty">Map places are being prepared. Check back soon!</div>
+			{:else}
+				<div class="mode-grid">
+					{#each shownCats as c (c.category)}
+						<button onclick={() => startMapQuiz(c.category)} class="pick-card mode-card">
+							<span class="pick-icon"><Map size={18} /></span>
+							<span class="pick-name">{c.label}</span>
+							<span class="pick-meta">{c.count} places · Tap the pin</span>
+						</button>
+					{/each}
+				</div>
+			{/if}
+		</div>
+
+	<!-- ═══ MAP PLAY ═══ -->
+	{:else if phase === 'mapplay' && mapQuestions.length > 0}
+		{@const mq = mapQuestions[mapIndex]}
+		<div class="quiz-shell fade-in">
+			<div class="quiz-main">
+				<div class="q-meta">
+					<div class="q-tags">
+						<span class="tag">Map Quiz</span>
+						<span class="tag">{mq.category.replace('Maps:', '')}</span>
+						<span class="tag tag-difficulty">{mapSel === 'india' ? 'India' : 'Karnataka'}</span>
+					</div>
+					<span class="counter">{mapIndex + 1} / {mapQuestions.length}</span>
+				</div>
+				<div class="q-card q-question {answerBounce ? 'answer-pop' : ''}">
+					<fieldset class="q-fieldset">
+						<legend class="q-legend">{mq.question_text}</legend>
+						<MapQuiz mapName={mapSel} options={mq.options} selectedKey={mapSelectedKey} answered={mapAnswered} revealed={false} onPick={handleMapAnswer} />
+					</fieldset>
+					{#if mapAnswered}
+						<div class="feedback {mapIsCorrect ? '' : 'feedback-bad'}">
+							<div class="feedback-head">
+								<span class="feedback-badge">{mapIsCorrect ? '✓' : '✕'}</span>
+								<span class="feedback-title">{mapIsCorrect ? 'Correct!' : 'Not quite'}</span>
+								{#if mapStreak >= 3 && mapIsCorrect}<span class="streak-chip">{mapStreak} streak</span>{/if}
+							</div>
+							{#if mq.explanation}
+								<p class="feedback-text">{mq.explanation}</p>
+							{/if}
+						</div>
+						<div style="margin-top:0.8rem">
+							<button onclick={nextMapQuestion} class="btn-primary btn-block">{mapIndex >= mapQuestions.length - 1 ? 'See results →' : 'Next →'}</button>
+						</div>
+					{/if}
+				</div>
+			</div>
+			<aside class="quiz-side">
+				<div class="side-card">
+					<div class="side-row">
+						<span class="side-label">Score</span>
+						<span class="side-value mono">{mapScore.toLocaleString()}</span>
+					</div>
+					<div class="progress">
+						<div class="progress-bar" style="width:{mapQuestions.length ? ((mapIndex + 1) / mapQuestions.length) * 100 : 0}%"></div>
+					</div>
+					<div class="side-grid">
+						<div class="stat">
+							<span class="stat-v mono">{mapAccuracy()}%</span>
+							<span class="stat-k">Accuracy</span>
+						</div>
+						<div class="stat">
+							<span class="stat-v mono">{mapCorrect}/{mapQuestions.length}</span>
+							<span class="stat-k">Correct</span>
+						</div>
+						<div class="stat">
+							<span class="stat-v mono">{mapBest}</span>
+							<span class="stat-k">Best streak</span>
+						</div>
+					</div>
+				</div>
+				<div class="side-card">
+					<div class="timer-head">
+						<span class="side-label">Time</span>
+						<span class="timer-num mono" style="color:{timeColor()}">{Math.ceil(timeLeft)}s</span>
+					</div>
+					<div class="timer-track">
+						<div class="timer-fill" style="width:{(timeLeft / 30) * 100}%; background:{timeColor()}"></div>
+					</div>
+					{#if mapStreak >= 2}
+						<div class="streak-box">{mapStreak}× streak</div>
+					{/if}
+				</div>
+				<div class="side-card side-muted">
+					<p class="side-hint">Tap the correct pin on the map — or use the A/B/C/D buttons below it.</p>
+				</div>
+			</aside>
+		</div>
+
+	<!-- ═══ MAP RESULTS ═══ -->
+	{:else if phase === 'mapresults'}
+		<div class="center fade-in">
+			<div class="q-card score-card">
+				<p class="score-kicker">MDRS (SC-32) Bahaddurghatta · Map Quiz</p>
+				<div class="score-stars" aria-hidden="true">{mapAccuracy() >= 80 ? '★★★' : mapAccuracy() >= 50 ? '★★' : '★'}</div>
+				<div class="score-stars-label">{mapAccuracy() >= 80 ? 'Excellent' : mapAccuracy() >= 50 ? 'Good work' : 'Keep practising'}</div>
+				<div class="score-num mono">{mapScore.toLocaleString()}</div>
+				<p class="score-label">Points</p>
+				<p class="score-name">{playerName}</p>
+				<p class="score-meta">{mapCategory.replace('Maps:', '')} · {mapSel === 'india' ? 'India' : 'Karnataka'}</p>
+				<div class="score-stats">
+					<div class="s-stat"><span class="s-v mono">{mapAccuracy()}%</span><span class="s-k">Accuracy</span></div>
+					<div class="s-sep"></div>
+					<div class="s-stat"><span class="s-v mono">{mapBest}</span><span class="s-k">Best streak</span></div>
+					<div class="s-sep"></div>
+					<div class="s-stat"><span class="s-v mono">{mapCorrect}/{mapQuestions.length}</span><span class="s-k">Correct</span></div>
+				</div>
+				<p class="score-time">{formatTime(Date.now() - startTime)} · {mapQuestions.length} questions</p>
+				<div class="score-actions">
+					<button onclick={() => startMapQuiz(mapCategory)} class="btn-primary btn-block">Play again →</button>
+					<button onclick={() => { playClick(); phase = 'maphub'; }} class="btn-ghost btn-block">Choose category</button>
+					<a href="/" class="btn-ghost btn-block" style="text-align:center; text-decoration:none; display:flex; justify-content:center;">Back to home</a>
+				</div>
+			</div>
 		</div>
 
 	<!-- ═══ GK HUB ═══ -->
