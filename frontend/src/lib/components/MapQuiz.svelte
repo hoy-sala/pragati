@@ -167,16 +167,20 @@
 		<p class="hint schematic-note">Schematic outline for practice — not to survey scale.</p>
 	{/if}
 
-	<!-- keyboard / small-screen fallback: same 4 options as buttons -->
+	<!-- keyboard / small-screen fallback: keys only (labels would give away the answer —
+	     students must locate the pin on the map; screen readers still get the name) -->
 	<div class="pin-fallback">
 		{#each options.filter((o) => !hiddenKeys.includes(o.key)) as o (o.key)}
 			{@const st = pinState(o)}
 			<button
 				onclick={() => pick(o.key)}
 				disabled={answered || disabled}
+				aria-label="Option {o.key}: {o.label}"
+				title={answered || revealed ? o.label : `Pick pin ${o.key} on the map`}
 				class="fallback-btn {st === 'picked-right' || st === 'answer' ? 'fb-right' : ''} {st === 'picked-wrong' ? 'fb-wrong' : ''}"
 			>
-				<span class="fb-key">{o.key}</span> {o.label}
+				<span class="fb-key">{o.key}</span>
+				<span class="fb-pick">{answered || revealed ? o.label : `Pin ${o.key}`}</span>
 			</button>
 		{/each}
 	</div>
