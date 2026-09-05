@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/pragati/backend/internal/models"
 	"github.com/rs/zerolog/log"
 )
 
@@ -86,7 +87,7 @@ func (h *MapQuizHandler) ListCategories(w http.ResponseWriter, r *http.Request) 
 	if cats == nil {
 		cats = []Cat{}
 	}
-	renderJSON(w, http.StatusOK, cats)
+	renderJSON(w, http.StatusOK, models.APIResponse{Data: cats})
 }
 
 // GenerateQuiz builds 4-pin map questions: 1 correct place + 3 same-category
@@ -196,7 +197,7 @@ func (h *MapQuizHandler) GenerateQuiz(w http.ResponseWriter, r *http.Request) {
 		renderJSON(w, http.StatusNotFound, map[string]string{"error": "not enough places"})
 		return
 	}
-	renderJSON(w, http.StatusOK, questions)
+	renderJSON(w, http.StatusOK, models.APIResponse{Data: questions})
 }
 
 // CheckAnswer verifies a tapped pin key for a generated question.
@@ -222,5 +223,5 @@ func (h *MapQuizHandler) CheckAnswer(w http.ResponseWriter, r *http.Request) {
 			correct = true
 		}
 	}
-	renderJSON(w, http.StatusOK, map[string]interface{}{"correct": correct})
+	renderJSON(w, http.StatusOK, models.APIResponse{Data: map[string]interface{}{"correct": correct}})
 }
