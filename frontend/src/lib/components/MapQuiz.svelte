@@ -30,7 +30,7 @@
 	let outlines = $state<{ id: string; d: string }[]>([]);
 	let states = $state<{ name: string; d: string }[]>([]);
 	let districts = $state<{ name: string; d: string }[]>([]);
-	let fillRule = $state('nonzero');
+	let fillRule = $state<'nonzero' | 'evenodd'>('nonzero');
 	let viewBox = $state('0 0 760 860');
 	let baseVB = $state({ x: 0, y: 0, w: 760, h: 860 });
 	let zoom = $state(1);
@@ -72,10 +72,19 @@
 	function zoomOut() { zoom = Math.max(1, +(zoom - 0.4).toFixed(2)); applyZoom(); }
 	function zoomReset() { zoom = 1; applyZoom(); }
 
-	// Spread out pins that would otherwise sit on top of each other
+	// Spread out pins that would otherwise sit on top of each other,
+	// then give each pin a collision-free label slot (greedy candidates).
 	let placed = $derived.by(() => {
 		const vis = options.filter((o) => !hiddenKeys.includes(o.key));
-		const pts = vis.map((o) => ({ ...o, px: o.svg_x, py: o.svg_y }));
+		const pts = vis.map((o) => ({
+			...o,
+			px: o.svg_x,
+			py: o.svg_y,
+			lx: o.svg_x + 20,
+			ly: o.svg_y + 5,
+			lanchor: 'start' as 'start' | 'middle' | 'end',
+			leader: null as null | { x1: number; y1: number; x2: number; y2: number }
+		}));
 		const R = 30;
 		for (let i = 0; i < pts.length; i++) {
 			for (let j = i + 1; j < pts.length; j++) {
@@ -88,6 +97,59 @@
 					pts[i].px -= ux * push; pts[i].py -= uy * push;
 					pts[j].px += ux * push; pts[j].py += uy * push;
 				}
+			}
+		}
+		// Label slots: right, left, above, below, then diagonals.
+		const CHAR_W = 7.6, PAD = 5;
+		const cands = [
+			{ dx: 20, dy: 5, anchor: 'start' },
+			{ dx: -20, dy: 5, anchor: 'end' },
+			{ dx: 0, dy: -25, anchor: 'middle' },
+			{ dx: 0, dy: 34, anchor: 'middle' },
+			{ dx: 26, dy: -22, anchor: 'start' },
+			{ dx: -26, dy: -22, anchor: 'end' },
+			{ dx: 26, dy: 30, anchor: 'start' },
+			{ dx: -26, dy: 30, anchor: 'end' }
+		] as const;
+		const boxes: { x0: number; y0: number; x1: number; y1: number }[] = [];
+		const overlaps = (b: { x0: number; y0: number; x1: number; y1: number }) =>
+			boxes.some((o) => b.x0 < o.x1 && b.x1 > o.x0 && b.y0 < o.y1 && b.y1 > o.y0);
+		const coversPin = (
+			b: { x0: number; y0: number; x1: number; y1: number },
+			self: { px: number; py: number }
+		) =>
+			pts.some((q) => {
+				if (q.px === self.px && q.py === self.py) return false;
+				const nx = Math.max(b.x0, Math.min(q.px, b.x1));
+				const ny = Math.max(b.y0, Math.min(q.py, b.y1));
+				return Math.hypot(q.px - nx, q.py - ny) < 17;
+			});
+		for (const p of pts) {
+			const w = Math.max(20, p.label.length * CHAR_W);
+			const boxOf = (c: { dx: number; dy: number; anchor: string }) => {
+				const lx = p.px + c.dx, ly = p.py + c.dy;
+				const x0 = c.anchor === 'start' ? lx : c.anchor === 'end' ? lx - w : lx - w / 2;
+				return { c, lx, ly, box: { x0: x0 - PAD, y0: ly - 13 - PAD, x1: x0 + w + PAD, y1: ly + 4 + PAD } };
+			};
+			const inFrame = (b: { x0: number; y0: number; x1: number; y1: number }) =>
+				b.x0 >= baseVB.x + 2 && b.x1 <= baseVB.x + baseVB.w - 2 &&
+				b.y0 >= baseVB.y + 2 && b.y1 <= baseVB.y + baseVB.h - 2;
+			let pick = cands.map(boxOf).find((r) => inFrame(r.box) && !overlaps(r.box) && !coversPin(r.box, p))
+				?? cands.map(boxOf).find((r) => !overlaps(r.box))
+				?? boxOf(cands[0]);
+			boxes.push(pick.box);
+			p.lx = Math.round(pick.lx * 10) / 10;
+			p.ly = Math.round(pick.ly * 10) / 10;
+			p.lanchor = pick.c.anchor as 'start' | 'middle' | 'end';
+			if (Math.abs(pick.c.dy) >= 20) {
+				const len = Math.hypot(pick.c.dx, pick.c.dy);
+				const ux = pick.c.dx / len, uy = pick.c.dy / len;
+				p.leader = {
+					x1: Math.round((p.px + ux * 16) * 10) / 10,
+					y1: Math.round((p.py + uy * 16) * 10) / 10,
+					x2: Math.round((pick.lx - ux * 3) * 10) / 10,
+					y2: Math.round((pick.ly - 5 - uy * 3) * 10) / 10
+				};
 			}
 		}
 		return pts;
@@ -170,9 +232,12 @@
 					{/if}
 					<circle class="dot" r="15" />
 					<text y="6" text-anchor="middle" class="pin-letter">{p.key}</text>
-					{#if answered || revealed}
-						<text x="20" y="5" class="pin-label">{p.label}</text>
+				{#if answered || revealed}
+					{#if p.leader}
+						<line x1={p.leader.x1} y1={p.leader.y1} x2={p.leader.x2} y2={p.leader.y2} class="leader" />
 					{/if}
+					<text x={p.lx} y={p.ly} text-anchor={p.lanchor} class="pin-label">{p.label}</text>
+				{/if}
 				</g>
 			{/each}
 		</svg>
@@ -189,7 +254,6 @@
 	{:else if sourceNote}
 		<p class="hint schematic-note">{sourceNote}</p>
 	{/if}
-	<p class="hint pin-hint">Tap a pin on the map{#if !(answered || revealed)} — names appear after you answer{/if}.</p>
 </div>
 
 <style>
@@ -253,5 +317,5 @@
 		font-family: var(--font-body); font-weight: 700; font-size: 13px;
 		fill: #1F1A2E; stroke: #FFFCF5; stroke-width: 4px; paint-order: stroke;
 	}
-	.pin-hint { margin: 0; font-size: 0.82rem; text-align: center; }
+	.leader { stroke: #1F1A2E; stroke-width: 1.3; opacity: 0.65; }
 </style>

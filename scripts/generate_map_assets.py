@@ -205,7 +205,6 @@ if GOVT and INDIA_RINGS:
         "outlines": [{"id": "india", "d": india_d}],
         "schematic": False,
         "fillRule": "evenodd",
-        "note": "Outer boundary: datameet india-composite (SoI/Census-derived).",
     }
 else:
     india_payload = {
