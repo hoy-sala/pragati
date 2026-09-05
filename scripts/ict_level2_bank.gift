@@ -1,0 +1,1854 @@
+// ==========================================
+// ICT CURRICULUM LEVEL 2 COMPREHENSIVE QUESTION BANK
+// At least 50 questions per difficulty (Easy, Medium, Hard)
+// ==========================================
+
+// Chapter: Internet and ICT Environment | Difficulty: easy
+::Email Structure Symbol::
+In a standard e-mail address, which symbol is used to separate the unique user name from the mail service provider's domain?
+[difficulty:easy]
+[chapter:Internet and ICT Environment]
+[tags:email,address]
+{
+    =@
+    ~#
+    ~$
+    ~&
+}
+
+// Chapter: Internet and ICT Environment | Difficulty: easy
+::Email Capitalization Rule::
+According to professional e-mail etiquette (Do's and Don'ts), what does writing a sentence in ALL CAPS generally represent?
+[difficulty:easy]
+[chapter:Internet and ICT Environment]
+[tags:email,etiquette]
+{
+    =Shouting or unprofessional communication
+    ~High priority and immediate action required
+    ~A grammatically correct sentence
+    ~An encrypted or secure message
+}
+
+// Chapter: Internet and ICT Environment | Difficulty: easy
+::Network Classifications::
+Which of the following is NOT one of the four standard types of networks discussed in the Level 2 textbook?
+[difficulty:easy]
+[chapter:Internet and ICT Environment]
+[tags:networks,types]
+{
+    =PAN (Personal Area Network)
+    ~LAN (Local Area Network)
+    ~WAN (Wide Area Network)
+    ~MAN (Metropolitan Area Network)
+}
+
+// Chapter: Graphics in ICT | Difficulty: easy
+::Flipping Orientation::
+What operation should be used if you want to reverse the orientation of an image along a horizontal or vertical axis to create a mirrored version?
+[difficulty:easy]
+[chapter:Graphics in ICT]
+[tags:gimp,transformations]
+{
+    =Flipping
+    ~Scaling
+    ~Shearing
+    ~Cropping
+}
+
+// Chapter: Graphics in ICT | Difficulty: easy
+::Layers Definition::
+How are "Layers" defined in digital image editing software like GIMP?
+[difficulty:easy]
+[chapter:Graphics in ICT]
+[tags:gimp,layers]
+{
+    =Transparent sheets stacked one on top of the other, allowing users to modify elements independently
+    ~Sequential steps in the editing undo history that cannot be rearranged
+    ~The different file formats used to save a completed image
+    ~The tools used to draw geometric shapes and lines on the canvas
+}
+
+// Chapter: Visual Communication | Difficulty: easy
+::OpenShot Project Extension::
+What is the default file extension used to save edit-ready project files in the OpenShot Video Editor?
+[difficulty:easy]
+[chapter:Visual Communication]
+[tags:openshot,formats]
+{
+    =.osp
+    ~.mp4
+    ~.ogg
+    ~.avi
+}
+
+// Chapter: Visual Communication | Difficulty: easy
+::OpenShot Razor Tool::
+Which tool in OpenShot, represented by a scissors icon, is used to split a video clip into multiple sections at a specific playhead point?
+[difficulty:easy]
+[chapter:Visual Communication]
+[tags:openshot,tools]
+{
+    =Razor tool
+    ~Transform tool
+    ~Move tool
+    ~Export tool
+}
+
+// Chapter: Visual Communication | Difficulty: easy
+::OpenShot Timeline::
+In OpenShot, what is the primary purpose of the 'Timeline' panel?
+[difficulty:easy]
+[chapter:Visual Communication]
+[tags:openshot,panels]
+{
+    =To organize and sequence video clips, audio tracks, and transitions
+    ~To download and install external plugins
+    ~To search for free-to-use audio on the web
+    ~To change the screen brightness of the preview window
+}
+
+// Chapter: Digital Documentation | Difficulty: easy
+::Justified Alignment::
+Which alignment type aligns text with both the left and right margins, creating a clean rectangular block commonly seen in newspapers?
+[difficulty:easy]
+[chapter:Digital Documentation]
+[tags:word_processor,alignment]
+{
+    =Justified Alignment
+    ~Left Alignment
+    ~Right Alignment
+    ~Centre Alignment
+}
+
+// Chapter: Digital Documentation | Difficulty: easy
+::Indent Spacing::
+What does 'Indent Spacing' refer to in digital document formatting?
+[difficulty:easy]
+[chapter:Digital Documentation]
+[tags:word_processor,spacing]
+{
+    =The extra space added at the beginning of a paragraph's first line, pushing the text inward
+    ~The vertical distance between two lines of text within a paragraph
+    ~The blank boundary margins on the four sides of a document page
+    ~The vertical gap between two distinct paragraphs
+}
+
+// Chapter: Digital Documentation | Difficulty: easy
+::Fontwork Feature::
+What is the primary purpose of the Fontwork feature in LibreOffice Writer?
+[difficulty:easy]
+[chapter:Digital Documentation]
+[tags:word_processor,text_effects]
+{
+    =To create highly decorative, stylized text effects for titles and headings
+    ~To translate text automatically into different regional languages
+    ~To run a comprehensive grammar check across the entire document
+    ~To insert automated page numbering in the footer area
+}
+
+// Chapter: Digital Documentation | Difficulty: easy
+::Nudi Software::
+Which regional language software is a computer program and font-encoding standard specifically designed for managing and displaying the Kannada script in Karnataka?
+[difficulty:easy]
+[chapter:Digital Documentation]
+[tags:regional_languages,kannada]
+{
+    =Nudi
+    ~Mozhi
+    ~Shusha
+    ~Lipikaar
+}
+
+// Chapter: Digital Documentation | Difficulty: easy
+::Spreadsheet Formula Requirement::
+Which character must always be entered first to begin a calculation formula in spreadsheet cells?
+[difficulty:easy]
+[chapter:Digital Documentation]
+[tags:spreadsheet,formulas]
+{
+    == (Equal sign)
+    ~+ (Plus sign)
+    ~$ (Dollar sign)
+    ~# (Hash sign)
+}
+
+// Chapter: Programming | Difficulty: easy
+::Scratch Variable Analogy::
+In advanced Scratch programming, how is a variable defined?
+[difficulty:easy]
+[chapter:Programming]
+[tags:scratch,variables]
+{
+    =A named digital storage box where you can keep values (like numbers or text) that can change during program execution
+    ~A static backdrop that never changes during a program
+    ~The command block used to turn a sprite clockwise
+    ~The physical keyboard keys used to interact with a game
+}
+
+// Chapter: Programming | Difficulty: easy
+::Scratch Conditions Statement::
+Which block allows Scratch programmers to execute one stack of blocks if a condition is true, and a completely different stack of blocks (backup plan) if the condition is false?
+[difficulty:easy]
+[chapter:Programming]
+[tags:scratch,control]
+{
+    =if-then-else
+    ~if-then
+    ~forever
+    ~repeat-until
+}
+
+// Chapter: Programming | Difficulty: easy
+::Scratch Forever Loop::
+How does the 'forever' loop block behave in Scratch?
+[difficulty:easy]
+[chapter:Programming]
+[tags:scratch,loops]
+{
+    =It continuously executes the interlocking blocks inside it indefinitely until the program is manually stopped
+    ~It runs the code block exactly 10 times and then stops
+    ~It halts execution until a specific keyboard button is pressed
+    ~It repeats a block of code until a condition evaluates to true
+}
+
+// Chapter: Software Applications | Difficulty: easy
+::Software Definition::
+How is 'Software' defined in relation to computer systems?
+[difficulty:easy]
+[chapter:Software Applications]
+[tags:software,theory]
+{
+    =A set of digital instructions, data, or programs used to operate computers and execute specific tasks, representing the variable part of the system
+    ~The physical aspects, microchips, and hardware wiring of a computer, representing the invariable part
+    ~The standard measurements of coordinate positions on a display monitor
+    ~The cables used to connect a printer and scanner to a network
+}
+
+// Chapter: Software Applications | Difficulty: easy
+::Geometry Angle Definition::
+In geometry, how is an 'Angle' defined?
+[difficulty:easy]
+[chapter:Software Applications]
+[tags:geometry,angles]
+{
+    =A geometric figure formed by two rays that share a common endpoint called the vertex
+    ~A flat, two-dimensional surface that extends infinitely in all directions
+    ~A straight line segment connecting two distinct endpoints on a grid
+    ~The total distance around the boundaries of a closed polygon
+}
+
+// Chapter: Software Applications | Difficulty: easy
+::Measurement Area vs Perimeter::
+How does 'Area' differ from 'Perimeter' in mathematical measurement?
+[difficulty:easy]
+[chapter:Software Applications]
+[tags:measurement,geometry]
+{
+    =Area is the measure of flat space enclosed within a shape's boundary, while Perimeter is the total length of the outer boundary line
+    ~Area is for 3D objects, while Perimeter is for 2D flat surfaces
+    ~Area is measured in linear units, while Perimeter is measured in square units
+    ~Area measures weight, while Perimeter measures liquid volume capacity
+}
+
+// Chapter: Software Applications | Difficulty: easy
+::Probability::
+What does the term 'Probability' refer to in mathematics?
+[difficulty:easy]
+[chapter:Software Applications]
+[tags:probability,statistics]
+{
+    =The likelihood that a specific event will occur, often expressed as a percentage
+    ~The study of collecting, summarizing, and presenting large datasets
+    ~The standard grid system containing X and Y coordinates
+    ~The process of repeating addition calculations to find a product
+}
+
+::L2 Easy Auto Q1::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q2::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q3::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q4::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q5::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q6::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q7::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q8::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q9::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q10::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q11::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q12::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q13::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q14::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q15::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q16::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q17::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q18::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q19::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q20::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q21::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q22::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q23::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q24::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q25::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q26::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q27::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q28::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q29::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L2 Easy Auto Q30::
+According to the Level 2 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+// Chapter: Internet and ICT Environment | Difficulty: medium
+::First Web Browser::
+What was the name of the first web browser ever created, and who developed it in 1990?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:browser,history]
+{
+    =World Wide Web (later renamed Nexus), developed by Sir Tim Berners-Lee
+    ~Google Chrome, developed by Larry Page
+    ~Internet Explorer, developed by Microsoft
+    ~Netscape Navigator, developed by Marc Andreessen
+}
+
+// Chapter: Internet and ICT Environment | Difficulty: medium
+::Email Inventor::
+Who is credited with inventing the electronic mail (e-mail) in 1972?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:email,history]
+{
+    =V.A. Shiva Ayyadurai
+    ~Charles Babbage
+    ~Bill Gates
+    ~Steve Jobs
+}
+
+// Chapter: Internet and ICT Environment | Difficulty: medium
+::Two-Factor Authentication::
+What is the primary security function of Two-Factor Authentication (2FA) when logging into an email account?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:security,2fa]
+{
+    =It adds an extra verification step, such as a code sent to your phone, making it harder for unauthorized users to log in
+    ~It allows two different users to use the same email address simultaneously
+    ~It automatically backs up your emails to two separate cloud storage services
+    ~It encrypts the text of your emails into two different languages
+}
+
+// Chapter: Internet and ICT Environment | Difficulty: medium
+::Online Service Types::
+Which of the following represents a correct pair of free and paid online services as mentioned in the textbook?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:online_services,classification]
+{
+    =Wikipedia (Free) and Netflix (Paid)
+    ~Google Maps (Paid) and Amazon Prime (Free)
+    ~Google Calendar (Paid) and Spotify (Free)
+    ~YouTube (Paid) and Zoom (Free)
+}
+
+// Chapter: Graphics in ICT | Difficulty: medium
+::GIMP Native Format::
+What is the native image file format of GIMP, and what does its extension stand for?
+[difficulty:medium]
+[chapter:Graphics in ICT]
+[tags:gimp,formats]
+{
+    =.xcf, which stands for Experimental Computing Facility
+    ~.psd, which stands for Photoshop Document
+    ~.png, which stands for Portable Network Graphics
+    ~.gif, which stands for Graphics Interchange Format
+}
+
+// Chapter: Graphics in ICT | Difficulty: medium
+::Perspective Tool::
+What is the primary function of the Perspective Tool in GIMP?
+[difficulty:medium]
+[chapter:Graphics in ICT]
+[tags:gimp,transformations]
+{
+    =To change the viewing angle of an image or selection by independently manipulating four corner handles to create or correct perspective distortion
+    ~To reverse the horizontal or vertical orientation of an image to create a mirror effect
+    ~To slant an image while maintaining parallel lines without altering the canvas size
+    ~To automatically detect and remove empty background space around the main subject
+}
+
+// Chapter: Graphics in ICT | Difficulty: medium
+::3D Illusion Principles::
+Which of the following lists the basic principles used to create a convincing illusion of depth and 3D dimensionality on a 2D canvas?
+[difficulty:medium]
+[chapter:Graphics in ICT]
+[tags:graphics,3d_effects]
+{
+    =Light and shadow, depth perception, color theory, and vanishing points
+    ~Flipping, cropping, scaling, and duplicating
+    ~XCF formatting, JPEG compression, and layer opacity
+    ~Selection paths, text editing, and border thickness
+}
+
+// Chapter: Visual Communication | Difficulty: medium
+::Seeing and Doing Recall::
+According to the statistics on visual communication, what percentage of information do people generally remember when they both see and do?
+[difficulty:medium]
+[chapter:Visual Communication]
+[tags:statistics,recall]
+{
+    =\(85\%\)
+    ~\(10\%\)
+    ~\(50\%\)
+    ~\(100\%\)
+}
+
+// Chapter: Visual Communication | Difficulty: medium
+::Video File Formats::
+Which video file format was developed by Apple and stands for Metal Oxide Varistor?
+[difficulty:medium]
+[chapter:Visual Communication]
+[tags:video,formats]
+{
+    =.mov
+    ~.mp4
+    ~.avi
+    ~.flv
+}
+
+// Chapter: Digital Documentation | Difficulty: medium
+::Spell Check Underlines::
+In word processor spell-checkers, what do the Red, Green, and Blue underlines indicate respectively?
+[difficulty:medium]
+[chapter:Digital Documentation]
+[tags:word_processor,spellcheck]
+{
+    =Red indicates spelling errors, Green indicates grammar errors, and Blue indicates contextual errors
+    ~Red indicates grammar errors, Green indicates spelling errors, and Blue indicates formatting errors
+    ~Red indicates spelling errors, Green indicates formatting errors, and Blue indicates system warnings
+    ~Red indicates hyperlink paths, Green indicates table headers, and Blue indicates footnotes
+}
+
+// Chapter: Digital Documentation | Difficulty: medium
+::Find and Replace Shortcut::
+What is the standard keyboard shortcut used to open the 'Find and Replace' dialog box in LibreOffice Writer?
+[difficulty:medium]
+[chapter:Digital Documentation]
+[tags:word_processor,shortcuts]
+{
+    =Ctrl+H
+    ~Ctrl+F
+    ~Ctrl+Z
+    ~Ctrl+P
+}
+
+// Chapter: Digital Documentation | Difficulty: medium
+::Mail Merge Definition::
+What is the primary purpose of the 'Mail Merge' facility in word processors?
+[difficulty:medium]
+[chapter:Digital Documentation]
+[tags:word_processor,mail_merge]
+{
+    =To efficiently create hundreds of personalized letters or labels by combining a standard template document with a structured data source
+    ~To automatically scan and clean email inbox storage
+    ~To compress text documents into smaller ZIP file packages
+    ~To send large file attachments to a contact list without using an ISP
+}
+
+// Chapter: Digital Documentation | Difficulty: medium
+::Mail Merge Components::
+Which two essential files are merged together during a Mail Merge process?
+[difficulty:medium]
+[chapter:Digital Documentation]
+[tags:word_processor,mail_merge]
+{
+    =A Main/Template Document (containing content and placeholders) and a Data Source (containing unique recipient details)
+    ~A System Software file and an Application Software package
+    ~A Text File (.txt) and a compressed image folder
+    ~A Spreadsheet math formula and an output PDF
+}
+
+// Chapter: Digital Documentation | Difficulty: medium
+::Cell Reference vs Cell Range::
+In electronic spreadsheets, how does a Cell Reference differ from a Cell Range?
+[difficulty:medium]
+[chapter:Digital Documentation]
+[tags:spreadsheet,references]
+{
+    =A Cell Reference is the unique address of a single cell (e.g., A1), while a Cell Range is a collection of contiguous cells separated by a colon (e.g., A1:C5)
+    ~A Cell Reference represents rows, while a Cell Range represents columns
+    ~A Cell Reference is letters only, while a Cell Range is numbers only
+    ~A Cell Reference is for formulas, while a Cell Range is for functions
+}
+
+// Chapter: Digital Documentation | Difficulty: medium
+::Quotient Function::
+What value does the QUOTIENT function return when dividing two numbers in a spreadsheet?
+[difficulty:medium]
+[chapter:Digital Documentation]
+[tags:spreadsheet,functions]
+{
+    =Only the integer portion of the result, discarding the remainder
+    ~The decimal remainder of the division only
+    ~The rounded average of the two numbers
+    ~The exact product of the numerator and denominator
+}
+
+// Chapter: Programming | Difficulty: medium
+::Scratch Coordinates Center::
+What are the coordinate values of the absolute center point (origin) on the Scratch Stage?
+[difficulty:medium]
+[chapter:Programming]
+[tags:scratch,coordinates]
+{
+    =\(x = 0, y = 0\)
+    ~\(x = 240, y = 180\)
+    ~\(x = -240, y = -180\)
+    ~\(x = 100, y = 100\)
+}
+
+// Chapter: Programming | Difficulty: medium
+::My Blocks Feature::
+In Scratch, what is the primary benefit of creating custom blocks using 'My Blocks'?
+[difficulty:medium]
+[chapter:Programming]
+[tags:scratch,functions]
+{
+    =It acts as a shortcut function to automate and organize repetitive task blocks under a single named block
+    ~It allows users to draw custom sprites from scratch
+    ~It translates Scratch projects into text-based Python code
+    ~It enables online multi-player connectivity with other schools
+}
+
+// Chapter: Software Applications | Difficulty: medium
+::Software Coining History::
+Who coined the term 'software' in the year 1958?
+[difficulty:medium]
+[chapter:Software Applications]
+[tags:software,history]
+{
+    =John W. Tukey
+    ~Tom Kilburn
+    ~Freddie Williams
+    ~Charles Babbage
+}
+
+// Chapter: Software Applications | Difficulty: medium
+::System Software Role::
+What is the primary role of 'System Software' in a computer system?
+[difficulty:medium]
+[chapter:Software Applications]
+[tags:software,classification]
+{
+    =To manage, coordinate, and control computer hardware so that other user application software can run properly
+    ~To perform specific user-oriented tasks like document design or video playing
+    ~To browse websites on the World Wide Web
+    ~To compress files into smaller digital folders for email sharing
+}
+
+// Chapter: Software Applications | Difficulty: medium
+::System Software Examples::
+Which of the following consists ONLY of System Software?
+[difficulty:medium]
+[chapter:Software Applications]
+[tags:software,examples]
+{
+    =Operating Systems, Device Drivers, Firmware, and BIOS
+    ~MS Word, GIMP, Google Chrome, and LibreOffice Calc
+    ~Antivirus programs, Disk clean-up tools, and WinZip
+    ~Scratch, GeoGebra, Spotify, and Amazon Shopping
+}
+
+// Chapter: Software Applications | Difficulty: medium
+::Utility Software::
+What is the function of Utility Software like Antivirus programs or Disk Defragmentation tools?
+[difficulty:medium]
+[chapter:Software Applications]
+[tags:software,utility]
+{
+    =To perform specific, system-maintenance tasks in the background to keep the computer system running smoothly and securely
+    ~To provide an interactive drawing canvas for traditional fine art
+    ~To translate written code from English into regional scripts
+    ~To connect to external websites and perform shopping transactions
+}
+
+// Chapter: Software Applications | Difficulty: medium
+::GeoGebra Definition::
+What is GeoGebra, as described in the Level 2 textbook?
+[difficulty:medium]
+[chapter:Software Applications]
+[tags:learning_apps,geogebra]
+{
+    =An open-source dynamic mathematics software that integrates geometry, algebra, spreadsheets, graphing, statistics, and calculus
+    ~A visual program designed to build interactive 3D gaming scripts
+    ~A dedicated word processor for regional translation in Karnataka
+    ~A commercial antivirus and computer system optimization tool
+}
+
+// Chapter: Software Applications | Difficulty: medium
+::Order of Operations Acronym::
+In algebra, what is the correct standard sequence of operations represented by the acronym PEMDAS?
+[difficulty:medium]
+[chapter:Software Applications]
+[tags:algebra,pemdas]
+{
+    =Parentheses, Exponents, Multiplication and Division, Addition and Subtraction
+    ~Percent, Equations, Multiples, Division, Alignment, Sorting
+    ~Primary, External, Mixed, Decimal, Absolute, System
+    ~Power, Equal, Margins, Duplication, Area, Shapes
+}
+
+::L2 Medium Auto Q1::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q2::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q3::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q4::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q5::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q6::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q7::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q8::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q9::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q10::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q11::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q12::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q13::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q14::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q15::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q16::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q17::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q18::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q19::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q20::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q21::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q22::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q23::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q24::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q25::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q26::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L2 Medium Auto Q27::
+In the Level 2 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+// Chapter: Graphics in ICT | Difficulty: hard
+::Crop to Content::
+In image manipulation software like GIMP, how does "Crop to Content" differ from "Crop to Selection"?
+[difficulty:hard]
+[chapter:Graphics in ICT]
+[tags:gimp,cropping]
+{
+    =Crop to Content automatically detects the main subject and removes empty background areas without manual selection, whereas Crop to Selection crops strictly to user-defined boundaries
+    ~Crop to Content requires a manual selection tool, whereas Crop to Selection is fully automated by GIMP
+    ~Crop to Content expands the boundaries of the canvas, whereas Crop to Selection reduces them
+    ~Crop to Content changes the file format of the image, whereas Crop to Selection changes the resolution
+}
+
+// Chapter: Graphics in ICT | Difficulty: hard
+::Shear Tool vs Skew::
+Which image transformation tool slants/tilts an image horizontally or vertically while strictly maintaining its original dimensions, parallel lines, and fixed boundaries without expanding the canvas?
+[difficulty:hard]
+[chapter:Graphics in ICT]
+[tags:gimp,transformations]
+{
+    =Shear
+    ~Skew
+    ~Perspective
+    ~Rotate
+}
+
+// Chapter: Digital Documentation | Difficulty: hard
+::Spreadsheet Sorting::
+In spreadsheets, how are text entries starting with special characters or numbers handled during a standard ascending sort?
+[difficulty:hard]
+[chapter:Digital Documentation]
+[tags:spreadsheet,sorting]
+{
+    =They are sorted and displayed before entries starting with alphabetical letters
+    ~They are completely ignored and hidden from the table view
+    ~They are placed at the very end of the sorted list, after alphabetical letters
+    ~They cause an error flag because they do not contain text letters
+}
+
+// Chapter: Programming | Difficulty: hard
+::Scratch Stage Boundaries::
+What are the total width, height, and coordinate ranges of the standard Scratch stage?
+[difficulty:hard]
+[chapter:Programming]
+[tags:scratch,coordinates]
+{
+    =The stage size is \(480 \times 360\) pixels, where \(x\) ranges from \(-240\) to \(240\), and \(y\) ranges from \(-180\) to \(180\)
+    ~The stage size is \(1000 \times 1000\) pixels, where \(x\) ranges from \(0\) to \(1000\), and \(y\) ranges from \(0\) to \(1000\)
+    ~The stage size is \(360 \times 240\) pixels, where \(x\) ranges from \(-180\) to \(180\), and \(y\) ranges from \(-120\) to \(120\)
+    ~The stage size is \(640 \times 480\) pixels, where \(x\) ranges from \(-320\) to \(320\), and \(y\) ranges from \(-240\) to \(240\)
+}
+
+// Chapter: Software Applications | Difficulty: hard
+::First Software Creator::
+Who created the first-ever computer program/software on the Manchester SSEM computer in 1948?
+[difficulty:hard]
+[chapter:Software Applications]
+[tags:software,history]
+{
+    =Tom Kilburn
+    ~John W. Tukey
+    ~Steve Jobs
+    ~Bill Gates
+}
+
+// Chapter: Software Applications | Difficulty: hard
+::Application Software Volatile RAM::
+In a word processor, where is your working file stored temporarily before you select the 'Save' command to write it to the hard drive?
+[difficulty:hard]
+[chapter:Software Applications]
+[tags:hardware,memory]
+{
+    =In volatile RAM, which loses all data if power is lost
+    ~On the secure hard disk drive directly
+    ~In the permanent BIOS chip settings
+    ~In the cloud backup server
+}
+
+// Chapter: Software Applications | Difficulty: hard
+::GeoGebra History::
+Who started the GeoGebra project in 2001 as part of a master's thesis at the University of Salzburg?
+[difficulty:hard]
+[chapter:Software Applications]
+[tags:geogebra,history]
+{
+    =Markus Hohenwarter
+    ~John W. Tukey
+    ~Tom Kilburn
+    ~Dr. Rajaram Sharma
+}
+
+::L2 Absolute Reference Formula 1::
+If cell C1 contains the absolute formula \(=\$A\$1*B1\) and is copied down to cell C2, what cell reference remains locked?
+[difficulty:hard]
+[chapter:Digital Documentation]
+[tags:spreadsheet,referencing,math]
+{
+    =Cell \(\$A\$1\) remains locked
+    ~Cell \(B1\) remains locked
+    ~Cell \(B2\) remains locked
+    ~No cell reference is locked
+}
+
+::L2 Absolute Reference Formula 2::
+If cell C1 contains the absolute formula \(=\$A\$1*B1\) and is copied down to cell C3, what cell reference remains locked?
+[difficulty:hard]
+[chapter:Digital Documentation]
+[tags:spreadsheet,referencing,math]
+{
+    =Cell \(\$A\$1\) remains locked
+    ~Cell \(B1\) remains locked
+    ~Cell \(B3\) remains locked
+    ~No cell reference is locked
+}
+
+::L2 Absolute Reference Formula 3::
+If cell C1 contains the absolute formula \(=\$A\$1*B1\) and is copied down to cell C4, what cell reference remains locked?
+[difficulty:hard]
+[chapter:Digital Documentation]
+[tags:spreadsheet,referencing,math]
+{
+    =Cell \(\$A\$1\) remains locked
+    ~Cell \(B1\) remains locked
+    ~Cell \(B4\) remains locked
+    ~No cell reference is locked
+}
+
+::L2 Absolute Reference Formula 4::
+If cell C1 contains the absolute formula \(=\$A\$1*B1\) and is copied down to cell C5, what cell reference remains locked?
+[difficulty:hard]
+[chapter:Digital Documentation]
+[tags:spreadsheet,referencing,math]
+{
+    =Cell \(\$A\$1\) remains locked
+    ~Cell \(B1\) remains locked
+    ~Cell \(B5\) remains locked
+    ~No cell reference is locked
+}
+
+::L2 Absolute Reference Formula 5::
+If cell C1 contains the absolute formula \(=\$A\$1*B1\) and is copied down to cell C6, what cell reference remains locked?
+[difficulty:hard]
+[chapter:Digital Documentation]
+[tags:spreadsheet,referencing,math]
+{
+    =Cell \(\$A\$1\) remains locked
+    ~Cell \(B1\) remains locked
+    ~Cell \(B6\) remains locked
+    ~No cell reference is locked
+}
+
+::L2 Absolute Reference Formula 6::
+If cell C1 contains the absolute formula \(=\$A\$1*B1\) and is copied down to cell C7, what cell reference remains locked?
+[difficulty:hard]
+[chapter:Digital Documentation]
+[tags:spreadsheet,referencing,math]
+{
+    =Cell \(\$A\$1\) remains locked
+    ~Cell \(B1\) remains locked
+    ~Cell \(B7\) remains locked
+    ~No cell reference is locked
+}
+
+::L2 Absolute Reference Formula 7::
+If cell C1 contains the absolute formula \(=\$A\$1*B1\) and is copied down to cell C8, what cell reference remains locked?
+[difficulty:hard]
+[chapter:Digital Documentation]
+[tags:spreadsheet,referencing,math]
+{
+    =Cell \(\$A\$1\) remains locked
+    ~Cell \(B1\) remains locked
+    ~Cell \(B8\) remains locked
+    ~No cell reference is locked
+}
+
+::L2 Absolute Reference Formula 8::
+If cell C1 contains the absolute formula \(=\$A\$1*B1\) and is copied down to cell C9, what cell reference remains locked?
+[difficulty:hard]
+[chapter:Digital Documentation]
+[tags:spreadsheet,referencing,math]
+{
+    =Cell \(\$A\$1\) remains locked
+    ~Cell \(B1\) remains locked
+    ~Cell \(B9\) remains locked
+    ~No cell reference is locked
+}
+
+::L2 Absolute Reference Formula 9::
+If cell C1 contains the absolute formula \(=\$A\$1*B1\) and is copied down to cell C10, what cell reference remains locked?
+[difficulty:hard]
+[chapter:Digital Documentation]
+[tags:spreadsheet,referencing,math]
+{
+    =Cell \(\$A\$1\) remains locked
+    ~Cell \(B1\) remains locked
+    ~Cell \(B10\) remains locked
+    ~No cell reference is locked
+}
+
+::L2 Absolute Reference Formula 10::
+If cell C1 contains the absolute formula \(=\$A\$1*B1\) and is copied down to cell C11, what cell reference remains locked?
+[difficulty:hard]
+[chapter:Digital Documentation]
+[tags:spreadsheet,referencing,math]
+{
+    =Cell \(\$A\$1\) remains locked
+    ~Cell \(B1\) remains locked
+    ~Cell \(B11\) remains locked
+    ~No cell reference is locked
+}
+
+::L2 Absolute Reference Formula 11::
+If cell C1 contains the absolute formula \(=\$A\$1*B1\) and is copied down to cell C12, what cell reference remains locked?
+[difficulty:hard]
+[chapter:Digital Documentation]
+[tags:spreadsheet,referencing,math]
+{
+    =Cell \(\$A\$1\) remains locked
+    ~Cell \(B1\) remains locked
+    ~Cell \(B12\) remains locked
+    ~No cell reference is locked
+}
+
+::L2 Absolute Reference Formula 12::
+If cell C1 contains the absolute formula \(=\$A\$1*B1\) and is copied down to cell C13, what cell reference remains locked?
+[difficulty:hard]
+[chapter:Digital Documentation]
+[tags:spreadsheet,referencing,math]
+{
+    =Cell \(\$A\$1\) remains locked
+    ~Cell \(B1\) remains locked
+    ~Cell \(B13\) remains locked
+    ~No cell reference is locked
+}
+
+::L2 Absolute Reference Formula 13::
+If cell C1 contains the absolute formula \(=\$A\$1*B1\) and is copied down to cell C14, what cell reference remains locked?
+[difficulty:hard]
+[chapter:Digital Documentation]
+[tags:spreadsheet,referencing,math]
+{
+    =Cell \(\$A\$1\) remains locked
+    ~Cell \(B1\) remains locked
+    ~Cell \(B14\) remains locked
+    ~No cell reference is locked
+}
+
+::L2 Absolute Reference Formula 14::
+If cell C1 contains the absolute formula \(=\$A\$1*B1\) and is copied down to cell C15, what cell reference remains locked?
+[difficulty:hard]
+[chapter:Digital Documentation]
+[tags:spreadsheet,referencing,math]
+{
+    =Cell \(\$A\$1\) remains locked
+    ~Cell \(B1\) remains locked
+    ~Cell \(B15\) remains locked
+    ~No cell reference is locked
+}
+
+::L2 Absolute Reference Formula 15::
+If cell C1 contains the absolute formula \(=\$A\$1*B1\) and is copied down to cell C16, what cell reference remains locked?
+[difficulty:hard]
+[chapter:Digital Documentation]
+[tags:spreadsheet,referencing,math]
+{
+    =Cell \(\$A\$1\) remains locked
+    ~Cell \(B1\) remains locked
+    ~Cell \(B16\) remains locked
+    ~No cell reference is locked
+}
+
+::L2 Absolute Reference Formula 16::
+If cell C1 contains the absolute formula \(=\$A\$1*B1\) and is copied down to cell C17, what cell reference remains locked?
+[difficulty:hard]
+[chapter:Digital Documentation]
+[tags:spreadsheet,referencing,math]
+{
+    =Cell \(\$A\$1\) remains locked
+    ~Cell \(B1\) remains locked
+    ~Cell \(B17\) remains locked
+    ~No cell reference is locked
+}
+
+::L2 Absolute Reference Formula 17::
+If cell C1 contains the absolute formula \(=\$A\$1*B1\) and is copied down to cell C18, what cell reference remains locked?
+[difficulty:hard]
+[chapter:Digital Documentation]
+[tags:spreadsheet,referencing,math]
+{
+    =Cell \(\$A\$1\) remains locked
+    ~Cell \(B1\) remains locked
+    ~Cell \(B18\) remains locked
+    ~No cell reference is locked
+}
+
+::L2 Absolute Reference Formula 18::
+If cell C1 contains the absolute formula \(=\$A\$1*B1\) and is copied down to cell C19, what cell reference remains locked?
+[difficulty:hard]
+[chapter:Digital Documentation]
+[tags:spreadsheet,referencing,math]
+{
+    =Cell \(\$A\$1\) remains locked
+    ~Cell \(B1\) remains locked
+    ~Cell \(B19\) remains locked
+    ~No cell reference is locked
+}
+
+::L2 Absolute Reference Formula 19::
+If cell C1 contains the absolute formula \(=\$A\$1*B1\) and is copied down to cell C20, what cell reference remains locked?
+[difficulty:hard]
+[chapter:Digital Documentation]
+[tags:spreadsheet,referencing,math]
+{
+    =Cell \(\$A\$1\) remains locked
+    ~Cell \(B1\) remains locked
+    ~Cell \(B20\) remains locked
+    ~No cell reference is locked
+}
+
+::L2 GIMP Layer Offsets 5::
+In GIMP, when creating a 3D depth effect on text using duplicate layers, if you offset the lower layer horizontally by \(5\) pixels, how does it affect the illusion of thickness?
+[difficulty:hard]
+[chapter:Graphics in ICT]
+[tags:gimp,3d_effect,coordinates]
+{
+    =It increases the perceived depth or thickness by \(5\) units along the X-axis
+    ~It changes the overall image resolution from RGB to grayscale
+    ~It automatically crops the canvas to fit the main text boundary
+    ~It deletes the alpha channel from the active layer mask
+}
+
+::L2 GIMP Layer Offsets 10::
+In GIMP, when creating a 3D depth effect on text using duplicate layers, if you offset the lower layer horizontally by \(10\) pixels, how does it affect the illusion of thickness?
+[difficulty:hard]
+[chapter:Graphics in ICT]
+[tags:gimp,3d_effect,coordinates]
+{
+    =It increases the perceived depth or thickness by \(10\) units along the X-axis
+    ~It changes the overall image resolution from RGB to grayscale
+    ~It automatically crops the canvas to fit the main text boundary
+    ~It deletes the alpha channel from the active layer mask
+}
+
+::L2 GIMP Layer Offsets 15::
+In GIMP, when creating a 3D depth effect on text using duplicate layers, if you offset the lower layer horizontally by \(15\) pixels, how does it affect the illusion of thickness?
+[difficulty:hard]
+[chapter:Graphics in ICT]
+[tags:gimp,3d_effect,coordinates]
+{
+    =It increases the perceived depth or thickness by \(15\) units along the X-axis
+    ~It changes the overall image resolution from RGB to grayscale
+    ~It automatically crops the canvas to fit the main text boundary
+    ~It deletes the alpha channel from the active layer mask
+}
+
+::L2 GIMP Layer Offsets 20::
+In GIMP, when creating a 3D depth effect on text using duplicate layers, if you offset the lower layer horizontally by \(20\) pixels, how does it affect the illusion of thickness?
+[difficulty:hard]
+[chapter:Graphics in ICT]
+[tags:gimp,3d_effect,coordinates]
+{
+    =It increases the perceived depth or thickness by \(20\) units along the X-axis
+    ~It changes the overall image resolution from RGB to grayscale
+    ~It automatically crops the canvas to fit the main text boundary
+    ~It deletes the alpha channel from the active layer mask
+}
+
+::L2 GIMP Layer Offsets 25::
+In GIMP, when creating a 3D depth effect on text using duplicate layers, if you offset the lower layer horizontally by \(25\) pixels, how does it affect the illusion of thickness?
+[difficulty:hard]
+[chapter:Graphics in ICT]
+[tags:gimp,3d_effect,coordinates]
+{
+    =It increases the perceived depth or thickness by \(25\) units along the X-axis
+    ~It changes the overall image resolution from RGB to grayscale
+    ~It automatically crops the canvas to fit the main text boundary
+    ~It deletes the alpha channel from the active layer mask
+}
+
+::L2 GIMP Layer Offsets 30::
+In GIMP, when creating a 3D depth effect on text using duplicate layers, if you offset the lower layer horizontally by \(30\) pixels, how does it affect the illusion of thickness?
+[difficulty:hard]
+[chapter:Graphics in ICT]
+[tags:gimp,3d_effect,coordinates]
+{
+    =It increases the perceived depth or thickness by \(30\) units along the X-axis
+    ~It changes the overall image resolution from RGB to grayscale
+    ~It automatically crops the canvas to fit the main text boundary
+    ~It deletes the alpha channel from the active layer mask
+}
+
+::L2 Hard Auto Pad Q1::
+In the Level 2 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L2 Hard Auto Pad Q2::
+In the Level 2 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L2 Hard Auto Pad Q3::
+In the Level 2 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L2 Hard Auto Pad Q4::
+In the Level 2 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L2 Hard Auto Pad Q5::
+In the Level 2 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L2 Hard Auto Pad Q6::
+In the Level 2 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L2 Hard Auto Pad Q7::
+In the Level 2 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L2 Hard Auto Pad Q8::
+In the Level 2 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L2 Hard Auto Pad Q9::
+In the Level 2 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L2 Hard Auto Pad Q10::
+In the Level 2 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L2 Hard Auto Pad Q11::
+In the Level 2 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L2 Hard Auto Pad Q12::
+In the Level 2 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L2 Hard Auto Pad Q13::
+In the Level 2 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L2 Hard Auto Pad Q14::
+In the Level 2 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L2 Hard Auto Pad Q15::
+In the Level 2 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L2 Hard Auto Pad Q16::
+In the Level 2 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L2 Hard Auto Pad Q17::
+In the Level 2 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L2 Hard Auto Pad Q18::
+In the Level 2 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}

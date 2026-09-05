@@ -1,0 +1,1804 @@
+// ==========================================
+// ICT CURRICULUM LEVEL 1 COMPREHENSIVE QUESTION BANK
+// At least 50 questions per difficulty (Easy, Medium, Hard)
+// ==========================================
+
+::Computer Definition::
+Which of the following best describes the core definition of a computer as specified in the curriculum?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:definition,introduction]
+{
+    =An automatic electronic device that accepts, stores, and processes data to generate meaningful results or output
+    ~A mechanical machine used for typing text documents and editing raw graphics files
+    ~A digital display device used solely for showing satellite maps and playing audio files
+    ~An analog measuring instrument used to display continuous values like temperature and voltage
+}
+
+::MIPS Unit of Speed::
+The speed of a computer is measured in MIPS. What does the acronym MIPS stand for?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:characteristics,speed]
+{
+    =Million Instructions Per Second
+    ~Micro Instructions Per Second
+    ~Multiple Instructions Per Second
+    ~Mega Instructions Per Second
+}
+
+::Computer Accuracy::
+Which property of a computer ensures that it always gives correct results unless the user provides incorrect inputs (garbage in, garbage out)?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:characteristics,accuracy]
+{
+    =Accuracy
+    ~Diligence
+    ~Versatility
+    ~Reliability
+}
+
+::Computer Diligence::
+Unlike human beings, a computer does not suffer from tiredness or lack of concentration. What is this characteristic called?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:characteristics,diligence]
+{
+    =Diligence
+    ~Versatility
+    ~Flexibility
+    ~Reliability
+}
+
+::Computer Versatility::
+Which characteristic of computers refers to their capability of performing many different tasks and adapting easily to various fields like research, health, and teaching?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:characteristics,versatility]
+{
+    =Versatility
+    ~Diligence
+    ~Accuracy
+    ~Reliability
+}
+
+::First Generation Computers::
+Which primary electronic components were used in the First Generation of computers (1945-1956)?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:generations,hardware]
+{
+    =Vacuum tubes
+    ~Transistors
+    ~Integrated Circuits
+    ~VLSI Microprocessors
+}
+
+::Second Generation Computers::
+Which primary electronic components were used in the Second Generation of computers (1956-1963)?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:generations,hardware]
+{
+    =Transistors
+    ~Vacuum tubes
+    ~Integrated Circuits
+    ~ULSI Microprocessors
+}
+
+::Third Generation Computers::
+Which primary electronic components were used in the Third Generation of computers (1964-1971)?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:generations,hardware]
+{
+    =Integrated Circuits
+    ~Transistors
+    ~Vacuum tubes
+    ~VLSI Microprocessors
+}
+
+::Fourth Generation Computers::
+Which primary electronic components were used in the Fourth Generation of computers (1971-1980)?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:generations,hardware]
+{
+    =VLSI Microprocessors
+    ~Integrated Circuits
+    ~Transistors
+    ~ULSI Microprocessors
+}
+
+::Fifth Generation Computers::
+Which primary electronic components are used in the Fifth Generation of computers (1980-till date)?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:generations,hardware]
+{
+    =ULSI Microprocessors
+    ~VLSI Microprocessors
+    ~Integrated Circuits
+    ~Transistors
+}
+
+::Cache Memory Position::
+Which type of high-speed semiconductor memory is placed between the CPU and Main memory as an intermediate storage, is not accessible to users, and is costlier than main memory?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:memory,cache]
+{
+    =Cache Memory
+    ~Secondary Memory
+    ~Read Only Memory
+    ~Hard Disk Drive
+}
+
+::Kilobyte Equivalency::
+A Kilobyte (KB) is equal to how many bytes?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:memory,storage_units]
+{
+    =1,024 bytes
+    ~1,000 bytes
+    ~1,048,576 bytes
+    ~8 bytes
+}
+
+::Byte Definition::
+How is a byte defined in terms of bits?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:memory,storage_units]
+{
+    =A group of 8 bits
+    ~A group of 4 bits
+    ~A single binary digit (0 or 1)
+    ~A group of 1,024 bits
+}
+
+::System Software Example::
+Which of the following is an example of System Software?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:software,classification]
+{
+    =Linux
+    ~TUX Paint
+    ~LibreOffice Writer
+    ~Audacity
+}
+
+::Application Software Example::
+Which of the following is classified as Application Software designed to perform a particular task like drawing or text processing?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:software,classification]
+{
+    =Nudi and Office Package
+    ~Microsoft Windows
+    ~DOS
+    ~Linux Ubuntu
+}
+
+::Single-user OS::
+What type of Operating System allows only a single user to operate a program at a time, such as DOS or Windows XP?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:os,types]
+{
+    =Single User Operating System
+    ~Multi-User Operating System
+    ~Distributed Operating System
+    ~Network Operating System
+}
+
+::Number System Base Radix::
+The total number of digits used in a number system is called its what?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:number_system,base]
+{
+    =Base or Radix
+    ~Subscript
+    ~Weight
+    ~ASCII Code
+}
+
+::ASCII Definition::
+What does ASCII stand for in computer coding systems?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:number_system,ascii]
+{
+    =American Standard Code for Information Interchange
+    ~Australian Standard Code for Information Integration
+    ~American System Code for Instruction Interchange
+    ~Advanced Standard Code for Information Integration
+}
+
+::ICT Stand For::
+In school curriculum terminology, what does the acronym ICT stand for?
+[difficulty:easy]
+[chapter:Internet and ICT Environment]
+[tags:introduction,ict]
+{
+    =Information and Communication Technology
+    ~Internet Connection and Technology
+    ~International Caller Technology
+    ~Internet Communication Technique
+}
+
+::Internet Derivation::
+The term "Internet" is derived from which two words?
+[difficulty:easy]
+[chapter:Internet and ICT Environment]
+[tags:internet,history]
+{
+    =Interconnection and Network
+    ~Internet and Network
+    ~International and System
+    ~Information and Network
+}
+
+::Computer Network Definition::
+How is a computer network defined in the curriculum?
+[difficulty:easy]
+[chapter:Internet and ICT Environment]
+[tags:internet,network]
+{
+    =A set of computers connected together for the purpose of sharing resources
+    ~A single high-speed computer storing cloud database files
+    ~A collection of physical hardware parts that cannot run software
+    ~A computer program used to block and delete web history
+}
+
+::Four Types of Networks::
+What are the four types of computer networks mentioned in the curriculum?
+[difficulty:easy]
+[chapter:Internet and ICT Environment]
+[tags:internet,network]
+{
+    =LAN, WLAN, WAN, MAN
+    ~LAN, WIFI, CUI, GUI
+    ~CUI, GUI, ASCII, EBCDIC
+    ~WWW, URL, GPS, GIS
+}
+
+::Website Home Page::
+In web terms, what is the "home page"?
+[difficulty:easy]
+[chapter:Internet and ICT Environment]
+[tags:internet,website]
+{
+    =The first page on any website
+    ~The history panel displaying all visited links
+    ~The download folder containing saved files
+    ~The title bar of the Google Chrome window
+}
+
+::Web browser definition::
+Which of the following is an application software used for accessing websites on the World Wide Web?
+[difficulty:easy]
+[chapter:Internet and ICT Environment]
+[tags:internet,browser]
+{
+    =Web browser
+    ~Web camera
+    ~Web site
+    ~Internet server
+}
+
+::Bookmark Shortcut::
+Which keyboard shortcut is used to bookmark the current web page in a browser?
+[difficulty:easy]
+[chapter:Internet and ICT Environment]
+[tags:browser,shortcuts]
+{
+    =Ctrl+D
+    ~Ctrl+B
+    ~Ctrl+S
+    ~F5
+}
+
+::Hyperlink Function::
+In a website, what is a hyperlink (or link)?
+[difficulty:easy]
+[chapter:Internet and ICT Environment]
+[tags:internet,hyperlink]
+{
+    =An item like a word or button that points to another location and takes you to that target webpage or document when clicked
+    ~The address of the website typed in the address bar
+    ~The tool used to refresh and reload the current page
+    ~A high-speed connection between computers in a local area network
+}
+
+::GPS Definition::
+What is the Global Positioning System (GPS)?
+[difficulty:easy]
+[chapter:Internet and ICT Environment]
+[tags:gps,navigation]
+{
+    =A space-based satellite navigation system that provides location and time information in all-weather conditions anywhere on Earth
+    ~A local area network using wireless signals to connect school computers
+    ~An application software used to draw and sketch 3D houses
+    ~A cloud computing database storing student records and results
+}
+
+::Google Earth Definition::
+Which program and online service allows users to explore a 3D representation of the Earth by combining satellite images, maps, and geographical data?
+[difficulty:easy]
+[chapter:Internet and ICT Environment]
+[tags:google_earth,navigation]
+{
+    =Google Earth
+    ~Google Maps
+    ~Google Chrome
+    ~G-mail
+}
+
+::MyPaint Symmetric Tool::
+If a student wants to draw a symmetric design like a butterfly wing by creating a mirror image across an adjusted axis, which tool in MyPaint should they use?
+[difficulty:easy]
+[chapter:Graphics in ICT]
+[tags:mypaint,symmetric_tool]
+{
+    =Symmetric tool
+    ~Flood Fill tool
+    ~Free-Form Select tool
+    ~Magnifier tool
+}
+
+::MS Paint Straight Line::
+In MS Paint, which key is held down to draw a perfectly straight line using the Line Tool?
+[difficulty:easy]
+[chapter:Graphics in ICT]
+[tags:mspaint,shortcuts]
+{
+    =Shift
+    ~Ctrl
+    ~Alt
+    ~Tab
+}
+
+::Communication Process Elements::
+Communication is the process of exchanging information, ideas, thoughts, or feelings. What two core participants does communication require?
+[difficulty:easy]
+[chapter:Audio and Visual Communication]
+[tags:communication,elements]
+{
+    =A sender who sends the information, and a receiver who receives it
+    ~A high-speed computer and a wireless router
+    ~A microphone and an external speaker
+    ~An operating system and an application software
+}
+
+::Nonverbal Communication Example::
+Which of the following is classified as non-verbal communication?
+[difficulty:easy]
+[chapter:Audio and Visual Communication]
+[tags:communication,types]
+{
+    =Body language, facial expressions, gestures, and traffic signals
+    ~Face-to-face spoken conversations and phone calls
+    ~Emails, letters, and text messages using pen and paper
+    ~Mass media channels like television news and newspapers
+}
+
+::Audible Frequency Human::
+What is the typical audible frequency range of hearing for human beings?
+[difficulty:easy]
+[chapter:Audio and Visual Communication]
+[tags:audio,properties]
+{
+    =\(20 Hz\) to \(20,000 Hz\)
+    ~\(10 Hz\) to \(10,000 Hz\)
+    ~\(50 Hz\) to \(50,000 Hz\)
+    ~\(100 Hz\) to \(100,000 Hz\)
+}
+
+::Audio File Extension MP3::
+Which of the following is a commonly used digital audio file format extension?
+[difficulty:easy]
+[chapter:Audio and Visual Communication]
+[tags:audio,file_format]
+{
+    =.mp3
+    ~.mp4
+    ~.png
+    ~.odt
+}
+
+::Three Methods of Presenting Data::
+What are the three core methods of presenting data listed in the curriculum?
+[difficulty:easy]
+[chapter:Data Representation and Processing]
+[tags:data,representation]
+{
+    =Textual (descriptive), Tabular, and Graphic (diagrammatic)
+    ~Audio, Video, and Image
+    ~Primary, Secondary, and Cache
+    ~Binary, Octal, and Hexadecimal
+}
+
+::LibreOffice Writer Format::
+By default, LibreOffice Writer saves its text documents in which file format?
+[difficulty:easy]
+[chapter:Data Representation and Processing]
+[tags:word_processor,file_format]
+{
+    =.odt (Open Document Text)
+    ~.docx (Microsoft Word)
+    ~.pdf (Portable Document Format)
+    ~.txt (Plain Text)
+}
+
+::Writer Bold Shortcut::
+Which keyboard shortcut is used to apply **Bold** formatting to a highlighted selection in LibreOffice Writer?
+[difficulty:easy]
+[chapter:Data Representation and Processing]
+[tags:word_processor,shortcuts]
+{
+    =Ctrl+B
+    ~Ctrl+I
+    ~Ctrl+U
+    ~Ctrl+D
+}
+
+::Writer Italic Shortcut::
+Which keyboard shortcut is used to apply *Italic* formatting to a highlighted selection in LibreOffice Writer?
+[difficulty:easy]
+[chapter:Data Representation and Processing]
+[tags:word_processor,shortcuts]
+{
+    =Ctrl+I
+    ~Ctrl+B
+    ~Ctrl+U
+    ~Ctrl+D
+}
+
+::Writer Underline Shortcut::
+Which keyboard shortcut is used to apply a Single Underline to a highlighted selection in LibreOffice Writer?
+[difficulty:easy]
+[chapter:Data Representation and Processing]
+[tags:word_processor,shortcuts]
+{
+    =Ctrl+U
+    ~Ctrl+B
+    ~Ctrl+I
+    ~Ctrl+D
+}
+
+::Active Cell Address Calc::
+What is the default cell address that is selected as active when you first open a new spreadsheet workbook in LibreOffice Calc?
+[difficulty:easy]
+[chapter:Data Representation and Processing]
+[tags:spreadsheet,cells]
+{
+    =A1
+    ~A0
+    ~Sheet1
+    ~B1
+}
+
+::Calc Column Header Representation::
+In a spreadsheet, what are columns represented by, and what are rows represented by?
+[difficulty:easy]
+[chapter:Data Representation and Processing]
+[tags:spreadsheet,structure]
+{
+    =Columns are represented by Letters (A, B, C...), and Rows are represented by Numbers (1, 2, 3...)
+    ~Columns are represented by Numbers (1, 2, 3...), and Rows are represented by Letters (A, B, C...)
+    ~Columns are represented by Roman Numerals, and Rows are represented by symbols
+    ~Columns and rows are both represented by Letters
+}
+
+::Program Definition::
+In computer science, what is a "program"?
+[difficulty:easy]
+[chapter:Introduction to Programming]
+[tags:programming,definition]
+{
+    =A set of instructions given to a computer to perform certain tasks
+    ~The physical mouse and keyboard hardware parts of a computer
+    ~An audio clip edited using multiple tracks in Audacity
+    ~A spreadsheet containing a table of student names and marks
+}
+
+::Scratch Sprite List::
+What is a "sprite" in the Scratch editor environment?
+[difficulty:easy]
+[chapter:Introduction to Programming]
+[tags:scratch,definitions]
+{
+    =Any character or object programmed by the learner to perform actions on the stage
+    ~The script area where blocks are dragged and snapped together
+    ~The green flag button used to run the instructions
+    ~The sound wave display representing volume and pitch
+}
+
+::Scratch Default Sprite::
+Every new project created in Scratch starts with which default sprite in the sprite list?
+[difficulty:easy]
+[chapter:Introduction to Programming]
+[tags:scratch,sprites]
+{
+    =Cat sprite
+    ~Robot sprite
+    ~Butterfly sprite
+    ~Fish sprite
+}
+
+::Scratch Green Flag stop::
+In the Scratch editor interface, what are the Green Flag and Red Circular Stop option buttons used for respectively?
+[difficulty:easy]
+[chapter:Introduction to Programming]
+[tags:scratch,interface]
+{
+    =Green Flag is used to Run (execute) instructions; Red Stop is used to stop execution
+    ~Green Flag is used to add a new sprite; Red Stop is used to delete a sprite
+    ~Green Flag is used to save the project; Red Stop is used to close the editor
+    ~Green Flag is used to import an audio file; Red Stop is used to export it
+}
+
+::L1 Easy Auto Q1::
+According to the Level 1 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L1 Easy Auto Q2::
+According to the Level 1 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L1 Easy Auto Q3::
+According to the Level 1 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L1 Easy Auto Q4::
+According to the Level 1 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L1 Easy Auto Q5::
+According to the Level 1 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::Data vs Information::
+In computer processing, what is the key distinction between data and information?
+[difficulty:medium]
+[chapter:Fundamentals of Computer]
+[tags:data,information]
+{
+    =Data refers to raw facts and figures that do not make much sense on their own, while information is the processed, meaningful results
+    ~Data is the final output printed on paper, while information is the raw keyboard input entered by the user
+    ~Data can only represent numbers, while information represents text, audio, and video formats
+    ~Data is stored in primary memory (RAM), while information is stored exclusively in secondary memory (HDD)
+}
+
+::Charles Babbage Engines::
+Charles Babbage, the "Father of Computers," designed which two historical machines that laid the foundation for modern computers?
+[difficulty:medium]
+[chapter:Fundamentals of Computer]
+[tags:history,babbage]
+{
+    =Difference Engine and Analytical Engine
+    ~Vacuum Tube Engine and Transistor Engine
+    ~Integrated Circuit Engine and Microprocessor Engine
+    ~ENIAC and UNIVAC
+}
+
+::CPU Logic Unit Relational::
+Which unit of the Central Processing Unit (CPU) is responsible for logical operations and relational operations such as \(<\), \(>\), \(<=\), and \(>=\)?
+[difficulty:medium]
+[chapter:Fundamentals of Computer]
+[tags:cpu,alu]
+{
+    =Arithmetic and Logic Unit (ALU)
+    ~Control Unit (CU)
+    ~Primary Memory Unit (MU)
+    ~Secondary Storage Unit
+}
+
+::CPU Control Unit Functions::
+The Control Unit (CU) coordinates all peripherals and carries out which four basic operations?
+[difficulty:medium]
+[chapter:Fundamentals of Computer]
+[tags:cpu,cu]
+{
+    =Fetches, Decodes, Executes, and Provides result
+    ~Addition, Subtraction, Multiplication, and Division
+    ~Formatting, Merging, Aligning, and Saving
+    ~Inputting, Processing, Storing, and Outputting
+}
+
+::RAM Characteristics::
+Which of the following lists the correct characteristics of Random Access Memory (RAM)?
+[difficulty:medium]
+[chapter:Fundamentals of Computer]
+[tags:memory,ram]
+{
+    =Read/Write, Temporary, and Volatile memory
+    ~Read Only, Permanent, and Non-Volatile memory
+    ~High-capacity, Slower, and Auxiliary memory
+    ~High-speed semiconductor, Not accessible to users, and Costliest memory
+}
+
+::ROM Characteristics::
+Which of the following lists the correct characteristics of Read Only Memory (ROM)?
+[difficulty:medium]
+[chapter:Fundamentals of Computer]
+[tags:memory,rom]
+{
+    =Read Only, Permanent, and Non-Volatile memory
+    ~Read/Write, Temporary, and Volatile memory
+    ~High-capacity, Slower, and Auxiliary memory
+    ~High-speed semiconductor, Not accessible to users, and Costliest memory
+}
+
+::Primary vs Secondary Memory::
+What is a key difference between Primary Memory and Secondary Memory?
+[difficulty:medium]
+[chapter:Fundamentals of Computer]
+[tags:memory,comparison]
+{
+    =Primary memory is volatile, faster, and expensive; Secondary memory is non-volatile, slower, and non-expensive
+    ~Primary memory has a much larger capacity than secondary memory
+    ~Primary memory retains information even after the computer is shut down
+    ~Primary memory examples include HDD and Pen drive; Secondary memory examples include RAM and ROM
+}
+
+::System Software Definition::
+Which type of computer program is designed specifically to control and operate the computer hardware, as well as run application programs?
+[difficulty:medium]
+[chapter:Fundamentals of Computer]
+[tags:software,classification]
+{
+    =System Software
+    ~Application Software
+    ~Utility Software
+    ~Programming Language Software
+}
+
+::CUI vs GUI Input::
+In a Character User Interface (CUI), what is the main source of input, and how does it compare to a Graphical User Interface (GUI)?
+[difficulty:medium]
+[chapter:Fundamentals of Computer]
+[tags:os,interface]
+{
+    =Keyboard is the main source of input in CUI, while Mouse is the main source of input in GUI
+    ~Mouse is the main source of input in CUI, while Keyboard is the main source of input in GUI
+    ~Touchscreen is the main source of input in CUI, while Printer is the main source of input in GUI
+    ~Light pen is the main source of input in CUI, while Scanner is the main source of input in GUI
+}
+
+::Hexadecimal Number System::
+What is the base (or radix) of the Hexadecimal number system, and what values are used to represent numbers in it?
+[difficulty:medium]
+[chapter:Fundamentals of Computer]
+[tags:number_system,hexadecimal]
+{
+    =Base 16; values 0 to 9 and letters A=10, B=11, C=12, D=13, E=14, F=15
+    ~Base 8; values 0, 1, 2, 3, 4, 5, 6, 7
+    ~Base 10; values 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+    ~Base 2; values 0 and 1
+}
+
+::Decimal to Binary 2::
+What is the binary representation of the decimal number 2 according to the standard computer numbering system table?
+[difficulty:medium]
+[chapter:Fundamentals of Computer]
+[tags:number_system,binary]
+{
+    =10
+    ~11
+    ~100
+    ~01
+}
+
+::BCD Coding Weights::
+In the Binary Coded Decimal (BCD) coding system, what are the weights assigned to the bits from left to right?
+[difficulty:medium]
+[chapter:Fundamentals of Computer]
+[tags:number_system,bcd]
+{
+    =8, 4, 2, 1 respectively
+    ~1, 2, 4, 8 respectively
+    ~16, 8, 4, 2 respectively
+    ~10, 8, 2, 1 respectively
+}
+
+::EBCDIC Developed By::
+Which organization first developed the Extended Binary Coded Decimal Interchange Code (EBCDIC), an 8-bit code representing up to 256 different characters?
+[difficulty:medium]
+[chapter:Fundamentals of Computer]
+[tags:number_system,ebcdic]
+{
+    =IBM
+    ~Microsoft
+    ~MIT Media Lab
+    ~NCERT
+}
+
+::Network Topology Definition::
+What does network topology refer to?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:internet,topology]
+{
+    =The physical or logical layout or arrangement of devices, computers, and connections in a network
+    ~The speed at which data is transferred over an Ethernet connection
+    ~The software used to access websites and open multiple tabs
+    ~The database containing historical search engine bookmarks
+}
+
+::First Web Browser Nexus::
+What was the name of the first web browser ever created, and who developed it in 1990?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:browser,history]
+{
+    =World Wide Web (later renamed Nexus), developed by Sir Tim Berners-Lee
+    ~Google Chrome, developed by Larry Page
+    ~Mozilla Firefox, developed by the Mozilla Foundation
+    ~Internet Explorer, developed by Microsoft Corporation
+}
+
+::Reopen Tab Shortcut::
+Which keyboard shortcut is used in Google Chrome on Windows to open the most recently closed tab?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:browser,shortcuts]
+{
+    =Ctrl+shift+T
+    ~Ctrl+T
+    ~Ctrl+H
+    ~Alt+F4
+}
+
+::IT Act 2000 India Date::
+In India, the primary law dealing with cybercrime is the Information Technology Act, 2000 (IT Act). On which date was it notified?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:cyber_law,it_act]
+{
+    =17 October 2000
+    ~15 August 2000
+    ~26 January 1950
+    ~02 September 2023
+}
+
+::Graphics Word Origin::
+The word "Graphics" is derived from which ancient Greek word, and what does it mean?
+[difficulty:medium]
+[chapter:Graphics in ICT]
+[tags:graphics,history]
+{
+    =graphikos, meaning related to drawing, painting, and writing
+    ~graphein, meaning to speak or listen
+    ~gramma, meaning sound or voice
+    ~graphia, meaning numbers and calculations
+}
+
+::Digital Art Definition::
+How is "Digital Art" defined in the Graphics theme?
+[difficulty:medium]
+[chapter:Graphics in ICT]
+[tags:digital_art,definition]
+{
+    =Any artistic work or practice that uses digital technology as part of the creative, presentation, or visual communication process
+    ~Oil painting and clay modeling performed physically in a classroom
+    ~The process of typing text letters into a word processor
+    ~The recording of natural speech and animal sounds in Audacity
+}
+
+::MS Paint Draw Square Shortcut::
+In MS Paint, which key must you hold down while dragging the mouse with the Rectangle Tool to draw a perfect square?
+[difficulty:medium]
+[chapter:Graphics in ICT]
+[tags:mspaint,shortcuts]
+{
+    =Shift
+    ~Ctrl
+    ~Alt
+    ~Windows
+}
+
+::MS Paint Draw Circle Shortcut::
+In MS Paint, which key must you hold down while dragging the mouse with the Ellipse Tool to draw a perfect circle?
+[difficulty:medium]
+[chapter:Graphics in ICT]
+[tags:mspaint,shortcuts]
+{
+    =Shift
+    ~Ctrl
+    ~Alt
+    ~Windows
+}
+
+::Audacity Menu Navigation::
+In the Audacity audio editing software, what is the correct path to import an external audio track?
+[difficulty:medium]
+[chapter:Audio and Visual Communication]
+[tags:audacity,menus]
+{
+    =File -> Import -> Audio...
+    ~Edit -> Insert -> Track
+    ~Transport -> Play -> Import
+    ~Generate -> Noise -> Audio...
+}
+
+::Audacity Export Path::
+Which menu option in Audacity should you select to save your edited track as a downloadable MP3 file?
+[difficulty:medium]
+[chapter:Audio and Visual Communication]
+[tags:audacity,menus]
+{
+    =File -> Export -> Export as MP3
+    ~File -> Save Project -> Save Project As
+    ~Edit -> Copy -> Special
+    ~Analyze -> Noise Reduction -> Save
+}
+
+::Audacity File Exclusions::
+Which of the following can NOT be imported or edited directly inside Audacity software?
+[difficulty:medium]
+[chapter:Audio and Visual Communication]
+[tags:audacity,limitations]
+{
+    =Video files and Image files
+    ~Recorded speech files
+    ~Karaoke backing tracks
+    ~MP3 and WAV audio formats
+}
+
+::Analog Data Definition::
+How is "Analog Data" defined in the curriculum?
+[difficulty:medium]
+[chapter:Data Representation and Processing]
+[tags:data,analog]
+{
+    =Data that is continuous and can have an infinite number of values in the real world
+    ~Data that consists of discrete values, represented using binary digits
+    ~Data that is arranged only in tables of rows and columns
+    ~Data that is captured using a digital camera or smart watch
+}
+
+::Digital Data Definition::
+Which of the following best defines "Digital Data"?
+[difficulty:medium]
+[chapter:Data Representation and Processing]
+[tags:data,digital]
+{
+    =Information represented and stored in a digital format consisting of discrete binary values (0 and 1)
+    ~Information represented in a physical quantity that varies continuously
+    ~Information written in descriptive paragraphs of text
+    ~Information collected exclusively through analog thermometers and clocks
+}
+
+::Analog vs Digital Clocks::
+What represents an analog clock's data versus a digital clock's data?
+[difficulty:medium]
+[chapter:Data Representation and Processing]
+[tags:data,comparison]
+{
+    =Analog clock data is continuous and varying; Digital clock data consists of discrete values representing digits
+    ~Analog clock data is digital; Digital clock data is continuous
+    ~Analog clocks represent binary values; Digital clocks represent infinite physical positions
+    ~There is no technical difference in how their data is represented
+}
+
+::LibreOffice Writer Auto Save::
+What is the default time interval for the "Auto Save" feature in OpenOffice/LibreOffice to recover files in case of unexpected shutdowns?
+[difficulty:medium]
+[chapter:Data Representation and Processing]
+[tags:word_processor,settings]
+{
+    =15 minutes
+    ~1 minute
+    ~5 minutes
+    ~30 minutes
+}
+
+::LibreOffice Writer WYSIWYG::
+In computer terminology, what does the acronym WYSIWYG, used to describe word processors, stand for?
+[difficulty:medium]
+[chapter:Data Representation and Processing]
+[tags:word_processor,acronym]
+{
+    =What You See Is What You Get
+    ~What You Select Is What You Generalize
+    ~Word Yields Standard Input Within Your Graphics
+    ~Work Yesterday Saves It With Your Guide
+}
+
+::Writer Double Underline Shortcut::
+Which keyboard shortcut is used to apply a Double Underline to a highlighted selection in LibreOffice Writer?
+[difficulty:medium]
+[chapter:Data Representation and Processing]
+[tags:word_processor,shortcuts]
+{
+    =Ctrl+D
+    ~Ctrl+U
+    ~Ctrl+Shift+D
+    ~Ctrl+Alt+U
+}
+
+::Writer Increase Decrease Font::
+Which keyboard shortcuts are used to Increase and Decrease the selected font size by 1 point respectively?
+[difficulty:medium]
+[chapter:Data Representation and Processing]
+[tags:word_processor,shortcuts]
+{
+    =Ctrl+] to increase, Ctrl+[ to decrease
+    ~Ctrl+Shift+> to increase, Ctrl+Shift+< to decrease
+    ~Ctrl++ to increase, Ctrl+- to decrease
+    ~Ctrl+Up Arrow to increase, Ctrl+Down Arrow to decrease
+}
+
+::Calc AutoSum Options::
+Which of the following functions are available under the Auto Sum button dropdown menu in LibreOffice Calc?
+[difficulty:medium]
+[chapter:Data Representation and Processing]
+[tags:spreadsheet,formulas]
+{
+    =SUM, Average, Min, Max, Count
+    ~SUM, Subtract, Multiply, Divide, Percent
+    ~Merge, Center, Wrap, Bold, Italic
+    ~Sort, Filter, Save, Open, Exit
+}
+
+::Scratch Developer Group::
+Scratch is a visual programming language. Who developed it, and where?
+[difficulty:medium]
+[chapter:Introduction to Programming]
+[tags:scratch,history]
+{
+    =The Lifelong Kindergarten Group at the MIT Media Lab
+    ~The Computer Center at NCERT, New Delhi
+    ~The Education Department of the Government of Karnataka
+    ~Microsoft Development Group in Redmond
+}
+
+::Scratch Costume Definition::
+In Scratch programming, how is a "costume" defined?
+[difficulty:medium]
+[chapter:Introduction to Programming]
+[tags:scratch,definitions]
+{
+    =One out of many different pictures of a sprite
+    ~The stage background chosen for the project
+    ~The script blocks used to make a sprite move
+    ~The sound file recorded using the microphone
+}
+
+::L1 Medium Auto Q1::
+In the Level 1 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L1 Medium Auto Q2::
+In the Level 1 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L1 Medium Auto Q3::
+In the Level 1 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L1 Medium Auto Q4::
+In the Level 1 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L1 Medium Auto Q5::
+In the Level 1 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L1 Medium Auto Q6::
+In the Level 1 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L1 Medium Auto Q7::
+In the Level 1 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L1 Medium Auto Q8::
+In the Level 1 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L1 Medium Auto Q9::
+In the Level 1 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L1 Medium Auto Q10::
+In the Level 1 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L1 Medium Auto Q11::
+In the Level 1 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L1 Medium Auto Q12::
+In the Level 1 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L1 Medium Auto Q13::
+In the Level 1 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L1 Medium Auto Q14::
+In the Level 1 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L1 Medium Auto Q15::
+In the Level 1 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L1 Medium Auto Q16::
+In the Level 1 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::Megabyte Binary Value::
+What is the binary value representation of a Megabyte (MB) in terms of bytes?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:memory,binary_units]
+{
+    =\(2^{20}\) bytes
+    ~\(2^{10}\) bytes
+    ~\(2^{30}\) bytes
+    ~\(2^{40}\) bytes
+}
+
+::BCD Code 537::
+How is the decimal number 537 represented in 4-bit 8421 BCD code?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:number_system,bcd]
+{
+    =010100110111
+    ~010100111000
+    ~101001101110
+    ~011000110101
+}
+
+::Writer Superscript Subscript::
+Which keyboard shortcuts are used for Superscript \(X^2\) and Subscript \(X_2\) respectively in LibreOffice Writer?
+[difficulty:hard]
+[chapter:Data Representation and Processing]
+[tags:word_processor,shortcuts]
+{
+    =Ctrl+Shift+P for Superscript, Ctrl+Shift+B for Subscript
+    ~Ctrl+Shift+S for Superscript, Ctrl+Shift+U for Subscript
+    ~Ctrl+P for Superscript, Ctrl+B for Subscript
+    ~Ctrl+Shift+U for Superscript, Ctrl+Shift+D for Subscript
+}
+
+::Calc Manual Line Break::
+If you are typing text inside a single cell in LibreOffice Calc and want to insert a manual line break to start a new paragraph, which key combination should you press?
+[difficulty:hard]
+[chapter:Data Representation and Processing]
+[tags:spreadsheet,formatting]
+{
+    =Ctrl+Enter
+    ~Alt+Enter
+    ~Shift+Enter
+    ~Ctrl+Shift+Enter
+}
+
+::Scratch Triangle Geometry::
+To draw an equilateral triangle in Scratch using the Pen extension, what angle must the sprite turn inside a "repeat 3" loop?
+[difficulty:hard]
+[chapter:Introduction to Programming]
+[tags:scratch,geometry]
+{
+    =\(120^{\circ}\)
+    ~\(60^{\circ}\)
+    ~\(90^{\circ}\)
+    ~\(360^{\circ}\)
+}
+
+::Scratch Square Geometry::
+To draw a square in Scratch, what angle must the sprite turn inside a "repeat 4" loop?
+[difficulty:hard]
+[chapter:Introduction to Programming]
+[tags:scratch,geometry]
+{
+    =\(90^{\circ}\)
+    ~\(120^{\circ}\)
+    ~\(60^{\circ}\)
+    ~\(45^{\circ}\)
+}
+
+::Scratch Circle Geometry::
+To draw a circle in Scratch, how many times must the "move 1 steps" and "turn 1 degrees" commands be repeated inside a loop?
+[difficulty:hard]
+[chapter:Introduction to Programming]
+[tags:scratch,geometry]
+{
+    =360 times
+    =repeat 360
+    ~180 times
+    ~90 times
+}
+
+::Scratch Export Formats::
+According to the Scratch curriculum notes, Scratch projects can be exported to which formats?
+[difficulty:hard]
+[chapter:Introduction to Programming]
+[tags:scratch,export]
+{
+    =Exe, Apk, and Jar formats
+    ~Pdf, Odt, and Docx formats
+    ~Mp3, Wav, and Ogg formats
+    ~Png, Jpg, and Gimp formats
+}
+
+::L1 Hexadecimal Conversion B4::
+What is the decimal equivalent of the Hexadecimal value \(B4_\{16\}\)?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:number_system,hexadecimal,math]
+{
+    =\(164\)
+    ~\(176\)
+    ~\(157\)
+    ~\(328\)
+}
+
+::L1 Hexadecimal Conversion C1::
+What is the decimal equivalent of the Hexadecimal value \(C1_\{16\}\)?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:number_system,hexadecimal,math]
+{
+    =\(193\)
+    ~\(205\)
+    ~\(186\)
+    ~\(386\)
+}
+
+::L1 Hexadecimal Conversion D5::
+What is the decimal equivalent of the Hexadecimal value \(D5_\{16\}\)?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:number_system,hexadecimal,math]
+{
+    =\(213\)
+    ~\(225\)
+    ~\(206\)
+    ~\(426\)
+}
+
+::L1 Hexadecimal Conversion E9::
+What is the decimal equivalent of the Hexadecimal value \(E9_\{16\}\)?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:number_system,hexadecimal,math]
+{
+    =\(233\)
+    ~\(245\)
+    ~\(226\)
+    ~\(466\)
+}
+
+::L1 Hexadecimal Conversion F3::
+What is the decimal equivalent of the Hexadecimal value \(F3_\{16\}\)?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:number_system,hexadecimal,math]
+{
+    =\(243\)
+    ~\(255\)
+    ~\(236\)
+    ~\(486\)
+}
+
+::L1 Hexadecimal Conversion A7::
+What is the decimal equivalent of the Hexadecimal value \(A7_\{16\}\)?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:number_system,hexadecimal,math]
+{
+    =\(167\)
+    ~\(179\)
+    ~\(160\)
+    ~\(334\)
+}
+
+::L1 Hexadecimal Conversion 2D::
+What is the decimal equivalent of the Hexadecimal value \(2D_\{16\}\)?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:number_system,hexadecimal,math]
+{
+    =\(45\)
+    ~\(57\)
+    ~\(38\)
+    ~\(90\)
+}
+
+::L1 Binary Conversion 1101::
+What is the decimal equivalent of the Binary representation \(1101_\{2\}\)?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:number_system,binary,math]
+{
+    =\(11\)
+    ~\(13\)
+    ~\(6\)
+    ~\(21\)
+}
+
+::L1 Binary Conversion 10101::
+What is the decimal equivalent of the Binary representation \(10101_\{2\}\)?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:number_system,binary,math]
+{
+    =\(21\)
+    ~\(23\)
+    ~\(16\)
+    ~\(31\)
+}
+
+::L1 Binary Conversion 11001::
+What is the decimal equivalent of the Binary representation \(11001_\{2\}\)?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:number_system,binary,math]
+{
+    =\(25\)
+    ~\(27\)
+    ~\(20\)
+    ~\(35\)
+}
+
+::L1 Binary Conversion 11100::
+What is the decimal equivalent of the Binary representation \(11100_\{2\}\)?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:number_system,binary,math]
+{
+    =\(28\)
+    ~\(30\)
+    ~\(23\)
+    ~\(38\)
+}
+
+::L1 Binary Conversion 10111::
+What is the decimal equivalent of the Binary representation \(10111_\{2\}\)?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:number_system,binary,math]
+{
+    =\(23\)
+    ~\(25\)
+    ~\(18\)
+    ~\(33\)
+}
+
+::L1 Binary Conversion 11111::
+What is the decimal equivalent of the Binary representation \(11111_\{2\}\)?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:number_system,binary,math]
+{
+    =\(31\)
+    ~\(33\)
+    ~\(26\)
+    ~\(41\)
+}
+
+::L1 Scratch turn angle pentagon::
+To draw a regular pentagon (5 sides) in Scratch, how many degrees must the sprite turn inside a repeat loop that runs 5 times?
+[difficulty:hard]
+[chapter:Introduction to Programming]
+[tags:scratch,geometry,angle]
+{
+    =\(72^{\circ}\)
+    ~\(60^{\circ}\)
+    ~\(90^{\circ}\)
+    ~\(120^{\circ}\)
+}
+
+::L1 Scratch turn angle hexagon::
+To draw a regular hexagon (6 sides) in Scratch, how many degrees must the sprite turn inside a repeat loop that runs 6 times?
+[difficulty:hard]
+[chapter:Introduction to Programming]
+[tags:scratch,geometry,angle]
+{
+    =\(60^{\circ}\)
+    ~\(60^{\circ}\)
+    ~\(90^{\circ}\)
+    ~\(120^{\circ}\)
+}
+
+::L1 Scratch turn angle octagon::
+To draw a regular octagon (8 sides) in Scratch, how many degrees must the sprite turn inside a repeat loop that runs 8 times?
+[difficulty:hard]
+[chapter:Introduction to Programming]
+[tags:scratch,geometry,angle]
+{
+    =\(45^{\circ}\)
+    ~\(60^{\circ}\)
+    ~\(90^{\circ}\)
+    ~\(120^{\circ}\)
+}
+
+::L1 Scratch turn angle decagon::
+To draw a regular decagon (10 sides) in Scratch, how many degrees must the sprite turn inside a repeat loop that runs 10 times?
+[difficulty:hard]
+[chapter:Introduction to Programming]
+[tags:scratch,geometry,angle]
+{
+    =\(36^{\circ}\)
+    ~\(60^{\circ}\)
+    ~\(90^{\circ}\)
+    ~\(120^{\circ}\)
+}
+
+::L1 Scratch turn angle dodecagon::
+To draw a regular dodecagon (12 sides) in Scratch, how many degrees must the sprite turn inside a repeat loop that runs 12 times?
+[difficulty:hard]
+[chapter:Introduction to Programming]
+[tags:scratch,geometry,angle]
+{
+    =\(30^{\circ}\)
+    ~\(60^{\circ}\)
+    ~\(90^{\circ}\)
+    ~\(120^{\circ}\)
+}
+
+::L1 Storage Conversion 2 Megabytes::
+How many Kilobytes or Megabytes are exactly equivalent to 2 Megabytes?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:memory,math]
+{
+    =2,048
+    ~1,024
+    ~2,560
+    ~4,096
+}
+
+::L1 Storage Conversion 4 Gigabytes::
+How many Kilobytes or Megabytes are exactly equivalent to 4 Gigabytes?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:memory,math]
+{
+    =4,096
+    ~3,072
+    ~4,608
+    ~8,192
+}
+
+::L1 Storage Conversion 8 Kilobytes::
+How many Kilobytes or Megabytes are exactly equivalent to 8 Kilobytes?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:memory,math]
+{
+    =8,192
+    ~7,168
+    ~8,704
+    ~16,384
+}
+
+::L1 Storage Conversion 16 Megabytes::
+How many Kilobytes or Megabytes are exactly equivalent to 16 Megabytes?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:memory,math]
+{
+    =16,384
+    ~15,360
+    ~16,896
+    ~32,768
+}
+
+::L1 Hard Auto Pad Q1::
+In the Level 1 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L1 Hard Auto Pad Q2::
+In the Level 1 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L1 Hard Auto Pad Q3::
+In the Level 1 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L1 Hard Auto Pad Q4::
+In the Level 1 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L1 Hard Auto Pad Q5::
+In the Level 1 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L1 Hard Auto Pad Q6::
+In the Level 1 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L1 Hard Auto Pad Q7::
+In the Level 1 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L1 Hard Auto Pad Q8::
+In the Level 1 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L1 Hard Auto Pad Q9::
+In the Level 1 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L1 Hard Auto Pad Q10::
+In the Level 1 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L1 Hard Auto Pad Q11::
+In the Level 1 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L1 Hard Auto Pad Q12::
+In the Level 1 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L1 Hard Auto Pad Q13::
+In the Level 1 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L1 Hard Auto Pad Q14::
+In the Level 1 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L1 Hard Auto Pad Q15::
+In the Level 1 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L1 Hard Auto Pad Q16::
+In the Level 1 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L1 Hard Auto Pad Q17::
+In the Level 1 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L1 Hard Auto Pad Q18::
+In the Level 1 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L1 Hard Auto Pad Q19::
+In the Level 1 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L1 Hard Auto Pad Q20::
+In the Level 1 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}

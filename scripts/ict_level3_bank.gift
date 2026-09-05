@@ -1,0 +1,1804 @@
+// ==========================================
+// ICT CURRICULUM LEVEL 3 COMPREHENSIVE QUESTION BANK
+// At least 50 questions per difficulty (Easy, Medium, Hard)
+// ==========================================
+
+::Online Meeting Tool Selection::
+An online meeting is a virtual gathering of people using the internet and video conferencing tools instead of meeting in person. Which of the following is an open-source meeting tool mentioned in the textbook? 
+[difficulty:easy]
+[chapter:Internet and ICT Environment]
+[tags:online_meetings,open_source]
+{
+    =Jitsi Meet
+    ~Zoom
+    ~Google Meet
+    ~Skype
+}
+
+::Online Meeting Best Practices::
+To maintain a respectful and focused online meeting environment, which of the following is a key rule of etiquette recommended in the textbook? 
+[difficulty:easy]
+[chapter:Internet and ICT Environment]
+[tags:online_meetings,etiquette]
+{
+    =Mute your microphone when you are not speaking
+    ~Keep your video camera off at all times
+    ~Send direct chat messages to every participant continuously
+    ~Always keep your microphone unmuted to show active listening
+}
+
+::Online Workspace Definition::
+An online workspace is a collection of cloud-based tools and apps that help people create, communicate, and collaborate online. Which of the following is an open-source online workspace tool option listed in the textbook? 
+[difficulty:easy]
+[chapter:Internet and ICT Environment]
+[tags:online_workspace,tools]
+{
+    =Nextcloud Forms
+    ~Google Workspace
+    ~Microsoft 365
+    ~Dropbox
+}
+
+::Online Workspace Tools Matching::
+Each tool in an online workspace has a specific purpose. If a student wants to make quizzes, surveys, and forms to collect organized information from people, which tool should they use? 
+[difficulty:easy]
+[chapter:Internet and ICT Environment]
+[tags:online_workspace,purpose]
+{
+    =Forms
+    ~Docs
+    ~Sheets
+    ~Slides
+}
+
+::Forms Required Question::
+When creating a feedback or survey form, what setting must you enable if a SATS Number or email address question is mandatory and cannot be skipped by respondents? 
+[difficulty:easy]
+[chapter:Internet and ICT Environment]
+[tags:online_workspace,forms]
+{
+    =Toggle the \"Required\" button at the bottom of the question box
+    ~Select the \"Short answer\" option from the question type dropdown
+    ~Change the color theme of the form in the customize menu
+    ~Export the form to Sheets before sharing
+}
+
+::Online Storage and Drive::
+How does an online file storage system like Google Drive or ownCloud assist students in online study and group work? 
+[difficulty:easy]
+[chapter:Internet and ICT Environment]
+[tags:online_workspace,drive]
+{
+    =It allows students to store documents, photos, and videos online safely and access or share them easily anytime from any device
+    ~It functions as a video editing software to create animations
+    ~It is a database management tool that automatically generates mathematical graphs
+    ~It is a software compiler that translates Python code into binary
+}
+
+::YouTube Video Upload Icon::
+When signed into YouTube, which specific user interface icon must a student click in the upper-right corner to upload a video from their device? 
+[difficulty:easy]
+[chapter:Internet and ICT Environment]
+[tags:social_media,youtube_upload]
+{
+    =The camera icon with a plus sign (\+)
+    ~The notification bell icon
+    ~The search magnifying glass icon
+    ~The profile picture thumbnail icon
+}
+
+::3D Definition::
+What does the term 3D stand for, and what are the three dimensions associated with 3D objects? 
+[difficulty:easy]
+[chapter:Graphics in ICT]
+[tags:3d_graphics,dimensions]
+{
+    =Three-Dimensional; objects have Length \(X\), Height \(Y\), and Depth \(Z\)
+    ~Three-Digital; objects have width, height, and color channels
+    ~Three-Directional; objects can only move left, right, and up
+    ~Triple-Drawn; objects are drawn on paper three times to show shadows
+}
+
+::2D Text vs 3D Text::
+What is the primary visual difference between flat 2D text and 3D text? 
+[difficulty:easy]
+[chapter:Graphics in ICT]
+[tags:3d_graphics,text]
+{
+    =3D text has the illusion of thickness and depth, appearing raised or standing out in space, while 2D text is completely flat
+    ~2D text can be rotated and shaded, while 3D text is restricted to a single flat angle
+    ~3D text is always written in capital letters, while 2D text is written in lowercase
+    ~2D text is saved as a digital image, while 3D text can only exist on physical printed paper
+}
+
+::Animation definition and frames::
+Animation is based on a principle of human vision where a series of static images are shown very quickly in sequence to create the illusion of movement. What is each individual still image in an animation sequence called? 
+[difficulty:easy]
+[chapter:Graphics in ICT]
+[tags:animation,concepts]
+{
+    =A frame
+    ~A layer
+    ~A mask
+    ~A keyframe
+}
+
+::Types of Animation Traditional vs 2D::
+What is the primary difference between Traditional Animation and computer-based 2D Animation? 
+[difficulty:easy]
+[chapter:Graphics in ICT]
+[tags:animation,types]
+{
+    =In traditional animation, each picture is drawn by hand on paper, while in 2D computer animation, flat images are created and moved using computer software
+    ~Traditional animation has depth and shadows, while 2D computer animation is completely flat
+    ~Traditional animation is created entirely using block coding, while 2D computer animation is drawn on paper
+    ~There is no difference; both require drawing 3D models using specialized physical sculpting materials
+}
+
+::Spreadsheet AutoFill Handle::
+In electronic spreadsheets, what is AutoFill, and what physical cell feature must you drag to activate it? 
+[difficulty:easy]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,autofill]
+{
+    =A feature that automatically fills cells with a series of data or copies formulas; you drag the fill handle (small square at the bottom-right corner of the cell)
+    ~A tool that formats cell colors; you drag the row border
+    ~A feature that links different sheets together; you double-click the cell grid center
+    ~A function that inserts circular charts; you drag the formula bar
+}
+
+::Spreadsheet Referencing Definition::
+What is cell referencing in an electronic spreadsheet like LibreOffice Calc? 
+[difficulty:easy]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,referencing]
+{
+    =The method of identifying specific cells or ranges of cells using their row and column addresses to help formulas perform calculations accurately
+    ~The process of inserting hyperlinks to external web articles inside cells
+    ~A formula used to format the font style and size of text data
+    ~A feature that automatically deletes duplicate number rows in a column
+}
+
+::Hyperlink Shortcut Spreadsheet::
+Which keyboard shortcut key combination is used in spreadsheet programs to quickly open the dialog box to insert a clickable hyperlink? 
+[difficulty:easy]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,hyperlinks]
+{
+    =Ctrl\+K
+    ~Ctrl\+H
+    ~Ctrl\+D
+    ~Ctrl\+Z
+}
+
+::AI definition vs standard machine::
+How is Artificial Intelligence (AI) defined in contrast to standard mechanical or electronic machines? 
+[difficulty:easy]
+[chapter:Introduction to AI]
+[tags:ai_basics,definitions]
+{
+    =AI is a type of computer program that can learn from information and make decisions on its own, whereas standard machines only do exactly what they are mechanically or electronically forced to do at that moment
+    ~AI refers only to physical robots that can walk and speak, whereas standard machines are stationary
+    ~AI is any computer program that contains mathematical multiplication operations, while standard machines do not
+    ~AI refers to software programs that can run completely offline without electricity
+}
+
+::Machine Mistakes GIGO::
+In the field of AI, what does the principle \"Garbage In, Garbage Out\" (GIGO) mean? 
+[difficulty:easy]
+[chapter:Introduction to AI]
+[tags:machine_mistakes,data_cleaning]
+{
+    =If you train an AI model using incomplete, broken, or biased data, the model will produce incorrect or broken answers
+    ~The AI program will automatically delete files from your Google Drive to clean up space
+    ~AI systems are only capable of running on computers that are recycled
+    ~If a computer gets physically dirty, its arithmetic calculations will contain errors
+}
+
+::MIT App Inventor Blocks Editor Workspace::
+Which workspace area inside MIT App Inventor is used by students to drag, drop, and snap together visual code blocks like LEGOs to define the logical behavior of the app? 
+[difficulty:easy]
+[chapter:Introduction to AI]
+[tags:app_inventor,blocks_editor]
+{
+    =The Blocks Editor Workspace
+    ~The Designer Workspace Mock-up Screen
+    ~The Components Palette Menu
+    ~The Properties Inspector Panel
+}
+
+::L3 Easy Auto Q1::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q2::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q3::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q4::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q5::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q6::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q7::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q8::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q9::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q10::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q11::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q12::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q13::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q14::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q15::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q16::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q17::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q18::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q19::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q20::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q21::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q22::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q23::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q24::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q25::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q26::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q27::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q28::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q29::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q30::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q31::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q32::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::L3 Easy Auto Q33::
+According to the Level 3 textbook curriculum, which of the following is considered a core computer component?
+[difficulty:easy]
+[chapter:Fundamentals of Computer]
+[tags:hardware,auto]
+{
+    =Central Processing Unit (CPU)
+    ~Floppy Disk Drive
+    ~Graphics Tablet
+    ~Scanner
+}
+
+::Online Meeting Drawback::
+While online meetings offer several facilities such as being cost-effective and saving travel time, they also have drawbacks. Which of the following is classified as an online meeting drawback in the textbook? 
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:online_meetings,drawbacks]
+{
+    =Lack of effective interaction due to the absence of face-to-face communication, which limits reading body language and emotional cues
+    ~The ability to easily schedule and reschedule meetings based on convenience
+    ~The option to record meetings for future reference to help participants review discussions
+    ~Eliminating expenses related to travel, accommodation, and venue booking
+}
+
+::Forms Best Practices::
+What is the primary rationale behind the form design tips \"use required fields\" and \"preview before sharing\"? 
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:online_workspace,forms_etiquette]
+{
+    =Required fields make important questions compulsory, and previewing ensures the form is clear, correct, and professional before sending
+    ~Required fields automatically collect email addresses, and previewing saves the form in Google Drive
+    ~Required fields limit responses to one per person, and previewing converts the form into a quiz mode
+    ~Required fields hide unnecessary questions, and previewing translates the form into regional languages
+}
+
+::YouTube Channel Creation::
+A student wants to create a YouTube channel to share school learning videos. To sign in and create a channel, which of the following accounts must they possess? 
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:social_media,youtube]
+{
+    =A Google Account
+    ~A Microsoft Account
+    ~A Facebook Account
+    ~A Yahoo Account
+}
+
+::YouTube Safety and Cons::
+While YouTube is an excellent platform for watching educational tutorials and sharing learning, it also presents challenges. Which of the following is a recognized disadvantage (con) of YouTube listed in the textbook? 
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:social_media,ethics]
+{
+    =Screen time addiction, inappropriate content, and negative or mean comments
+    ~The cost of subscription is extremely high for basic educational channels
+    ~It only works on desktop computers and cannot be accessed on mobile devices
+    ~It does not allow users to subscribe to their favorite educational channels
+}
+
+::GIMP Text Layer management::
+In GIMP, how does a text layer differ from standard image layers during the design process? 
+[difficulty:medium]
+[chapter:Graphics in ICT]
+[tags:image_editing,gimp,text]
+{
+    =It allows the designer to insert and edit text characters dynamically without affecting other parts of the artwork or background layer
+    ~It cannot be moved, resized, or rotated once it is created on the canvas
+    ~It automatically merges with the background layer, making it impossible to edit later
+    ~It is a non-transparent solid color sheet that covers the entire image size
+}
+
+::Layer Group Purpose::
+Why are Layer Groups used in complex 2D image design projects that contain a large number of separate layers? 
+[difficulty:medium]
+[chapter:Graphics in ICT]
+[tags:image_editing,gimp,layers]
+{
+    =To keep the workspace neat and organized by grouping layers into a hierarchical structure, allowing multiple layers to be moved, hidden, or modified at once
+    ~To permanently lock all image layers so that no further edits can be made by the user
+    ~To reduce the file size of the project by merging all image layers into a single pixel layer
+    ~To automatically convert 2D raster layers into 3D vector graphics
+}
+
+::GIMP 3D Text Shadow Effect::
+In GIMP, how is a simple 3D drop-shadow text effect created using filters? 
+[difficulty:medium]
+[chapter:Graphics in ICT]
+[tags:image_editing,gimp,3d_text]
+{
+    =By adding text, navigating to Filters \(\rightarrow\) Light and Shadow \(\rightarrow\) Drop Shadow, and adjusting the offset and blur radius
+    ~By drawing a square on the workplane and dropping a cylinder inside it
+    ~By using the Eraser tool to carve a shadow outline on the text layer by hand
+    ~By adding a Layer Mask and painting it entirely with black brush strokes
+}
+
+::GIMP 3D Shape Bevel Effect::
+To make a flat 2D rectangle selection filled with color look like a raised 3D button, what GIMP filter sequence and adjustment should be applied? 
+[difficulty:medium]
+[chapter:Graphics in ICT]
+[tags:image_editing,gimp,3d_shapes]
+{
+    =Click Filters \(\rightarrow\) Decor \(\rightarrow\) Add Bevel and adjust the thickness parameter as needed
+    ~Click Colors \(\rightarrow\) Brightness-Contrast and maximize the brightness of the rectangle
+    ~Click Layer \(\rightarrow\) New Layer Group and rename the group to \"Button\"
+    ~Click Edit \(\rightarrow\) Cut and then paste the selection as a new text layer
+}
+
+::Historical Animation Frame Volume::
+Historically, why was hand-drawn traditional animation considered an incredibly big job? Depending on quality, how many frames are typically required for one minute of animation? 
+[difficulty:medium]
+[chapter:Graphics in ICT]
+[tags:animation,history]
+{
+    =Between \(720\) and \(1800\) separate still images
+    ~Between \(10\) and \(50\) separate still images
+    ~Exactly \(100\) still images
+    ~Over \(10000\) still images per second
+}
+
+::Animation Principle Squash and Stretch::
+When a bouncing rubber ball hits the ground, it squashes flat, and then stretches vertically as it bounces back up. Which fundamental principle of animation does this exemplify? 
+[difficulty:medium]
+[chapter:Graphics in ICT]
+[tags:animation,principles]
+{
+    =Squash and Stretch
+    ~Anticipation
+    ~Timing
+    ~Follow Through
+}
+
+::Animation Principle Anticipation::
+Before a person jumps, they bend their knees. Before an athlete throws a ball, they pull their arm back. Which animation principle uses a small action before a big action so the audience knows what is coming? 
+[difficulty:medium]
+[chapter:Graphics in ICT]
+[tags:animation,principles]
+{
+    =Anticipation
+    ~Ease In and Ease Out
+    ~Timing
+    ~Follow Through
+}
+
+::Animation Principle Timing::
+According to the animation principle of Timing, how does the number of drawing frames change depending on the speed of an action (e.g., a slow walk vs. a fast run)? 
+[difficulty:medium]
+[chapter:Graphics in ICT]
+[tags:animation,principles]
+{
+    =Moving fast requires fewer drawing frames, while moving slowly requires more drawing frames
+    ~Moving fast requires more drawing frames, while moving slowly requires fewer drawing frames
+    ~Both fast and slow movements require the exact same number of drawing frames
+    ~Slow movements do not require any drawing frames; they are done automatically by the software
+}
+
+::Animation Software Options::
+Match the animation software with its description: Which free and open-source software is widely used professionally for 3D modeling, rigging, rendering, and complex 3D animations? 
+[difficulty:medium]
+[chapter:Graphics in ICT]
+[tags:animation,software]
+{
+    =Blender
+    ~Adobe Animate
+    ~Pencil2D
+    ~Microsoft PowerPoint
+}
+
+::Relative Cell Referencing::
+What is the default type of cell referencing in spreadsheets, and how does it behave when a formula is copied to another cell? 
+[difficulty:medium]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,referencing]
+{
+    =Relative Referencing; the cell addresses in the formula change automatically relative to where the formula is copied
+    ~Absolute Referencing; the cell addresses remain completely fixed and do not change
+    ~Mixed Referencing; only the column changes while the row remains locked
+    ~Fixed Referencing; the formula is cleared and must be typed again manually
+}
+
+::Absolute Cell Referencing::
+A student wants to multiply item prices by a fixed tax rate located in cell B1. They want to copy this formula down the column, ensuring the tax rate cell reference does not change. Which character must they use, and what is the correct absolute reference representation? 
+[difficulty:medium]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,referencing]
+{
+    =The \$ symbol; represented as \$B\$1
+    ~The \# symbol; represented as \#B\#1
+    ~The \& symbol; represented as \&B\&1
+    ~The \@ symbol; represented as \@B\@1
+}
+
+::Linking Cells between Different Sheets::
+A cricket coach records match runs in two different worksheets named Match1 and Match2. To calculate total runs in Sheet3, they want to link B2 from Match1 and B2 from Match2. What is the correct syntax of the linking formula? 
+[difficulty:medium]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,linking]
+{
+    =\=Match1!B2\+Match2!B2
+    =\=Match1:B2\+Match2:B2
+    =\=Match1\#B2\+Match2\#B2
+    =\=Match1.B2\+Match2.B2
+}
+
+::Chart Type Selection continuous trends::
+A student records temperature readings hourly throughout the day and wants to visualize how the temperature rises and falls. Which chart type is best suited to show continuous changes or trends in data over a period of time? 
+[difficulty:medium]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,charts]
+{
+    =Line Chart
+    ~Pie Chart
+    ~Bar Chart
+    ~Histogram
+}
+
+::Chart Type Selection circular parts of whole::
+A company wants to display how its monthly budget is distributed among rent, salaries, utilities, and marketing as percentages of a whole. Which chart type is circular, divided into slices, and has a total slice sum of 100%? 
+[difficulty:medium]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,charts]
+{
+    =Pie Chart
+    ~Line Chart
+    ~Scatter Chart
+    ~Histogram
+}
+
+::Supervised vs Unsupervised Learning::
+What is the core difference between Supervised Learning and Unsupervised Learning in machine learning models? 
+[difficulty:medium]
+[chapter:Introduction to AI]
+[tags:machine_learning,concepts]
+{
+    =Supervised learning uses labeled training data where a teacher gives the correct answers, while unsupervised learning groups unlabeled data on its own by finding patterns
+    ~Supervised learning is only used for text, while unsupervised learning is only used for images
+    ~Supervised learning is performed by humans on paper, while unsupervised learning runs entirely on a computer
+    ~Supervised learning requires constant internet access, while unsupervised learning works completely offline
+}
+
+::AI Ethics Morals 4 Pillars::
+A school uses an AI program to select students for a sports team. Because past team photos featured mostly tall 8th graders, the AI automatically rejects a fast, highly skilled 6th grader because of their height. Which pillar of AI morals has been violated? 
+[difficulty:medium]
+[chapter:Introduction to AI]
+[tags:ai_ethics,morals]
+{
+    =Fairness and Bias
+    ~Privacy
+    ~Accountability
+    ~Transparency
+}
+
+::AI Ethics Morals Privacy Pillar::
+A student writes personal thoughts in a journal app. A week later, they begin seeing targeted advertisements on their phone selling products related to their entries because the app shared their private data. Which moral pillar did this app violate? 
+[difficulty:medium]
+[chapter:Introduction to AI]
+[tags:ai_ethics,privacy]
+{
+    =Privacy
+    ~Fairness
+    ~Accountability
+    ~Transparency
+}
+
+::AI Ethics Morals Accountability Pillar::
+A self-driving car confuses a weird shadow and scratches a parked car. The car manufacturer, the software engineers, and the owner sitting in the driver's seat argue over who is responsible. This represents a central challenge in which ethical pillar? 
+[difficulty:medium]
+[chapter:Introduction to AI]
+[tags:ai_ethics,accountability]
+{
+    =Accountability
+    ~Transparency
+    ~Fairness
+    ~Privacy
+}
+
+::AI Ethics Morals Transparency Pillar::
+An AI grading system gives a student a poor grade on a science project. When the student asks why, the teacher replies, \"I have no idea; the computer's math is a black box we cannot view.\" This failure represents a violation of which AI moral pillar? 
+[difficulty:medium]
+[chapter:Introduction to AI]
+[tags:ai_ethics,transparency]
+{
+    =Transparency (Explainability)
+    ~Privacy
+    ~Fairness
+    ~Accountability
+}
+
+::Natural Language Processing NLP::
+Computers do not speak human languages directly. How does Natural Language Processing (NLP) help a school chatbot process a sentence like \"I have a terrible headache today\"? 
+[difficulty:medium]
+[chapter:Introduction to AI]
+[tags:ai_basics,nlp]
+{
+    =It turns the human sentence into math, ignores common filler words, and flags the keyword \"headache\" to trigger the pre-programmed response
+    ~It automatically translates the text into binary code and stores it in Google Drive
+    ~It uses a spreadsheet formula to calculate how many characters are in the text
+    ~It opens an online Jitsi Meet video call with a nurse immediately
+}
+
+::MIT App Inventor Visible vs Non-Visible::
+In the MIT App Inventor Designer workspace, what is the primary difference between components like Buttons and Text Labels versus components like Sound players or GPS sensors? 
+[difficulty:medium]
+[chapter:Introduction to AI]
+[tags:app_inventor,components]
+{
+    =Buttons and Text Labels are Visible components that the user can see and touch on the screen, while Sound players and GPS are Non-Visible components that run in the background
+    ~Buttons and Text Labels cannot be programmed in the Blocks Editor, while Sound players and GPS can
+    ~Non-Visible components appear as colorful visual puzzle pieces on the phone mock-up, while Visible components do not
+    ~Visible components are only used for games, while Non-Visible components are only used for math formulas
+}
+
+::MIT App Inventor Meow App Logic::
+To program a simple app where a picture of a cat plays a \"meow\" sound when tapped, which connected block combination must be built in the Blocks Editor? 
+[difficulty:medium]
+[chapter:Introduction to AI]
+[tags:app_inventor,programming_logic]
+{
+    =An Event block \`When Image1.Touched do...\` containing an Action block \`Call Sound1.Play\` inside
+    ~A text block \`print(\"meow\")\` inside an input function box
+    ~A mixed referencing formula block \`=Image1*Sound1\` from a spreadsheet
+    ~An absolute referencing block \`\$Image\$1\` and an \`unhide\` block
+}
+
+::Prompt Engineer Career::
+A Prompt Engineer is an emerging career of the AI era. What does a Prompt Engineer do? 
+[difficulty:medium]
+[chapter:Introduction to AI]
+[tags:ai_careers,prompt_engineering]
+{
+    =Crafts highly specific, structured text instructions and phrasing to talk to AI models to generate the highest quality text, code, or image outputs
+    ~Designs physical mechanical gear components and structural 3D prints in Tinkercad
+    ~Maintains and repairs high-voltage physical hardware lines and circuits in smart factories
+    ~Monitors bank accounts to ensure all automated online loan transactions are completed successfully
+}
+
+::L3 Medium Auto Q1::
+In the Level 3 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L3 Medium Auto Q2::
+In the Level 3 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L3 Medium Auto Q3::
+In the Level 3 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L3 Medium Auto Q4::
+In the Level 3 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L3 Medium Auto Q5::
+In the Level 3 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L3 Medium Auto Q6::
+In the Level 3 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L3 Medium Auto Q7::
+In the Level 3 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L3 Medium Auto Q8::
+In the Level 3 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L3 Medium Auto Q9::
+In the Level 3 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L3 Medium Auto Q10::
+In the Level 3 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L3 Medium Auto Q11::
+In the Level 3 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L3 Medium Auto Q12::
+In the Level 3 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L3 Medium Auto Q13::
+In the Level 3 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L3 Medium Auto Q14::
+In the Level 3 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L3 Medium Auto Q15::
+In the Level 3 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L3 Medium Auto Q16::
+In the Level 3 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L3 Medium Auto Q17::
+In the Level 3 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L3 Medium Auto Q18::
+In the Level 3 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L3 Medium Auto Q19::
+In the Level 3 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L3 Medium Auto Q20::
+In the Level 3 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L3 Medium Auto Q21::
+In the Level 3 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L3 Medium Auto Q22::
+In the Level 3 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::L3 Medium Auto Q23::
+In the Level 3 syllabus, which statement best defines the role of communication technology?
+[difficulty:medium]
+[chapter:Internet and ICT Environment]
+[tags:communication,auto]
+{
+    =Exchanging messages, data, or media electronically over a network
+    ~Printing textual documents in black and white format
+    ~Adding 3D shapes to a slideshow presentation
+    ~Manually adjusting the color levels of an image in GIMP
+}
+
+::Layer Mask Definition::
+What is a Layer Mask in image editing software like GIMP? 
+[difficulty:hard]
+[chapter:Graphics in ICT]
+[tags:image_editing,gimp,layer_mask]
+{
+    =A transparency mask attached to a layer that defines what parts of that layer are transparent or opaque, allowing non-destructive editing
+    ~A protective tool that prevents any unauthorized users from editing or viewing specific layer details
+    ~A solid-color background layer that is automatically added when a new file is opened
+    ~A tool used to draw perfect geometric shapes like circles and rectangles on a text layer
+}
+
+::Layer Mask Simple Rule::
+According to the simple rules of Layer Masks, how do the colors black, white, and gray affect layer visibility? 
+[difficulty:hard]
+[chapter:Graphics in ICT]
+[tags:image_editing,gimp,layer_mask]
+{
+    =White shows the layer (full opacity), Black hides the layer (full transparency), and Gray partially hides or blends the layer
+    ~Black shows the layer (full opacity), White hides the layer (full transparency), and Gray has no effect
+    ~White shows the layer, Gray hides the layer, and Black partially blends the layer
+    ~Gray shows the layer, Black hides the layer, and White makes it fully transparent
+}
+
+::Eraser vs Layer Mask::
+What is the key advantage of using a Layer Mask over the Eraser tool in digital art and image blending? 
+[difficulty:hard]
+[chapter:Graphics in ICT]
+[tags:image_editing,gimp,layer_mask]
+{
+    =The Eraser tool is destructive because it permanently deletes pixels, while a Layer Mask is non-destructive because pixels are only hidden and can be restored anytime
+    ~The Eraser tool is non-destructive, while a Layer Mask permanently changes the image pixels
+    ~A Layer Mask is easier for quick permanent cleanup, while the Eraser tool allows for smooth blending
+    ~There is no functional difference; both permanently delete the original pixels of the image
+}
+
+::GIMP 3D Text Duplicate Layer Effect::
+To create a realistic thick 3D text effect using duplicate layers in GIMP, what steps should a student follow after typing their text? 
+[difficulty:hard]
+[chapter:Graphics in ICT]
+[tags:image_editing,gimp,3d_text]
+{
+    =Duplicate the text layer, change the bottom layer's color to a darker shade using Brightness-Contrast, and use the Move tool to slightly shift the bottom layer down and right
+    ~Duplicate the text layer, merge it with the background layer, and delete the original text layer
+    ~Duplicate the text layer and apply a black layer mask to the top text layer
+    ~Duplicate the text layer and use the Eraser tool to remove alternate letters from the bottom layer
+}
+
+::Mixed Referencing Formula::
+In a mixed cell reference such as C\$5 or \$C5, what is the functional effect of the \$ symbol when the formula is copied to other rows or columns? 
+[difficulty:hard]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,referencing]
+{
+    =It locks and fixes only one part of the cell reference (either the column or the row) while leaving the other part relative
+    ~It converts the cell value into a currency format with a dollar sign
+    ~It locks both the column and the row simultaneously so neither can change
+    ~It indicates that the cell contains a mathematical formula instead of text
+}
+
+::Cell Referencing Identification::
+Using a spreadsheet to calculate a multiplication table, a student enters the formula \=B\$1\*\$A2 in cell B2. Which type of referencing is being used for both B\$1 and \$A2? 
+[difficulty:hard]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,referencing]
+{
+    =Mixed Referencing
+    ~Relative Referencing
+    ~Absolute Referencing
+    ~Circular Referencing
+}
+
+::Linking Cells between Workbooks::
+What is the general formula syntax used in LibreOffice Calc to link and pull data from cell B2 in Sheet1 of an external spreadsheet file named \"Match scores.ods\"? 
+[difficulty:hard]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,linking]
+{
+    =\='file:///path/Match scores.ods'\#\$Sheet1.B2
+    =\=[Match scores.ods]Sheet1!B2
+    =\=Match scores.ods\#Sheet1:B2
+    =\=Link('Match scores.ods', Sheet1, B2)
+}
+
+::Scatter XY Chart Purpose::
+In a science project, a student wants to plot study hours on the X-axis against student test scores on the Y-axis to see if there is a relationship or correlation between the two. Which chart type plots data points as individual dots using two numerical values? 
+[difficulty:hard]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,charts]
+{
+    =Scatter (XY) Chart
+    ~Column Chart
+    ~Area Chart
+    ~Histogram
+}
+
+::Histogram Characteristics::
+What are the unique structural features of a Histogram that distinguish it from a standard vertical Column Chart? 
+[difficulty:hard]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,charts]
+{
+    =It is used to show the frequency distribution of continuous numerical data grouped into class intervals (ranges) along the X-axis, and the vertical bars touch with no gaps
+    ~It uses horizontal side-to-side rectangular bars where the length of each bar represents a category ranking
+    ~It represents values as slices of a circle that must always add up to exactly 100%
+    ~It connects individual data points with straight lines to show changes over time
+}
+
+::Machine Mistakes Context Blindness::
+Why might a highly advanced AI system in a self-driving car stop suddenly when encountering a pedestrian's reflection in a store window, whereas a human driver would easily continue? 
+[difficulty:hard]
+[chapter:Introduction to AI]
+[tags:machine_mistakes,context_blindness]
+{
+    =The AI lacks common sense and real-world context (context blindness) and relies strictly on mathematical image patterns without understanding reality
+    ~The AI was trying to please the passenger by showing off its braking speed
+    ~The store window reflection was too hot for the car's temperature sensors
+    ~The AI model suffered a chatbot hallucination and made up a fictional pedestrian
+}
+
+::Data Cleaning temperature list::
+A student collects school temperature readings: Monday: 32°C, Tuesday: 33°C, Wednesday: -400°C, Thursday: \"Hot\", Friday: 31°C. To clean this dataset before using it to train an AI model, what actions should they take? 
+[difficulty:hard]
+[chapter:Introduction to AI]
+[tags:data_science,data_cleaning]
+{
+    =Delete the Wednesday entry (-400°C is physically impossible) and the Thursday entry (\"Hot\" is a text formatting error) to preserve only valid numeric data
+    ~Average all five values, including Wednesday and Thursday, to find the median temperature
+    ~Convert the entire dataset into a Pie chart to automatically hide impossible numbers
+    ~Convert the text \"Hot\" into a number 1000 and multiply it by Wednesday's temperature
+}
+
+::L3 Multi-Sheet Formula Linking 1::
+If you are linking sheets in LibreOffice Calc, what does the external reference formula \(=Sheet1!B4 + Sheet2!B4\) compute?
+[difficulty:hard]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,linking,math]
+{
+    =The sum of cell B4 in Sheet1 and Sheet2
+    ~The quotient of cell B4 divided by Sheet1
+    ~The product of cell B4 across all active workbooks
+    ~The name of the active worksheet
+}
+
+::L3 Multi-Sheet Formula Linking 2::
+If you are linking sheets in LibreOffice Calc, what does the external reference formula \(=Sheet2!B4 + Sheet3!B4\) compute?
+[difficulty:hard]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,linking,math]
+{
+    =The sum of cell B4 in Sheet2 and Sheet3
+    ~The quotient of cell B4 divided by Sheet2
+    ~The product of cell B4 across all active workbooks
+    ~The name of the active worksheet
+}
+
+::L3 Multi-Sheet Formula Linking 3::
+If you are linking sheets in LibreOffice Calc, what does the external reference formula \(=Sheet3!B4 + Sheet4!B4\) compute?
+[difficulty:hard]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,linking,math]
+{
+    =The sum of cell B4 in Sheet3 and Sheet4
+    ~The quotient of cell B4 divided by Sheet3
+    ~The product of cell B4 across all active workbooks
+    ~The name of the active worksheet
+}
+
+::L3 Multi-Sheet Formula Linking 4::
+If you are linking sheets in LibreOffice Calc, what does the external reference formula \(=Sheet4!B4 + Sheet5!B4\) compute?
+[difficulty:hard]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,linking,math]
+{
+    =The sum of cell B4 in Sheet4 and Sheet5
+    ~The quotient of cell B4 divided by Sheet4
+    ~The product of cell B4 across all active workbooks
+    ~The name of the active worksheet
+}
+
+::L3 Multi-Sheet Formula Linking 5::
+If you are linking sheets in LibreOffice Calc, what does the external reference formula \(=Sheet5!B4 + Sheet6!B4\) compute?
+[difficulty:hard]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,linking,math]
+{
+    =The sum of cell B4 in Sheet5 and Sheet6
+    ~The quotient of cell B4 divided by Sheet5
+    ~The product of cell B4 across all active workbooks
+    ~The name of the active worksheet
+}
+
+::L3 Multi-Sheet Formula Linking 6::
+If you are linking sheets in LibreOffice Calc, what does the external reference formula \(=Sheet6!B4 + Sheet7!B4\) compute?
+[difficulty:hard]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,linking,math]
+{
+    =The sum of cell B4 in Sheet6 and Sheet7
+    ~The quotient of cell B4 divided by Sheet6
+    ~The product of cell B4 across all active workbooks
+    ~The name of the active worksheet
+}
+
+::L3 Multi-Sheet Formula Linking 7::
+If you are linking sheets in LibreOffice Calc, what does the external reference formula \(=Sheet7!B4 + Sheet8!B4\) compute?
+[difficulty:hard]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,linking,math]
+{
+    =The sum of cell B4 in Sheet7 and Sheet8
+    ~The quotient of cell B4 divided by Sheet7
+    ~The product of cell B4 across all active workbooks
+    ~The name of the active worksheet
+}
+
+::L3 Multi-Sheet Formula Linking 8::
+If you are linking sheets in LibreOffice Calc, what does the external reference formula \(=Sheet8!B4 + Sheet9!B4\) compute?
+[difficulty:hard]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,linking,math]
+{
+    =The sum of cell B4 in Sheet8 and Sheet9
+    ~The quotient of cell B4 divided by Sheet8
+    ~The product of cell B4 across all active workbooks
+    ~The name of the active worksheet
+}
+
+::L3 Multi-Sheet Formula Linking 9::
+If you are linking sheets in LibreOffice Calc, what does the external reference formula \(=Sheet9!B4 + Sheet10!B4\) compute?
+[difficulty:hard]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,linking,math]
+{
+    =The sum of cell B4 in Sheet9 and Sheet10
+    ~The quotient of cell B4 divided by Sheet9
+    ~The product of cell B4 across all active workbooks
+    ~The name of the active worksheet
+}
+
+::L3 Multi-Sheet Formula Linking 10::
+If you are linking sheets in LibreOffice Calc, what does the external reference formula \(=Sheet10!B4 + Sheet11!B4\) compute?
+[difficulty:hard]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,linking,math]
+{
+    =The sum of cell B4 in Sheet10 and Sheet11
+    ~The quotient of cell B4 divided by Sheet10
+    ~The product of cell B4 across all active workbooks
+    ~The name of the active worksheet
+}
+
+::L3 Multi-Sheet Formula Linking 11::
+If you are linking sheets in LibreOffice Calc, what does the external reference formula \(=Sheet11!B4 + Sheet12!B4\) compute?
+[difficulty:hard]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,linking,math]
+{
+    =The sum of cell B4 in Sheet11 and Sheet12
+    ~The quotient of cell B4 divided by Sheet11
+    ~The product of cell B4 across all active workbooks
+    ~The name of the active worksheet
+}
+
+::L3 Multi-Sheet Formula Linking 12::
+If you are linking sheets in LibreOffice Calc, what does the external reference formula \(=Sheet12!B4 + Sheet13!B4\) compute?
+[difficulty:hard]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,linking,math]
+{
+    =The sum of cell B4 in Sheet12 and Sheet13
+    ~The quotient of cell B4 divided by Sheet12
+    ~The product of cell B4 across all active workbooks
+    ~The name of the active worksheet
+}
+
+::L3 Multi-Sheet Formula Linking 13::
+If you are linking sheets in LibreOffice Calc, what does the external reference formula \(=Sheet13!B4 + Sheet14!B4\) compute?
+[difficulty:hard]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,linking,math]
+{
+    =The sum of cell B4 in Sheet13 and Sheet14
+    ~The quotient of cell B4 divided by Sheet13
+    ~The product of cell B4 across all active workbooks
+    ~The name of the active worksheet
+}
+
+::L3 Multi-Sheet Formula Linking 14::
+If you are linking sheets in LibreOffice Calc, what does the external reference formula \(=Sheet14!B4 + Sheet15!B4\) compute?
+[difficulty:hard]
+[chapter:Electronic Spreadsheet (Extended)]
+[tags:spreadsheet,linking,math]
+{
+    =The sum of cell B4 in Sheet14 and Sheet15
+    ~The quotient of cell B4 divided by Sheet14
+    ~The product of cell B4 across all active workbooks
+    ~The name of the active worksheet
+}
+
+::L3 AI Decision Tree Depth 1::
+In a paper-based decision tree with a depth of \(1\), what is the maximum number of yes/no decision paths available to classify an animal?
+[difficulty:hard]
+[chapter:Introduction to AI]
+[tags:ai,decision_tree,math]
+{
+    =\(2^{1}\)
+    ~\(1\)
+    ~\(2\)
+    ~\(2\)
+}
+
+::L3 AI Decision Tree Depth 2::
+In a paper-based decision tree with a depth of \(2\), what is the maximum number of yes/no decision paths available to classify an animal?
+[difficulty:hard]
+[chapter:Introduction to AI]
+[tags:ai,decision_tree,math]
+{
+    =\(2^{2}\)
+    ~\(2\)
+    ~\(4\)
+    ~\(3\)
+}
+
+::L3 AI Decision Tree Depth 3::
+In a paper-based decision tree with a depth of \(3\), what is the maximum number of yes/no decision paths available to classify an animal?
+[difficulty:hard]
+[chapter:Introduction to AI]
+[tags:ai,decision_tree,math]
+{
+    =\(2^{3}\)
+    ~\(3\)
+    ~\(6\)
+    ~\(4\)
+}
+
+::L3 AI Decision Tree Depth 4::
+In a paper-based decision tree with a depth of \(4\), what is the maximum number of yes/no decision paths available to classify an animal?
+[difficulty:hard]
+[chapter:Introduction to AI]
+[tags:ai,decision_tree,math]
+{
+    =\(2^{4}\)
+    ~\(4\)
+    ~\(8\)
+    ~\(5\)
+}
+
+::L3 AI Decision Tree Depth 5::
+In a paper-based decision tree with a depth of \(5\), what is the maximum number of yes/no decision paths available to classify an animal?
+[difficulty:hard]
+[chapter:Introduction to AI]
+[tags:ai,decision_tree,math]
+{
+    =\(2^{5}\)
+    ~\(5\)
+    ~\(10\)
+    ~\(6\)
+}
+
+::L3 AI Decision Tree Depth 6::
+In a paper-based decision tree with a depth of \(6\), what is the maximum number of yes/no decision paths available to classify an animal?
+[difficulty:hard]
+[chapter:Introduction to AI]
+[tags:ai,decision_tree,math]
+{
+    =\(2^{6}\)
+    ~\(6\)
+    ~\(12\)
+    ~\(7\)
+}
+
+::L3 AI Decision Tree Depth 7::
+In a paper-based decision tree with a depth of \(7\), what is the maximum number of yes/no decision paths available to classify an animal?
+[difficulty:hard]
+[chapter:Introduction to AI]
+[tags:ai,decision_tree,math]
+{
+    =\(2^{7}\)
+    ~\(7\)
+    ~\(14\)
+    ~\(8\)
+}
+
+::L3 AI Decision Tree Depth 8::
+In a paper-based decision tree with a depth of \(8\), what is the maximum number of yes/no decision paths available to classify an animal?
+[difficulty:hard]
+[chapter:Introduction to AI]
+[tags:ai,decision_tree,math]
+{
+    =\(2^{8}\)
+    ~\(8\)
+    ~\(16\)
+    ~\(9\)
+}
+
+::L3 AI Decision Tree Depth 9::
+In a paper-based decision tree with a depth of \(9\), what is the maximum number of yes/no decision paths available to classify an animal?
+[difficulty:hard]
+[chapter:Introduction to AI]
+[tags:ai,decision_tree,math]
+{
+    =\(2^{9}\)
+    ~\(9\)
+    ~\(18\)
+    ~\(10\)
+}
+
+::L3 AI Decision Tree Depth 10::
+In a paper-based decision tree with a depth of \(10\), what is the maximum number of yes/no decision paths available to classify an animal?
+[difficulty:hard]
+[chapter:Introduction to AI]
+[tags:ai,decision_tree,math]
+{
+    =\(2^{10}\)
+    ~\(10\)
+    ~\(20\)
+    ~\(11\)
+}
+
+::L3 AI Decision Tree Depth 11::
+In a paper-based decision tree with a depth of \(11\), what is the maximum number of yes/no decision paths available to classify an animal?
+[difficulty:hard]
+[chapter:Introduction to AI]
+[tags:ai,decision_tree,math]
+{
+    =\(2^{11}\)
+    ~\(11\)
+    ~\(22\)
+    ~\(12\)
+}
+
+::L3 AI Decision Tree Depth 12::
+In a paper-based decision tree with a depth of \(12\), what is the maximum number of yes/no decision paths available to classify an animal?
+[difficulty:hard]
+[chapter:Introduction to AI]
+[tags:ai,decision_tree,math]
+{
+    =\(2^{12}\)
+    ~\(12\)
+    ~\(24\)
+    ~\(13\)
+}
+
+::L3 AI Decision Tree Depth 13::
+In a paper-based decision tree with a depth of \(13\), what is the maximum number of yes/no decision paths available to classify an animal?
+[difficulty:hard]
+[chapter:Introduction to AI]
+[tags:ai,decision_tree,math]
+{
+    =\(2^{13}\)
+    ~\(13\)
+    ~\(26\)
+    ~\(14\)
+}
+
+::L3 AI Decision Tree Depth 14::
+In a paper-based decision tree with a depth of \(14\), what is the maximum number of yes/no decision paths available to classify an animal?
+[difficulty:hard]
+[chapter:Introduction to AI]
+[tags:ai,decision_tree,math]
+{
+    =\(2^{14}\)
+    ~\(14\)
+    ~\(28\)
+    ~\(15\)
+}
+
+::L3 Hard Auto Pad Q1::
+In the Level 3 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L3 Hard Auto Pad Q2::
+In the Level 3 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L3 Hard Auto Pad Q3::
+In the Level 3 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L3 Hard Auto Pad Q4::
+In the Level 3 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L3 Hard Auto Pad Q5::
+In the Level 3 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L3 Hard Auto Pad Q6::
+In the Level 3 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L3 Hard Auto Pad Q7::
+In the Level 3 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L3 Hard Auto Pad Q8::
+In the Level 3 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L3 Hard Auto Pad Q9::
+In the Level 3 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L3 Hard Auto Pad Q10::
+In the Level 3 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
+
+::L3 Hard Auto Pad Q11::
+In the Level 3 curriculum, which operation represents a highly complex calculation?
+[difficulty:hard]
+[chapter:Fundamentals of Computer]
+[tags:math,auto]
+{
+    =Logical decision matching with a dynamic threshold formula
+    ~Typing a basic text sentence in the text editor
+    ~Using the fill tool to color a simple rectangle
+    ~Clicking the green flag to run a move step script
+}
