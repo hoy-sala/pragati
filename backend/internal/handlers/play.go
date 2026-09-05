@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"math/rand"
 	"net/http"
@@ -44,6 +45,34 @@ type PlayQuestion struct {
 	Difficulty   string          `json:"difficulty"`
 }
 
+// ictLevelForClass maps a class (by name) to its ICT question-bank level.
+// Level 1 is for Class 6, Level 2 for Class 7, Level 3 for Classes 8-10.
+// Returns "" when the class has no ICT level mapping.
+func (h *PlayHandler) ictLevelForClass(ctx context.Context, classID string) string {
+	var name string
+	err := h.db.QueryRow(ctx, `SELECT name FROM classes WHERE id = $1`, classID).Scan(&name)
+	if err != nil {
+		return ""
+	}
+	switch name {
+	case "Class 6":
+		return "ICT L1"
+	case "Class 7":
+		return "ICT L2"
+	case "Class 8", "Class 9", "Class 10":
+		return "ICT L3"
+	default:
+		return ""
+	}
+}
+
+// ictLevelCondition returns a SQL fragment (using questions alias q and
+// parameter $n holding e.g. 'ICT L1:') that keeps non-ICT questions for all
+// classes but restricts ICT-prefixed chapters to the class's own level.
+func ictLevelCondition(param string) string {
+	return ` AND (q.chapters IS NULL OR q.chapters::text NOT LIKE '%ICT L%' OR q.chapters::text LIKE '%` + `%' || ` + param + ` || '%')`
+}
+
 type PlayScoreInput struct {
 	PlayerName     string `json:"player_name"`
 	ClassID        string `json:"class_id"`
@@ -84,6 +113,10 @@ func (h *PlayHandler) ListClasses(w http.ResponseWriter, r *http.Request) {
 		WHERE c.school_id = $1 AND c.deleted_at IS NULL
 		AND q.deleted_at IS NULL AND q.is_active = true
 		AND s.code != 'GK'
+		AND (q.chapters IS NULL OR q.chapters::text NOT LIKE '%ICT L%'
+			OR (c.name = 'Class 6' AND q.chapters::text LIKE '%ICT L1:%')
+			OR (c.name = 'Class 7' AND q.chapters::text LIKE '%ICT L2:%')
+			OR (c.name IN ('Class 8','Class 9','Class 10') AND q.chapters::text LIKE '%ICT L3:%'))
 		GROUP BY c.id, c.name
 		ORDER BY c.sort_order, c.name
 	`, schoolID)
@@ -121,6 +154,11 @@ func (h *PlayHandler) ListSubjects(w http.ResponseWriter, r *http.Request) {
 	if classID != "" {
 		query += ` AND q.id IN (SELECT q2.id FROM questions q2 JOIN class_subjects cs2 ON cs2.subject_id = q2.subject_id WHERE cs2.class_id = $1)`
 		args = append(args, classID)
+		if prefix := h.ictLevelForClass(r.Context(), classID); prefix != "" {
+			n := len(args) + 1
+			query += ictLevelCondition(`$` + strconv.Itoa(n))
+			args = append(args, prefix+":")
+		}
 	}
 	query += ` GROUP BY s.id, s.name ORDER BY s.name`
 
@@ -165,6 +203,11 @@ func (h *PlayHandler) ListTopics(w http.ResponseWriter, r *http.Request) {
 	if classID != "" {
 		query += ` AND q.id IN (SELECT q2.id FROM questions q2 JOIN class_subjects cs2 ON cs2.subject_id = q2.subject_id WHERE cs2.class_id = $2)`
 		args = append(args, classID)
+		if prefix := h.ictLevelForClass(r.Context(), classID); prefix != "" {
+			n := len(args) + 1
+			query += ictLevelCondition(`$` + strconv.Itoa(n))
+			args = append(args, prefix+":")
+		}
 	}
 	query += ` ORDER BY topic`
 
@@ -221,6 +264,11 @@ func (h *PlayHandler) GetQuiz(w http.ResponseWriter, r *http.Request) {
 		query += ` AND q.id IN (SELECT q2.id FROM questions q2 JOIN class_subjects cs2 ON cs2.subject_id = q2.subject_id WHERE cs2.class_id = $` + strconv.Itoa(n) + `)`
 		args = append(args, classID)
 		n++
+		if prefix := h.ictLevelForClass(r.Context(), classID); prefix != "" {
+			query += ictLevelCondition(`$` + strconv.Itoa(n))
+			args = append(args, prefix+":")
+			n++
+		}
 	}
 
 	if topic != "" {
