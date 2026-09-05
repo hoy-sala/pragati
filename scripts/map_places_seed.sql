@@ -139,7 +139,7 @@ DO $$ BEGIN
   ('00000000-0000-0000-0000-000000000001', 'Kopra Reservoir', 'ramsar', 'Maps:Ramsar Wetlands', 'india', 22.0, 82.1, 363.2, 422.9, 'Chhattisgarh', 'Bilaspur', 'Ramsar 2025', '2025-08-08', '["upsc"]', true),
   ('00000000-0000-0000-0000-000000000001', 'Siliserh Lake', 'ramsar', 'Maps:Ramsar Wetlands', 'india', 27.5, 76.6, 229.2, 278.7, 'Rajasthan', 'Alwar', 'Ramsar 2025; Sariska buffer', '2025-08-08', '["upsc"]', true),
   ('00000000-0000-0000-0000-000000000001', 'Chilika Lake', 'ramsar', 'Maps:Ramsar Wetlands', 'india', 19.7, 85.3, 441.2, 483.2, 'Odisha', '', 'First Ramsar 1981; lagoon', NULL, '["upsc"]', true),
-  ('00000000-0000-0000-0000-000000000001', 'Keoladeo Ghana NP', 'ramsar', 'Maps:Ramsar Wetlands', 'india', 27.15, 77.5, 251.1, 287.9, 'Rajasthan', '', 'First Ramsar 1981; Montreux', NULL, '["upsc"]', true),
+  ('00000000-0000-0000-0000-000000000001', 'Keoladeo Ghana Wetland', 'ramsar', 'Maps:Ramsar Wetlands', 'india', 27.15, 77.5, 251.1, 287.9, 'Rajasthan', '', 'First Ramsar 1981; Montreux', NULL, '["upsc"]', true),
   ('00000000-0000-0000-0000-000000000001', 'Loktak Lake', 'ramsar', 'Maps:Ramsar Wetlands', 'india', 24.5, 93.77, 647.5, 357.3, 'Manipur', '', 'Phumdis; Montreux', NULL, '["upsc"]', true),
   ('00000000-0000-0000-0000-000000000001', 'Vembanad-Kol', 'ramsar', 'Maps:Ramsar Wetlands', 'india', 9.6, 76.4, 224.3, 748.1, 'Kerala', '', 'Largest Kerala wetland', NULL, '["upsc"]', true),
   ('00000000-0000-0000-0000-000000000001', 'Kolleru Lake', 'ramsar', 'Maps:Ramsar Wetlands', 'india', 16.6, 81.2, 341.3, 564.5, 'Andhra Pradesh', '', 'Godavari-Krishna basin', NULL, '["upsc"]', true),

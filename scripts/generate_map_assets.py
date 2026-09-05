@@ -231,7 +231,7 @@ add("Gokul Jalashay", "ramsar", "Ramsar Wetlands", "india", 25.90, 85.90, "Bihar
 add("Kopra Reservoir", "ramsar", "Ramsar Wetlands", "india", 22.00, 82.10, "Chhattisgarh", "Bilaspur", "Ramsar 2025", "2025-08-08", U)
 add("Siliserh Lake", "ramsar", "Ramsar Wetlands", "india", 27.50, 76.60, "Rajasthan", "Alwar", "Ramsar 2025; Sariska buffer", "2025-08-08", U)
 add("Chilika Lake", "ramsar", "Ramsar Wetlands", "india", 19.70, 85.30, "Odisha", "", "First Ramsar 1981; lagoon", None, U)
-add("Keoladeo Ghana NP", "ramsar", "Ramsar Wetlands", "india", 27.15, 77.50, "Rajasthan", "", "First Ramsar 1981; Montreux", None, U)
+add("Keoladeo Ghana Wetland", "ramsar", "Ramsar Wetlands", "india", 27.15, 77.50, "Rajasthan", "", "First Ramsar 1981; Montreux", None, U)
 add("Loktak Lake", "ramsar", "Ramsar Wetlands", "india", 24.50, 93.77, "Manipur", "", "Phumdis; Montreux", None, U)
 add("Vembanad-Kol", "ramsar", "Ramsar Wetlands", "india", 9.60, 76.40, "Kerala", "", "Largest Kerala wetland", None, U)
 add("Kolleru Lake", "ramsar", "Ramsar Wetlands", "india", 16.60, 81.20, "Andhra Pradesh", "", "Godavari-Krishna basin", None, U)
