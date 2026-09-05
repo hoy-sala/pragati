@@ -29,10 +29,13 @@
 
 	let outlines = $state<{ id: string; d: string }[]>([]);
 	let states = $state<{ name: string; d: string }[]>([]);
+	let districts = $state<{ name: string; d: string }[]>([]);
+	let fillRule = $state('nonzero');
 	let viewBox = $state('0 0 760 860');
 	let baseVB = $state({ x: 0, y: 0, w: 760, h: 860 });
 	let zoom = $state(1);
 	let schematic = $state(false);
+	let sourceNote = $state('');
 	let loadError = $state(false);
 
 	$effect(() => {
@@ -47,12 +50,15 @@
 			.then((j) => {
 				outlines = j.outlines ?? [];
 				states = j.states ?? [];
+				districts = j.districts ?? [];
+				fillRule = j.fillRule ?? 'nonzero';
 				const vb = j.viewBox ?? [0, 0, 760, 860];
 				baseVB = { x: vb[0], y: vb[1], w: vb[2], h: vb[3] };
 				viewBox = `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`;
 				schematic = !!j.schematic;
+				sourceNote = typeof j.note === 'string' ? j.note : '';
 			})
-			.catch(() => { loadError = true; outlines = []; states = []; });
+			.catch(() => { loadError = true; outlines = []; states = []; districts = []; });
 	});
 
 	function applyZoom() {
@@ -125,12 +131,23 @@
 			{#if loadError}
 				<text x="50%" y="50%" text-anchor="middle" font-size="22" fill="#4A4458">Map outline unavailable</text>
 			{:else}
-				{#each outlines as o (o.id)}
-					<path d={o.d} fill="#FFFBEC" stroke="#1F1A2E" stroke-width="3" stroke-linejoin="round" filter="url(#landShadow)" />
-				{/each}
-				{#each states as s (s.name)}
-					<path d={s.d} fill="none" stroke="#1F1A2E" stroke-width="1" opacity="0.4" stroke-linejoin="round" />
-				{/each}
+			{#each outlines as o (o.id)}
+				<path
+					d={o.d}
+					fill="#FFFBEC"
+					stroke="#1F1A2E"
+					stroke-width="3"
+					stroke-linejoin="round"
+					fill-rule={fillRule}
+					filter="url(#landShadow)"
+				/>
+			{/each}
+			{#each states as s (s.name)}
+				<path d={s.d} fill="none" stroke="#1F1A2E" stroke-width="1" opacity="0.4" stroke-linejoin="round" />
+			{/each}
+			{#each districts as d (d.name)}
+				<path d={d.d} fill="#FFFBEC" stroke="#1F1A2E" stroke-width="1.1" stroke-linejoin="round" />
+			{/each}
 			{/if}
 
 			<!-- compass -->
@@ -173,6 +190,8 @@
 
 	{#if schematic}
 		<p class="hint schematic-note">Schematic outline for practice — not to survey scale.</p>
+	{:else if sourceNote}
+		<p class="hint schematic-note">{sourceNote}</p>
 	{/if}
 	<p class="hint pin-hint">Tap a pin on the map{#if !(answered || revealed)} — names appear after you answer{/if}.</p>
 </div>

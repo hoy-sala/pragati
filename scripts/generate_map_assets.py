@@ -14,6 +14,102 @@ ROOT = pathlib.Path(__file__).parent.parent
 MAP_DIR = ROOT / "frontend" / "static" / "maps"
 MAP_DIR.mkdir(parents=True, exist_ok=True)
 
+import os
+GOVT = os.environ.get("GOVT_MAPS") == "1"
+
+KA_DISTRICTS = []  # [(name, [rings])] — govt mode only
+INDIA_RINGS = None  # list of rings — govt mode only
+
+def read_shp_polygons(shp_path):
+    """Minimal ESRI shapefile polygon reader (pure stdlib). Returns list of
+    (bbox, parts, points) in file order matching .dbf records."""
+    import struct
+    data = pathlib.Path(shp_path).read_bytes()
+    assert struct.unpack(">i", data[0:4])[0] == 9994, "not a shapefile"
+    n = len(data)
+    off = 100
+    recs = []
+    while off + 8 <= n:
+        _recno, clen = struct.unpack(">2i", data[off:off + 8])
+        end = off + 8 + clen * 2
+        stype = struct.unpack("<i", data[off + 8:off + 12])[0]
+        if stype == 5:  # polygon
+            nb = struct.unpack("<i", data[off + 44:off + 48])[0]
+            np = struct.unpack("<i", data[off + 48:off + 52])[0]
+            parts = struct.unpack("<%di" % nb, data[off + 52:off + 52 + 4 * nb])
+            pts = struct.unpack("<%dd" % (2 * np), data[off + 52 + 4 * nb:off + 52 + 4 * nb + 16 * np])
+            rings = []
+            for i in range(nb):
+                s = parts[i]
+                e = parts[i + 1] if i + 1 < nb else np
+                rings.append([(pts[j * 2], pts[j * 2 + 1]) for j in range(s, e)])
+            recs.append(rings)
+        else:
+            recs.append([])
+        off = end
+    return recs
+
+def read_dbf_rows(dbf_path):
+    """Minimal dBase III reader. Returns (field_names, rows as dicts)."""
+    import struct
+    data = pathlib.Path(dbf_path).read_bytes()
+    nrec = struct.unpack("<i", data[4:8])[0]
+    hlen = struct.unpack("<h", data[8:10])[0]
+    rlen = struct.unpack("<h", data[10:12])[0]
+    fields = []
+    off = 32
+    while off < hlen - 1:
+        if data[off] == 0x0D:
+            break
+        name = data[off:off + 11].split(b"\x00")[0].decode("latin-1").strip()
+        ftype = chr(data[off + 11])
+        flen = data[off + 16]
+        fdec = data[off + 17]
+        fields.append((name, ftype, flen, fdec))
+        off += 32
+    rows = []
+    pos = hlen
+    for _ in range(nrec):
+        rec = data[pos:pos + rlen]
+        pos += rlen
+        if not rec or rec[0:1] == b"*":
+            rows.append(None)
+            continue
+        p = 1
+        row = {}
+        for name, ftype, flen, fdec in fields:
+            raw = rec[p:p + flen]
+            p += flen
+            try:
+                row[name] = raw.decode("latin-1").strip()
+            except Exception:
+                row[name] = ""
+        rows.append(row)
+    return [f[0] for f in fields], rows
+
+if GOVT:
+    # ——— Accurate outer boundary: datameet india-composite (SoI/Census) ———
+    _fc = json.loads(pathlib.Path("/tmp/indcomp.geojson").read_text(encoding="utf-8"))
+    INDIA_RINGS = []
+    for _feat in _fc["features"]:
+        _g = _feat["geometry"]
+        _polys = [_g["coordinates"]] if _g["type"] == "Polygon" else _g["coordinates"]
+        for _poly in _polys:
+            for _ring in _poly:
+                INDIA_RINGS.append([(c[0], c[1]) for c in _ring])
+    # ——— Accurate Karnataka districts: Census 2011 shapefile ———
+    _recs = read_shp_polygons("/tmp/2011_Dist.shp")
+    _fields, _rows = read_dbf_rows("/tmp/2011_Dist.dbf")
+    _stf = next((f for f in _fields if f.upper() in ("ST_NM", "STATE", "STATENAME", "STATE_NAME")), _fields[0])
+    _dtf = next((f for f in _fields if "DIST" in f.upper()), _fields[-1])
+    for _rec, _row in zip(_recs, _rows):
+        if not _row or not _rec:
+            continue
+        if _row.get(_stf, "").strip().upper() != "KARNATAKA":
+            continue
+        KA_DISTRICTS.append((_row.get(_dtf, "").strip() or "District", _rec))
+    print(f"govt mode: india rings={len(INDIA_RINGS or [])} ka_districts={len(KA_DISTRICTS)}")
+
 # ——— India country outline (lng,lat), from world.geo.json IND ———
 INDIA_OUTLINE = [
 [77.837451,35.49401],[78.912269,34.321936],[78.811086,33.506198],[79.208892,32.994395],[79.176129,32.48378],[78.458446,32.618164],[78.738894,31.515906],[79.721367,30.882715],[81.111256,30.183481],[80.476721,29.729865],[80.088425,28.79447],[81.057203,28.416095],[81.999987,27.925479],[83.304249,27.364506],[84.675018,27.234901],[85.251779,26.726198],[86.024393,26.630985],[87.227472,26.397898],[88.060238,26.414615],[88.174804,26.810405],[88.043133,27.445819],[88.120441,27.876542],[88.730326,28.086865],[88.814248,27.299316],[88.835643,27.098966],[89.744528,26.719403],[90.373275,26.875724],[91.217513,26.808648],[92.033484,26.83831],[92.103712,27.452614],[91.696657,27.771742],[92.503119,27.896876],[93.413348,28.640629],[94.56599,29.277438],[95.404802,29.031717],[96.117679,29.452802],[96.586591,28.83098],[96.248833,28.411031],[97.327114,28.261583],[97.402561,27.882536],[97.051989,27.699059],[97.133999,27.083774],[96.419366,27.264589],[95.124768,26.573572],[95.155153,26.001307],[94.603249,25.162495],[94.552658,24.675238],[94.106742,23.850741],[93.325188,24.078556],[93.286327,23.043658],[93.060294,22.703111],[93.166128,22.27846],[92.672721,22.041239],[92.146035,23.627499],[91.869928,23.624346],[91.706475,22.985264],[91.158963,23.503527],[91.46773,24.072639],[91.915093,24.130414],[92.376202,24.976693],[91.799596,25.147432],[90.872211,25.132601],[89.920693,25.26975],[89.832481,25.965082],[89.355094,26.014407],[88.563049,26.446526],[88.209789,25.768066],[88.931554,25.238692],[88.306373,24.866079],[88.084422,24.501657],[88.69994,24.233715],[88.52977,23.631142],[88.876312,22.879146],[89.031961,22.055708],[88.888766,21.690588],[88.208497,21.703172],[86.975704,21.495562],[87.033169,20.743308],[86.499351,20.151638],[85.060266,19.478579],[83.941006,18.30201],[83.189217,17.671221],[82.192792,17.016636],[82.191242,16.556664],[81.692719,16.310219],[80.791999,15.951972],[80.324896,15.899185],[80.025069,15.136415],[80.233274,13.835771],[80.286294,13.006261],[79.862547,12.056215],[79.857999,10.357275],[79.340512,10.308854],[78.885345,9.546136],[79.18972,9.216544],[78.277941,8.933047],[77.941165,8.252959],[77.539898,7.965535],[76.592979,8.899276],[76.130061,10.29963],[75.746467,11.308251],[75.396101,11.781245],[74.864816,12.741936],[74.616717,13.992583],[74.443859,14.617222],[73.534199,15.990652],[73.119909,17.92857],[72.820909,19.208234],[72.824475,20.419503],[72.630533,21.356009],[71.175273,20.757441],[70.470459,20.877331],[69.16413,22.089298],[69.644928,22.450775],[69.349597,22.84318],[68.176645,23.691965],[68.842599,24.359134],[71.04324,24.356524],[70.844699,25.215102],[70.282873,25.722229],[70.168927,26.491872],[69.514393,26.940966],[70.616496,27.989196],[71.777666,27.91318],[72.823752,28.961592],[73.450638,29.976413],[74.42138,30.979815],[74.405929,31.692639],[75.258642,32.271105],[74.451559,32.7649],[74.05,33.30],[73.55,33.75],[73.35,34.35],[73.55,35.05],[73.85,35.80],[74.25,36.40],[74.70,37.00],[75.30,36.85],[75.90,36.45],[76.40,36.10],[76.90,35.70],
@@ -42,35 +138,36 @@ def make_projection(outline, W, H, pad=24):
         return (round(x, 1), round(y, 1))
     return proj
 
+def make_projection_rings(all_rings, W, H, pad=24):
+    pts = [p for ring in all_rings for p in ring]
+    return make_projection(pts, W, H, pad)
+
 INDIA_W, INDIA_H = 760, 860
 KA_W, KA_H = 560, 760
 
-india_proj = make_projection(INDIA_OUTLINE, INDIA_W, INDIA_H)
-ka_proj = make_projection(KARNATAKA_OUTLINE, KA_W, KA_H)
+if GOVT and INDIA_RINGS:
+    india_proj = make_projection_rings(INDIA_RINGS, INDIA_W, INDIA_H)
+else:
+    india_proj = make_projection(INDIA_OUTLINE, INDIA_W, INDIA_H)
+if GOVT and KA_DISTRICTS:
+    ka_proj = make_projection_rings([r for _, rs in KA_DISTRICTS for r in rs], KA_W, KA_H)
+else:
+    ka_proj = make_projection(KARNATAKA_OUTLINE, KA_W, KA_H)
 
 def path_d(outline, proj):
     pts = [proj(lng, lat) for lng, lat in outline]
     d = f"M {pts[0][0]} {pts[0][1]} " + " ".join(f"L {x} {y}" for x, y in pts[1:]) + " Z"
     return d
 
-(MAP_DIR / "india.json").write_text(json.dumps({
-    "viewBox": [0, 0, INDIA_W, INDIA_H],
-    "outlines": [{"id": "india", "d": path_d(INDIA_OUTLINE, india_proj)}],
-    "schematic": False,
-}, ensure_ascii=False), encoding="utf-8")
+def path_d_rings(rings, proj):
+    parts = []
+    for ring in rings:
+        pts = [proj(lng, lat) for lng, lat in ring]
+        if not pts:
+            continue
+        parts.append(f"M {pts[0][0]} {pts[0][1]} " + " ".join(f"L {x} {y}" for x, y in pts[1:]) + " Z")
+    return " ".join(parts)
 
-(MAP_DIR / "karnataka.json").write_text(json.dumps({
-    "viewBox": [0, 0, KA_W, KA_H],
-    "outlines": [{"id": "karnataka", "d": path_d(KARNATAKA_OUTLINE, ka_proj)}],
-    "schematic": True,
-    "note": "Schematic outline for practice, not to survey scale.",
-}, ensure_ascii=False), encoding="utf-8")
-
-# ——— India state boundaries (official-style internal borders) ———
-# Source: click-that-hood india.geojson (OSM-derived), Douglas-Peucker
-# simplified. J&K omitted: that file follows the LoC, while our outer
-# outline shows full J&K per India's official map — drawing its LoC
-# boundary inside would contradict it.
 def dp_simplify(pts, tol):
     """Douglas-Peucker on [(x,y)] in degree space. Returns reduced list."""
     if len(pts) < 3:
@@ -98,9 +195,90 @@ def dp_simplify(pts, tol):
             stack.append((imax, e))
     return [p for p, k in zip(pts, keep) if k]
 
+def simplify_ring(ring, tol):
+    return dp_simplify([(x, y) for x, y in ring], tol) if len(ring) >= 3 else ring
+
+if GOVT and INDIA_RINGS:
+    india_d = path_d_rings([simplify_ring(r, 0.008) for r in INDIA_RINGS], india_proj)
+    india_payload = {
+        "viewBox": [0, 0, INDIA_W, INDIA_H],
+        "outlines": [{"id": "india", "d": india_d}],
+        "schematic": False,
+        "fillRule": "evenodd",
+        "note": "Outer boundary: datameet india-composite (SoI/Census-derived).",
+    }
+else:
+    india_payload = {
+        "viewBox": [0, 0, INDIA_W, INDIA_H],
+        "outlines": [{"id": "india", "d": path_d(INDIA_OUTLINE, india_proj)}],
+        "schematic": False,
+    }
+(MAP_DIR / "india.json").write_text(json.dumps(india_payload, ensure_ascii=False), encoding="utf-8")
+
+if GOVT and KA_DISTRICTS:
+    dist_out = []
+    for _dname, _rings in KA_DISTRICTS:
+        _parts = []
+        for _ring in _rings:
+            _simp = dp_simplify([(x, y) for x, y in _ring], 0.004)
+            if len(_simp) < 4:
+                continue
+            _sp = [ka_proj(lng, lat) for lng, lat in _simp]
+            _parts.append("M " + " L ".join(f"{x} {y}" for x, y in _sp) + " Z")
+        if _parts:
+            dist_out.append({"name": _dname, "d": " ".join(_parts)})
+    (MAP_DIR / "karnataka.json").write_text(json.dumps({
+        "viewBox": [0, 0, KA_W, KA_H],
+        "outlines": [],
+        "districts": dist_out,
+        "schematic": False,
+        "note": "District boundaries: Census 2011, Govt of India.",
+    }, ensure_ascii=False), encoding="utf-8")
+else:
+    (MAP_DIR / "karnataka.json").write_text(json.dumps({
+        "viewBox": [0, 0, KA_W, KA_H],
+        "outlines": [{"id": "karnataka", "d": path_d(KARNATAKA_OUTLINE, ka_proj)}],
+        "schematic": True,
+        "note": "Schematic outline for practice, not to survey scale.",
+    }, ensure_ascii=False), encoding="utf-8")
+
+# ——— India state boundaries (official-style internal borders) ———
+# Source: click-that-hood india.geojson (OSM-derived), Douglas-Peucker
+# simplified. J&K omitted: that file follows the LoC, while our outer
+# outline shows full J&K per India's official map — drawing its LoC
+# boundary inside would contradict it.
 STATES_RAW = pathlib.Path(r"C:\Users\MDRS Bahaddurghatta\.local\share\opencode\tool-output\tool_072b00b50001Hwn9jCotd1q0Fm")
 states_out = []
-if STATES_RAW.exists():
+if GOVT and pathlib.Path("/tmp/Admin2.shp").exists() and pathlib.Path("/tmp/Admin2.dbf").exists():
+    # Accurate state borders: datameet States/Admin2 (SoI-aligned, matches the
+    # composite outer — includes full J&K + Ladakh, so nothing is omitted).
+    _srecs = read_shp_polygons("/tmp/Admin2.shp")
+    _sfields, _srows = read_dbf_rows("/tmp/Admin2.dbf")
+    _snf = next((f for f in _sfields if f.upper() in ("ST_NM", "STATE", "STATENAME", "STATE_NAME", "NAME", "STNAME")),
+                next((f for f in _sfields if "STAT" in f.upper() or "NAME" in f.upper()), _sfields[0]))
+    _SKIP = {"LAKSHADWEEP", "ANDAMAN AND NICOBAR ISLANDS", "ANDAMAN & NICOBAR ISLANDS"}
+    for _rec, _row in zip(_srecs, _srows):
+        if not _row or not _rec:
+            continue
+        _nm = _row.get(_snf, "").strip()
+        if not _nm or _nm.upper() in _SKIP:
+            continue
+        _parts = []
+        for _ring in _rec:
+            if len(_ring) < 4:
+                continue
+            _xs = [p[0] for p in _ring]; _ys = [p[1] for p in _ring]
+            if max(_xs) - min(_xs) < 0.3 and max(_ys) - min(_ys) < 0.3:
+                continue
+            _simp = dp_simplify([(x, y) for x, y in _ring], 0.02)
+            if len(_simp) < 4:
+                continue
+            _sp = [india_proj(lng, lat) for lng, lat in _simp]
+            _parts.append("M " + " L ".join(f"{x} {y}" for x, y in _sp) + " Z")
+        if _parts:
+            states_out.append({"name": _nm, "d": " ".join(_parts)})
+    print(f"govt mode: states={len(states_out)}")
+if not states_out and STATES_RAW.exists():
     # Far-flung island UTs render as stray fragments next to the
     # mainland outline, so they are left out of internal borders.
     SKIP_STATES = {"Jammu and Kashmir", "Lakshadweep", "Andaman and Nicobar Islands"}
@@ -135,9 +313,14 @@ if STATES_RAW.exists():
 
 india_json_path = MAP_DIR / "india.json"
 india_data = json.loads(india_json_path.read_text(encoding="utf-8"))
+if not states_out and "states" in india_data:
+    # Raw states source unavailable (e.g. server run): keep existing lines.
+    states_out = india_data["states"]
+    print(f"kept {len(states_out)} existing state boundaries")
+else:
+    print(f"added {len(states_out)} state boundaries")
 india_data["states"] = states_out
 india_json_path.write_text(json.dumps(india_data, ensure_ascii=False), encoding="utf-8")
-print(f"added {len(states_out)} state boundaries")
 
 print("wrote map JSON assets")
 
