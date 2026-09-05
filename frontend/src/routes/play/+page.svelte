@@ -1311,7 +1311,7 @@
 					{/if}
 				</div>
 				<div class="side-card side-muted">
-					<p class="side-hint">Tap the correct pin on the map — or use the A/B/C/D buttons below it.</p>
+					<p class="side-hint">Tap the correct pin on the map. Place names appear on the pins after you answer.</p>
 				</div>
 			</aside>
 		</div>

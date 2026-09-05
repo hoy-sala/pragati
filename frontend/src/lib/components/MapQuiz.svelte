@@ -143,7 +143,7 @@
 					transform="translate({p.px},{p.py})"
 					role="button"
 					tabindex={answered || disabled ? -1 : 0}
-					aria-label="Option {p.key}"
+					aria-label="Pin {p.key}{(answered || revealed) ? `: ${p.label}` : ''}"
 					onclick={() => pick(p.key)}
 					onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(p.key); } }}
 				>
@@ -152,6 +152,9 @@
 					{/if}
 					<circle class="dot" r="15" />
 					<text y="6" text-anchor="middle" class="pin-letter">{p.key}</text>
+					{#if answered || revealed}
+						<text x="20" y="5" class="pin-label">{p.label}</text>
+					{/if}
 				</g>
 			{/each}
 		</svg>
@@ -166,24 +169,7 @@
 	{#if schematic}
 		<p class="hint schematic-note">Schematic outline for practice — not to survey scale.</p>
 	{/if}
-
-	<!-- keyboard / small-screen fallback: keys only (labels would give away the answer —
-	     students must locate the pin on the map; screen readers still get the name) -->
-	<div class="pin-fallback">
-		{#each options.filter((o) => !hiddenKeys.includes(o.key)) as o (o.key)}
-			{@const st = pinState(o)}
-			<button
-				onclick={() => pick(o.key)}
-				disabled={answered || disabled}
-				aria-label="Option {o.key}: {o.label}"
-				title={answered || revealed ? o.label : `Pick pin ${o.key} on the map`}
-				class="fallback-btn {st === 'picked-right' || st === 'answer' ? 'fb-right' : ''} {st === 'picked-wrong' ? 'fb-wrong' : ''}"
-			>
-				<span class="fb-key">{o.key}</span>
-				<span class="fb-pick">{answered || revealed ? o.label : `Pin ${o.key}`}</span>
-			</button>
-		{/each}
-	</div>
+	<p class="hint pin-hint">Tap a pin on the map{#if !(answered || revealed)} — names appear after you answer{/if}.</p>
 </div>
 
 <style>
@@ -243,23 +229,9 @@
 	}
 	@keyframes shakeIt { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-5px); } 40% { transform: translateX(5px); } 60% { transform: translateX(-3px); } 80% { transform: translateX(3px); } }
 
-	.pin-fallback { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
-	@media (max-width: 560px) { .pin-fallback { grid-template-columns: 1fr; } }
-	.fallback-btn {
-		display: flex; align-items: center; gap: 0.55rem;
-		border: 2px solid var(--ink); background: var(--paper); border-radius: 12px;
-		padding: 0.55rem 0.75rem; font-weight: 600; font-size: 0.92rem; cursor: pointer; color: var(--ink);
-		text-align: left;
+	.pin-label {
+		font-family: var(--font-body); font-weight: 700; font-size: 13px;
+		fill: #1F1A2E; stroke: #FFFCF5; stroke-width: 4px; paint-order: stroke;
 	}
-	.fallback-btn:hover:not(:disabled) { background: var(--cream); }
-	.fallback-btn:disabled { cursor: default; }
-	.fb-key {
-		width: 26px; height: 26px; border-radius: 50%; flex: none;
-		border: 2px solid var(--ink); display: grid; place-items: center;
-		font-family: var(--font-display); font-weight: 800; font-size: 0.85rem;
-	}
-	.fb-right { border-color: var(--teal); background: var(--mint); }
-	.fb-right .fb-key { border-color: var(--teal); color: var(--teal); }
-	.fb-wrong { border-color: var(--coral); background: var(--coral-tint); }
-	.fb-wrong .fb-key { border-color: var(--coral); color: var(--coral); }
+	.pin-hint { margin: 0; font-size: 0.82rem; text-align: center; }
 </style>
