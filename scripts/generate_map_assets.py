@@ -231,7 +231,6 @@ if GOVT and KA_DISTRICTS:
         "outlines": [],
         "districts": dist_out,
         "schematic": False,
-        "note": "District boundaries: Census 2011, Govt of India.",
     }, ensure_ascii=False), encoding="utf-8")
 else:
     (MAP_DIR / "karnataka.json").write_text(json.dumps({
@@ -352,6 +351,54 @@ add("Raichur", "city", "Karnataka Special", "karnataka", 16.20, 77.35, "Karnatak
 add("Bidar", "city", "Karnataka Special", "karnataka", 17.91, 77.53, "Karnataka", "Bidar", "Bidriware; fort", None, K)
 add("Shivamogga", "city", "Karnataka Special", "karnataka", 14.16, 75.63, "Karnataka", "Shivamogga", "Malnad gateway; Agumbe", None, K)
 add("Tumakuru", "city", "Karnataka Special", "karnataka", 13.33, 77.10, "Karnataka", "Tumakuru", "Pavagada solar nearby", None, K)
+
+# Karnataka Heritage (karnataka map)
+add("Badami Caves", "heritage", "Karnataka Heritage", "karnataka", 15.92, 75.68, "Karnataka", "Bagalkote", "Chalukya rock-cut temples", None, K)
+add("Aihole", "heritage", "Karnataka Heritage", "karnataka", 16.02, 75.88, "Karnataka", "Bagalkote", "Cradle of temple architecture", None, K)
+add("Somanathapura", "heritage", "Karnataka Heritage", "karnataka", 12.28, 76.88, "Karnataka", "Mysuru", "Hoysala Keshava temple", None, K)
+add("Talakadu", "heritage", "Karnataka Heritage", "karnataka", 12.19, 77.03, "Karnataka", "Mysuru", "Buried temples; Pancha Lingas", None, K)
+add("Srirangapatna", "heritage", "Karnataka Heritage", "karnataka", 12.42, 76.70, "Karnataka", "Mandya", "Tipu capital; Ranganathaswamy", None, K)
+add("Gol Gumbaz", "heritage", "Karnataka Heritage", "karnataka", 16.83, 75.73, "Karnataka", "Vijayapura", "Whispering gallery", None, K)
+add("Chitradurga Fort", "heritage", "Karnataka Heritage", "karnataka", 14.23, 76.40, "Karnataka", "Chitradurga", "Onake Obavva; Nayakas", None, K)
+add("Mirjan Fort", "heritage", "Karnataka Heritage", "karnataka", 14.50, 74.42, "Karnataka", "Uttara Kannada", "Pepper queen Rani Chennabhairadevi", None, K)
+add("Lakkundi", "heritage", "Karnataka Heritage", "karnataka", 15.39, 75.72, "Karnataka", "Gadag", "Chalukya temples; stepwells", None, K)
+add("Banavasi", "heritage", "Karnataka Heritage", "karnataka", 14.53, 75.01, "Karnataka", "Uttara Kannada", "Kadamba capital", None, K)
+
+# Karnataka Rivers & Dams (karnataka map)
+add("Tungabhadra Dam", "dam", "Karnataka Rivers & Dams", "karnataka", 15.27, 76.33, "Karnataka", "Vijayanagara", "Hospet; TB Board", None, K)
+add("Linganamakki Dam", "dam", "Karnataka Rivers & Dams", "karnataka", 14.15, 74.83, "Karnataka", "Shivamogga", "Sharavathi hydroelectric", None, K)
+add("Supa Dam", "dam", "Karnataka Rivers & Dams", "karnataka", 15.28, 74.52, "Karnataka", "Uttara Kannada", "Kali river power", None, K)
+add("Kabini Dam", "dam", "Karnataka Rivers & Dams", "karnataka", 11.97, 76.35, "Karnataka", "Mysuru", "Kaveri tributary", None, K)
+add("Bhadra Dam", "dam", "Karnataka Rivers & Dams", "karnataka", 13.70, 75.63, "Karnataka", "Shivamogga", "Bhadra reservoir", None, K)
+add("Hemavathi Dam", "dam", "Karnataka Rivers & Dams", "karnataka", 13.03, 76.00, "Karnataka", "Hassan", "Gorur; Kaveri tributary", None, K)
+add("Harangi Dam", "dam", "Karnataka Rivers & Dams", "karnataka", 12.48, 75.98, "Karnataka", "Kodagu", "First Kaveri basin dam", None, K)
+add("Hidkal Dam", "dam", "Karnataka Rivers & Dams", "karnataka", 16.12, 74.63, "Karnataka", "Belagavi", "Ghataprabha project", None, K)
+add("Vani Vilas Sagar", "dam", "Karnataka Rivers & Dams", "karnataka", 14.23, 76.45, "Karnataka", "Chitradurga", "Vedavathi; oldest dam", None, K)
+add("Navilatirtha Dam", "dam", "Karnataka Rivers & Dams", "karnataka", 15.93, 75.10, "Karnataka", "Belagavi", "Malaprabha project", None, K)
+
+# Karnataka Wildlife (karnataka map)
+add("Bannerghatta NP", "park", "Karnataka Wildlife", "karnataka", 12.80, 77.58, "Karnataka", "Bengaluru Urban", "Butterfly park; safari", None, K)
+add("Dandeli WLS", "park", "Karnataka Wildlife", "karnataka", 15.25, 74.62, "Karnataka", "Uttara Kannada", "Hornbills; Kali rafting", None, K)
+add("Ranganathittu", "park", "Karnataka Wildlife", "karnataka", 12.42, 76.67, "Karnataka", "Mandya", "Bird sanctuary; Kaveri", None, K)
+add("Kokkare Bellur", "park", "Karnataka Wildlife", "karnataka", 12.51, 77.35, "Karnataka", "Mandya", "Pelicanry; community reserve", None, K)
+add("Pushpagiri WLS", "park", "Karnataka Wildlife", "karnataka", 12.62, 75.70, "Karnataka", "Kodagu", "Western Ghats birds", None, K)
+add("Brahmagiri WLS", "park", "Karnataka Wildlife", "karnataka", 12.03, 75.83, "Karnataka", "Kodagu", "Lion-tailed macaque", None, K)
+add("Attiveri Sanctuary", "park", "Karnataka Wildlife", "karnataka", 15.08, 75.03, "Karnataka", "Uttara Kannada", "Bird sanctuary", None, K)
+add("Kudremukh NP", "park", "Karnataka Wildlife", "karnataka", 13.13, 75.20, "Karnataka", "Chikkamagaluru", "Iron ore; shola grassland", None, K)
+add("Sharavathi WLS", "park", "Karnataka Wildlife", "karnataka", 14.20, 74.75, "Karnataka", "Shivamogga", "Lion-tailed macaque", None, K)
+add("Mookambika WLS", "park", "Karnataka Wildlife", "karnataka", 13.85, 74.78, "Karnataka", "Udupi", "Kollur; evergreen forest", None, K)
+
+# Karnataka Cities (karnataka map)
+add("Hubballi", "city", "Karnataka Cities", "karnataka", 15.36, 75.12, "Karnataka", "Dharwad", "Commercial hub; rail", None, K)
+add("Davangere", "city", "Karnataka Cities", "karnataka", 14.47, 75.93, "Karnataka", "Davangere", "Benne dosa; textiles", None, K)
+add("Hosapete", "city", "Karnataka Cities", "karnataka", 15.27, 76.39, "Karnataka", "Vijayanagara", "Hampi gateway; steel", None, K)
+add("Udupi", "city", "Karnataka Cities", "karnataka", 13.34, 74.75, "Karnataka", "Udupi", "Krishna Matha; cuisine", None, K)
+add("Hassan", "city", "Karnataka Cities", "karnataka", 13.01, 76.10, "Karnataka", "Hassan", "Hoysala temple circuit", None, K)
+add("Bhadravati", "city", "Karnataka Cities", "karnataka", 13.85, 75.70, "Karnataka", "Shivamogga", "VISL steel plant", None, K)
+add("Vijayapura", "city", "Karnataka Cities", "karnataka", 16.83, 75.73, "Karnataka", "Vijayapura", "Adil Shahi capital", None, K)
+add("Gadag", "city", "Karnataka Cities", "karnataka", 15.43, 75.63, "Karnataka", "Gadag", "Tontadarya Math; Kalyana chalukya", None, K)
+add("Mandya", "city", "Karnataka Cities", "karnataka", 12.52, 76.90, "Karnataka", "Mandya", "Sugar bowl; KRS", None, K)
+add("Koppal", "city", "Karnataka Cities", "karnataka", 15.35, 76.15, "Karnataka", "Koppal", "Kalyana Karnataka; iron ore", None, K)
 
 # National Parks & Reserves (india map)
 add("Bandipur NP", "park", "National Parks", "india", 11.66, 76.63, "Karnataka", "Chamarajanagara", "Tiger reserve", None, UK)
