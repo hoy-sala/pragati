@@ -101,10 +101,13 @@ def dp_simplify(pts, tol):
 STATES_RAW = pathlib.Path(r"C:\Users\MDRS Bahaddurghatta\.local\share\opencode\tool-output\tool_072b00b50001Hwn9jCotd1q0Fm")
 states_out = []
 if STATES_RAW.exists():
+    # Far-flung island UTs render as stray fragments next to the
+    # mainland outline, so they are left out of internal borders.
+    SKIP_STATES = {"Jammu and Kashmir", "Lakshadweep", "Andaman and Nicobar Islands"}
     fc = json.loads(STATES_RAW.read_text(encoding="utf-8"))
     for feat in fc["features"]:
         name = (feat.get("properties") or {}).get("name", "")
-        if not name or name == "Jammu and Kashmir":
+        if not name or name in SKIP_STATES:
             continue
         geom = feat["geometry"]
         polys = []
@@ -117,6 +120,10 @@ if STATES_RAW.exists():
             for ring in poly:
                 pts = [(c[0], c[1]) for c in ring]
                 if len(pts) < 4:
+                    continue
+                # Drop degenerate specks that survive simplification as artifacts
+                lngs = [p[0] for p in pts]; lats = [p[1] for p in pts]
+                if max(lngs) - min(lngs) < 0.3 and max(lats) - min(lats) < 0.3:
                     continue
                 simp = dp_simplify(pts, 0.07)
                 if len(simp) < 4:
