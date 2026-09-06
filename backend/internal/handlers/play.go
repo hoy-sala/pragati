@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -251,7 +252,7 @@ func (h *PlayHandler) GetQuiz(w http.ResponseWriter, r *http.Request) {
 	}
 
 	query := `
-		SELECT q.id, q.question_text, q.question_type, q.options, q.difficulty
+		SELECT q.id, q.question_text, q.question_type, q.options, q.difficulty, COALESCE(q.answer, '')
 		FROM questions q
 		WHERE q.subject_id = $1
 		AND q.deleted_at IS NULL AND q.is_active = true
@@ -297,10 +298,23 @@ func (h *PlayHandler) GetQuiz(w http.ResponseWriter, r *http.Request) {
 	for rows.Next() {
 		var q PlayQuestion
 		var optsJSON []byte
-		if err := rows.Scan(&q.ID, &q.QuestionText, &q.QuestionType, &optsJSON, &q.Difficulty); err != nil {
+		var answer string
+		if err := rows.Scan(&q.ID, &q.QuestionText, &q.QuestionType, &optsJSON, &q.Difficulty, &answer); err != nil {
 			continue
 		}
 		json.Unmarshal(optsJSON, &q.Options)
+		if q.QuestionType == "true_false" && len(q.Options) == 0 && answer != "" {
+			// True/False rows store the verdict in `answer`; build playable options.
+			a := strings.ToUpper(strings.TrimSpace(answer))
+			truthy := a == "TRUE" || a == "T" || a == "1" || a == "YES"
+			q.Options = []models.Option{
+				{Key: "A", Value: "True", Correct: truthy},
+				{Key: "B", Value: "False", Correct: !truthy},
+			}
+		}
+		if len(q.Options) == 0 {
+			continue
+		}
 		if q.QuestionType == "mcq" || q.QuestionType == "true_false" {
 			questions = append(questions, q)
 		}

@@ -632,7 +632,7 @@
 			for (let r = 0; r < maxPer; r++) {
 				for (const n of teamNames) {
 					const q = teamPlayQuestions[n][r];
-					if (q) teamPlayOrder.push({ team: n, q: { ...q, options: shuffle(q.options ?? []) } });
+					if (q && Array.isArray(q.options) && q.options.length > 0) teamPlayOrder.push({ team: n, q: { ...q, options: shuffle(q.options ?? []) } });
 				}
 			}
 			teamPlayIndex = 0;
@@ -682,7 +682,7 @@
 			for (let r = 0; r < maxPer; r++) {
 				for (const n of teamNames) {
 					const q = qbt[n][r];
-					if (q) teamPlayOrder.push({ team: n, q: { ...q, options: shuffle(q.options ?? []) } });
+					if (q && Array.isArray(q.options) && q.options.length > 0) teamPlayOrder.push({ team: n, q: { ...q, options: shuffle(q.options ?? []) } });
 				}
 			}
 			teamPlayIndex = 0;
