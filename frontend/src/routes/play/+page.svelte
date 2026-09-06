@@ -759,7 +759,14 @@
 			phase = 'coming-soon';
 			return;
 		}
-		questions = data.map(q => ({ ...q, options: shuffle(q.options) }));
+		questions = data
+			.filter(q => Array.isArray(q.options) && q.options.length > 0)
+			.map(q => ({ ...q, options: shuffle(q.options) }));
+		if (questions.length === 0) {
+			comingSoonLabel = selectedTopic ? `${selectedTopic} (${difficulty})` : `${selectedSubject?.name} (${difficulty})`;
+			phase = 'coming-soon';
+			return;
+		}
 		currentIndex = 0; score = 0; streak = 0; bestStreak = 0; correctCount = 0;
 		missed = []; missCount = 0; secondChance = false; redeemed = 0; quizTotal = 0;
 		selectedKey = ''; answered = false; startTime = Date.now();
