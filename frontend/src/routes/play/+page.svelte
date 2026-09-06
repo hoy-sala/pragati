@@ -59,6 +59,7 @@
 	let mapStreak = $state(0);
 	let mapBest = $state(0);
 	let mapCorrect = $state(0);
+	let mapMiss = $state(0);
 	let mapAnswered = $state(false);
 	let mapSelectedKey = $state('');
 	let mapIsCorrect = $state(false);
@@ -73,6 +74,12 @@
 	let streak = $state(0);
 	let bestStreak = $state(0);
 	let correctCount = $state(0);
+	// Session fun (nothing is saved): misses for the second-chance round.
+	let missCount = $state(0);
+	let missed = $state<GenQ[]>([]);
+	let secondChance = $state(false);
+	let redeemed = $state(0);
+	let quizTotal = $state(0);
 	let selectedKey = $state('');
 	let answered = $state(false);
 	let isCorrect = $state(false);
@@ -189,8 +196,28 @@
 	}
 	function displayCorrect() {
 		if ((tablesActive || periodicActive) && !rushMode) return `${uniqueTotal - uniqueWrong.length}/${uniqueTotal}`;
-		return `${correctCount}/${questions.length}`;
+		return `${correctCount}/${quizLen()}`;
 	}
+	// ── Session fun: praise, momentum, second chances. Nothing is saved. ──
+	const PRAISE = ['Correct! Sharp thinking.', 'Brilliant — exactly right!', 'Yes! You knew that one cold.', 'Superb recall, scholar!', 'Nailed it! Keep climbing.', 'Correct! Your brain just grew.'];
+	const NUDGES = ['Good try — mistakes grow your brain.', 'Not this one. Study the highlighted answer — it will stick.', 'Every topper got this wrong once. Next question!', 'Wrong today, easy marks tomorrow. Keep going!'];
+	function fireFor(s: number) { return s >= 9 ? '🔥🔥🔥' : s >= 6 ? '🔥🔥' : s >= 3 ? '🔥' : ''; }
+	function praiseFor(s: number) {
+		if (s >= 8) return 'Unstoppable! 8 in a row!';
+		if (s >= 5) return 'On fire! 5 straight!';
+		if (s >= 3) return '3 in a row — heating up!';
+		return PRAISE[(s - 1) % PRAISE.length];
+	}
+	function nudgeFor(m: number) { return NUDGES[(m - 1) % NUDGES.length]; }
+	function momentum(s: number) {
+		if (s <= 0) return 'Warming up…';
+		if (s === 1) return 'Good start — one more!';
+		if (s === 2) return 'Building momentum…';
+		if (s < 5) return 'Heating up!';
+		if (s < 8) return 'On fire!';
+		return 'UNSTOPPABLE!';
+	}
+	function quizLen() { return secondChance && quizTotal > 0 ? quizTotal : questions.length; }
 	function rushColor() { return rushLeft > 20 ? '#0E7C71' : rushLeft > 10 ? '#B45309' : '#C2381B'; }
 
 	// ── Periodic table ──
@@ -530,7 +557,7 @@
 			return;
 		}
 		mapQuestions = data;
-		mapIndex = 0; mapScore = 0; mapStreak = 0; mapBest = 0; mapCorrect = 0;
+		mapIndex = 0; mapScore = 0; mapStreak = 0; mapBest = 0; mapCorrect = 0; mapMiss = 0;
 		mapAnswered = false; mapSelectedKey = ''; startTime = Date.now();
 		phase = 'mapplay';
 		startMapTimer();
@@ -560,6 +587,7 @@
 			if (mapStreak >= 5) spawnConfetti();
 		} else {
 			mapStreak = 0;
+			mapMiss++;
 			screenShake = true;
 			playWrong();
 			setTimeout(() => { screenShake = false; }, 500);
@@ -733,6 +761,7 @@
 		}
 		questions = data.map(q => ({ ...q, options: shuffle(q.options) }));
 		currentIndex = 0; score = 0; streak = 0; bestStreak = 0; correctCount = 0;
+		missed = []; missCount = 0; secondChance = false; redeemed = 0; quizTotal = 0;
 		selectedKey = ''; answered = false; startTime = Date.now();
 		phase = 'quiz';
 		startTimer();
@@ -756,6 +785,7 @@
 		isCorrect = key !== '' && key === correct?.key;
 		if (isCorrect) {
 			correctCount++; streak++;
+			if (secondChance) redeemed++;
 			if (streak > bestStreak) bestStreak = streak;
 			const pts = rushMode ? 100 * Math.min(streak, 5) : (100 + Math.round(timeLeft * 10)) * Math.min(streak, 4);
 			score += pts;
@@ -764,6 +794,8 @@
 			if (streak >= 5) spawnConfetti();
 		} else {
 			streak = 0;
+			missCount++;
+			if (!tablesActive && !periodicActive && !rushMode && !secondChance) missed = [...missed, questions[currentIndex]];
 			screenShake = true;
 			playWrong();
 			setTimeout(() => { screenShake = false; }, 500);
@@ -810,6 +842,7 @@
 
 	function finishQuiz() {
 		clearInterval(timerInterval);
+		if (!secondChance && !tablesActive && !periodicActive && !rushMode) quizTotal = questions.length;
 		if (tablesActive && !rushMode && selectedTable !== 0) {
 			const acc = (uniqueTotal - uniqueWrong.length) / Math.max(uniqueTotal, 1);
 			if (acc >= 0.9 && !mastered.includes(selectedTable)) {
@@ -828,6 +861,19 @@
 		playComplete();
 		spawnConfetti();
 		phase = 'results';
+	}
+
+	// Second-chance round: re-ask this quiz's misses once, same score pot.
+	function retryMisses() {
+		if (secondChance || missed.length === 0) return;
+		playClick();
+		secondChance = true;
+		questions = missed.map(q => ({ ...q, options: shuffle(q.options) }));
+		missed = [];
+		currentIndex = 0; streak = 0; answered = false; selectedKey = ''; isCorrect = false;
+		startTime = Date.now();
+		phase = 'quiz';
+		startTimer();
 	}
 
 	function goBack() {
@@ -858,7 +904,7 @@
 
 	function timeColor() { return timeLeft > 20 ? '#0E7C71' : timeLeft > 10 ? '#B45309' : '#C2381B'; }
 	function progressWidth() { return questions.length ? `${((currentIndex + 1) / questions.length) * 100}%` : '0%'; }
-	function accuracy() { return questions.length ? Math.round((correctCount / questions.length) * 100) : 0; }
+	function accuracy() { return quizLen() ? Math.round((correctCount / quizLen()) * 100) : 0; }
 	function formatTime(ms: number) { const s = ms / 1000; return s < 60 ? `${s.toFixed(1)}s` : `${Math.floor(s / 60)}m ${Math.floor(s % 60)}s`; }
 	function stars() { return displayAccuracy() >= 80 ? '★★★' : displayAccuracy() >= 50 ? '★★' : '★'; }
 	function starsLabel() { return displayAccuracy() >= 80 ? 'Excellent' : displayAccuracy() >= 50 ? 'Good work' : 'Keep practising'; }
@@ -1271,6 +1317,13 @@
 								<span class="feedback-title">{mapIsCorrect ? 'Correct!' : 'Not quite'}</span>
 								{#if mapStreak >= 3 && mapIsCorrect}<span class="streak-chip">{mapStreak} streak</span>{/if}
 							</div>
+							<p class="feedback-text">
+								{#if mapIsCorrect}
+									{praiseFor(mapStreak)}
+								{:else}
+									{nudgeFor(mapMiss)} The correct pin is ringed on the map.
+								{/if}
+							</p>
 							{#if mq.explanation}
 								<p class="feedback-text">{mq.explanation}</p>
 							{/if}
@@ -1314,8 +1367,9 @@
 						<div class="timer-fill" style="width:{(timeLeft / 30) * 100}%; background:{timeColor()}"></div>
 					</div>
 					{#if mapStreak >= 2}
-						<div class="streak-box">{mapStreak}× streak</div>
+						<div class="streak-box">{fireFor(mapStreak)} {mapStreak}× streak</div>
 					{/if}
+					<div class="momentum">{momentum(mapStreak)}</div>
 				</div>
 				<div class="side-card side-muted">
 					<p class="side-hint">Tap the correct pin on the map. Place names appear on the pins after you answer.</p>
@@ -1703,9 +1757,9 @@
 							</div>
 							<p class="feedback-text">
 								{#if isCorrect}
-									Nice work — you earned points with a {streak}× multiplier.
+									{praiseFor(streak)}
 								{:else}
-									The correct answer is highlighted above.
+									{nudgeFor(missCount)} The correct answer is highlighted above.
 								{/if}
 							</p>
 						</div>
@@ -1748,8 +1802,9 @@
 						<div class="timer-fill" style="width:{(rushMode ? rushLeft / 60 : timeLeft / 30) * 100}%; background:{rushMode ? rushColor() : timeColor()}"></div>
 					</div>
 					{#if streak >= 2}
-						<div class="streak-box">{streak}× streak</div>
+						<div class="streak-box">{fireFor(streak)} {streak}× streak</div>
 					{/if}
+					<div class="momentum">{momentum(streak)}</div>
 				</div>
 
 				<div class="side-card side-muted">
@@ -1789,7 +1844,13 @@
 				{#if (tablesActive || periodicActive) && !rushMode && uniqueWrong.length > 0}
 					<p class="score-time">Practise these: {uniqueWrong.slice(0, 4).map(uid => { const q = questions.find(qq => qq.uid === uid); return q ? q.question_text.replace('What is ', '').replace('?', '') : ''; }).filter(Boolean).join(' · ')}</p>
 				{/if}
+				{#if secondChance && redeemed > 0}
+					<p class="score-time">Second chance: redeemed {redeemed}!</p>
+				{/if}
 				<div class="score-actions">
+					{#if !secondChance && missed.length > 0 && !tablesActive && !periodicActive && !rushMode}
+						<button onclick={retryMisses} class="btn-primary btn-block">Second chance: {missed.length} to redeem →</button>
+					{/if}
 					<button onclick={playAgain} class="btn-primary btn-block">Play again →</button>
 					<button onclick={() => { playClick(); phase = periodicActive ? 'periodic' : tablesActive ? 'tables' : 'mode'; }} class="btn-ghost btn-block">Choose {periodicActive ? 'level' : tablesActive ? 'table' : 'quiz'}</button>
 					<a href="/" class="btn-ghost btn-block" style="text-align:center; text-decoration:none; display:flex; justify-content:center;">Back to home</a>
@@ -2084,6 +2145,10 @@
 	.streak-box {
 		text-align: center; font-weight: 800; padding: 0.45rem;
 		background: var(--amber-tint); border: 2px solid var(--ink); border-radius: 999px;
+	}
+	.momentum {
+		text-align: center; font-family: var(--font-display); font-weight: 800;
+		font-size: 1.05rem; letter-spacing: -0.01em;
 	}
 	.side-hint { margin: 0; font-size: 0.88rem; line-height: 1.45; color: var(--ink-soft); }
 
