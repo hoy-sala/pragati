@@ -880,7 +880,7 @@
 <div class="page {screenShake ? 'shake' : ''}">
 	<header class="quiz-header">
 		<button onclick={handleIdentityClick} class="qh-identity" aria-label="Go home">
-			<span class="qh-logo"><Building2 size={16} /></span>
+			<span class="qh-logo"><GraduationCap size={20} /></span>
 			<span class="qh-wordmark qh-wordmark-kannada">ಪ್ರಗತಿ</span>
 			<span class="qh-sub">MDRS (SC-32) Bahaddurghatta</span>
 		</button>
