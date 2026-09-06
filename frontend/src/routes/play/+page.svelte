@@ -886,9 +886,6 @@
 		</button>
 		<div style="display:flex;gap:0.5rem;align-items:center">
 			<button onclick={toggleMute} class="qh-home" aria-label={soundMuted ? 'Unmute sounds' : 'Mute sounds'} title={soundMuted ? 'Unmute sounds' : 'Mute sounds'}>{soundMuted ? '🔇' : '🔊'}</button>
-			{#if phase !== 'results'}
-				<button onclick={confirmExit} class="qh-home">← Home</button>
-			{/if}
 		</div>
 	</header>
 
