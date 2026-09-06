@@ -97,7 +97,7 @@
 			lanchor: 'start' as 'start' | 'middle' | 'end',
 			leader: null as null | { x1: number; y1: number; x2: number; y2: number }
 		}));
-		const R = narrow ? 46 : 30;
+		const R = narrow ? 52 : 30;
 		for (let i = 0; i < pts.length; i++) {
 			for (let j = i + 1; j < pts.length; j++) {
 				const dx = pts[j].px - pts[i].px;
@@ -114,7 +114,7 @@
 		// Label slots: right, left, above, below, then diagonals.
 		// Widths in SVG units; narrow screens render labels larger (see CSS).
 		const CHAR_W = narrow ? 8.8 : 7.6, PAD = narrow ? 7 : 5;
-		const PIN_R = narrow ? 24 : 17;
+		const PIN_R = narrow ? 26 : 17;
 		const cands = [
 			{ dx: 20, dy: 5, anchor: 'start' },
 			{ dx: -20, dy: 5, anchor: 'end' },
@@ -158,7 +158,7 @@
 			if (Math.abs(pick.c.dy) >= 20) {
 				const len = Math.hypot(pick.c.dx, pick.c.dy);
 				const ux = pick.c.dx / len, uy = pick.c.dy / len;
-				const edge = narrow ? 23 : 16;
+				const edge = narrow ? 26 : 16;
 				p.leader = {
 					x1: Math.round(ux * edge * 10) / 10,
 					y1: Math.round(uy * edge * 10) / 10,
@@ -340,7 +340,7 @@
 	/* Phones: pins/letters/labels/tools scale up for touch; halo thickens to match. */
 	@media (max-width: 640px) {
 		.map-svg { max-height: 72vh; }
-		.pin .dot { transform: scale(1.45); }
+		.pin .dot { transform: scale(1.65); }
 		.pin .ring { transform-box: fill-box; transform-origin: center; scale: 1.3; }
 		.pin-letter { font-size: 19px; }
 		.pin-label { font-size: 15px; stroke-width: 5px; }
@@ -349,6 +349,6 @@
 	}
 	/* Hover grow only where a real hover exists (else it sticks on touch). */
 	@media (max-width: 640px) and (hover: hover) {
-		.pin:hover .dot { transform: scale(1.6); }
+		.pin:hover .dot { transform: scale(1.8); }
 	}
 </style>

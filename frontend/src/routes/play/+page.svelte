@@ -2141,18 +2141,25 @@
 
 	@media (max-width: 640px) {
 		/* Quiz-taking on phones: roomier card, larger tap text, no squeeze. */
-		.q-card { padding: 1rem 0.85rem; }
-		.q-legend { font-size: 1.06rem; }
+		.page { padding-left: 0.65rem; padding-right: 0.65rem; }
+		.q-card { padding: 0.9rem 0.7rem; }
+		.q-fieldset { padding: 0; margin: 0; }
+		.q-legend { font-size: 1.15rem; }
 		.opt-row { min-height: 52px; padding: 0.85rem; }
-		.opt-text { font-size: 1.06rem; }
-		.tag { font-size: 0.85rem; }
-		.counter { font-size: 0.92rem; }
+		.opt-text { font-size: 1.12rem; }
+		.feedback-text { font-size: 1.05rem; }
+		.tag { font-size: 0.9rem; }
+		.counter { font-size: 0.95rem; }
 		.timer-num { font-size: 1.5rem; }
 		.timer-track { height: 12px; }
 		.progress { height: 12px; }
 		.score-stats { flex-wrap: wrap; }
 		.side-grid { gap: 0.4rem; }
 		.side-card { padding: 0.75rem; }
+		.side-label { font-size: 0.85rem; }
+		.side-value { font-size: 1.75rem; }
+		.stat-v { font-size: 1.1rem; }
+		.stat-k { font-size: 0.8rem; }
 		.team-create-grid { grid-template-columns: 1fr; }
 		.btn-primary { min-height: 50px; font-size: 1.05rem; }
 		.feedback-badge { width: 36px; height: 36px; font-size: 1.1rem; }
