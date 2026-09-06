@@ -856,7 +856,7 @@
 
 <svelte:head>
 	<title>Quiz Arena — Pragati</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </svelte:head>
 
 {#each confettiPieces as cp (cp.id)}
@@ -971,7 +971,7 @@
 				</div>
 			</div>
 			<div class="q-card" style="display:flex;flex-direction:column;gap:1rem">
-				<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem">
+				<div class="team-create-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem">
 					<label class="field">
 						<span class="field-label">Number of teams</span>
 						<select bind:value={teamCount} onchange={() => syncCustomNames()} class="input">
@@ -1118,7 +1118,7 @@
 				</div>
 				<div class="q-card q-question">
 					<div style="display:flex;justify-content:space-between;align-items:center;gap:0.6rem;margin-bottom:0.8rem">
-						<button onclick={useFiftyFifty} disabled={curLifelineDone || teamPlayAnswered} class="btn-ghost" style="min-height:36px;padding:0.3rem 0.8rem;border-radius:999px;opacity:{curLifelineDone ? 0.5 : 1}" title="50:50 — remove two wrong options (once per team)">50:50 {#if curLifelineDone}✓{:else}· {cur.team}{/if}</button>
+						<button onclick={useFiftyFifty} disabled={curLifelineDone || teamPlayAnswered} class="btn-ghost" style="min-height:44px;padding:0.3rem 0.8rem;border-radius:999px;opacity:{curLifelineDone ? 0.5 : 1}" title="50:50 — remove two wrong options (once per team)">50:50 {#if curLifelineDone}✓{:else}· {cur.team}{/if}</button>
 						<span class="counter">{teamScores[cur.team] ?? 0} pts</span>
 					</div>
 					<fieldset class="q-fieldset">
@@ -1184,7 +1184,7 @@
 						<span class="side-label">Time</span>
 						<div style="display:flex;align-items:center;gap:0.5rem">
 							<span class="timer-num mono" style="color:{timeColor()}">{Math.ceil(timeLeft)}s</span>
-							<button onclick={startTeamTimer} class="btn-ghost" style="min-height:32px;padding:0.25rem 0.5rem;border-radius:8px" title="Start {teamTimerLabel()} timer after reading">
+							<button onclick={startTeamTimer} class="btn-ghost" style="min-height:44px;min-width:44px;padding:0.25rem 0.5rem;border-radius:8px" title="Start {teamTimerLabel()} timer after reading">
 								<Clock size={16} />
 							</button>
 						</div>
@@ -1897,7 +1897,7 @@
 
 	.topics { display: flex; flex-wrap: wrap; gap: 0.6rem; }
 	.topic {
-		min-height: 40px; padding: 0.5rem 0.9rem; border-radius: 999px;
+		min-height: 44px; padding: 0.5rem 0.9rem; border-radius: 999px;
 		border: 1.5px solid var(--ink); background: var(--paper); color: var(--ink);
 		font-weight: 600; font-size: 0.88rem; cursor: pointer;
 	}
@@ -2120,6 +2120,25 @@
 	@keyframes scoreFloat { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-90px) scale(1.05); } }
 	.shake { animation: shakeIt 0.45s ease-out; }
 	@keyframes shakeIt { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } }
+
+	@media (max-width: 640px) {
+		/* Quiz-taking on phones: roomier card, larger tap text, no squeeze. */
+		.q-card { padding: 1rem 0.85rem; }
+		.q-legend { font-size: 1.06rem; }
+		.opt-row { min-height: 52px; padding: 0.85rem; }
+		.opt-text { font-size: 1.06rem; }
+		.tag { font-size: 0.85rem; }
+		.counter { font-size: 0.92rem; }
+		.timer-num { font-size: 1.5rem; }
+		.timer-track { height: 12px; }
+		.progress { height: 12px; }
+		.score-stats { flex-wrap: wrap; }
+		.side-grid { gap: 0.4rem; }
+		.side-card { padding: 0.75rem; }
+		.team-create-grid { grid-template-columns: 1fr; }
+		.btn-primary { min-height: 50px; font-size: 1.05rem; }
+		.feedback-badge { width: 36px; height: 36px; font-size: 1.1rem; }
+	}
 
 	@media (prefers-reduced-motion: reduce) { .fade-in, .answer-pop, .shake, .confetti-piece, .score-popup { animation: none; transition: none; } }
 </style>

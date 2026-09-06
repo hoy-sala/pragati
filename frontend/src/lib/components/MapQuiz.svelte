@@ -37,6 +37,17 @@
 	let schematic = $state(false);
 	let sourceNote = $state('');
 	let loadError = $state(false);
+	// Narrow (phone) screens: bigger pins/labels for touch. Reactive to rotation/resize.
+	let narrow = $state(false);
+
+	$effect(() => {
+		if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return;
+		const mq = window.matchMedia('(max-width: 640px)');
+		const upd = () => { narrow = mq.matches; };
+		upd();
+		mq.addEventListener('change', upd);
+		return () => mq.removeEventListener('change', upd);
+	});
 
 	$effect(() => {
 		const m = mapName || 'india';
@@ -86,7 +97,7 @@
 			lanchor: 'start' as 'start' | 'middle' | 'end',
 			leader: null as null | { x1: number; y1: number; x2: number; y2: number }
 		}));
-		const R = 30;
+		const R = narrow ? 46 : 30;
 		for (let i = 0; i < pts.length; i++) {
 			for (let j = i + 1; j < pts.length; j++) {
 				const dx = pts[j].px - pts[i].px;
@@ -101,7 +112,9 @@
 			}
 		}
 		// Label slots: right, left, above, below, then diagonals.
-		const CHAR_W = 7.6, PAD = 5;
+		// Widths in SVG units; narrow screens render labels larger (see CSS).
+		const CHAR_W = narrow ? 8.8 : 7.6, PAD = narrow ? 7 : 5;
+		const PIN_R = narrow ? 24 : 17;
 		const cands = [
 			{ dx: 20, dy: 5, anchor: 'start' },
 			{ dx: -20, dy: 5, anchor: 'end' },
@@ -123,7 +136,7 @@
 				if (q.px === self.px && q.py === self.py) return false;
 				const nx = Math.max(b.x0, Math.min(q.px, b.x1));
 				const ny = Math.max(b.y0, Math.min(q.py, b.y1));
-				return Math.hypot(q.px - nx, q.py - ny) < 17;
+				return Math.hypot(q.px - nx, q.py - ny) < PIN_R;
 			});
 		for (const p of pts) {
 			const w = Math.max(20, p.label.length * CHAR_W);
@@ -145,9 +158,10 @@
 			if (Math.abs(pick.c.dy) >= 20) {
 				const len = Math.hypot(pick.c.dx, pick.c.dy);
 				const ux = pick.c.dx / len, uy = pick.c.dy / len;
+				const edge = narrow ? 23 : 16;
 				p.leader = {
-					x1: Math.round(ux * 16 * 10) / 10,
-					y1: Math.round(uy * 16 * 10) / 10,
+					x1: Math.round(ux * edge * 10) / 10,
+					y1: Math.round(uy * edge * 10) / 10,
 					x2: Math.round((pick.c.dx - ux * 3) * 10) / 10,
 					y2: Math.round((pick.c.dy - 5 - uy * 3) * 10) / 10
 				};
@@ -319,4 +333,16 @@
 		fill: #1F1A2E; stroke: #FFFCF5; stroke-width: 4px; paint-order: stroke;
 	}
 	.leader { stroke: #1F1A2E; stroke-width: 1.3; opacity: 0.65; }
+
+	/* Phones: pins/letters/labels/tools scale up for touch; halo thickens to match. */
+	@media (max-width: 640px) {
+		.map-svg { max-height: 72vh; }
+		.pin .dot { transform: scale(1.45); }
+		.pin:hover .dot { transform: scale(1.6); }
+		.pin .ring { transform-box: fill-box; transform-origin: center; scale: 1.3; }
+		.pin-letter { font-size: 19px; }
+		.pin-label { font-size: 15px; stroke-width: 5px; }
+		.leader { stroke-width: 1.6; }
+		.tool { width: 44px; height: 44px; }
+	}
 </style>
