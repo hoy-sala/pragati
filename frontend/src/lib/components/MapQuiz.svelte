@@ -295,13 +295,16 @@
 	.tool:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--ink); }
 	.schematic-note { margin: 0; }
 
-	.pin { cursor: pointer; animation: dropIn 0.35s ease-out backwards; }
+	.pin { cursor: pointer; animation: dropIn 0.35s ease-out backwards; -webkit-tap-highlight-color: transparent; }
 	.pin .dot {
 		fill: #FFFCF5; stroke: #1F1A2E; stroke-width: 2.5;
 		transition: fill 120ms, transform 120ms;
 		transform-box: fill-box; transform-origin: center;
 	}
-	.pin:hover .dot { fill: #FDE9C2; transform: scale(1.12); }
+	@media (hover: hover) {
+		.pin:hover .dot { fill: #FDE9C2; transform: scale(1.12); }
+	}
+	.pin:active .dot { fill: #FDE9C2; }
 	.pin:focus-visible { outline: 3px solid var(--plum); outline-offset: 3px; }
 	.pin-letter {
 		font-family: var(--font-display); font-weight: 800; font-size: 15px;
@@ -338,11 +341,14 @@
 	@media (max-width: 640px) {
 		.map-svg { max-height: 72vh; }
 		.pin .dot { transform: scale(1.45); }
-		.pin:hover .dot { transform: scale(1.6); }
 		.pin .ring { transform-box: fill-box; transform-origin: center; scale: 1.3; }
 		.pin-letter { font-size: 19px; }
 		.pin-label { font-size: 15px; stroke-width: 5px; }
 		.leader { stroke-width: 1.6; }
 		.tool { width: 44px; height: 44px; }
+	}
+	/* Hover grow only where a real hover exists (else it sticks on touch). */
+	@media (max-width: 640px) and (hover: hover) {
+		.pin:hover .dot { transform: scale(1.6); }
 	}
 </style>

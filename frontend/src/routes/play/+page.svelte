@@ -566,8 +566,16 @@
 		}
 		clearInterval(timerInterval);
 	}
+	// Drop focus from the tapped control so :focus-within outlines can't stick
+	// to recycled option/pin nodes on the next question (touch devices).
+	function blurActive() {
+		if (typeof document === 'undefined') return;
+		const el = document.activeElement;
+		if (el instanceof HTMLElement) el.blur();
+	}
 	function nextMapQuestion() {
 		if (phase !== 'mapplay') return;
+		blurActive();
 		if (mapIndex >= mapQuestions.length - 1) {
 			clearInterval(timerInterval);
 			playComplete(); spawnConfetti();
@@ -700,6 +708,7 @@
 	}
 	function nextTeamQuestion() {
 		if (teamPlayIndex >= teamPlayOrder.length - 1) { clearInterval(timerInterval); playComplete(); spawnConfetti(); teamFinished = true; phase = 'team-created'; return; }
+		blurActive();
 		teamPlayIndex++;
 		teamPlayRevealed = false;
 		teamPlayAnswered = false;
@@ -779,6 +788,7 @@
 
 	function nextQuestion() {
 		if (phase !== 'quiz') return;
+		blurActive();
 		if (rushMode) {
 			currentIndex++; selectedKey = ''; answered = false;
 			if (periodicActive) {
@@ -1127,7 +1137,7 @@
 							<MapQuiz mapName={cur.q.options[0].map} options={cur.q.options.map((o: any) => ({ key: o.key, label: o.label ?? o.value, svg_x: o.svg_x, svg_y: o.svg_y, correct: !!o.correct }))} selectedKey={teamPlaySelectedKey} answered={teamPlayAnswered} revealed={teamPlayRevealed} hiddenKeys={hiddenOptKeys} onPick={handleTeamAnswer} />
 						{:else}
 						<div class="options">
-							{#each cur.q.options as opt}
+							{#each cur.q.options as opt (`${teamPlayIndex}-${opt.key}`)}
 								{@const isSelected = teamPlayAnswered && opt.key === teamPlaySelectedKey}
 								{@const isCorrectOpt = !!opt.correct}
 								{@const showCorrect = (teamPlayAnswered || teamPlayRevealed) && !isSelected && isCorrectOpt}
@@ -1900,10 +1910,14 @@
 		min-height: 44px; padding: 0.5rem 0.9rem; border-radius: 999px;
 		border: 1.5px solid var(--ink); background: var(--paper); color: var(--ink);
 		font-weight: 600; font-size: 0.88rem; cursor: pointer;
+		-webkit-tap-highlight-color: transparent;
 	}
-	.topic:hover { background: var(--cream); }
+	@media (hover: hover) {
+		.topic:hover { background: var(--cream); }
+		.topic-selected:hover { background: var(--ink); }
+	}
+	.topic:active { background: var(--cream); }
 	.topic-selected { background: var(--ink); color: var(--paper); border-width: 2px; }
-	.topic-selected:hover { background: var(--ink); }
 	.topic-all { background: var(--amber); border-width: 2px; }
 
 	/* mode select */
@@ -2002,7 +2016,11 @@
 		display: block; border: 2px solid var(--ink); background: var(--paper);
 		border-radius: 12px; cursor: pointer; position: relative;
 	}
-	.opt:hover { background: var(--cream-deep); }
+	.opt { -webkit-tap-highlight-color: transparent; }
+	@media (hover: hover) {
+		.opt:hover { background: var(--cream-deep); }
+	}
+	.opt:active { background: var(--cream-deep); }
 	.opt-input { position: absolute; opacity: 0; width: 1px; height: 1px; }
 	.opt-row { display: flex; align-items: center; gap: 0.7rem; min-height: 44px; padding: 0.75rem 0.9rem; }
 	.opt-radio {
