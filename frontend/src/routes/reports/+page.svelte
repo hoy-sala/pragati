@@ -94,12 +94,12 @@
 		if (cr.data) classes = cr.data;
 	});
 
-	async function loadMarkSheet() {
+	async function loadMarkSheet(term = selectedTerm) {
 		if (!selectedClass) { err = 'Select a class'; return; }
 		err = ''; loading = true; markSheetData = null;
 		try {
 			const params = new URLSearchParams({ class_id: selectedClass });
-			if (selectedTerm) params.set('term', selectedTerm);
+			if (term) params.set('term', term);
 			const res = await api<typeof markSheetData>('GET', `/reports/mark-sheet?${params}`);
 			if (res.data) markSheetData = res.data;
 			else if (res.error) err = res.error.message;
@@ -148,11 +148,7 @@
 	}
 
 	$effect(() => {
-		if (selectedClass && activeTab === 'marksheet') loadMarkSheet();
-	});
-
-	$effect(() => {
-		if (selectedTerm && activeTab === 'marksheet' && selectedClass) loadMarkSheet();
+		if (selectedClass && activeTab === 'marksheet') loadMarkSheet(selectedTerm);
 	});
 
 	$effect(() => {
@@ -161,10 +157,6 @@
 
 	$effect(() => {
 		if (activeTab === 'mentors') loadMentorReport();
-	});
-
-	$effect(() => {
-		if (activeTab === 'mentors' && !mentorReport) loadMentorReport();
 	});
 
 	function handlePrint() {

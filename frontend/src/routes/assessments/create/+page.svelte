@@ -8,6 +8,7 @@
 	let categories = $state<AssessmentCategory[]>([]);
 	let classes = $state<Class[]>([]);
 	let subjects = $state<Subject[]>([]);
+	let years = $state<{ id: string; name: string; is_current: boolean }[]>([]);
 
 	let selectedCategory = $state('');
 	let selectedSubject = $state('');
@@ -28,7 +29,7 @@
 			api<AssessmentCategory[]>('GET', '/assessment-categories'),
 			api<Class[]>('GET', '/classes'),
 			api<Subject[]>('GET', '/subjects'),
-			api<{ id: string; is_current: boolean }[]>('GET', '/academic-years'),
+			api<{ id: string; name: string; is_current: boolean }[]>('GET', '/academic-years'),
 		]);
 		if (catRes.data) categories = catRes.data;
 		if (classRes.data) classes = classRes.data;
@@ -96,6 +97,10 @@
 			<div>
 				<label for="class" class="block text-sm font-medium text-slate-700 mb-1">Class *</label>
 				<Select id="class" bind:value={selectedClass} options={classes} placeholder="Select" />
+			</div>
+			<div>
+				<label for="year" class="block text-sm font-medium text-slate-700 mb-1">Academic Year *</label>
+				<Select id="year" bind:value={selectedYear} options={years} placeholder="Select" />
 			</div>
 			<div>
 				<label for="section" class="block text-sm font-medium text-slate-700 mb-1">Section</label>

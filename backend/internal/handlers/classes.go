@@ -269,12 +269,17 @@ func (h *AcademicYearHandler) List(w http.ResponseWriter, r *http.Request) {
 	defer rows.Close()
 
 	years := []models.AcademicYear{}
+	seen := map[string]bool{}
 	for rows.Next() {
 		var y models.AcademicYear
 		if err := rows.Scan(&y.ID, &y.SchoolID, &y.Name, &y.StartDate, &y.EndDate, &y.IsCurrent, &y.CreatedAt, &y.UpdatedAt); err != nil {
 			log.Error().Err(err).Msg("scan academic year row failed")
 			continue
 		}
+		if seen[y.Name] {
+			continue
+		}
+		seen[y.Name] = true
 		years = append(years, y)
 	}
 
@@ -298,6 +303,17 @@ func (h *AcademicYearHandler) Create(w http.ResponseWriter, r *http.Request) {
 	if req.Name == "" || req.StartDate == "" || req.EndDate == "" {
 		renderJSON(w, http.StatusBadRequest, models.APIResponse{
 			Error: &models.APIError{Code: "VALIDATION_ERROR", Message: "name, start_date, and end_date are required"},
+		})
+		return
+	}
+
+	var existingID string
+	if err := h.db.QueryRow(r.Context(),
+		`SELECT id FROM academic_years WHERE school_id = $1 AND name = $2 AND deleted_at IS NULL`,
+		claims.SchoolID, req.Name,
+	).Scan(&existingID); err == nil {
+		renderJSON(w, http.StatusConflict, models.APIResponse{
+			Error: &models.APIError{Code: "DUPLICATE", Message: "An academic year with this name already exists"},
 		})
 		return
 	}

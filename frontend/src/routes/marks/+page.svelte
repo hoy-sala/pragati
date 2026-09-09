@@ -14,6 +14,13 @@
 	let subjects = $state<Subject[]>([]);
 	let assessments = $state<Assessment[]>([]);
 
+	let assessmentOptions = $derived(
+		assessments.map(a => ({
+			id: a.id,
+			name: `${a.name}${a.class_name || a.subject_name ? ' — ' + [a.class_name, a.subject_name].filter(Boolean).join(' · ') : ''}`
+		}))
+	);
+
 	let selectedCategory = $state('');
 	let selectedClass = $state('');
 	let selectedSubject = $state('');
@@ -56,6 +63,8 @@
 
 		selectedSubject = sp.get('subject') ?? '';
 		selectedAssessment = sp.get('assessment') ?? '';
+		loadAssessments();
+		filtersReady = true;
 	});
 
 	let prevAssessment = $state('');
@@ -83,25 +92,28 @@
 		if (res.data && seq === reqSeq) assessments = res.data;
 	}
 
+	let filtersReady = $state(false);
 	let prevSearch = $state('');
 	let prevCat = $state('');
 	let prevCls = $state('');
 	let prevSub = $state('');
 	$effect(() => {
+		const filtersChanged = selectedCategory !== prevCat || selectedClass !== prevCls || selectedSubject !== prevSub;
 		if (selectedCategory !== prevCat) {
 			if (!filteredClasses.find(c => c.id === selectedClass)) selectedClass = '';
 			if (!filteredSubjects.find(s => s.id === selectedSubject)) selectedSubject = '';
 		}
-		if ((selectedCategory !== prevCat || selectedClass !== prevCls || selectedSubject !== prevSub) && prevSearch !== '') {
+		prevCat = selectedCategory;
+		prevCls = selectedClass;
+		prevSub = selectedSubject;
+		if (filtersChanged && filtersReady) {
 			selectedAssessment = '';
 			prevAssessment = '';
 			students = [];
 			if (table) { table.destroy(); table = null; }
 			statusMsg = '';
+			loadAssessments();
 		}
-		prevCat = selectedCategory;
-		prevCls = selectedClass;
-		prevSub = selectedSubject;
 	});
 
 	$effect(() => {
@@ -116,7 +128,6 @@
 			history.replaceState(null, '', newSearch);
 		}
 		if (prevSearch === '') prevSearch = newSearch;
-		if (prevSearch !== '') loadAssessments();
 	});
 
 	async function loadGrid() {
@@ -328,7 +339,7 @@
 				<Select bind:value={selectedSubject} options={filteredSubjects} label="Subject" icon={BookOpen} placeholder="All subjects" />
 			</div>
 			<div class="w-48">
-				<Select bind:value={selectedAssessment} options={assessments} label="Assessment" icon={ClipboardCheck} placeholder="Select assessment" />
+				<Select bind:value={selectedAssessment} options={assessmentOptions} label="Assessment" icon={ClipboardCheck} placeholder="Select assessment" />
 			</div>
 			<Button onclick={resetForm} variant="ghost" class="px-3 py-2 text-sm rounded-lg border border-slate-300 hover:border-slate-400 bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50">Clear</Button>
 		</div>

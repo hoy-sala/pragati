@@ -54,10 +54,6 @@
 		await load();
 	});
 
-	$effect(() => {
-		if (classes.length) load();
-	});
-
 	function onFilterChange() {
 		page = 0;
 		load();

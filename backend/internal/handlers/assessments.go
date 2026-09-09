@@ -54,6 +54,11 @@ func (h *AssessmentHandler) List(w http.ResponseWriter, r *http.Request) {
 		args = append(args, categoryID)
 		n++
 	}
+	if yearID := r.URL.Query().Get("academic_year_id"); yearID != "" {
+		baseWhere += fmt.Sprintf(" AND a.academic_year_id = $%d", n)
+		args = append(args, yearID)
+		n++
+	}
 
 	whereArgs := args[:]
 
@@ -70,9 +75,10 @@ func (h *AssessmentHandler) List(w http.ResponseWriter, r *http.Request) {
 		COALESCE(a.date::text, ''), a.academic_year_id, a.is_published, a.is_locked, a.version,
 		a.created_at, a.updated_at,
 		COALESCE(s.name, ''), COALESCE(c.name, ''), COALESCE(cl.name, ''),
-		(SELECT COUNT(*) FROM marks m WHERE m.assessment_id = a.id),
-		(SELECT COUNT(*) FROM students st WHERE st.class_id = a.class_id AND st.deleted_at IS NULL AND st.is_active = true)
+		mc.cnt, sc.cnt
 		FROM assessments a
+		LEFT JOIN (SELECT assessment_id, COUNT(*) AS cnt FROM marks GROUP BY assessment_id) mc ON mc.assessment_id = a.id
+		LEFT JOIN (SELECT class_id, COUNT(*) AS cnt FROM students WHERE deleted_at IS NULL AND is_active = true GROUP BY class_id) sc ON sc.class_id = a.class_id
 		LEFT JOIN subjects s ON s.id = a.subject_id AND s.deleted_at IS NULL
 		LEFT JOIN assessment_categories c ON c.id = a.category_id
 		LEFT JOIN classes cl ON cl.id = a.class_id AND cl.deleted_at IS NULL ` + baseWhere + ` ORDER BY a.date DESC NULLS LAST, a.created_at DESC`
