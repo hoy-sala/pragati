@@ -75,7 +75,7 @@ func (h *AssessmentHandler) List(w http.ResponseWriter, r *http.Request) {
 		COALESCE(a.date::text, ''), a.academic_year_id, a.is_published, a.is_locked, a.version,
 		a.created_at, a.updated_at,
 		COALESCE(s.name, ''), COALESCE(c.name, ''), COALESCE(cl.name, ''),
-		mc.cnt, sc.cnt
+		COALESCE(mc.cnt, 0), COALESCE(sc.cnt, 0)
 		FROM assessments a
 		LEFT JOIN (SELECT assessment_id, COUNT(*) AS cnt FROM marks GROUP BY assessment_id) mc ON mc.assessment_id = a.id
 		LEFT JOIN (SELECT class_id, COUNT(*) AS cnt FROM students WHERE deleted_at IS NULL AND is_active = true GROUP BY class_id) sc ON sc.class_id = a.class_id
