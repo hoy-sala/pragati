@@ -35,8 +35,8 @@ type LoginRequest struct {
 }
 
 type StaffLoginRequest struct {
-	Mobile   string `json:"mobile"`
-	Password string `json:"password"`
+	Identifier string `json:"identifier"`
+	Password   string `json:"password"`
 }
 
 type StudentLoginRequest struct {

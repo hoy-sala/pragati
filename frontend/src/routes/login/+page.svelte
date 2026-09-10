@@ -1,19 +1,17 @@
 <script lang="ts">
-	import { login, staffLogin, studentLogin } from '$lib/stores/auth.svelte';
+	import { staffLogin, studentLogin } from '$lib/stores/auth.svelte';
 	import { goto } from '$app/navigation';
-	import { Phone, Key, Hash, Calendar, Shield, ArrowLeft, Gamepad2, CalendarDays, LogIn, Building2, Users, GraduationCap, Info } from 'lucide-svelte';
+	import { Key, Hash, Calendar, Shield, ArrowLeft, Gamepad2, CalendarDays, LogIn, Building2, Users, GraduationCap, Info } from 'lucide-svelte';
 
 	type View = 'home' | 'login';
 	let view = $state<View>('home');
-	type Tab = 'student' | 'staff' | 'admin';
+	type Tab = 'student' | 'staff';
 	let activeTab = $state<Tab>('student');
 
 	let satsNumber = $state('');
 	let dateOfBirth = $state('');
-	let mobile = $state('');
+	let staffIdentifier = $state('');
 	let staffPassword = $state('');
-	let adminEmail = $state('');
-	let adminPassword = $state('');
 	let error = $state('');
 	let loading = $state(false);
 	let aboutOpen = $state(false);
@@ -29,15 +27,7 @@
 	async function handleStaffSubmit() {
 		error = ''; loading = true;
 		let result;
-		try { result = await staffLogin(mobile, staffPassword); }
-		catch { result = { error: 'Unable to reach server.' }; }
-		loading = false;
-		if ('error' in result) error = result.error; else goto('/reports');
-	}
-	async function handleAdminSubmit() {
-		error = ''; loading = true;
-		let result;
-		try { result = await login(adminEmail, adminPassword); }
+		try { result = await staffLogin(staffIdentifier, staffPassword); }
 		catch { result = { error: 'Unable to reach server.' }; }
 		loading = false;
 		if ('error' in result) error = result.error; else goto('/reports');
@@ -146,7 +136,6 @@
 				<div class="tabs" role="tablist" aria-label="Login role">
 					<button role="tab" aria-selected={activeTab === 'student'} onclick={() => { activeTab = 'student'; error = ''; }} class="tab {activeTab === 'student' ? 'tab-active' : ''}">Student</button>
 					<button role="tab" aria-selected={activeTab === 'staff'} onclick={() => { activeTab = 'staff'; error = ''; }} class="tab {activeTab === 'staff' ? 'tab-active' : ''}">Staff</button>
-					<button role="tab" aria-selected={activeTab === 'admin'} onclick={() => { activeTab = 'admin'; error = ''; }} class="tab {activeTab === 'admin' ? 'tab-active' : ''}">Admin</button>
 				</div>
 
 				{#if activeTab === 'student'}
@@ -172,10 +161,10 @@
 				{:else if activeTab === 'staff'}
 					<form onsubmit={(e) => { e.preventDefault(); handleStaffSubmit(); }} class="form">
 						<label class="field">
-							<span class="field-label">Mobile number</span>
+							<span class="field-label">Email or mobile number</span>
 							<span class="control">
-								<Phone size={16} class="field-icon" />
-								<input type="tel" bind:value={mobile} maxlength="10" placeholder="10-digit mobile" class="input" />
+								<Shield size={16} class="field-icon" />
+								<input type="text" bind:value={staffIdentifier} placeholder="Email or 10-digit mobile" class="input" autocomplete="username" />
 							</span>
 						</label>
 						<label class="field">
@@ -186,26 +175,7 @@
 							</span>
 						</label>
 						{#if error}<div class="error" role="alert">{error}</div>{/if}
-						<button type="submit" disabled={loading || !mobile || !staffPassword} class="btn-primary"> {loading ? 'Signing in…' : 'Sign in →'} </button>
-					</form>
-				{:else}
-					<form onsubmit={(e) => { e.preventDefault(); handleAdminSubmit(); }} class="form">
-						<label class="field">
-							<span class="field-label">Email address</span>
-							<span class="control">
-								<Shield size={16} class="field-icon" />
-								<input type="email" bind:value={adminEmail} placeholder="you@school.edu" class="input" autocomplete="email" />
-							</span>
-						</label>
-						<label class="field">
-							<span class="field-label">Password</span>
-							<span class="control">
-								<Key size={16} class="field-icon" />
-								<input type="password" bind:value={adminPassword} placeholder="Password" class="input" />
-							</span>
-						</label>
-						{#if error}<div class="error" role="alert">{error}</div>{/if}
-						<button type="submit" disabled={loading || !adminEmail || !adminPassword} class="btn-primary"> {loading ? 'Signing in…' : 'Sign in →'} </button>
+						<button type="submit" disabled={loading || !staffIdentifier || !staffPassword} class="btn-primary"> {loading ? 'Signing in…' : 'Sign in →'} </button>
 					</form>
 				{/if}
 			</div>

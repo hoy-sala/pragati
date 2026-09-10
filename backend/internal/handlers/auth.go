@@ -43,25 +43,56 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var user models.User
-	err := h.db.QueryRow(r.Context(),
-		`SELECT id, school_id, email, password_hash, name, role,
-		        COALESCE(phone, ''), COALESCE(avatar_url, ''), is_active
-		 FROM users WHERE email = $1 AND is_active = true AND deleted_at IS NULL`,
-		req.Email,
-	).Scan(&user.ID, &user.SchoolID, &user.Email, &user.PasswordHash, &user.Name,
-		&user.Role, &user.Phone, &user.AvatarURL, &user.IsActive)
-	if err != nil {
-		log.Debug().Err(err).Str("email", req.Email).Msg("login failed: user not found")
-		renderJSON(w, http.StatusUnauthorized, models.APIResponse{
-			Error: &models.APIError{Code: "INVALID_CREDENTIALS", Message: "invalid email or password"},
+	h.authenticateStaff(w, r, req.Email, req.Password)
+}
+
+func (h *AuthHandler) StaffLogin(w http.ResponseWriter, r *http.Request) {
+	var req models.StaffLoginRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		renderJSON(w, http.StatusBadRequest, models.APIResponse{
+			Error: &models.APIError{Code: "INVALID_INPUT", Message: "invalid request body"},
 		})
 		return
 	}
 
-	if !auth.CheckPassword(req.Password, user.PasswordHash) {
+	identifier := strings.TrimSpace(req.Identifier)
+	if identifier == "" || req.Password == "" {
+		renderJSON(w, http.StatusBadRequest, models.APIResponse{
+			Error: &models.APIError{Code: "VALIDATION_ERROR", Message: "email/mobile and password are required"},
+		})
+		return
+	}
+
+	if isAllDigits(identifier) && len(identifier) != 10 {
+		renderJSON(w, http.StatusBadRequest, models.APIResponse{
+			Error: &models.APIError{Code: "VALIDATION_ERROR", Message: "mobile must be 10 digits"},
+		})
+		return
+	}
+
+	h.authenticateStaff(w, r, identifier, req.Password)
+}
+
+func (h *AuthHandler) authenticateStaff(w http.ResponseWriter, r *http.Request, identifier, password string) {
+	var user models.User
+	err := h.db.QueryRow(r.Context(),
+		`SELECT id, school_id, email, password_hash, name, role,
+		        COALESCE(phone, ''), COALESCE(avatar_url, ''), is_active
+		 FROM users WHERE (email = $1 OR mobile = $1) AND is_active = true AND deleted_at IS NULL`,
+		identifier,
+	).Scan(&user.ID, &user.SchoolID, &user.Email, &user.PasswordHash, &user.Name,
+		&user.Role, &user.Phone, &user.AvatarURL, &user.IsActive)
+	if err != nil {
+		log.Debug().Err(err).Str("identifier", identifier).Msg("login failed: user not found")
 		renderJSON(w, http.StatusUnauthorized, models.APIResponse{
-			Error: &models.APIError{Code: "INVALID_CREDENTIALS", Message: "invalid email or password"},
+			Error: &models.APIError{Code: "INVALID_CREDENTIALS", Message: "invalid email/mobile or password"},
+		})
+		return
+	}
+
+	if !auth.CheckPassword(password, user.PasswordHash) {
+		renderJSON(w, http.StatusUnauthorized, models.APIResponse{
+			Error: &models.APIError{Code: "INVALID_CREDENTIALS", Message: "invalid email/mobile or password"},
 		})
 		return
 	}
@@ -109,92 +140,13 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func (h *AuthHandler) StaffLogin(w http.ResponseWriter, r *http.Request) {
-	var req models.StaffLoginRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		renderJSON(w, http.StatusBadRequest, models.APIResponse{
-			Error: &models.APIError{Code: "INVALID_INPUT", Message: "invalid request body"},
-		})
-		return
+func isAllDigits(s string) bool {
+	for _, c := range s {
+		if c < '0' || c > '9' {
+			return false
+		}
 	}
-
-	if req.Mobile == "" || req.Password == "" {
-		renderJSON(w, http.StatusBadRequest, models.APIResponse{
-			Error: &models.APIError{Code: "VALIDATION_ERROR", Message: "mobile and password are required"},
-		})
-		return
-	}
-
-	if len(req.Mobile) != 10 {
-		renderJSON(w, http.StatusBadRequest, models.APIResponse{
-			Error: &models.APIError{Code: "VALIDATION_ERROR", Message: "mobile must be 10 digits"},
-		})
-		return
-	}
-
-	var user models.User
-	err := h.db.QueryRow(r.Context(),
-		`SELECT id, school_id, email, password_hash, name, role,
-		        COALESCE(phone, ''), COALESCE(avatar_url, ''), is_active
-		 FROM users WHERE mobile = $1 AND is_active = true AND deleted_at IS NULL`,
-		req.Mobile,
-	).Scan(&user.ID, &user.SchoolID, &user.Email, &user.PasswordHash, &user.Name,
-		&user.Role, &user.Phone, &user.AvatarURL, &user.IsActive)
-	if err != nil {
-		renderJSON(w, http.StatusUnauthorized, models.APIResponse{
-			Error: &models.APIError{Code: "INVALID_CREDENTIALS", Message: "invalid mobile or password"},
-		})
-		return
-	}
-
-	if !auth.CheckPassword(req.Password, user.PasswordHash) {
-		renderJSON(w, http.StatusUnauthorized, models.APIResponse{
-			Error: &models.APIError{Code: "INVALID_CREDENTIALS", Message: "invalid mobile or password"},
-		})
-		return
-	}
-
-	accessToken, expiresAt, err := h.jwtService.GenerateAccessToken(&user)
-	if err != nil {
-		log.Error().Err(err).Msg("failed to generate access token")
-		renderJSON(w, http.StatusInternalServerError, models.APIResponse{
-			Error: &models.APIError{Code: "INTERNAL_ERROR", Message: "failed to generate token"},
-		})
-		return
-	}
-
-	rawToken, hashedToken, lookupHash, err := h.jwtService.GenerateRefreshToken()
-	if err != nil {
-		log.Error().Err(err).Msg("failed to generate refresh token")
-		renderJSON(w, http.StatusInternalServerError, models.APIResponse{
-			Error: &models.APIError{Code: "INTERNAL_ERROR", Message: "failed to generate refresh token"},
-		})
-		return
-	}
-
-	if _, err := h.db.Exec(r.Context(),
-		`INSERT INTO refresh_tokens (id, user_id, token_hash, lookup_hash, expires_at, created_at)
-		 VALUES ($1, $2, $3, $4, $5, $6)`,
-		uuid.New().String(), user.ID, hashedToken, lookupHash, time.Now().Add(h.jwtService.RefreshTokenExpiry()), time.Now(),
-	); err != nil {
-		log.Error().Err(err).Msg("failed to store refresh token")
-	}
-
-	if _, err := h.db.Exec(r.Context(),
-		`UPDATE users SET last_login_at = NOW() WHERE id = $1`, user.ID); err != nil {
-		log.Error().Err(err).Msg("failed to update last login")
-	}
-
-	user.PasswordHash = ""
-
-	renderJSON(w, http.StatusOK, models.APIResponse{
-		Data: models.LoginResponse{
-			User:         &user,
-			AccessToken:  accessToken,
-			RefreshToken: rawToken,
-			ExpiresIn:    expiresAt - time.Now().Unix(),
-		},
-	})
+	return len(s) > 0
 }
 
 func (h *AuthHandler) StudentLogin(w http.ResponseWriter, r *http.Request) {

@@ -37,27 +37,9 @@ export async function initAuth() {
 	isLoading = false;
 }
 
-export async function login(email: string, password: string): Promise<{ user: User } | { error: string }> {
+export async function staffLogin(identifier: string, password: string): Promise<{ user: User } | { error: string }> {
 	const res = await api<{ user: User; access_token: string; refresh_token: string; expires_in: number }>(
-		'POST', '/auth/login', { email, password }
-	);
-
-	if (res.error) {
-		return { error: res.error.message };
-	}
-
-	if (res.data) {
-		setTokens(res.data.access_token, res.data.refresh_token);
-		currentUser = res.data.user;
-		return { user: res.data.user };
-	}
-
-	return { error: 'unexpected error' };
-}
-
-export async function staffLogin(mobile: string, password: string): Promise<{ user: User } | { error: string }> {
-	const res = await api<{ user: User; access_token: string; refresh_token: string; expires_in: number }>(
-		'POST', '/auth/staff-login', { mobile, password }
+		'POST', '/auth/staff-login', { identifier, password }
 	);
 
 	if (res.error) {
