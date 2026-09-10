@@ -441,7 +441,7 @@
 	.login-sub { color: var(--ink-soft); font-size: 0.95rem; margin: 0.15rem 0 0; }
 	.tabs {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(2, 1fr);
 		gap: 0.4rem;
 		background: var(--cream);
 		border: 2.5px solid var(--ink);
