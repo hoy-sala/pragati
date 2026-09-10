@@ -184,16 +184,86 @@
     importError = "";
   }
 
+  const IMPORT_HEADER =
+    "sats_number,first_name,last_name,class,date_of_birth,gender,father_name,mother_name,parent_name";
+
+  function csvEscape(v: string): string {
+    return /["\n,]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+  }
+
+  function cleanRegisterField(v: string): string {
+    return v === "" || /^N\/?A$/i.test(v) ? "" : v;
+  }
+
+  function registerToCsv(parsed: unknown): string {
+    const maybeArr = parsed as Record<string, unknown>;
+    const arr = Array.isArray(parsed)
+      ? parsed
+      : Array.isArray(maybeArr?.students)
+        ? (maybeArr.students as unknown[])
+        : Array.isArray(maybeArr?.data)
+          ? (maybeArr.data as unknown[])
+          : null;
+    if (!arr) throw new Error("Unrecognized JSON. Expected an array of student records (register export).");
+    const lines = [IMPORT_HEADER];
+    for (const rec of arr) {
+      if (!rec || typeof rec !== "object") continue;
+      const f: Record<string, string> = {};
+      for (const [k, v] of Object.entries(rec as Record<string, unknown>)) {
+        f[k.toLowerCase()] = String(v ?? "").trim();
+      }
+      const sats = f.student_id.replace(/\s+/g, "");
+      const name = f.student_name.trim();
+      const first = name.split(/\s+/)[0] || name;
+      const last = name.split(/\s+/).slice(1).join(" ");
+      const clsMatch = f.class_studying.match(/(\d+)/);
+      const cls = clsMatch ? "Class " + clsMatch[1] : "";
+      let dob = "";
+      const dc = cleanRegisterField(f.dob).split("/");
+      if (
+        dc.length === 3 &&
+        /^\d{1,2}$/.test(dc[0]) &&
+        /^\d{1,2}$/.test(dc[1]) &&
+        /^\d{4}$/.test(dc[2])
+      ) {
+        dob = `${dc[2]}-${dc[1].padStart(2, "0")}-${dc[0].padStart(2, "0")}`;
+      }
+      let gender = "";
+      if (/^1/.test(f.sex)) gender = "male";
+      else if (/^2/.test(f.sex)) gender = "female";
+      const father = cleanRegisterField(f.father_name);
+      const mother = cleanRegisterField(f.mother_name);
+      lines.push([sats, first, last, cls, dob, gender, father, mother, father || mother].map(csvEscape).join(","));
+    }
+    return lines.join("\n");
+  }
+
   async function importStudents() {
     if (!importFile) {
-      importError = "Select a CSV file.";
+      importError = "Select a CSV or JSON file.";
       return;
     }
     importing = true;
     importError = "";
     importResult = null;
+    let uploadFile = importFile;
+    if (importFile.name.toLowerCase().endsWith(".json")) {
+      try {
+        const parsed = JSON.parse(await importFile.text());
+        const csv = registerToCsv(parsed);
+        const rowCount = csv.trim().split(/\n/).length - 1;
+        if (rowCount <= 0) throw new Error("No student records found in the JSON file.");
+        uploadFile = new File([csv], "students_import.csv", { type: "text/csv" });
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : "Invalid JSON file.";
+        importError = msg;
+        toast(msg, "error");
+        importing = false;
+        return;
+      }
+    }
     const formData = new FormData();
-    formData.append("file", importFile);
+    formData.append("file", uploadFile);
     try {
       const res = await fetch(apiUrl("/students/import"), {
         method: "POST",
@@ -376,18 +446,18 @@
       </div>
       <div class="p-4 space-y-4">
         <p class="text-sm text-slate-500">
-          Upload a CSV of students. Rows whose SATS number already exists are
-          updated; new ones are inserted. Leave the academic year column empty
-          to use the current year.
+          Upload a CSV or JSON of students. Rows whose SATS number already
+          exists are updated; new ones are inserted. Leave the academic year
+          column empty to use the current year.
         </p>
         <div>
           <label for="st-import-csv" class="block text-xs font-medium text-slate-500 mb-1"
-            >CSV File</label
+            >File</label
           >
           <input
             id="st-import-csv"
             type="file"
-            accept=".csv"
+            accept=".csv,.json"
             onchange={(e: Event) => {
               const el = e.target as HTMLInputElement;
               importFile = el.files?.[0] || null;
@@ -397,8 +467,15 @@
         </div>
         <details class="text-xs text-slate-500">
           <summary class="cursor-pointer hover:text-slate-700"
-            >CSV format reference</summary
+            >Accepted formats</summary
           >
+          <p class="mt-2">
+            <strong>JSON</strong> — register export (keys like
+            <code>student_name</code>, <code>student_id</code>,
+            <code>class_studying</code>, <code>dob</code>
+            (DD/MM/YYYY), <code>sex</code> (1-BOY/2-GIRL),
+            <code>father_name</code>, <code>mother_name</code>).
+          </p>
           <pre
             class="mt-2 p-3 bg-slate-50 rounded-lg text-xs leading-relaxed overflow-x-auto"
           ><code>sats_number,first_name,last_name,class,date_of_birth,gender,father_name,mother_name,parent_name,parent_phone,parent_email,admission_no,roll_no,academic_year</code></pre>
