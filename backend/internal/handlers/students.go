@@ -39,11 +39,11 @@ func (h *StudentHandler) List(w http.ResponseWriter, r *http.Request) {
 		limit = 500
 	}
 
-	query := `SELECT s.id, s.school_id, s.user_id, s.sats_number, s.admission_no,
-		s.roll_no, s.first_name, s.last_name, s.date_of_birth, s.gender,
-		s.photo_url, s.blood_group, s.address, s.phone, s.email,
+	query := `SELECT s.id, s.school_id, s.user_id, s.sats_number, COALESCE(s.admission_no, ''),
+		COALESCE(s.roll_no, 0), s.first_name, COALESCE(s.last_name, ''), s.date_of_birth, s.gender,
+		s.photo_url, COALESCE(s.blood_group, ''), COALESCE(s.address, ''), COALESCE(s.phone, ''), COALESCE(s.email, ''),
 		s.class_id, s.section_id, s.house_id, s.academic_year_id,
-		s.parent_name, s.father_name, s.mother_name, s.parent_phone, s.parent_email, s.is_active,
+		COALESCE(s.parent_name, ''), s.father_name, s.mother_name, COALESCE(s.parent_phone, ''), COALESCE(s.parent_email, ''), s.is_active,
 		s.created_at, s.updated_at
 		FROM students s
 		WHERE s.school_id = $1 AND s.deleted_at IS NULL`
