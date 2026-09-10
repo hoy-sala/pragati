@@ -279,6 +279,19 @@ export interface APIError {
 	details?: unknown;
 }
 
+export interface ImportRowError {
+	row: number;
+	sats_number: string;
+	field: string;
+	message: string;
+}
+
+export interface ImportResult {
+	imported: number;
+	skipped: number;
+	errors?: ImportRowError[];
+}
+
 export interface StaffLoginRequest {
 	mobile: string;
 	password: string;

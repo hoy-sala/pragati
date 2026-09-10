@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { api } from "$lib/api/client.svelte";
+  import { api, apiUrl } from "$lib/api/client.svelte";
   import {
     Plus,
     Pencil,
@@ -14,12 +14,14 @@
     Users,
     Eye,
     EyeOff,
+    Upload,
+    X,
   } from "lucide-svelte";
   import Button from "$lib/components/Button.svelte";
   import Select from "$lib/components/Select.svelte";
   import SearchFilter from "$lib/components/SearchFilter.svelte";
   import Pagination from "$lib/components/Pagination.svelte";
-  import type { Student, Class, AcademicYear } from "$lib/types";
+  import type { Student, Class, AcademicYear, ImportResult } from "$lib/types";
   import { toast } from "$lib/stores/toast.svelte";
   import { onMount } from "svelte";
 
@@ -31,6 +33,11 @@
   let error = $state("");
 
   let showForm = $state(false);
+  let showImport = $state(false);
+  let importFile = $state<File | null>(null);
+  let importing = $state(false);
+  let importResult = $state<ImportResult | null>(null);
+  let importError = $state("");
   let editingId: string | null = $state(null);
   let formSATS = $state("");
   let formFirstName = $state("");
@@ -162,6 +169,60 @@
     resetForm();
   }
 
+  function openImport() {
+    showImport = true;
+    importFile = null;
+    importResult = null;
+    importError = "";
+  }
+
+  function closeImport() {
+    showImport = false;
+    importing = false;
+    importFile = null;
+    importResult = null;
+    importError = "";
+  }
+
+  async function importStudents() {
+    if (!importFile) {
+      importError = "Select a CSV file.";
+      return;
+    }
+    importing = true;
+    importError = "";
+    importResult = null;
+    const formData = new FormData();
+    formData.append("file", importFile);
+    try {
+      const res = await fetch(apiUrl("/students/import"), {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+        body: formData,
+      });
+      const json = await res.json();
+      if (json.data) {
+        importResult = json.data as ImportResult;
+        const sRes = await api<Student[]>("GET", "/students?limit=500");
+        if (sRes.data) allStudents = sRes.data;
+        toast("Student import finished", "success");
+      } else if (json.error) {
+        importError = json.error.message;
+        toast(importError, "error");
+      } else {
+        importError = "Import failed with no response.";
+        toast(importError, "error");
+      }
+    } catch {
+      importError = "Import failed. Please try again.";
+      toast(importError, "error");
+    } finally {
+      importing = false;
+    }
+  }
+
   async function save() {
     if (!formSATS.trim() || !formFirstName.trim() || !formClassId) return;
     if (formSATS.trim().length !== 9) {
@@ -282,8 +343,110 @@
         {allStudents.length} student{allStudents.length !== 1 ? "s" : ""} enrolled
       </p>
     </div>
-    <Button onclick={openCreate} icon={Plus}>Add Student</Button>
+    <div class="flex items-center gap-2">
+      <Button onclick={openImport} variant="secondary" icon={Upload}
+        >Import CSV</Button
+      >
+      <Button onclick={openCreate} icon={Plus}>Add Student</Button>
+    </div>
   </div>
+
+  {#if showImport}
+    <div
+      class="bg-white rounded-xl border border-slate-200 shadow-sm"
+      role="dialog"
+      aria-label="Import students from CSV"
+    >
+      <div
+        class="px-4 py-3 border-b border-slate-100 flex items-center justify-between"
+      >
+        <h3
+          class="text-sm font-semibold text-slate-700 flex items-center gap-2"
+        >
+          <Upload size={16} class="text-primary-500" />
+          Import Students
+        </h3>
+        <button
+          onclick={closeImport}
+          aria-label="Close import dialog"
+          class="text-slate-400 hover:text-slate-600 transition-colors p-1 rounded-md hover:bg-slate-100"
+        >
+          <X size={16} />
+        </button>
+      </div>
+      <div class="p-4 space-y-4">
+        <p class="text-sm text-slate-500">
+          Upload a CSV of students. Rows whose SATS number already exists are
+          updated; new ones are inserted. Leave the academic year column empty
+          to use the current year.
+        </p>
+        <div>
+          <label for="st-import-csv" class="block text-xs font-medium text-slate-500 mb-1"
+            >CSV File</label
+          >
+          <input
+            id="st-import-csv"
+            type="file"
+            accept=".csv"
+            onchange={(e: Event) => {
+              const el = e.target as HTMLInputElement;
+              importFile = el.files?.[0] || null;
+            }}
+            class="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
+          />
+        </div>
+        <details class="text-xs text-slate-500">
+          <summary class="cursor-pointer hover:text-slate-700"
+            >CSV format reference</summary
+          >
+          <pre
+            class="mt-2 p-3 bg-slate-50 rounded-lg text-xs leading-relaxed overflow-x-auto"
+          ><code>sats_number,first_name,last_name,class,date_of_birth,gender,father_name,mother_name,parent_name,parent_phone,parent_email,admission_no,roll_no,academic_year</code></pre>
+          <p class="mt-2"><code>sats_number</code>, <code>first_name</code> and <code>class</code> are required. <code>class</code> is the class name or code, e.g. <code>Class 6</code>.</p>
+          <p class="mt-2"><code>date_of_birth</code> uses <code>YYYY-MM-DD</code>. <code>gender</code> is <code>male</code> or <code>female</code>.</p>
+        </details>
+
+        {#if importError}
+          <div
+            class="flex items-center gap-2 text-sm px-3 py-2 rounded-lg bg-red-50 text-danger-600 border border-red-200"
+          >
+            <span>{importError}</span>
+          </div>
+        {/if}
+
+        {#if importResult}
+          <div
+            class="text-sm bg-green-50 border border-green-200 rounded-lg p-4"
+          >
+            <p class="text-green-700 font-medium">
+              Imported {importResult.imported} student{importResult.imported !== 1 ? "s" : ""}
+              {importResult.skipped > 0 ? `, skipped ${importResult.skipped}` : ""}
+            </p>
+            {#if importResult.errors && importResult.errors.length > 0}
+              <ul class="mt-2 space-y-1 max-h-48 overflow-y-auto">
+                {#each importResult.errors as e}
+                  <li class="text-amber-700">
+                    Row {e.row} ({e.sats_number}): {e.message}
+                  </li>
+                {/each}
+              </ul>
+            {/if}
+          </div>
+        {/if}
+
+        <div class="flex items-center gap-2 pt-1">
+          <Button
+            onclick={importStudents}
+            disabled={importing || !importFile}
+            loading={importing}
+          >
+            {importing ? "Importing..." : "Import"}
+          </Button>
+          <Button onclick={closeImport} variant="secondary">Cancel</Button>
+        </div>
+      </div>
+    </div>
+  {/if}
 
   {#if showForm}
     <div class="bg-white rounded-xl border border-slate-200 shadow-sm">
