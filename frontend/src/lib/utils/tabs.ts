@@ -6,16 +6,16 @@ export interface PageTab {
 }
 
 export const MENTOR_TABS: PageTab[] = [
-	{ href: '/mentors', label: 'Assignments' },
-	{ href: '/mentors/roster', label: 'Roster' },
-	{ href: '/mentors/attendance', label: 'Attendance' },
-	{ href: '/mentors/logs', label: 'Logs' },
-	{ href: '/mentors/dashboard', label: 'Dashboard', roles: ['admin', 'principal'] },
+	{ href: '/mentors?tab=assignments', label: 'Assignments' },
+	{ href: '/mentors?tab=roster', label: 'Roster' },
+	{ href: '/mentors?tab=attendance', label: 'Attendance' },
+	{ href: '/mentors?tab=logs', label: 'Logs' },
+	{ href: '/mentors?tab=dashboard', label: 'Dashboard', roles: ['admin', 'principal'] },
 ];
 
 export const HPC_TABS: PageTab[] = [
-	{ href: '/hpc', label: 'Progress Grid' },
-	{ href: '/hpc/assess', label: 'LO Assessment' },
-	{ href: '/hpc/lo-import', label: 'Import LOs', roles: ['admin'] },
-	{ href: '/hpc/config', label: 'Config', roles: ['admin'] },
+	{ href: '/hpc?tab=grid', label: 'Progress Grid' },
+	{ href: '/hpc?tab=assess', label: 'LO Assessment' },
+	{ href: '/hpc?tab=import', label: 'Import LOs', roles: ['admin'] },
+	{ href: '/hpc?tab=config', label: 'Config', roles: ['admin'] },
 ];

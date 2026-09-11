@@ -2,20 +2,39 @@
 	import { page } from '$app/stores';
 	import type { PageTab } from '$lib/utils/tabs';
 
-	let { tabs, role = '' }: { tabs: PageTab[]; role?: string } = $props();
+	let { tabs, role = '', active }: { tabs: PageTab[]; role?: string; active?: string } = $props();
 
 	let visible = $derived(tabs.filter((t) => !t.roles || t.roles.includes(role)));
 
+	function currentUrl(): string {
+		return $page.url.pathname + $page.url.search;
+	}
+
+	function splitHref(href: string): { path: string; search: string } {
+		const i = href.indexOf('?');
+		return i === -1 ? { path: href, search: '' } : { path: href.slice(0, i), search: href.slice(i) };
+	}
+
 	function isActive(href: string): boolean {
-		const path = $page.url.pathname;
-		if (path === href) return true;
-		if (!path.startsWith(href + '/')) return false;
+		if (active !== undefined) return active === href;
+		const cur = currentUrl();
+		if (cur === href) return true;
+		const { path, search } = splitHref(href);
+		const curPath = $page.url.pathname;
+		if (search) return false; // query tabs only match exactly
+		if (curPath === path) return true;
+		if (!curPath.startsWith(path + '/')) return false;
 		// Longest-prefix wins so /mentors doesn't stay active on /mentors/roster.
 		return !visible.some(
-			(t) =>
-				t.href !== href &&
-				t.href.length > href.length &&
-				(path === t.href || path.startsWith(t.href + '/'))
+			(t) => {
+				const tp = splitHref(t.href);
+				return (
+					t.href !== href &&
+					tp.search === '' &&
+					tp.path.length > path.length &&
+					(curPath === tp.path || curPath.startsWith(tp.path + '/'))
+				);
+			}
 		);
 	}
 </script>
