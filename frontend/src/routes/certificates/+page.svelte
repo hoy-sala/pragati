@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { api, apiUrl } from "$lib/api/client.svelte";
+  import { api, apiUrl, apiUpload } from "$lib/api/client.svelte";
   import type {
     CertificateEvent,
     CertificateParticipant,
@@ -11,6 +11,7 @@
   import { Trash2, Plus, X } from "lucide-svelte";
   import Button from "$lib/components/Button.svelte";
   import Select from "$lib/components/Select.svelte";
+  import SearchFilter from "$lib/components/SearchFilter.svelte";
   import { toast } from "$lib/stores/toast.svelte";
 
   const CATEGORIES = [
@@ -44,6 +45,7 @@
   let error = $state("");
 
   let showForm = $state(false);
+  let search = $state("");
   let newName = $state("");
   let newCategory = $state("sports");
   let newHeldDate = $state("");
@@ -62,6 +64,18 @@
     >
   >({});
   let loadingDetails = $state(false);
+
+  let filteredEvents = $derived(
+    events.filter((e) => {
+      if (!search.trim()) return true;
+      const q = search.toLowerCase();
+      return (
+        e.name?.toLowerCase().includes(q) ||
+        e.venue?.toLowerCase().includes(q) ||
+        categoryLabel(e.category).toLowerCase().includes(q)
+      );
+    }),
+  );
 
   let studentOptions = $derived(
     students.map((s) => ({
@@ -261,21 +275,14 @@
     f.error = "";
     const formData = new FormData();
     formData.append("file", input.files[0]);
-    try {
-      const token = localStorage.getItem("access_token");
-      const res = await fetch(apiUrl("/certificates/signatures"), {
-        method: "POST",
-        headers: { Authorization: "Bearer " + token },
-        body: formData,
-      });
-      const json = await res.json();
-      if (json.data?.url) {
-        f.signature_url = json.data.url;
-      } else {
-        f.error = json.error?.message || "Upload failed";
-      }
-    } catch {
-      f.error = "Unable to reach server.";
+    const json = await apiUpload<{ url: string }>(
+      "/certificates/signatures",
+      formData,
+    );
+    if (json.data?.url) {
+      f.signature_url = json.data.url;
+    } else {
+      f.error = json.error?.message || "Upload failed";
     }
     f.uploading = false;
     input.value = "";
@@ -400,6 +407,12 @@
   {/if}
 
   <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
+    <div class="p-4 border-b border-slate-200">
+      <SearchFilter
+        bind:value={search}
+        placeholder="Search events by name, venue, or category..."
+      />
+    </div>
     <table class="w-full text-sm">
       <thead>
         <tr class="bg-slate-50 text-slate-600">
@@ -422,8 +435,14 @@
               >No events yet. Add one above.</td
             ></tr
           >
+        {:else if filteredEvents.length === 0}
+          <tr
+            ><td colspan="4" class="px-4 py-8 text-center text-slate-400"
+              >No events match your search.</td
+            ></tr
+          >
         {:else}
-          {#each events as e (e.id)}
+          {#each filteredEvents as e (e.id)}
             <tr
               class="border-t border-slate-100 hover:bg-slate-50 cursor-pointer"
               onclick={() => toggleEvent(e.id)}

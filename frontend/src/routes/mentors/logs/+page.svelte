@@ -16,13 +16,10 @@
   import { getAuthState } from "$lib/stores/auth.svelte";
   import { effectiveRole } from "$lib/utils/roles";
   import { toast } from "$lib/stores/toast.svelte";
-  import type { AcademicYear } from "$lib/types";
 
   const auth = getAuthState();
   let role = $derived(effectiveRole(auth.currentUser));
 
-  let years = $state<AcademicYear[]>([]);
-  let selectedYear = $state("");
   let logs = $state<
     {
       id: string;
@@ -64,19 +61,12 @@
   ];
 
   onMount(async () => {
-    const [yr, roster] = await Promise.all([
-      api<AcademicYear[]>("GET", "/academic-years"),
-      api<{ id: string; name: string }[]>(
-        "GET",
-        "/mentors/roster?academic_year_id=current",
-      ),
-    ]);
-    if (yr.data) {
-      years = yr.data;
-      const cur = yr.data.find((y) => y.is_current);
-      if (cur) selectedYear = cur.id;
-    }
+    const roster = await api<{ id: string; name: string }[]>(
+      "GET",
+      "/mentors/roster?academic_year_id=current",
+    );
     if (roster.data) students = roster.data;
+    loadLogs();
   });
 
   async function loadLogs() {
@@ -85,10 +75,6 @@
     if (res.data) logs = res.data;
     loading = false;
   }
-
-  $effect(() => {
-    if (selectedYear) loadLogs();
-  });
 
   async function submitLog() {
     if (!form.student_id || !form.description) return;

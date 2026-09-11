@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { api, apiUrl } from "$lib/api/client.svelte";
+  import { api, apiUpload } from "$lib/api/client.svelte";
   import {
     Plus,
     Pencil,
@@ -270,16 +270,9 @@
     const formData = new FormData();
     formData.append("file", uploadFile);
     try {
-      const res = await fetch(apiUrl("/students/import"), {
-        method: "POST",
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("access_token"),
-        },
-        body: formData,
-      });
-      const json = await res.json();
+      const json = await apiUpload<ImportResult>("/students/import", formData);
       if (json.data) {
-        importResult = json.data as ImportResult;
+        importResult = json.data;
         const sRes = await api<Student[]>("GET", "/students?limit=500");
         if (sRes.data) allStudents = sRes.data;
         toast("Student import finished", "success");

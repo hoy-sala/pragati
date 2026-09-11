@@ -17,7 +17,7 @@
   let subjects = $state<Subject[]>([]);
   let selectedClass = $state("");
   let selectedSubject = $state("");
-  let selectedTerm = $state("Term1");
+  let selectedTerm = $state("Term 1");
 
   let loColumns = $state<any[]>([]);
   let students = $state<any[]>([]);
@@ -27,7 +27,7 @@
   let statusMsg = $state("");
   let statusType = $state<"success" | "error">("success");
 
-  const terms = ["Term1", "Term2"];
+  const terms = ["Term 1", "Term 2"];
   const termOptions = terms.map((t) => ({ id: t, name: t }));
   const proficiencyOptions = [
     { id: "0", name: "—" },
@@ -62,6 +62,10 @@
       statusType = "error";
     }
   }
+
+  $effect(() => {
+    if (selectedClass && selectedSubject) loadGrid();
+  });
 
   function getCellValue(studentId: string, loId: string): number {
     const row = gridData.find((r: any) => r.student.student_id === studentId);
@@ -173,9 +177,6 @@
           options={termOptions}
         />
       </div>
-      <Button variant="secondary" onclick={loadGrid}>
-        Load
-      </Button>
     </div>
   </div>
 

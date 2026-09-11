@@ -1,7 +1,7 @@
 <script lang="ts">
   import { api } from "$lib/api/client.svelte";
   import type { Class } from "$lib/types";
-  import { onMount } from "svelte";
+  import { onMount, untrack } from "svelte";
   import Select from "$lib/components/Select.svelte";
   import Button from "$lib/components/Button.svelte";
   import PageTabs from "$lib/components/PageTabs.svelte";
@@ -19,7 +19,7 @@
   let loadedConfig = $state<any>(null);
   let gradingScheme = $state<any[]>([]);
   let proficiencyScale = $state<any[]>([]);
-  let terms = $state(["Term1", "Term2"]);
+  let terms = $state(["Term 1", "Term 2"]);
   let loading = $state(true);
   let saving = $state(false);
   let statusMsg = $state("");
@@ -69,9 +69,9 @@
     const res = await api<any>("GET", "/hpc/config?" + params.toString());
     if (res.data) {
       loadedConfig = res.data;
-      gradingScheme = res.data.grading_scheme || gradingScheme;
-      proficiencyScale = res.data.proficiency_scale || proficiencyScale;
-      terms = res.data.terms || terms;
+      gradingScheme = res.data.grading_scheme || untrack(() => gradingScheme);
+      proficiencyScale = res.data.proficiency_scale || untrack(() => proficiencyScale);
+      terms = res.data.terms || untrack(() => terms);
       statusMsg = "Configuration loaded.";
       statusType = "success";
     } else {
@@ -79,6 +79,10 @@
       statusType = "success";
     }
   }
+
+  $effect(() => {
+    if (isAdmin) loadConfig();
+  });
 
   async function saveConfig() {
     saving = true;
@@ -162,9 +166,6 @@
           placeholder="All Classes"
         />
       </div>
-      <Button variant="secondary" onclick={loadConfig}>
-        Load Existing
-      </Button>
     </div>
   </div>
 

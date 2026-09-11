@@ -121,15 +121,14 @@
 		</div>
 		<div class="flex flex-wrap gap-3 items-end">
 			<div class="w-44">
-				<Select bind:value={selectedClass} options={[{ id: '', name: 'All Classes' }, ...classes.map(c => ({ id: c.id, name: c.name }))]} placeholder="All Classes" />
+				<Select bind:value={selectedClass} options={[{ id: '', name: 'All Classes' }, ...classes.map(c => ({ id: c.id, name: c.name }))]} placeholder="All Classes" onselect={onFilterChange} />
 			</div>
 			<div class="w-44">
-				<Select bind:value={selectedSubject} options={[{ id: '', name: 'All Subjects' }, ...filteredSubjects.map(s => ({ id: s.id, name: s.name }))]} placeholder="All Subjects" />
+				<Select bind:value={selectedSubject} options={[{ id: '', name: 'All Subjects' }, ...filteredSubjects.map(s => ({ id: s.id, name: s.name }))]} placeholder="All Subjects" onselect={onFilterChange} />
 			</div>
 			<div class="w-44">
-				<Select bind:value={selectedCategory} options={[{ id: '', name: 'All Categories' }, ...categories.map(c => ({ id: c.id, name: c.name }))]} placeholder="All Categories" />
+				<Select bind:value={selectedCategory} options={[{ id: '', name: 'All Categories' }, ...categories.map(c => ({ id: c.id, name: c.name }))]} placeholder="All Categories" onselect={onFilterChange} />
 			</div>
-			<Button variant="secondary" onclick={onFilterChange}>Apply</Button>
 		</div>
 	</div>
 

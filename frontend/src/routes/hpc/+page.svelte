@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { api } from "$lib/api/client.svelte";
+  import { api, apiUrl } from "$lib/api/client.svelte";
   import type { Class, AcademicYear } from "$lib/types";
   import { onMount } from "svelte";
   import Select from "$lib/components/Select.svelte";
   import Button from "$lib/components/Button.svelte";
+  import SearchFilter from "$lib/components/SearchFilter.svelte";
   import PageTabs from "$lib/components/PageTabs.svelte";
   import { HPC_TABS } from "$lib/utils/tabs";
   import { getAuthState } from "$lib/stores/auth.svelte";
@@ -29,7 +30,7 @@
   let grid = $state<HPCGridRow[]>([]);
   let selectedClass = $state("");
   let selectedYear = $state("");
-  let selectedTerm = $state("Term1");
+  let selectedTerm = $state("Term 1");
   let loading = $state(false);
   let publishing = $state(false);
   let statusMsg = $state("");
@@ -40,8 +41,20 @@
     draft_count: 0,
   });
 
-  const terms = ["Term1", "Term2"];
+  const terms = ["Term 1", "Term 2"];
   const termOptions = terms.map((t) => ({ id: t, name: t }));
+
+  let gridSearch = $state("");
+  let filteredGrid = $derived(
+    grid.filter((r) => {
+      if (!gridSearch.trim()) return true;
+      const q = gridSearch.toLowerCase();
+      return (
+        r.name?.toLowerCase().includes(q) ||
+        r.sats_number?.includes(q)
+      );
+    }),
+  );
 
   onMount(async () => {
     const [cRes, yRes] = await Promise.all([
@@ -71,6 +84,10 @@
     if (gRes.data) grid = gRes.data;
     if (rRes.data) summary = rRes.data as any;
   }
+
+  $effect(() => {
+    if (selectedClass && selectedYear) loadGrid();
+  });
 
   async function migrateFromMarks() {
     if (!selectedClass || !selectedYear) return;
@@ -200,9 +217,6 @@
         >
         <Select id="hpc-term" bind:value={selectedTerm} options={termOptions} />
       </div>
-      <Button variant="secondary" onclick={loadGrid}>
-        Load
-      </Button>
     </div>
   </div>
 
@@ -233,6 +247,12 @@
   <div
     class="bg-white rounded-xl border border-slate-200 overflow-hidden overflow-x-auto"
   >
+    <div class="p-4 border-b border-slate-200">
+      <SearchFilter
+        bind:value={gridSearch}
+        placeholder="Search by name or SATS..."
+      />
+    </div>
     <table class="w-full text-sm">
       <thead>
         <tr class="bg-slate-50 text-slate-600">
@@ -258,8 +278,14 @@
                 : "Select a class above."}
             </td></tr
           >
+        {:else if filteredGrid.length === 0}
+          <tr
+            ><td colspan="5" class="px-4 py-8 text-center text-slate-400">
+              No students match your search.
+            </td></tr
+          >
         {:else}
-          {#each grid as row (row.student_id)}
+          {#each filteredGrid as row (row.student_id)}
             <tr class="border-t border-slate-100 hover:bg-slate-50">
               <td class="px-4 py-3">{row.roll_no}</td>
               <td class="px-4 py-3 font-mono text-xs">{row.sats_number}</td>
@@ -289,7 +315,7 @@
                   </a>
                   {#if row.has_pdf}
                     <a
-                      href="/api/v1/hpc/entries/{row.entry_id}/pdf"
+                      href={apiUrl(`/hpc/entries/${row.entry_id}/pdf`)}
                       target="_blank"
                       class="text-xs text-slate-500 hover:text-slate-700">PDF</a
                     >

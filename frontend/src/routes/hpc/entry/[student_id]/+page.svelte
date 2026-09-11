@@ -15,7 +15,7 @@
   let role = $derived(effectiveRole(auth.currentUser));
 
   const studentId = $page.params.student_id;
-  const term = $page.url.searchParams.get("term") || "Term1";
+  const term = $page.url.searchParams.get("term") || "Term 1";
   const year = $page.url.searchParams.get("year") || "";
   let studentName = $state("");
 

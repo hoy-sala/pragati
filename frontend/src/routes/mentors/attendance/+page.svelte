@@ -10,6 +10,7 @@
     LoaderCircle,
   } from "lucide-svelte";
   import { toast } from "$lib/stores/toast.svelte";
+  import Select from "$lib/components/Select.svelte";
   import PageTabs from "$lib/components/PageTabs.svelte";
   import { MENTOR_TABS } from "$lib/utils/tabs";
   import { getAuthState } from "$lib/stores/auth.svelte";
@@ -116,7 +117,7 @@
   </div>
   <PageTabs tabs={MENTOR_TABS} role={role} />
   <div
-    class="bg-white rounded-xl border border-slate-200 p-4 no-print flex gap-3"
+    class="bg-white rounded-xl border border-slate-200 p-4 no-print flex flex-wrap gap-3"
   >
     <input
       type="date"
@@ -124,6 +125,13 @@
       onchange={() => loadAttendance()}
       class="px-3 py-2 rounded-lg border border-slate-300 text-sm"
     />
+    <div class="w-44">
+      <Select
+        bind:value={selectedYear}
+        options={years}
+        placeholder="Select year"
+      />
+    </div>
   </div>
   {#if loading}<div
       class="bg-white rounded-xl border border-slate-200 p-12 text-center text-sm text-slate-400"

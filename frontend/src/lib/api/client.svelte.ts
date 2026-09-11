@@ -100,3 +100,23 @@ export async function api<T = unknown>(
 export function apiUrl(path: string): string {
 	return `${getApiBase()}/api/v1${path}`;
 }
+
+/** POST a FormData body (file uploads) with auth + token refresh. */
+export async function apiUpload<T = unknown>(path: string, form: FormData): Promise<APIResponse<T>> {
+	const url = `${getApiBase()}/api/v1${path}`;
+	const doFetch = () =>
+		fetch(url, {
+			method: 'POST',
+			headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+			body: form
+		});
+	let res = await doFetch();
+	if (res.status === 401 && refreshToken) {
+		if (await refreshAccessToken()) res = await doFetch();
+	}
+	try {
+		return (await res.json()) as APIResponse<T>;
+	} catch {
+		return { error: { code: 'NETWORK_ERROR', message: 'Unable to reach server.' } };
+	}
+}
