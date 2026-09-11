@@ -227,7 +227,7 @@ func (h *HPCHandler) GetGrid(w http.ResponseWriter, r *http.Request) {
 
 	rows, err := h.db.Query(r.Context(),
 		`SELECT s.id, s.sats_number, s.first_name, COALESCE(s.last_name, ''), s.roll_no,
-			COALESCE(e.id, ''), COALESCE(e.status, ''), CASE WHEN e.generated_pdf_url != '' THEN true ELSE false END
+			COALESCE(e.id::text, ''), COALESCE(e.status, ''), CASE WHEN e.generated_pdf_url != '' THEN true ELSE false END
 		FROM students s
 		LEFT JOIN hpc_entries e ON e.student_id = s.id AND e.term = $1
 			AND e.academic_year_id = $2 AND e.deleted_at IS NULL
