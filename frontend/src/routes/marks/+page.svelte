@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { api } from '$lib/api/client.svelte';
-	import { Save, X, BookOpen, Users, ClipboardCheck, Filter, Table } from 'lucide-svelte';
+	import { Save, X, BookOpen, Users, ClipboardCheck, Table } from 'lucide-svelte';
 	import Button from '$lib/components/Button.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import Select from '$lib/components/Select.svelte';
@@ -89,6 +89,7 @@
 		if (selectedCategory) params.set('category_id', selectedCategory);
 		if (selectedClass) params.set('class_id', selectedClass);
 		if (selectedSubject) params.set('subject_id', selectedSubject);
+		params.set('limit', '100');
 		const res = await api<Assessment[]>('GET', '/assessments?' + params.toString());
 		if (res.data && seq === reqSeq) assessments = res.data;
 	}
@@ -324,10 +325,6 @@
 	</PageHeader>
 
 	<div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
-		<div class="flex items-center gap-2 mb-3">
-			<Filter size={14} class="text-slate-400" />
-			<span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Filters</span>
-		</div>
 		<div class="flex flex-wrap gap-3 items-end">
 			<div class="w-44">
 				<Select bind:value={selectedCategory} options={categories} label="Category" icon={ClipboardCheck} placeholder="All categories" />
@@ -339,7 +336,7 @@
 				<Select bind:value={selectedSubject} options={filteredSubjects} label="Subject" icon={BookOpen} placeholder="All subjects" />
 			</div>
 			<div class="w-48">
-				<Select bind:value={selectedAssessment} options={assessmentOptions} label="Assessment" icon={ClipboardCheck} placeholder="Select assessment" />
+				<Select bind:value={selectedAssessment} options={assessmentOptions} label="Assessment" icon={ClipboardCheck} placeholder="Select assessment" searchable />
 			</div>
 			<Button onclick={resetForm} variant="secondary">Clear</Button>
 		</div>

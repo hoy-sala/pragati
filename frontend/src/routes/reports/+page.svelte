@@ -1,14 +1,19 @@
 <script lang="ts">
 	import { api } from '$lib/api/client.svelte';
-	import { GraduationCap, Printer, Users, FileText, HeartHandshake } from 'lucide-svelte';
+	import { GraduationCap, Printer, FileText, HeartHandshake } from 'lucide-svelte';
 	import Select from '$lib/components/Select.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
+	import PageTabs from '$lib/components/PageTabs.svelte';
+	import { REPORT_TABS } from '$lib/utils/tabs';
+	import { page } from '$app/stores';
 	import type { Class } from '$lib/types';
 	import { onMount } from 'svelte';
 
 	type Tab = 'marksheet' | 'report' | 'mentors';
-	let activeTab = $state<Tab>('marksheet');
+	const REPORT_VIEWS: Tab[] = ['marksheet', 'report', 'mentors'];
+	let viewParam = $derived($page.url.searchParams.get('view') ?? '');
+	let activeTab: Tab = $derived(REPORT_VIEWS.includes(viewParam as Tab) ? (viewParam as Tab) : 'marksheet');
 
 	let classes = $state<Class[]>([]);
 
@@ -192,19 +197,8 @@
 				<Select bind:value={selectedTerm} options={termOptions} placeholder="All Terms" />
 			</div>
 
-			<div class="flex bg-slate-100 rounded-lg p-1 ml-2">
-				<button onclick={() => activeTab = 'marksheet'}
-					class="px-4 py-1.5 text-sm font-medium rounded-md transition-colors {activeTab === 'marksheet' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}">
-					<span class="flex items-center gap-1.5"><Users size={14} /> Mark Sheet</span>
-				</button>
-				<button onclick={() => activeTab = 'report'}
-					class="px-4 py-1.5 text-sm font-medium rounded-md transition-colors {activeTab === 'report' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}">
-					<span class="flex items-center gap-1.5"><FileText size={14} /> Report Card</span>
-				</button>
-				<button onclick={() => activeTab = 'mentors'}
-					class="px-4 py-1.5 text-sm font-medium rounded-md transition-colors {activeTab === 'mentors' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}">
-					<span class="flex items-center gap-1.5"><HeartHandshake size={14} /> Mentor-wise</span>
-				</button>
+			<div class="ml-2">
+				<PageTabs tabs={REPORT_TABS} />
 			</div>
 
 			{#if activeTab === 'report'}

@@ -4,7 +4,7 @@
 	import {
 		LogOut, GraduationCap, CalendarDays, House,
 		ClipboardCheck, ClipboardList, Table, FileSpreadsheet,
-		FileText, Settings, Heart, CheckSquare, HelpCircle, User, Award
+		FileText, Settings, Heart, HelpCircle, User, Award
 	} from 'lucide-svelte';
 	import type { ComponentType } from 'svelte';
 	import type { User as UserType, Student } from '$lib/types';
@@ -85,7 +85,6 @@
 			items: [
 				{ href: '/mentors', label: 'Mentors', icon: Heart, roles: ['admin', 'principal', 'teacher', 'special_educator'] },
 				{ href: '/hpc', label: 'HPC Cards', icon: FileSpreadsheet, roles: ['admin', 'principal', 'teacher'] },
-				{ href: '/hpc/assess', label: 'LO Assessment', icon: CheckSquare, roles: ['admin', 'principal', 'teacher'] },
 			]
 		},
 		{

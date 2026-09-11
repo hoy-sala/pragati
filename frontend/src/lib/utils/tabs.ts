@@ -19,3 +19,9 @@ export const HPC_TABS: PageTab[] = [
 	{ href: '/hpc?tab=import', label: 'Import LOs', roles: ['admin'] },
 	{ href: '/hpc?tab=config', label: 'Config', roles: ['admin'] },
 ];
+
+export const REPORT_TABS: PageTab[] = [
+	{ href: '/reports?view=marksheet', label: 'Mark Sheet' },
+	{ href: '/reports?view=report', label: 'Report Card' },
+	{ href: '/reports?view=mentors', label: 'Mentor-wise' },
+];
