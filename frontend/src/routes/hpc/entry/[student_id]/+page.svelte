@@ -245,7 +245,7 @@
     {/snippet}
   </PageHeader>
 
-  <PageTabs tabs={HPC_TABS} role={role} />
+  <PageTabs tabs={HPC_TABS} role={role} active="/hpc?tab=grid" />
 
   {#if statusMsg}
     <div
