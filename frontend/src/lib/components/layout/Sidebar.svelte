@@ -2,7 +2,7 @@
 	import { getAuthState, logout } from '$lib/stores/auth.svelte';
 	import { page } from '$app/stores';
 	import {
-		LogOut, GraduationCap, CalendarDays,
+		LogOut, GraduationCap, CalendarDays, House,
 		ClipboardCheck, ClipboardList, Table, FileSpreadsheet,
 		FileText, Settings, Heart, CheckSquare, HelpCircle, User, Award
 	} from 'lucide-svelte';
@@ -59,6 +59,11 @@
 	};
 
 	const navSections: NavSection[] = [
+		{
+			items: [
+				{ href: '/home', label: 'Home', icon: House, roles: ['admin', 'principal', 'teacher', 'special_educator'] },
+			]
+		},
 		{
 			label: 'Academic',
 			items: [
@@ -151,7 +156,7 @@
 								? 'bg-primary-50 text-primary-700 font-medium'
 								: 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'}"
 						>
-							<item.icon size={16} class="{isActive(item.href) ? 'text-primary-600' : 'text-slate-400'}" />
+							<item.icon size={16} class={isActive(item.href) ? 'text-primary-600' : 'text-slate-400'} />
 							<span class="truncate">{item.label}</span>
 						</a>
 					{/each}

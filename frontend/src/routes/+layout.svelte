@@ -3,6 +3,7 @@
   import "katex/dist/katex.min.css";
   import { onMount } from "svelte";
   import { initAuth, getAuthState } from "$lib/stores/auth.svelte";
+  import { effectiveRole } from "$lib/utils/roles";
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
   import Sidebar from "$lib/components/layout/Sidebar.svelte";
@@ -40,7 +41,9 @@
       auth.isAuthenticated &&
       $page.url.pathname === "/login"
     ) {
-      goto("/reports");
+      goto(
+        effectiveRole(auth.currentUser) === "student" ? "/reports" : "/home",
+      );
     }
   });
 </script>

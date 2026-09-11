@@ -51,7 +51,7 @@
 				{#if p === '...'}
 					<span class="px-1 text-xs text-slate-400">...</span>
 				{:else}
-					<button onclick={() => goto(p)}
+					<button onclick={() => { if (typeof p === 'number') goto(p); }}
 						class="px-2.5 py-1 text-xs rounded {p === currentPage ? 'bg-primary-600 text-white font-medium' : 'border border-slate-200 text-slate-600 hover:bg-slate-50'}">
 						{p}
 					</button>

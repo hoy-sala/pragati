@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { getAuthState } from '$lib/stores/auth.svelte';
+	import { effectiveRole } from '$lib/utils/roles';
 	import { goto } from '$app/navigation';
 
 	const auth = getAuthState();
@@ -8,7 +9,7 @@
 		if (!auth.isLoading && !auth.isAuthenticated) {
 			goto('/login');
 		} else if (!auth.isLoading && auth.isAuthenticated) {
-			goto('/reports');
+			goto(effectiveRole(auth.currentUser) === 'student' ? '/reports' : '/home');
 		}
 	});
 </script>

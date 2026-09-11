@@ -3,6 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { Building2, GraduationCap, BookOpen, Layers, Sparkles, Hash, Zap, Check, Globe, Newspaper, Clock, Atom, Users, Trophy, Cpu, Map } from 'lucide-svelte';
 	import type { PlayClass, PlaySubject, PlayTopic, PlayQuestion } from '$lib/types';
+	import { onMount } from 'svelte';
 	import { ELEMENTS, CATEGORY_LABELS, elementClass, elementPeriod, PERIODIC_DIFFICULTIES } from '$lib/data/elements';
 	import MathText from '$lib/components/MathText.svelte';
 	import MapQuiz from '$lib/components/MapQuiz.svelte';
@@ -111,9 +112,11 @@
 	if (typeof window !== 'undefined') {
 		try { mastered = JSON.parse(localStorage.getItem('pragati:tables:mastered') || '[]'); } catch { mastered = []; }
 		try { bestRush = JSON.parse(localStorage.getItem('pragati:tables:best') || '{}'); } catch { bestRush = {}; }
+	}
+	onMount(() => {
 		playerName = localStorage.getItem('pragati:player:name') || '';
 		if (playerName) phase = 'mode';
-	}
+	});
 	function savePlayerName() {
 		try { localStorage.setItem('pragati:player:name', playerName.trim()); } catch { /* ignore */ }
 	}
@@ -135,7 +138,8 @@
 		let filler = ans + 1;
 		while (distractors.length < 3) { if (filler !== ans && !distractors.includes(filler)) distractors.push(filler); filler++; }
 		const options = shuffle([ans, ...distractors]).map((v, i) => ({ key: 'ABCD'[i], value: String(v), correct: v === ans }));
-		return { question_text: `What is ${a} × ${b}?`, options, uid: ++qUid, isRepeat: false };
+		const uid = ++qUid;
+		return { id: `tables-${uid}`, question_text: `What is ${a} × ${b}?`, question_type: 'mcq' as const, options, difficulty: 'medium', uid, isRepeat: false };
 	}
 
 	function randPair(): [number, number] {
@@ -730,7 +734,7 @@
 		const cur = teamPlayOrder[teamPlayIndex];
 		if (!cur || teamPlayAnswered || lifelineUsed[cur.team]) return;
 		const wrongs = cur.q.options.filter((o: any) => !o.correct).map((o: any) => o.key);
-		hiddenOptKeys = shuffle(wrongs).slice(0, 2);
+		hiddenOptKeys = shuffle<string>(wrongs).slice(0, 2);
 		lifelineUsed[cur.team] = true;
 		playClick();
 	}
@@ -761,7 +765,7 @@
 		}
 		questions = data
 			.filter(q => Array.isArray(q.options) && q.options.length > 0)
-			.map(q => ({ ...q, options: shuffle(q.options) }));
+			.map(q => ({ ...q, uid: ++qUid, isRepeat: false, options: shuffle(q.options) }));
 		if (questions.length === 0) {
 			comingSoonLabel = selectedTopic ? `${selectedTopic} (${difficulty})` : `${selectedSubject?.name} (${difficulty})`;
 			phase = 'coming-soon';

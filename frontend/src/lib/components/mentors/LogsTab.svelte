@@ -159,10 +159,11 @@
         </div>
       </div>
       <div>
-        <label class="block text-xs font-medium text-slate-600 mb-1"
+        <label for="log-desc" class="block text-xs font-medium text-slate-600 mb-1"
           >Description *</label
         >
         <textarea
+          id="log-desc"
           bind:value={form.description}
           rows="3"
           class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm"
@@ -170,10 +171,11 @@
         ></textarea>
       </div>
       <div>
-        <label class="block text-xs font-medium text-slate-600 mb-1"
+        <label for="log-action" class="block text-xs font-medium text-slate-600 mb-1"
           >Action Taken</label
         >
         <textarea
+          id="log-action"
           bind:value={form.action_taken}
           rows="2"
           class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm"

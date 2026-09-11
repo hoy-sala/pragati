@@ -236,7 +236,6 @@
 		margin: 0.22rem 0 0;
 		line-height: 1.3;
 	}
-	.wordmark-kannada { font-family: 'Anek Kannada', system-ui, sans-serif; font-weight: 700; color: var(--ink-soft); font-size: 0.88em; margin-left: 0.4rem; letter-spacing: -0.01em; }
 	.about-link {
 		display: inline-flex;
 		align-items: center;
@@ -255,7 +254,6 @@
 		text-decoration-thickness: 1.5px;
 	}
 	.about-link:hover { color: var(--ink); background: var(--paper); border-color: var(--ink); }
-	.about-icon { display: inline-grid; place-items: center; width: 18px; height: 18px; border: 1.5px solid currentColor; border-radius: 50%; font-size: 0.7rem; font-weight: 700; }
 
 	.intro { margin-bottom: 1.5rem; max-width: 60ch; }
 	.intro-kids { max-width: 48ch; }
@@ -281,22 +279,6 @@
 		line-height: 1.65;
 		margin: 0.6rem 0 0;
 	}
-	.intro-meta { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.9rem; }
-	.pill {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.35rem;
-		font-size: 0.76rem;
-		font-weight: 600;
-		border: 1.5px solid var(--ink);
-		background: var(--paper);
-		border-radius: 999px;
-		padding: 0.24rem 0.6rem;
-		color: var(--ink);
-	}
-	.mono { font-family: var(--font-mono); }
-	.pill-dot { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid var(--ink); display: inline-block; }
-
 	.card-grid {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
@@ -353,16 +335,6 @@
 		margin: 0;
 		flex: 1;
 	}
-	.tag-row { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-	.tag {
-		font-size: 0.72rem;
-		font-weight: 600;
-		border: 1.5px solid var(--ink);
-		border-radius: 999px;
-		padding: 0.18rem 0.5rem;
-		background: var(--paper);
-	}
-	.tag-mint { background: var(--mint); }
 	.role-row { display: flex; flex-wrap: wrap; gap: 0.35rem; }
 	.role {
 		display: inline-flex; align-items: center; gap: 0.28rem;
@@ -387,14 +359,12 @@
 		font-size: 0.94rem;
 	}
 	.cta-ghost { background: var(--paper); }
-	.cta-dark { background: var(--ink); color: var(--paper); }
 	.footer-note {
 		margin-top: 1.75rem;
 		text-align: center;
 		color: var(--ink-soft);
 		font-size: 0.88rem;
 	}
-	.footer-note a { color: var(--plum); font-weight: 700; }
 
 	.scrim { position: fixed; inset: 0; background: rgba(31,26,46,0.45); backdrop-filter: blur(2px); z-index: 60; }
 	.about {
@@ -517,7 +487,6 @@
 	.btn-primary:active { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--ink); }
 	.btn-primary:disabled { opacity: 0.52; cursor: not-allowed; transform: none; box-shadow: 3px 3px 0 var(--ink); }
 	.field-hint { color: var(--ink-soft); font-size: 0.85rem; margin: 0; text-align: center; }
-	.login-foot { text-align: center; color: var(--ink-soft); font-size: 0.85rem; margin-top: 1rem; }
 
 	@media (prefers-reduced-motion: reduce) { .card, .btn-primary { transition: none; } }
 </style>

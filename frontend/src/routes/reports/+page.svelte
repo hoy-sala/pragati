@@ -3,6 +3,7 @@
 	import { GraduationCap, Printer, Users, FileText, HeartHandshake } from 'lucide-svelte';
 	import Select from '$lib/components/Select.svelte';
 	import Button from '$lib/components/Button.svelte';
+	import PageHeader from '$lib/components/PageHeader.svelte';
 	import type { Class } from '$lib/types';
 	import { onMount } from 'svelte';
 
@@ -17,7 +18,7 @@
 	let loading = $state(false);
 	let err = $state('');
 
-	type MarkCell = { assessment_id: string; value: number; is_absent: boolean; has_mark: boolean };
+	type MarkCell = { assessment_id: string; value: number; is_absent: boolean; has_mark: boolean; grade?: string };
 	type SubjectAgg = { subject_id: string; subject_code: string; subject_name: string; subject_type: string; total: number; max_total: number; percentage: number; grade: string; grade_label?: string };
 	type MarkSheetStudent = { student_id: string; sats_number: string; name: string; roll_no: number; marks: MarkCell[]; total: number; max_total: number; percentage: number; grade: string; rank: number; subjects: SubjectAgg[] };
 	type MarkSheetAssessment = { id: string; name: string; subject_id: string; subject_code: string; subject_name: string; category_id: string; category_name: string; category_code: string; max_marks: number; date?: string; term: string; subject_type: string };

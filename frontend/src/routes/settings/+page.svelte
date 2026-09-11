@@ -67,6 +67,11 @@
   });
   let editingId = $state<string | null>(null);
   let editOpen = $state(false);
+
+  // Keep editingId in sync when the dialog is dismissed via backdrop/Escape.
+  $effect(() => {
+    if (!editOpen) editingId = null;
+  });
   let editSubjects = $state<{ id: string; name: string; selected: boolean }[]>(
     [],
   );
@@ -563,16 +568,15 @@
       </div>
     </div>
 
-    {#if editingId}
-      <Modal
-        bind:open={editOpen}
-        title="Assign Subjects & Class"
-        onclose={() => (editingId = null)}
-      >
-        <div class="mb-4">
-          <label class="block text-xs font-medium text-slate-600 mb-2"
-            >Subjects</label
-          >
+      {#if editingId}
+        <Modal
+          bind:open={editOpen}
+          title="Assign Subjects & Class"
+        >
+          <div class="mb-4" role="group" aria-labelledby="teach-subjects-label">
+            <span class="block text-xs font-medium text-slate-600 mb-2" id="teach-subjects-label"
+              >Subjects</span
+            >
           <div class="flex flex-wrap gap-2">
             {#each editSubjects as s}
               <label
