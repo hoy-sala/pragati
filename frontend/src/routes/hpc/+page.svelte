@@ -3,6 +3,7 @@
   import type { Class, AcademicYear } from "$lib/types";
   import { onMount } from "svelte";
   import Select from "$lib/components/Select.svelte";
+  import Button from "$lib/components/Button.svelte";
   import { toast } from "$lib/stores/toast.svelte";
 
   interface HPCGridRow {
@@ -127,7 +128,7 @@
 <div class="space-y-4">
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-xl font-bold text-slate-900">
+      <h1 class="text-2xl font-bold text-slate-900">
         Holistic Progress Card (HPC)
       </h1>
       <div class="flex items-center gap-3 mt-0.5">
@@ -147,20 +148,20 @@
       </div>
     </div>
     <div class="flex gap-2">
-      <button
+      <Button
+        variant="secondary"
         onclick={migrateFromMarks}
         disabled={!selectedClass || publishing}
-        class="px-3 py-1.5 border border-slate-300 rounded-lg text-sm hover:bg-slate-50 transition-colors disabled:opacity-50"
       >
         Migrate from Marks
-      </button>
-      <button
+      </Button>
+      <Button
         onclick={publishAll}
         disabled={!selectedClass || publishing}
-        class="px-4 py-1.5 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 disabled:opacity-50 transition-colors"
+        loading={publishing}
       >
         {publishing ? "Publishing..." : "Publish All"}
-      </button>
+      </Button>
     </div>
   </div>
 
@@ -185,12 +186,9 @@
         >
         <Select id="hpc-term" bind:value={selectedTerm} options={termOptions} />
       </div>
-      <button
-        onclick={loadGrid}
-        class="px-4 py-1.5 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800 transition-colors"
-      >
+      <Button variant="secondary" onclick={loadGrid}>
         Load
-      </button>
+      </Button>
     </div>
   </div>
 

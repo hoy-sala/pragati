@@ -5,13 +5,13 @@
     Users,
     UserPlus,
     Trash2,
-    Search,
     UserRound,
     GraduationCap,
     AlertCircle,
   } from "lucide-svelte";
   import Button from "$lib/components/Button.svelte";
   import Select from "$lib/components/Select.svelte";
+  import SearchFilter from "$lib/components/SearchFilter.svelte";
   import { toast } from "$lib/stores/toast.svelte";
   import type { Class, AcademicYear } from "$lib/types";
 
@@ -357,15 +357,10 @@
             Select a mentor on the left to assign students
           </div>
         {:else}
-          <div class="relative mb-3">
-            <Search
-              size={15}
-              class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-            />
-            <input
+          <div class="mb-3">
+            <SearchFilter
               bind:value={studentSearch}
               placeholder="Search by name or SATS..."
-              class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
           {#if unassignedStudents.length === 0}
@@ -429,15 +424,10 @@
           </p>
         </div>
         <div class="flex items-center gap-2">
-          <div class="relative">
-            <Search
-              size={15}
-              class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-            />
-            <input
+          <div class="w-56">
+            <SearchFilter
               bind:value={assignmentSearch}
               placeholder="Search students..."
-              class="w-56 pl-9 pr-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
           {#if selectedMentorId}
@@ -482,14 +472,14 @@
                     >{a.mentor_name}</td
                   >{/if}
                 <td class="px-4 py-2">
-                  <button
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    icon={Trash2}
                     onclick={() => unassign(a.id)}
                     disabled={unassignLoading.has(a.id)}
                     aria-label={`Unassign ${a.student_name}`}
-                    title="Unassign"
-                    class="p-1 text-slate-400 hover:text-red-500 disabled:opacity-40 disabled:cursor-not-allowed"
-                    ><Trash2 size={14} /></button
-                  >
+                  />
                 </td>
               </tr>
             {:else}

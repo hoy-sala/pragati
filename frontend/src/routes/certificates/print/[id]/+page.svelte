@@ -3,6 +3,7 @@
 	import type { CertificateDetail } from '$lib/types';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
+	import Button from '$lib/components/Button.svelte';
 
 	const certId = $page.params.id;
 
@@ -66,8 +67,8 @@
 </script>
 
 <div class="no-print toolbar">
-	<button onclick={() => window.print()} class="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors">Print</button>
-	<button onclick={() => history.back()} class="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 transition-colors">Back</button>
+	<Button onclick={() => window.print()}>Print</Button>
+	<Button variant="secondary" onclick={() => history.back()}>Back</Button>
 </div>
 
 {#if loading}

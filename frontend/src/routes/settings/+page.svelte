@@ -16,6 +16,7 @@
   } from "lucide-svelte";
   import Button from "$lib/components/Button.svelte";
   import Modal from "$lib/components/Modal.svelte";
+  import Select from "$lib/components/Select.svelte";
   import { toast } from "$lib/stores/toast.svelte";
   import type {
     AcademicYear,
@@ -26,6 +27,13 @@
 
   type Tab = "users" | "years" | "classes" | "subjects" | "categories";
   let activeTab = $state<Tab>("users");
+
+  const roleOptions = [
+    { id: "teacher", name: "Teacher" },
+    { id: "principal", name: "Principal" },
+    { id: "special_educator", name: "Special Educator" },
+    { id: "parent", name: "Parent" },
+  ];
 
   let years = $state<AcademicYear[]>([]);
   let classes = $state<Class[]>([]);
@@ -422,21 +430,12 @@
               />
             </div>
             <div>
-              <label
-                for="u-role"
-                class="block text-xs font-medium text-slate-600 mb-1"
-                >Role *</label
-              >
-              <select
+              <Select
                 id="u-role"
+                label="Role *"
                 bind:value={userForm.role}
-                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm"
-              >
-                <option value="teacher">Teacher</option>
-                <option value="principal">Principal</option>
-                <option value="special_educator">Special Educator</option>
-                <option value="parent">Parent</option>
-              </select>
+                options={roleOptions}
+              />
             </div>
             <div>
               <label
@@ -585,20 +584,13 @@
           </div>
         </div>
         <div>
-          <label
-            for="teach-class"
-            class="block text-xs font-medium text-slate-600 mb-1">Class</label
-          >
-          <select
+          <Select
             id="teach-class"
+            label="Class"
             bind:value={editClassId}
-            class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm"
-          >
-            <option value="">No class assigned</option>
-            {#each classes as c}
-              <option value={c.id}>{c.name}</option>
-            {/each}
-          </select>
+            options={[{ id: "", name: "No class assigned" }, ...classes.map((c) => ({ id: c.id, name: c.name }))]}
+            placeholder="No class assigned"
+          />
         </div>
         {#snippet footer()}
           <Button variant="ghost" onclick={closeEdit}>Cancel</Button>

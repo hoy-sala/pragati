@@ -3,6 +3,7 @@
   import type { Class, Subject } from "$lib/types";
   import { onMount } from "svelte";
   import Select from "$lib/components/Select.svelte";
+  import Button from "$lib/components/Button.svelte";
 
   let classes = $state<Class[]>([]);
   let subjects = $state<Subject[]>([]);
@@ -115,13 +116,13 @@ LA-6.2.1,Writes clear and coherent paragraphs,psychomotor,3,1`;
           placeholder="Select"
         />
       </div>
-      <button
+      <Button
         onclick={importLO}
         disabled={importing || !selectedSubject || !loText.trim()}
-        class="px-4 py-1.5 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 disabled:opacity-50 transition-colors"
+        loading={importing}
       >
         {importing ? "Importing..." : "Import"}
-      </button>
+      </Button>
     </div>
   </div>
 

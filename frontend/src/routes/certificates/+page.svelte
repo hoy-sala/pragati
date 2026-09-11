@@ -8,6 +8,8 @@
   } from "$lib/types";
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
+  import { Trash2, Plus, X } from "lucide-svelte";
+  import Button from "$lib/components/Button.svelte";
   import Select from "$lib/components/Select.svelte";
   import { toast } from "$lib/stores/toast.svelte";
 
@@ -346,12 +348,13 @@
         Generate premium certificates for competition participants
       </p>
     </div>
-    <button
+    <Button
+      icon={showForm ? X : Plus}
+      variant={showForm ? "secondary" : "primary"}
       onclick={() => (showForm = !showForm)}
-      class="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors"
     >
       {showForm ? "Cancel" : "Add Event"}
-    </button>
+    </Button>
   </div>
 
   {#if showForm}
@@ -386,13 +389,13 @@
       {#if error}
         <div class="text-sm text-danger-600">{error}</div>
       {/if}
-      <button
+      <Button
         onclick={createEvent}
         disabled={savingEvent || !newName.trim()}
-        class="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 disabled:opacity-50 transition-colors"
+        loading={savingEvent}
       >
         {savingEvent ? "Saving..." : "Create Event"}
-      </button>
+      </Button>
     </div>
   {/if}
 
@@ -474,12 +477,13 @@
                                     : ""}
                                 </div>
                               </div>
-                              <button
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                icon={Trash2}
                                 onclick={() => deleteSignatory(sig.id, e.id)}
                                 aria-label={`Remove signatory ${sig.name}`}
-                                class="text-slate-400 hover:text-danger-600 transition-colors ml-1"
-                                >✕</button
-                              >
+                              >Remove</Button>
                             </div>
                           {/each}
                         </div>
@@ -514,18 +518,20 @@
                                 onchange={() => uploadSignature(e.id)}
                               />
                             </div>
-                            <button
+                            <Button
+                              variant="secondary"
                               onclick={() => addSignatory(e.id)}
                               disabled={savingSignatory ||
                                 !signForm[e.id].name.trim()}
-                              class="px-3 py-2 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-slate-900 disabled:opacity-50 transition-colors"
+                              loading={signForm[e.id].uploading ||
+                                savingSignatory}
                             >
                               {signForm[e.id].uploading
                                 ? "Uploading..."
                                 : savingSignatory
                                   ? "Saving..."
                                   : "Add Signatory"}
-                            </button>
+                            </Button>
                           </div>
                           {#if signForm[e.id].signature_url}
                             <div
@@ -600,17 +606,18 @@
                                   >
                                   <td class="px-3 py-2">
                                     <div class="flex justify-end gap-2">
-                                      <button
+                                      <Button
+                                        size="sm"
                                         onclick={() =>
                                           goto(`/certificates/print/${p.id}`)}
-                                        class="px-2 py-1 bg-primary-600 text-white rounded text-xs font-medium hover:bg-primary-700 transition-colors"
-                                        >Print</button
+                                        >Print</Button
                                       >
-                                      <button
+                                      <Button
+                                        size="sm"
+                                        variant="danger"
                                         onclick={() =>
                                           deleteParticipant(p.id, e.id)}
-                                        class="px-2 py-1 border border-slate-200 text-slate-500 rounded text-xs hover:text-danger-600 transition-colors"
-                                        >Remove</button
+                                        >Remove</Button
                                       >
                                     </div>
                                   </td>
@@ -652,16 +659,16 @@
                             type="date"
                             class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
                           />
-                          <button
+                          <Button
                             onclick={() => addParticipant(e.id)}
                             disabled={savingParticipant ||
                               !partForm[e.id].student_id}
-                            class="px-3 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 disabled:opacity-50 transition-colors"
+                            loading={savingParticipant}
                           >
                             {savingParticipant
                               ? "Saving..."
                               : "Add Participant"}
-                          </button>
+                          </Button>
                         </div>
                       </div>
                     </div>

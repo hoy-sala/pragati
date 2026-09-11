@@ -3,6 +3,9 @@
 	import type { Question, Subject } from '$lib/types';
 	import { typeColors, typeLabels } from '$lib/utils/questionUtils';
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
+	import { Upload, Plus, HelpCircle } from 'lucide-svelte';
+	import Button from '$lib/components/Button.svelte';
 	import Select from '$lib/components/Select.svelte';
 	import SearchFilter from '$lib/components/SearchFilter.svelte';
 	import Pagination from '$lib/components/Pagination.svelte';
@@ -62,12 +65,12 @@
 			<p class="text-sm text-slate-500 mt-1">{totalQuestions} questions</p>
 		</div>
 		<div class="flex gap-2">
-			<a href="/questions/import" class="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 transition-colors">
+			<Button variant="secondary" icon={Upload} onclick={() => goto('/questions/import')}>
 				Import
-			</a>
-			<a href="/questions/create" class="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors">
+			</Button>
+			<Button icon={Plus} onclick={() => goto('/questions/create')}>
 				New Question
-			</a>
+			</Button>
 		</div>
 	</div>
 
@@ -89,7 +92,14 @@
 		{#if loading}
 			<div class="p-8 text-center text-sm text-slate-400">Loading...</div>
 		{:else if totalQuestions === 0}
-			<div class="p-8 text-center text-sm text-slate-400">No questions found.</div>
+			<div class="p-8 text-center">
+				<HelpCircle size={36} class="mx-auto text-slate-300 mb-3" />
+				<p class="text-slate-500 text-sm">No questions found.</p>
+				<p class="text-xs text-slate-400 mt-1">Try adjusting filters, or add your first question.</p>
+				<div class="mt-3">
+					<Button size="sm" icon={Plus} onclick={() => goto('/questions/create')}>New Question</Button>
+				</div>
+			</div>
 		{:else}
 			{#each paginatedQuestions as q (q.id)}
 				<div class="p-4 hover:bg-slate-50 transition-colors">

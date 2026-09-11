@@ -3,6 +3,7 @@
   import type { Class, Subject } from "$lib/types";
   import { onMount } from "svelte";
   import Select from "$lib/components/Select.svelte";
+  import Button from "$lib/components/Button.svelte";
   import { toast } from "$lib/stores/toast.svelte";
 
   let classes = $state<Class[]>([]);
@@ -114,16 +115,16 @@
 
 <div class="space-y-4">
   <div class="flex items-center justify-between">
-    <h1 class="text-xl font-bold text-slate-900">
+    <h1 class="text-2xl font-bold text-slate-900">
       Learning Outcome Assessment Grid
     </h1>
-    <button
+    <Button
       onclick={saveAll}
       disabled={saving || loading || !selectedSubject}
-      class="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 disabled:opacity-50 transition-colors"
+      loading={saving}
     >
       {saving ? "Saving..." : "Save All"}
-    </button>
+    </Button>
   </div>
 
   <div class="bg-white rounded-xl border border-slate-200 p-4">
@@ -163,12 +164,9 @@
           options={termOptions}
         />
       </div>
-      <button
-        onclick={loadGrid}
-        class="px-4 py-1.5 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800 transition-colors"
-      >
+      <Button variant="secondary" onclick={loadGrid}>
         Load
-      </button>
+      </Button>
     </div>
   </div>
 

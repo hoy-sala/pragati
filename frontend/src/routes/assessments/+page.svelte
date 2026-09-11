@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { api } from '$lib/api/client.svelte';
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 	import { ClipboardCheck, Plus, BookOpen, Users, Filter, Eye } from 'lucide-svelte';
 	import Select from '$lib/components/Select.svelte';
 	import Button from '$lib/components/Button.svelte';
+	import Pagination from '$lib/components/Pagination.svelte';
 	import { toast } from '$lib/stores/toast.svelte';
 	import type { Assessment, AssessmentCategory, Class, Subject } from '$lib/types';
 
@@ -59,7 +61,7 @@
 		load();
 	}
 
-	function goto(p: number) {
+	function gotoPage(p: number) {
 		page = p;
 		load();
 	}
@@ -91,7 +93,6 @@
 		return { pct, label: `${entered}/${total}`, cls };
 	}
 
-	const totalPages = $derived(Math.max(1, Math.ceil(total / pageSize)));
 </script>
 
 <svelte:head>
@@ -104,9 +105,7 @@
 			<h1 class="text-2xl font-bold text-slate-900">Assessments</h1>
 			<p class="text-sm text-slate-500 mt-1">View and manage all assessments across classes</p>
 		</div>
-		<a href="/assessments/create">
-			<Button icon={Plus}>New Assessment</Button>
-		</a>
+		<Button icon={Plus} onclick={() => goto('/assessments/create')}>New Assessment</Button>
 	</div>
 
 
@@ -132,11 +131,6 @@
 	<div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
 		<div class="px-6 py-3 border-b border-slate-200 flex items-center justify-between">
 			<span class="text-sm text-slate-500">{total} assessment{total !== 1 ? 's' : ''}</span>
-			<div class="flex items-center gap-1">
-				<Button variant="ghost" size="sm" disabled={page === 0} onclick={() => goto(page - 1)}>Prev</Button>
-				<span class="text-xs text-slate-500 px-2">Page {page + 1}/{totalPages}</span>
-				<Button variant="ghost" size="sm" disabled={page >= totalPages - 1} onclick={() => goto(page + 1)}>Next</Button>
-			</div>
 		</div>
 
 		{#if loading}
@@ -212,5 +206,6 @@
 				</table>
 			</div>
 		{/if}
+		<Pagination total={total} pageSize={pageSize} page={page + 1} onChange={(p) => gotoPage(p - 1)} />
 	</div>
 </div>

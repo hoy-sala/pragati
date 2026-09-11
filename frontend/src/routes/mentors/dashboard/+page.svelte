@@ -7,9 +7,10 @@
     FileText,
     Phone,
     CheckCircle,
-    LoaderCircle,
   } from "lucide-svelte";
   import { toast } from "$lib/stores/toast.svelte";
+  import Button from "$lib/components/Button.svelte";
+  import Select from "$lib/components/Select.svelte";
   import type { AcademicYear } from "$lib/types";
 
   type AlertLog = {
@@ -111,13 +112,11 @@
   </div>
 
   <div class="bg-white rounded-xl border border-slate-200 p-4 no-print w-56">
-    <select
+    <Select
       bind:value={selectedYear}
-      class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm"
-    >
-      <option value="">Select year</option>
-      {#each years as y}<option value={y.id}>{y.name}</option>{/each}
-    </select>
+      options={years}
+      placeholder="Select year"
+    />
   </div>
 
   {#if loading}<div
@@ -154,11 +153,11 @@
                   By {a.mentor_name} . {a.log_date}
                 </p>
               </div>
-              <button
-                onclick={() => openReview(a)}
-                class="px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 text-xs font-medium hover:bg-blue-100 shrink-0"
-                >Review</button
-              >
+               <Button
+                 size="sm"
+                 variant="secondary"
+                 onclick={() => openReview(a)}
+               >Review</Button>
             </div>
           {/each}
         </div>
@@ -261,22 +260,19 @@
           class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
         ></textarea>
         <div class="flex justify-end gap-2">
-          <button
+          <Button
+            variant="secondary"
             onclick={() => {
               if (!reviewSaving) reviewingLog = null;
             }}
             disabled={reviewSaving}
-            class="px-3.5 py-2 text-sm rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 disabled:opacity-50 disabled:cursor-not-allowed"
-            >Cancel</button
+            >Cancel</Button
           >
-          <button
+          <Button
             onclick={saveReview}
             disabled={reviewSaving}
-            class="inline-flex items-center gap-2 px-3.5 py-2 text-sm rounded-lg bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
-            >{#if reviewSaving}<LoaderCircle
-                size={14}
-                class="animate-spin"
-              />{/if}Save Review</button
+            loading={reviewSaving}
+            >Save Review</Button
           >
         </div>
       </div>

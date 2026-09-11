@@ -10,6 +10,7 @@
     AlertTriangle,
   } from "lucide-svelte";
   import Button from "$lib/components/Button.svelte";
+  import Select from "$lib/components/Select.svelte";
   import { toast } from "$lib/stores/toast.svelte";
   import type { AcademicYear } from "$lib/types";
 
@@ -141,47 +142,30 @@
     >
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label
-            for="log-student"
-            class="block text-xs font-medium text-slate-600 mb-1"
-            >Student *</label
-          >
-          <select
+          <Select
             id="log-student"
+            label="Student *"
             bind:value={form.student_id}
-            class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm"
-          >
-            <option value="">Select student</option>
-            {#each students as s}<option value={s.id}>{s.name}</option>{/each}
-          </select>
+            options={students}
+            placeholder="Select student"
+            searchable
+          />
         </div>
         <div>
-          <label
-            for="log-cat"
-            class="block text-xs font-medium text-slate-600 mb-1"
-            >Category</label
-          >
-          <select
+          <Select
             id="log-cat"
+            label="Category"
             bind:value={form.category}
-            class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm"
-          >
-            {#each categories as c}<option value={c.id}>{c.name}</option>{/each}
-          </select>
+            options={categories}
+          />
         </div>
         <div>
-          <label
-            for="log-sev"
-            class="block text-xs font-medium text-slate-600 mb-1"
-            >Severity</label
-          >
-          <select
+          <Select
             id="log-sev"
+            label="Severity"
             bind:value={form.severity}
-            class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm"
-          >
-            {#each severities as s}<option value={s.id}>{s.name}</option>{/each}
-          </select>
+            options={severities}
+          />
         </div>
         <div class="flex items-end pb-1">
           <label class="flex items-center gap-2 text-sm"

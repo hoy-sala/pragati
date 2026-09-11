@@ -4,6 +4,7 @@
   import { page } from "$app/stores";
   import { onMount } from "svelte";
   import Select from "$lib/components/Select.svelte";
+  import Button from "$lib/components/Button.svelte";
   import { toast } from "$lib/stores/toast.svelte";
 
   const studentId = $page.params.student_id;
@@ -216,24 +217,25 @@
 <div class="max-w-4xl mx-auto space-y-6">
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-xl font-bold text-slate-900">HPC Entry</h1>
+      <h1 class="text-2xl font-bold text-slate-900">HPC Entry</h1>
       <p class="text-sm text-slate-500">{studentName}</p>
     </div>
     <div class="flex gap-2">
-      <button
+      <Button
         onclick={save}
         disabled={saving || loading || publishing}
-        class="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 disabled:opacity-50 transition-colors"
+        loading={saving}
       >
         {saving ? "Saving..." : "Save"}
-      </button>
-      <button
+      </Button>
+      <Button
+        variant="secondary"
         onclick={publish}
         disabled={!entryId || saving || publishing}
-        class="px-4 py-2 border border-slate-300 rounded-lg text-sm hover:bg-slate-50 disabled:opacity-50 transition-colors"
+        loading={publishing}
       >
         {publishing ? "Publishing..." : "Publish"}
-      </button>
+      </Button>
     </div>
   </div>
 

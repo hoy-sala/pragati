@@ -2,6 +2,10 @@
   import { api } from "$lib/api/client.svelte";
   import type { QuizListItem } from "$lib/types";
   import { onMount } from "svelte";
+  import { goto } from "$app/navigation";
+  import { Plus, ClipboardList } from "lucide-svelte";
+  import Button from "$lib/components/Button.svelte";
+  import Select from "$lib/components/Select.svelte";
   import SearchFilter from "$lib/components/SearchFilter.svelte";
   import Pagination from "$lib/components/Pagination.svelte";
   import { toast } from "$lib/stores/toast.svelte";
@@ -12,7 +16,13 @@
   let search = $state("");
   let filterStatus = $state("");
   let page = $state(1);
-  const pageSize = 15;
+  const pageSize = 20;
+
+  const statusOptions = [
+    { id: "", name: "All Status" },
+    { id: "published", name: "Published" },
+    { id: "draft", name: "Draft" },
+  ];
 
   let filteredQuizzes = $derived(
     allQuizzes.filter((q) => {
@@ -83,12 +93,9 @@
       <h1 class="text-2xl font-bold text-slate-900">Quizzes</h1>
       <p class="text-sm text-slate-500 mt-1">{totalQuizzes} quizzes</p>
     </div>
-    <a
-      href="/quizzes/create"
-      class="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors"
-    >
+    <Button icon={Plus} onclick={() => goto("/quizzes/create")}>
       Create Quiz
-    </a>
+    </Button>
   </div>
 
   <div class="bg-white rounded-xl border border-slate-200">
@@ -101,23 +108,25 @@
         />
       </div>
       <div class="w-36">
-        <select
+        <Select
           bind:value={filterStatus}
-          onchange={resetPage}
-          class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm"
-        >
-          <option value="">All Status</option>
-          <option value="published">Published</option>
-          <option value="draft">Draft</option>
-        </select>
+          options={statusOptions}
+          placeholder="All Status"
+          onselect={resetPage}
+        />
       </div>
     </div>
 
     {#if loading}
       <div class="p-8 text-center text-sm text-slate-400">Loading...</div>
     {:else if totalQuizzes === 0}
-      <div class="p-8 text-center text-sm text-slate-400">
-        No quizzes found.
+      <div class="p-8 text-center">
+        <ClipboardList size={36} class="mx-auto text-slate-300 mb-3" />
+        <p class="text-slate-500 text-sm">No quizzes found.</p>
+        <p class="text-xs text-slate-400 mt-1">Try adjusting filters, or create your first quiz.</p>
+        <div class="mt-3">
+          <Button size="sm" icon={Plus} onclick={() => goto("/quizzes/create")}>Create Quiz</Button>
+        </div>
       </div>
     {:else}
       <div class="divide-y divide-slate-100">
@@ -148,26 +157,30 @@
               </div>
               <div class="flex gap-1.5 shrink-0">
                 {#if !q.is_published}
-                  <button
+                  <Button
+                    size="sm"
                     onclick={() => publish(q.id)}
                     disabled={deleting !== null}
-                    class="px-3 py-1.5 text-xs font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 disabled:opacity-50 transition-colors"
                   >
                     Publish
-                  </button>
-                  <a
-                    href="/quizzes/{q.id}/edit"
-                    class="px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    onclick={() => goto(`/quizzes/${q.id}/edit`)}
+                    disabled={deleting !== null}
                   >
                     Edit
-                  </a>
-                  <button
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="danger"
                     onclick={() => remove(q.id)}
                     disabled={deleting !== null}
-                    class="px-3 py-1.5 text-xs font-medium text-danger-600 border border-danger-300 rounded-lg hover:bg-danger-50 disabled:opacity-50 transition-colors"
+                    loading={deleting === q.id}
                   >
                     {deleting === q.id ? "Deleting..." : "Delete"}
-                  </button>
+                  </Button>
                 {/if}
               </div>
             </div>

@@ -3,6 +3,7 @@
   import type { Class } from "$lib/types";
   import { onMount } from "svelte";
   import Select from "$lib/components/Select.svelte";
+  import Button from "$lib/components/Button.svelte";
 
   let classes = $state<Class[]>([]);
   let selectedClass = $state("");
@@ -104,14 +105,14 @@
 
 <div class="max-w-3xl mx-auto space-y-6">
   <div class="flex items-center justify-between">
-    <h1 class="text-xl font-bold text-slate-900">HPC Configuration</h1>
-    <button
+    <h1 class="text-2xl font-bold text-slate-900">HPC Configuration</h1>
+    <Button
       onclick={saveConfig}
       disabled={saving}
-      class="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 disabled:opacity-50 transition-colors"
+      loading={saving}
     >
       {saving ? "Saving..." : "Save Config"}
-    </button>
+    </Button>
   </div>
 
   {#if statusMsg}
@@ -150,12 +151,9 @@
           placeholder="All Classes"
         />
       </div>
-      <button
-        onclick={loadConfig}
-        class="px-3 py-1.5 border border-slate-300 rounded-lg text-sm hover:bg-slate-50 transition-colors"
-      >
+      <Button variant="secondary" onclick={loadConfig}>
         Load Existing
-      </button>
+      </Button>
     </div>
   </div>
 

@@ -312,8 +312,8 @@
 				<Table size={18} class="text-primary-600" />
 			</div>
 			<div>
-				<h1 class="text-xl font-bold text-slate-900">Marks Entry</h1>
-				<p class="text-xs text-slate-500">Enter and manage student marks for assessments</p>
+				<h1 class="text-2xl font-bold text-slate-900">Marks Entry</h1>
+				<p class="text-sm text-slate-500">Enter and manage student marks for assessments</p>
 			</div>
 		</div>
 		<div class="flex gap-2">
@@ -341,7 +341,7 @@
 			<div class="w-48">
 				<Select bind:value={selectedAssessment} options={assessmentOptions} label="Assessment" icon={ClipboardCheck} placeholder="Select assessment" />
 			</div>
-			<Button onclick={resetForm} variant="ghost" class="px-3 py-2 text-sm rounded-lg border border-slate-300 hover:border-slate-400 bg-white text-slate-600 hover:text-slate-900 hover:bg-slate-50">Clear</Button>
+			<Button onclick={resetForm} variant="secondary">Clear</Button>
 		</div>
 	</div>
 
