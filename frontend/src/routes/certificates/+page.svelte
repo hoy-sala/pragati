@@ -8,8 +8,11 @@
   } from "$lib/types";
   import { onMount } from "svelte";
   import { goto } from "$app/navigation";
-  import { Trash2, Plus, X } from "lucide-svelte";
+  import { Trash2, Plus } from "lucide-svelte";
   import Button from "$lib/components/Button.svelte";
+  import Modal from "$lib/components/Modal.svelte";
+  import PageHeader from "$lib/components/PageHeader.svelte";
+  import EmptyState from "$lib/components/EmptyState.svelte";
   import Select from "$lib/components/Select.svelte";
   import SearchFilter from "$lib/components/SearchFilter.svelte";
   import { toast } from "$lib/stores/toast.svelte";
@@ -348,25 +351,23 @@
 </script>
 
 <div class="space-y-6">
-  <div class="flex items-center justify-between">
-    <div>
-      <h1 class="text-2xl font-bold text-slate-900">Certificates</h1>
-      <p class="text-sm text-slate-500 mt-1">
-        Generate premium certificates for competition participants
-      </p>
-    </div>
-    <Button
-      icon={showForm ? X : Plus}
-      variant={showForm ? "secondary" : "primary"}
-      onclick={() => (showForm = !showForm)}
-    >
-      {showForm ? "Cancel" : "Add Event"}
-    </Button>
-  </div>
+  <PageHeader
+    title="Certificates"
+    subtitle="Generate premium certificates for competition participants"
+  >
+    {#snippet actions()}
+      <Button
+        icon={Plus}
+        onclick={() => (showForm = true)}
+      >
+        Add Event
+      </Button>
+    {/snippet}
+  </PageHeader>
 
-  {#if showForm}
-    <div class="bg-white rounded-xl border border-slate-200 p-4 space-y-3">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+  <Modal bind:open={showForm} title="Add Event" maxWidth="max-w-2xl">
+    <div class="space-y-3">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <input
           bind:value={newName}
           placeholder="Event name (e.g. Kannada Elocution)"
@@ -390,12 +391,15 @@
         <input
           bind:value={newDescription}
           placeholder="Description (optional)"
-          class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+          class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 sm:col-span-2"
         />
       </div>
       {#if error}
         <div class="text-sm text-danger-600">{error}</div>
       {/if}
+    </div>
+    {#snippet footer()}
+      <Button variant="ghost" onclick={() => (showForm = false)}>Cancel</Button>
       <Button
         onclick={createEvent}
         disabled={savingEvent || !newName.trim()}
@@ -403,8 +407,8 @@
       >
         {savingEvent ? "Saving..." : "Create Event"}
       </Button>
-    </div>
-  {/if}
+    {/snippet}
+  </Modal>
 
   <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
     <div class="p-4 border-b border-slate-200">
@@ -431,14 +435,17 @@
           >
         {:else if events.length === 0}
           <tr
-            ><td colspan="4" class="px-4 py-8 text-center text-slate-400"
-              >No events yet. Add one above.</td
+            ><td colspan="4" class="px-4"
+              ><EmptyState title="No events yet. Add one above." /></td
             ></tr
           >
         {:else if filteredEvents.length === 0}
           <tr
-            ><td colspan="4" class="px-4 py-8 text-center text-slate-400"
-              >No events match your search.</td
+            ><td colspan="4" class="px-4"
+              ><EmptyState
+                title="No events match your search."
+                hint="Try a different name, venue, or category."
+              /></td
             ></tr
           >
         {:else}

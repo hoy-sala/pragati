@@ -4,6 +4,7 @@
   import { onMount } from "svelte";
   import Select from "$lib/components/Select.svelte";
   import Button from "$lib/components/Button.svelte";
+  import PageHeader from "$lib/components/PageHeader.svelte";
   import SearchFilter from "$lib/components/SearchFilter.svelte";
   import PageTabs from "$lib/components/PageTabs.svelte";
   import { HPC_TABS } from "$lib/utils/tabs";
@@ -151,29 +152,11 @@
 </script>
 
 <div class="space-y-4">
-  <div class="flex items-center justify-between">
-    <div>
-      <h1 class="text-2xl font-bold text-slate-900">
-        Holistic Progress Card (HPC)
-      </h1>
-      <div class="flex items-center gap-3 mt-0.5">
-        <p class="text-sm text-slate-500">
-          Assess learning outcomes per student
-        </p>
-        {#if isAdmin}
-        <a
-          href="/hpc/config"
-          class="text-xs text-primary-600 hover:text-primary-700 font-medium"
-          >Config</a
-        >
-        <a
-          href="/hpc/lo-import"
-          class="text-xs text-primary-600 hover:text-primary-700 font-medium"
-          >Import LOs</a
-        >
-        {/if}
-      </div>
-    </div>
+  <PageHeader
+    title="Holistic Progress Card (HPC)"
+    subtitle="Assess learning outcomes per student"
+  >
+    {#snippet actions()}
     <div class="flex gap-2">
       {#if isAdmin}
       <Button
@@ -192,7 +175,8 @@
         {publishing ? "Publishing..." : "Publish All"}
       </Button>
     </div>
-  </div>
+    {/snippet}
+  </PageHeader>
 
   <PageTabs tabs={HPC_TABS} role={role} />
 

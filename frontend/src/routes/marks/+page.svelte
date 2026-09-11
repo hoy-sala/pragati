@@ -2,6 +2,7 @@
 	import { api } from '$lib/api/client.svelte';
 	import { Save, X, BookOpen, Users, ClipboardCheck, Filter, Table } from 'lucide-svelte';
 	import Button from '$lib/components/Button.svelte';
+	import PageHeader from '$lib/components/PageHeader.svelte';
 	import Select from '$lib/components/Select.svelte';
 	import type { Assessment, AssessmentCategory, Class, Subject, MarkGridRow, MarkInput } from '$lib/types';
 	import { onMount } from 'svelte';
@@ -306,22 +307,21 @@
 </script>
 
 <div class="space-y-4">
-	<div class="flex items-center justify-between">
-		<div class="flex items-center gap-3">
-			<div class="w-9 h-9 rounded-lg bg-primary-100 flex items-center justify-center">
+	<PageHeader
+		title="Marks Entry"
+		subtitle="Enter and manage student marks for assessments"
+	>
+		{#snippet icon()}
+			<div class="w-9 h-9 rounded-lg bg-primary-100 flex items-center justify-center shrink-0">
 				<Table size={18} class="text-primary-600" />
 			</div>
-			<div>
-				<h1 class="text-2xl font-bold text-slate-900">Marks Entry</h1>
-				<p class="text-sm text-slate-500">Enter and manage student marks for assessments</p>
-			</div>
-		</div>
-		<div class="flex gap-2">
+		{/snippet}
+		{#snippet actions()}
 			<Button onclick={saveMarks} disabled={saving || !selectedAssessment || !table} loading={saving} icon={Save}>
 				Save Marks
 			</Button>
-		</div>
-	</div>
+		{/snippet}
+	</PageHeader>
 
 	<div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
 		<div class="flex items-center gap-2 mb-3">

@@ -169,14 +169,17 @@
 </svelte:head>
 
 <div class="max-w-7xl mx-auto space-y-6">
-	<div class="flex items-center justify-between no-print">
-		<div>
-			<h1 class="text-2xl font-bold text-slate-900">Reports</h1>
-			<p class="text-sm text-slate-500 mt-0.5">Class mark sheets &amp; student report cards</p>
-		</div>
-		{#if (activeTab === 'marksheet' && markSheetData) || (activeTab === 'report' && studentReport) || (activeTab === 'mentors' && mentorReport)}
-			<Button icon={Printer} onclick={handlePrint}>Print</Button>
-		{/if}
+	<div class="no-print">
+	<PageHeader
+		title="Reports"
+		subtitle="Class mark sheets & student report cards"
+	>
+		{#snippet actions()}
+			{#if (activeTab === 'marksheet' && markSheetData) || (activeTab === 'report' && studentReport) || (activeTab === 'mentors' && mentorReport)}
+				<Button icon={Printer} onclick={handlePrint}>Print</Button>
+			{/if}
+		{/snippet}
+	</PageHeader>
 	</div>
 
 	<div class="bg-white rounded-xl border border-slate-200 p-4 no-print">

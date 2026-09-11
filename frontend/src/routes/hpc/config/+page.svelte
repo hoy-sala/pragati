@@ -4,6 +4,7 @@
   import { onMount, untrack } from "svelte";
   import Select from "$lib/components/Select.svelte";
   import Button from "$lib/components/Button.svelte";
+  import PageHeader from "$lib/components/PageHeader.svelte";
   import PageTabs from "$lib/components/PageTabs.svelte";
   import { HPC_TABS } from "$lib/utils/tabs";
   import { getAuthState } from "$lib/stores/auth.svelte";
@@ -116,8 +117,8 @@
 </script>
 
 <div class="max-w-3xl mx-auto space-y-6">
-  <div class="flex items-center justify-between">
-    <h1 class="text-2xl font-bold text-slate-900">HPC Configuration</h1>
+  <PageHeader title="HPC Configuration">
+    {#snippet actions()}
     <Button
       onclick={saveConfig}
       disabled={saving}
@@ -125,7 +126,8 @@
     >
       {saving ? "Saving..." : "Save Config"}
     </Button>
-  </div>
+    {/snippet}
+  </PageHeader>
 
   <PageTabs tabs={HPC_TABS} role={role} />
 

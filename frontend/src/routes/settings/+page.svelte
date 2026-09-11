@@ -15,6 +15,8 @@
     RotateCw,
   } from "lucide-svelte";
   import Button from "$lib/components/Button.svelte";
+  import PageHeader from "$lib/components/PageHeader.svelte";
+  import EmptyState from "$lib/components/EmptyState.svelte";
   import Modal from "$lib/components/Modal.svelte";
   import Select from "$lib/components/Select.svelte";
   import { getAuthState } from "$lib/stores/auth.svelte";
@@ -348,17 +350,18 @@
 </svelte:head>
 
 <div class="max-w-7xl mx-auto space-y-6">
-  <div class="flex items-center gap-3">
+  <PageHeader
+    title="Settings"
+    subtitle="School configuration and preferences"
+  >
+    {#snippet icon()}
     <div
-      class="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-600 to-slate-800 flex items-center justify-center"
+      class="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-600 to-slate-800 flex items-center justify-center shrink-0"
     >
       <Settings size={20} class="text-white" />
     </div>
-    <div>
-      <h1 class="text-2xl font-bold text-slate-900">Settings</h1>
-      <p class="text-sm text-slate-500">School configuration and preferences</p>
-    </div>
-  </div>
+    {/snippet}
+  </PageHeader>
 
   <div class="flex gap-1 bg-slate-100 rounded-lg p-1 no-print">
     {#each tabItems as item}
@@ -555,9 +558,7 @@
             </div>
           </div>
         {:else}
-          <div class="px-6 py-8 text-center text-sm text-slate-400">
-            No users found
-          </div>
+          <EmptyState title="No users found" />
         {/each}
       </div>
     </div>
@@ -790,9 +791,7 @@
             <span class="text-xs text-slate-400">Order: {c.sort_order}</span>
           </div>
         {:else}
-          <div class="px-6 py-8 text-center text-sm text-slate-400">
-            No classes configured
-          </div>
+          <EmptyState title="No classes configured" />
         {/each}
       </div>
     </div>
@@ -890,9 +889,7 @@
             </div>
           </div>
         {:else}
-          <div class="px-6 py-8 text-center text-sm text-slate-400">
-            No subjects configured
-          </div>
+          <EmptyState title="No subjects configured" />
         {/each}
       </div>
     </div>
@@ -990,9 +987,7 @@
             </div>
           </div>
         {:else}
-          <div class="px-6 py-8 text-center text-sm text-slate-400">
-            No categories configured
-          </div>
+          <EmptyState title="No categories configured" />
         {/each}
       </div>
     </div>

@@ -11,6 +11,7 @@
   } from "lucide-svelte";
   import { toast } from "$lib/stores/toast.svelte";
   import Select from "$lib/components/Select.svelte";
+  import PageHeader from "$lib/components/PageHeader.svelte";
   import PageTabs from "$lib/components/PageTabs.svelte";
   import { MENTOR_TABS } from "$lib/utils/tabs";
   import { getAuthState } from "$lib/stores/auth.svelte";
@@ -104,17 +105,15 @@
 <svelte:head><title>Daily Attendance - Pragati</title></svelte:head>
 
 <div class="max-w-5xl mx-auto space-y-6">
-  <div class="flex items-center gap-3">
+  <PageHeader title="Daily Attendance" subtitle="{roster.length} students">
+    {#snippet icon()}
     <div
-      class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center"
+      class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center shrink-0"
     >
       <Check size={20} class="text-white" />
     </div>
-    <div>
-      <h1 class="text-2xl font-bold text-slate-900">Daily Attendance</h1>
-      <p class="text-sm text-slate-500">{roster.length} students</p>
-    </div>
-  </div>
+    {/snippet}
+  </PageHeader>
   <PageTabs tabs={MENTOR_TABS} role={role} />
   <div
     class="bg-white rounded-xl border border-slate-200 p-4 no-print flex flex-wrap gap-3"

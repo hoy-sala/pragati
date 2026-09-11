@@ -3,7 +3,7 @@
   import type { Class, Subject } from "$lib/types";
   import { onMount } from "svelte";
   import Select from "$lib/components/Select.svelte";
-  import Button from "$lib/components/Button.svelte";
+  import PageHeader from "$lib/components/PageHeader.svelte";
   import PageTabs from "$lib/components/PageTabs.svelte";
   import { HPC_TABS } from "$lib/utils/tabs";
   import { getAuthState } from "$lib/stores/auth.svelte";
@@ -23,7 +23,6 @@
   let students = $state<any[]>([]);
   let gridData = $state<any[]>([]);
   let loading = $state(false);
-  let saving = $state(false);
   let statusMsg = $state("");
   let statusType = $state<"success" | "error">("success");
 
@@ -89,54 +88,13 @@
     }
   }
 
-  async function saveAll() {
-    saving = true;
-    statusMsg = "Saving all assessments...";
-    statusType = "success";
-    let total = 0;
-    let failed = 0;
-    for (const row of gridData) {
-      const assessments = loColumns
-        .filter((lo: any) => row.cells[lo.id] && row.cells[lo.id].level > 0)
-        .map((lo: any) => ({
-          learning_outcome_id: lo.id,
-          proficiency_level: row.cells[lo.id].level,
-        }));
-      if (assessments.length === 0) continue;
-      const res = await api("POST", "/hpc/assess", {
-        student_id: row.student.student_id,
-        subject_id: selectedSubject,
-        term: selectedTerm,
-        assessments,
-      });
-      if (res.error) failed++;
-      else total += assessments.length;
-    }
-    saving = false;
-    if (failed > 0) {
-      statusMsg = `Saved ${total}, failed ${failed} student(s).`;
-      statusType = "error";
-      toast(`${failed} student(s) failed to save`, "error");
-    } else {
-      statusMsg = `Saved ${total} assessments.`;
-      statusType = "success";
-    }
-  }
 </script>
 
 <div class="space-y-4">
-  <div class="flex items-center justify-between">
-    <h1 class="text-2xl font-bold text-slate-900">
-      Learning Outcome Assessment Grid
-    </h1>
-    <Button
-      onclick={saveAll}
-      disabled={saving || loading || !selectedSubject}
-      loading={saving}
-    >
-      {saving ? "Saving..." : "Save All"}
-    </Button>
-  </div>
+  <PageHeader
+    title="Learning Outcome Assessment Grid"
+    subtitle="Changes save automatically when you pick a level"
+  />
 
   <PageTabs tabs={HPC_TABS} role={role} />
 

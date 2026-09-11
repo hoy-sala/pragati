@@ -6,6 +6,8 @@
 	import Select from '$lib/components/Select.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Pagination from '$lib/components/Pagination.svelte';
+	import PageHeader from '$lib/components/PageHeader.svelte';
+	import EmptyState from '$lib/components/EmptyState.svelte';
 	import { getAuthState } from '$lib/stores/auth.svelte';
 	import { hasRole } from '$lib/utils/roles';
 	import { toast } from '$lib/stores/toast.svelte';
@@ -105,13 +107,14 @@
 </svelte:head>
 
 <div class="max-w-7xl mx-auto space-y-6">
-	<div class="flex items-center justify-between">
-		<div>
-			<h1 class="text-2xl font-bold text-slate-900">Assessments</h1>
-			<p class="text-sm text-slate-500 mt-1">View and manage all assessments across classes</p>
-		</div>
-		<Button icon={Plus} onclick={() => goto('/assessments/create')}>New Assessment</Button>
-	</div>
+	<PageHeader
+		title="Assessments"
+		subtitle="View and manage all assessments across classes"
+	>
+		{#snippet actions()}
+			<Button icon={Plus} onclick={() => goto('/assessments/create')}>New Assessment</Button>
+		{/snippet}
+	</PageHeader>
 
 
 	<div class="bg-white rounded-xl border border-slate-200 p-4 no-print">
@@ -140,11 +143,15 @@
 		{#if loading}
 			<div class="p-12 text-center text-sm text-slate-400">Loading...</div>
 		{:else if assessments.length === 0}
-			<div class="p-12 text-center">
-				<BookOpen size={40} class="mx-auto text-slate-300 mb-3" />
-				<p class="text-slate-500 text-sm">No assessments found</p>
-				<a href="/assessments/create" class="text-sm text-primary-600 hover:text-primary-700 mt-2 inline-block">Create your first assessment</a>
-			</div>
+			<EmptyState
+				icon={BookOpen}
+				title="No assessments found"
+				hint="Try adjusting filters, or create your first assessment."
+			>
+				{#snippet action()}
+					<Button size="sm" icon={Plus} onclick={() => goto('/assessments/create')}>New Assessment</Button>
+				{/snippet}
+			</EmptyState>
 		{:else}
 			<div class="overflow-x-auto">
 				<table class="w-full text-sm">

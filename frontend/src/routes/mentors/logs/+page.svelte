@@ -10,6 +10,8 @@
     AlertTriangle,
   } from "lucide-svelte";
   import Button from "$lib/components/Button.svelte";
+  import Modal from "$lib/components/Modal.svelte";
+  import PageHeader from "$lib/components/PageHeader.svelte";
   import Select from "$lib/components/Select.svelte";
   import PageTabs from "$lib/components/PageTabs.svelte";
   import { MENTOR_TABS } from "$lib/utils/tabs";
@@ -112,29 +114,26 @@
 <svelte:head><title>Mentor Logs - Pragati</title></svelte:head>
 
 <div class="max-w-5xl mx-auto space-y-6">
-  <div class="flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <div
-        class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-700 flex items-center justify-center"
-      >
-        <ShieldAlert size={20} class="text-white" />
-      </div>
-      <div>
-        <h1 class="text-2xl font-bold text-slate-900">Mentor Logs</h1>
-        <p class="text-sm text-slate-500">
-          Health, behavior, grievance tracking
-        </p>
-      </div>
+  <PageHeader
+    title="Mentor Logs"
+    subtitle="Health, behavior, grievance tracking"
+  >
+    {#snippet icon()}
+    <div
+      class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-700 flex items-center justify-center shrink-0"
+    >
+      <ShieldAlert size={20} class="text-white" />
     </div>
-    <Button icon={Plus} onclick={() => (showForm = !showForm)}>New Log</Button>
-  </div>
+    {/snippet}
+    {#snippet actions()}
+    <Button icon={Plus} onclick={() => (showForm = true)}>New Log</Button>
+    {/snippet}
+  </PageHeader>
 
   <PageTabs tabs={MENTOR_TABS} role={role} />
 
-  {#if showForm}
-    <div
-      class="bg-white rounded-xl border border-slate-200 p-5 space-y-4 no-print"
-    >
+  <Modal bind:open={showForm} title="New Log" maxWidth="max-w-2xl">
+    <div class="space-y-4">
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <Select
@@ -194,11 +193,14 @@
           placeholder="Steps taken..."
         ></textarea>
       </div>
+    </div>
+    {#snippet footer()}
+      <Button variant="ghost" onclick={() => (showForm = false)}>Cancel</Button>
       <Button onclick={submitLog} loading={saving} disabled={saving}
         >Submit Log</Button
       >
-    </div>
-  {/if}
+    {/snippet}
+  </Modal>
 
   {#if loading}<div
       class="bg-white rounded-xl border border-slate-200 p-12 text-center text-sm text-slate-400"

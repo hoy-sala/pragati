@@ -18,6 +18,8 @@
     X,
   } from "lucide-svelte";
   import Button from "$lib/components/Button.svelte";
+  import PageHeader from "$lib/components/PageHeader.svelte";
+  import EmptyState from "$lib/components/EmptyState.svelte";
   import Select from "$lib/components/Select.svelte";
   import SearchFilter from "$lib/components/SearchFilter.svelte";
   import Pagination from "$lib/components/Pagination.svelte";
@@ -404,22 +406,21 @@
 </script>
 
 <div class="space-y-6">
-  <div class="flex items-center justify-between">
-    <div>
-      <h1 class="text-2xl font-bold text-slate-900">Students</h1>
-      <p class="text-sm text-slate-500 mt-1">
-        {allStudents.length} student{allStudents.length !== 1 ? "s" : ""} enrolled
-      </p>
-    </div>
+  <PageHeader
+    title="Students"
+    subtitle={`${allStudents.length} student${allStudents.length !== 1 ? "s" : ""} enrolled`}
+  >
+    {#snippet actions()}
     <div class="flex items-center gap-2">
       {#if isAdmin}
       <Button onclick={openImport} variant="secondary" icon={Upload}
-        >Import CSV</Button
+        >Import</Button
       >
       {/if}
       <Button onclick={openCreate} icon={Plus}>Add Student</Button>
     </div>
-  </div>
+    {/snippet}
+  </PageHeader>
 
   {#if showImport}
     <div
@@ -861,8 +862,12 @@
             >
           {:else if filteredStudents.length === 0}
             <tr
-              ><td colspan="4" class="px-4 py-12 text-center text-slate-400"
-                >No students match your search.</td
+              ><td colspan="4" class="px-4"
+                ><EmptyState
+                  icon={User}
+                  title="No students match your search."
+                  hint="Try a different name, SATS number, or class filter."
+                /></td
               ></tr
             >
           {:else}

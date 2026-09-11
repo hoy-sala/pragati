@@ -10,6 +10,8 @@
   } from "lucide-svelte";
   import { toast } from "$lib/stores/toast.svelte";
   import Button from "$lib/components/Button.svelte";
+  import Modal from "$lib/components/Modal.svelte";
+  import PageHeader from "$lib/components/PageHeader.svelte";
   import Select from "$lib/components/Select.svelte";
   import PageTabs from "$lib/components/PageTabs.svelte";
   import { MENTOR_TABS } from "$lib/utils/tabs";
@@ -50,6 +52,7 @@
   >([]);
   let loading = $state(true);
   let reviewingLog = $state<AlertLog | null>(null);
+  let reviewOpen = $state(false);
   let reviewNotes = $state("");
   let reviewSaving = $state(false);
 
@@ -84,7 +87,12 @@
   function openReview(log: AlertLog) {
     reviewingLog = log;
     reviewNotes = "";
+    reviewOpen = true;
   }
+
+  $effect(() => {
+    if (!reviewOpen) reviewingLog = null;
+  });
 
   async function saveReview() {
     if (!reviewingLog) return;
@@ -97,7 +105,7 @@
       toast(res.error.message, "error");
     } else {
       toast("Review saved", "success");
-      reviewingLog = null;
+      reviewOpen = false;
       await load();
     }
     reviewSaving = false;
@@ -107,17 +115,15 @@
 <svelte:head><title>Mentor Dashboard - Pragati</title></svelte:head>
 
 <div class="max-w-7xl mx-auto space-y-6">
-  <div class="flex items-center gap-3">
+  <PageHeader title="Mentor Dashboard" subtitle="Principal oversight">
+    {#snippet icon()}
     <div
-      class="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-rose-700 flex items-center justify-center"
+      class="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-rose-700 flex items-center justify-center shrink-0"
     >
       <AlertTriangle size={20} class="text-white" />
     </div>
-    <div>
-      <h1 class="text-2xl font-bold text-slate-900">Mentor Dashboard</h1>
-      <p class="text-sm text-slate-500">Principal oversight</p>
-    </div>
-  </div>
+    {/snippet}
+  </PageHeader>
 
   <PageTabs tabs={MENTOR_TABS} role={role} />
 
@@ -248,20 +254,16 @@
   {/if}
 
   {#if reviewingLog}
-    <div
-      class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Review log"
+    <Modal
+      bind:open={reviewOpen}
+      title="Review Log"
+      maxWidth="max-w-md"
     >
-      <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-5 space-y-4">
-        <div>
-          <h3 class="text-base font-semibold text-slate-900">Review Log</h3>
-          <p class="text-xs text-slate-500 mt-0.5">
-            {reviewingLog.student_name} · {reviewingLog.severity} · {reviewingLog.category}
-            · {reviewingLog.log_date}
-          </p>
-        </div>
+      <div class="space-y-4">
+        <p class="text-xs text-slate-500">
+          {reviewingLog.student_name} · {reviewingLog.severity} · {reviewingLog.category}
+          · {reviewingLog.log_date}
+        </p>
         <p class="text-sm text-slate-600">{reviewingLog.description}</p>
         <textarea
           bind:value={reviewNotes}
@@ -269,23 +271,23 @@
           placeholder="Principal notes..."
           class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
         ></textarea>
-        <div class="flex justify-end gap-2">
-          <Button
-            variant="secondary"
-            onclick={() => {
-              if (!reviewSaving) reviewingLog = null;
-            }}
-            disabled={reviewSaving}
-            >Cancel</Button
-          >
-          <Button
-            onclick={saveReview}
-            disabled={reviewSaving}
-            loading={reviewSaving}
-            >Save Review</Button
-          >
-        </div>
       </div>
-    </div>
+      {#snippet footer()}
+        <Button
+          variant="secondary"
+          onclick={() => {
+            if (!reviewSaving) reviewOpen = false;
+          }}
+          disabled={reviewSaving}
+          >Cancel</Button
+        >
+        <Button
+          onclick={saveReview}
+          disabled={reviewSaving}
+          loading={reviewSaving}
+          >Save Review</Button
+        >
+      {/snippet}
+    </Modal>
   {/if}
 </div>

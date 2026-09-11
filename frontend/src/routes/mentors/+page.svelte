@@ -10,6 +10,7 @@
     AlertCircle,
   } from "lucide-svelte";
   import Button from "$lib/components/Button.svelte";
+  import PageHeader from "$lib/components/PageHeader.svelte";
   import Select from "$lib/components/Select.svelte";
   import SearchFilter from "$lib/components/SearchFilter.svelte";
   import PageTabs from "$lib/components/PageTabs.svelte";
@@ -187,19 +188,18 @@
 <svelte:head><title>Mentor Assignments ? Pragati</title></svelte:head>
 
 <div class="max-w-7xl mx-auto space-y-6">
-  <div class="flex items-center gap-3">
-    <div
-      class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-emerald-700 flex items-center justify-center"
-    >
-      <Users size={20} class="text-white" />
-    </div>
-    <div>
-      <h1 class="text-2xl font-bold text-slate-900">Mentor Assignments</h1>
-      <p class="text-sm text-slate-500">
-        Manage which students each mentor is responsible for
-      </p>
-    </div>
-  </div>
+  <PageHeader
+    title="Mentor Assignments"
+    subtitle="Manage which students each mentor is responsible for"
+  >
+    {#snippet icon()}
+      <div
+        class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-emerald-700 flex items-center justify-center shrink-0"
+      >
+        <Users size={20} class="text-white" />
+      </div>
+    {/snippet}
+  </PageHeader>
 
   <PageTabs tabs={MENTOR_TABS} role={role} />
 

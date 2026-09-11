@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import { Phone, MapPin, Users, AlertTriangle } from 'lucide-svelte';
 	import Select from '$lib/components/Select.svelte';
+	import PageHeader from '$lib/components/PageHeader.svelte';
 	import PageTabs from '$lib/components/PageTabs.svelte';
 	import { MENTOR_TABS } from '$lib/utils/tabs';
 	import { getAuthState } from '$lib/stores/auth.svelte';
@@ -40,10 +41,11 @@
 <svelte:head><title>My Roster - Pragati</title></svelte:head>
 
 <div class="max-w-7xl mx-auto space-y-6">
-	<div class="flex items-center gap-3">
-		<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center"><Users size={20} class="text-white" /></div>
-		<div><h1 class="text-2xl font-bold text-slate-900">My Student Roster</h1><p class="text-sm text-slate-500">{roster.length} students assigned to you</p></div>
-	</div>
+	<PageHeader title="My Student Roster" subtitle="{roster.length} students assigned to you">
+		{#snippet icon()}
+			<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center shrink-0"><Users size={20} class="text-white" /></div>
+		{/snippet}
+	</PageHeader>
 	<PageTabs tabs={MENTOR_TABS} role={role} />
 	<div class="bg-white rounded-xl border border-slate-200 p-4 no-print w-56">
 		<Select bind:value={selectedYear} options={[{ id: '', name: 'Select year' }, ...years.map(y => ({ id: y.id, name: y.name }))]} />

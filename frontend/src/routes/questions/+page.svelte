@@ -6,6 +6,8 @@
 	import { goto } from '$app/navigation';
 	import { Upload, Plus, HelpCircle } from 'lucide-svelte';
 	import Button from '$lib/components/Button.svelte';
+	import PageHeader from '$lib/components/PageHeader.svelte';
+	import EmptyState from '$lib/components/EmptyState.svelte';
 	import Select from '$lib/components/Select.svelte';
 	import SearchFilter from '$lib/components/SearchFilter.svelte';
 	import Pagination from '$lib/components/Pagination.svelte';
@@ -59,20 +61,18 @@
 </script>
 
 <div class="space-y-6">
-	<div class="flex items-center justify-between">
-		<div>
-			<h1 class="text-2xl font-bold text-slate-900">Question Bank</h1>
-			<p class="text-sm text-slate-500 mt-1">{totalQuestions} questions</p>
-		</div>
-		<div class="flex gap-2">
-			<Button variant="secondary" icon={Upload} onclick={() => goto('/questions/import')}>
-				Import
-			</Button>
-			<Button icon={Plus} onclick={() => goto('/questions/create')}>
-				New Question
-			</Button>
-		</div>
-	</div>
+	<PageHeader title="Question Bank" subtitle="{totalQuestions} questions">
+		{#snippet actions()}
+			<div class="flex gap-2">
+				<Button variant="secondary" icon={Upload} onclick={() => goto('/questions/import')}>
+					Import
+				</Button>
+				<Button icon={Plus} onclick={() => goto('/questions/create')}>
+					New Question
+				</Button>
+			</div>
+		{/snippet}
+	</PageHeader>
 
 	<div class="bg-white rounded-xl border border-slate-200 p-4">
 		<div class="flex flex-wrap gap-3">
@@ -92,14 +92,15 @@
 		{#if loading}
 			<div class="p-8 text-center text-sm text-slate-400">Loading...</div>
 		{:else if totalQuestions === 0}
-			<div class="p-8 text-center">
-				<HelpCircle size={36} class="mx-auto text-slate-300 mb-3" />
-				<p class="text-slate-500 text-sm">No questions found.</p>
-				<p class="text-xs text-slate-400 mt-1">Try adjusting filters, or add your first question.</p>
-				<div class="mt-3">
+			<EmptyState
+				icon={HelpCircle}
+				title="No questions found."
+				hint="Try adjusting filters, or add your first question."
+			>
+				{#snippet action()}
 					<Button size="sm" icon={Plus} onclick={() => goto('/questions/create')}>New Question</Button>
-				</div>
-			</div>
+				{/snippet}
+			</EmptyState>
 		{:else}
 			{#each paginatedQuestions as q (q.id)}
 				<div class="p-4 hover:bg-slate-50 transition-colors">

@@ -5,6 +5,8 @@
   import { goto } from "$app/navigation";
   import { Plus, ClipboardList } from "lucide-svelte";
   import Button from "$lib/components/Button.svelte";
+  import PageHeader from "$lib/components/PageHeader.svelte";
+  import EmptyState from "$lib/components/EmptyState.svelte";
   import Select from "$lib/components/Select.svelte";
   import SearchFilter from "$lib/components/SearchFilter.svelte";
   import Pagination from "$lib/components/Pagination.svelte";
@@ -88,15 +90,13 @@
 </script>
 
 <div class="space-y-6">
-  <div class="flex items-center justify-between">
-    <div>
-      <h1 class="text-2xl font-bold text-slate-900">Quizzes</h1>
-      <p class="text-sm text-slate-500 mt-1">{totalQuizzes} quizzes</p>
-    </div>
-    <Button icon={Plus} onclick={() => goto("/quizzes/create")}>
-      Create Quiz
-    </Button>
-  </div>
+  <PageHeader title="Quizzes" subtitle="{totalQuizzes} quizzes">
+    {#snippet actions()}
+      <Button icon={Plus} onclick={() => goto("/quizzes/create")}>
+        Create Quiz
+      </Button>
+    {/snippet}
+  </PageHeader>
 
   <div class="bg-white rounded-xl border border-slate-200">
     <div class="p-4 border-b border-slate-200 flex flex-wrap gap-3">
@@ -120,14 +120,15 @@
     {#if loading}
       <div class="p-8 text-center text-sm text-slate-400">Loading...</div>
     {:else if totalQuizzes === 0}
-      <div class="p-8 text-center">
-        <ClipboardList size={36} class="mx-auto text-slate-300 mb-3" />
-        <p class="text-slate-500 text-sm">No quizzes found.</p>
-        <p class="text-xs text-slate-400 mt-1">Try adjusting filters, or create your first quiz.</p>
-        <div class="mt-3">
+      <EmptyState
+        icon={ClipboardList}
+        title="No quizzes found."
+        hint="Try adjusting filters, or create your first quiz."
+      >
+        {#snippet action()}
           <Button size="sm" icon={Plus} onclick={() => goto("/quizzes/create")}>Create Quiz</Button>
-        </div>
-      </div>
+        {/snippet}
+      </EmptyState>
     {:else}
       <div class="divide-y divide-slate-100">
         {#each paginatedQuizzes as q (q.id)}
