@@ -6,6 +6,8 @@
 	import Select from '$lib/components/Select.svelte';
 	import Button from '$lib/components/Button.svelte';
 	import Pagination from '$lib/components/Pagination.svelte';
+	import { getAuthState } from '$lib/stores/auth.svelte';
+	import { hasRole } from '$lib/utils/roles';
 	import { toast } from '$lib/stores/toast.svelte';
 	import type { Assessment, AssessmentCategory, Class, Subject } from '$lib/types';
 
@@ -23,6 +25,9 @@
 	let page = $state(0);
 	const pageSize = 20;
 	let publishing = $state<string | null>(null);
+
+	const auth = getAuthState();
+	let canPublish = $derived(hasRole(auth.currentUser, 'admin', 'principal'));
 
 	let filteredSubjects = $derived(
 		selectedClass ? subjects.filter(s => s.is_core || s.is_language) : subjects
@@ -193,7 +198,7 @@
 										<a href="/marks?assessment={a.id}" title="Enter marks">
 											<Button variant="ghost" size="sm" icon={ClipboardCheck}>Marks</Button>
 										</a>
-										{#if !a.is_published}
+										{#if !a.is_published && canPublish}
 											<Button variant="ghost" size="sm" icon={Eye} disabled={publishing === a.id} onclick={() => publish(a)}>
 												{publishing === a.id ? '...' : 'Publish'}
 											</Button>

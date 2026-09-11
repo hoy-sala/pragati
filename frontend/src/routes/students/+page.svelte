@@ -23,7 +23,12 @@
   import Pagination from "$lib/components/Pagination.svelte";
   import type { Student, Class, AcademicYear, ImportResult } from "$lib/types";
   import { toast } from "$lib/stores/toast.svelte";
+  import { getAuthState } from "$lib/stores/auth.svelte";
+  import { hasRole } from "$lib/utils/roles";
   import { onMount } from "svelte";
+
+  const auth = getAuthState();
+  let isAdmin = $derived(hasRole(auth.currentUser, "admin"));
 
   let allStudents: Student[] = $state([]);
   let classes: Class[] = $state([]);
@@ -414,9 +419,11 @@
       </p>
     </div>
     <div class="flex items-center gap-2">
+      {#if isAdmin}
       <Button onclick={openImport} variant="secondary" icon={Upload}
         >Import CSV</Button
       >
+      {/if}
       <Button onclick={openCreate} icon={Plus}>Add Student</Button>
     </div>
   </div>
@@ -884,12 +891,14 @@
                     size="sm"
                     icon={Pencil}>Edit</Button
                   >
+                  {#if isAdmin}
                   <Button
                     onclick={() => removeStudent(s.id)}
                     variant="ghost"
                     size="sm"
                     icon={Trash2}>Delete</Button
                   >
+                  {/if}
                 </td>
               </tr>
             {/each}

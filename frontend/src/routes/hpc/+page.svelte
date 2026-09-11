@@ -4,7 +4,15 @@
   import { onMount } from "svelte";
   import Select from "$lib/components/Select.svelte";
   import Button from "$lib/components/Button.svelte";
+  import PageTabs from "$lib/components/PageTabs.svelte";
+  import { HPC_TABS } from "$lib/utils/tabs";
+  import { getAuthState } from "$lib/stores/auth.svelte";
+  import { effectiveRole, hasRole } from "$lib/utils/roles";
   import { toast } from "$lib/stores/toast.svelte";
+
+  const auth = getAuthState();
+  let role = $derived(effectiveRole(auth.currentUser));
+  let isAdmin = $derived(hasRole(auth.currentUser, "admin"));
 
   interface HPCGridRow {
     student_id: string;
@@ -135,6 +143,7 @@
         <p class="text-sm text-slate-500">
           Assess learning outcomes per student
         </p>
+        {#if isAdmin}
         <a
           href="/hpc/config"
           class="text-xs text-primary-600 hover:text-primary-700 font-medium"
@@ -145,9 +154,11 @@
           class="text-xs text-primary-600 hover:text-primary-700 font-medium"
           >Import LOs</a
         >
+        {/if}
       </div>
     </div>
     <div class="flex gap-2">
+      {#if isAdmin}
       <Button
         variant="secondary"
         onclick={migrateFromMarks}
@@ -155,6 +166,7 @@
       >
         Migrate from Marks
       </Button>
+      {/if}
       <Button
         onclick={publishAll}
         disabled={!selectedClass || publishing}
@@ -164,6 +176,8 @@
       </Button>
     </div>
   </div>
+
+  <PageTabs tabs={HPC_TABS} role={role} />
 
   <div class="bg-white rounded-xl border border-slate-200 p-4">
     <div class="flex flex-wrap gap-3 items-end">

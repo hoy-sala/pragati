@@ -12,8 +12,16 @@
   import Button from "$lib/components/Button.svelte";
   import Select from "$lib/components/Select.svelte";
   import SearchFilter from "$lib/components/SearchFilter.svelte";
+  import PageTabs from "$lib/components/PageTabs.svelte";
+  import { MENTOR_TABS } from "$lib/utils/tabs";
+  import { getAuthState } from "$lib/stores/auth.svelte";
+  import { effectiveRole, hasRole } from "$lib/utils/roles";
   import { toast } from "$lib/stores/toast.svelte";
   import type { Class, AcademicYear } from "$lib/types";
+
+  const auth = getAuthState();
+  let role = $derived(effectiveRole(auth.currentUser));
+  let isAdmin = $derived(hasRole(auth.currentUser, "admin"));
 
   let classes = $state<Class[]>([]);
   let years = $state<AcademicYear[]>([]);
@@ -193,6 +201,8 @@
     </div>
   </div>
 
+  <PageTabs tabs={MENTOR_TABS} role={role} />
+
   {#if statusMsg}
     <div
       class="text-sm px-4 py-2.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200"
@@ -344,7 +354,7 @@
               {/if}
             </p>
           </div>
-          {#if selectedMentorId && selectedStudentIds.size > 0}
+          {#if selectedMentorId && selectedStudentIds.size > 0 && isAdmin}
             <Button icon={UserPlus} onclick={assign} loading={assignLoading}
               >Assign {selectedStudentIds.size}</Button
             >
@@ -459,7 +469,7 @@
                   class="px-4 py-2 text-left font-semibold text-slate-600"
                   >Mentor</th
                 >{/if}
-              <th class="px-4 py-2 w-10"></th>
+              {#if isAdmin}<th class="px-4 py-2 w-10"></th>{/if}
             </tr>
           </thead>
           <tbody>
@@ -472,6 +482,7 @@
                     >{a.mentor_name}</td
                   >{/if}
                 <td class="px-4 py-2">
+                  {#if isAdmin}
                   <Button
                     variant="ghost"
                     size="sm"
@@ -480,6 +491,7 @@
                     disabled={unassignLoading.has(a.id)}
                     aria-label={`Unassign ${a.student_name}`}
                   />
+                  {/if}
                 </td>
               </tr>
             {:else}

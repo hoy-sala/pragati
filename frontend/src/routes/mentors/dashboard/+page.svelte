@@ -11,7 +11,15 @@
   import { toast } from "$lib/stores/toast.svelte";
   import Button from "$lib/components/Button.svelte";
   import Select from "$lib/components/Select.svelte";
+  import PageTabs from "$lib/components/PageTabs.svelte";
+  import { MENTOR_TABS } from "$lib/utils/tabs";
+  import { getAuthState } from "$lib/stores/auth.svelte";
+  import { effectiveRole, hasRole } from "$lib/utils/roles";
   import type { AcademicYear } from "$lib/types";
+
+  const auth = getAuthState();
+  let role = $derived(effectiveRole(auth.currentUser));
+  let canReview = $derived(hasRole(auth.currentUser, "admin", "principal"));
 
   type AlertLog = {
     id: string;
@@ -111,6 +119,8 @@
     </div>
   </div>
 
+  <PageTabs tabs={MENTOR_TABS} role={role} />
+
   <div class="bg-white rounded-xl border border-slate-200 p-4 no-print w-56">
     <Select
       bind:value={selectedYear}
@@ -153,11 +163,11 @@
                   By {a.mentor_name} . {a.log_date}
                 </p>
               </div>
-               <Button
+               {#if canReview}<Button
                  size="sm"
                  variant="secondary"
                  onclick={() => openReview(a)}
-               >Review</Button>
+               >Review</Button>{/if}
             </div>
           {/each}
         </div>

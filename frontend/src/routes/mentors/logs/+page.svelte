@@ -11,8 +11,15 @@
   } from "lucide-svelte";
   import Button from "$lib/components/Button.svelte";
   import Select from "$lib/components/Select.svelte";
+  import PageTabs from "$lib/components/PageTabs.svelte";
+  import { MENTOR_TABS } from "$lib/utils/tabs";
+  import { getAuthState } from "$lib/stores/auth.svelte";
+  import { effectiveRole } from "$lib/utils/roles";
   import { toast } from "$lib/stores/toast.svelte";
   import type { AcademicYear } from "$lib/types";
+
+  const auth = getAuthState();
+  let role = $derived(effectiveRole(auth.currentUser));
 
   let years = $state<AcademicYear[]>([]);
   let selectedYear = $state("");
@@ -135,6 +142,8 @@
     </div>
     <Button icon={Plus} onclick={() => (showForm = !showForm)}>New Log</Button>
   </div>
+
+  <PageTabs tabs={MENTOR_TABS} role={role} />
 
   {#if showForm}
     <div

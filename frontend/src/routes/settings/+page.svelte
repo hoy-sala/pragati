@@ -17,6 +17,8 @@
   import Button from "$lib/components/Button.svelte";
   import Modal from "$lib/components/Modal.svelte";
   import Select from "$lib/components/Select.svelte";
+  import { getAuthState } from "$lib/stores/auth.svelte";
+  import { hasRole } from "$lib/utils/roles";
   import { toast } from "$lib/stores/toast.svelte";
   import type {
     AcademicYear,
@@ -27,6 +29,9 @@
 
   type Tab = "users" | "years" | "classes" | "subjects" | "categories";
   let activeTab = $state<Tab>("users");
+
+  const auth = getAuthState();
+  let isAdmin = $derived(hasRole(auth.currentUser, "admin"));
 
   const roleOptions = [
     { id: "teacher", name: "Teacher" },
@@ -370,6 +375,7 @@
     {/each}
   </div>
 
+  {#if isAdmin}
   {#if loading}
     <div
       class="bg-white rounded-xl border border-slate-200 p-12 text-center text-sm text-slate-400"
@@ -990,5 +996,11 @@
         {/each}
       </div>
     </div>
+  {/if}
+
+  {:else}
+  <div class="bg-white rounded-xl border border-slate-200 p-12 text-center">
+    <p class="text-slate-500 text-sm">Settings are restricted to administrators.</p>
+  </div>
   {/if}
 </div>

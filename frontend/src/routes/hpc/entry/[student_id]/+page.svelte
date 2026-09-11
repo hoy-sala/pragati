@@ -5,7 +5,14 @@
   import { onMount } from "svelte";
   import Select from "$lib/components/Select.svelte";
   import Button from "$lib/components/Button.svelte";
+  import PageTabs from "$lib/components/PageTabs.svelte";
+  import { HPC_TABS } from "$lib/utils/tabs";
+  import { getAuthState } from "$lib/stores/auth.svelte";
+  import { effectiveRole } from "$lib/utils/roles";
   import { toast } from "$lib/stores/toast.svelte";
+
+  const auth = getAuthState();
+  let role = $derived(effectiveRole(auth.currentUser));
 
   const studentId = $page.params.student_id;
   const term = $page.url.searchParams.get("term") || "Term1";
@@ -238,6 +245,8 @@
       </Button>
     </div>
   </div>
+
+  <PageTabs tabs={HPC_TABS} role={role} />
 
   {#if statusMsg}
     <div

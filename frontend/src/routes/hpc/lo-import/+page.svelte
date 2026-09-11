@@ -4,6 +4,14 @@
   import { onMount } from "svelte";
   import Select from "$lib/components/Select.svelte";
   import Button from "$lib/components/Button.svelte";
+  import PageTabs from "$lib/components/PageTabs.svelte";
+  import { HPC_TABS } from "$lib/utils/tabs";
+  import { getAuthState } from "$lib/stores/auth.svelte";
+  import { effectiveRole, hasRole } from "$lib/utils/roles";
+
+  const auth = getAuthState();
+  let role = $derived(effectiveRole(auth.currentUser));
+  let isAdmin = $derived(hasRole(auth.currentUser, "admin"));
 
   let classes = $state<Class[]>([]);
   let subjects = $state<Subject[]>([]);
@@ -88,8 +96,11 @@ LA-6.2.1,Writes clear and coherent paragraphs,psychomotor,3,1`;
 </script>
 
 <div class="max-w-3xl mx-auto space-y-4">
-  <h1 class="text-xl font-bold text-slate-900">Import Learning Outcomes</h1>
+  <h1 class="text-2xl font-bold text-slate-900">Import Learning Outcomes</h1>
 
+  <PageTabs tabs={HPC_TABS} role={role} />
+
+  {#if isAdmin}
   <div class="bg-white rounded-xl border border-slate-200 p-4">
     <div class="flex flex-wrap gap-3 items-end">
       <div>
@@ -156,4 +167,10 @@ LA-6.2.1,Writes clear and coherent paragraphs,psychomotor,3,1`;
       <pre class="mt-1 p-2 bg-slate-50 rounded text-xs">{sampleLO}</pre>
     </details>
   </div>
+
+  {:else}
+  <div class="bg-white rounded-xl border border-slate-200 p-12 text-center">
+    <p class="text-slate-500 text-sm">Importing learning outcomes is restricted to administrators.</p>
+  </div>
+  {/if}
 </div>

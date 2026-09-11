@@ -4,7 +4,14 @@
   import { onMount } from "svelte";
   import Select from "$lib/components/Select.svelte";
   import Button from "$lib/components/Button.svelte";
+  import PageTabs from "$lib/components/PageTabs.svelte";
+  import { HPC_TABS } from "$lib/utils/tabs";
+  import { getAuthState } from "$lib/stores/auth.svelte";
+  import { effectiveRole } from "$lib/utils/roles";
   import { toast } from "$lib/stores/toast.svelte";
+
+  const auth = getAuthState();
+  let role = $derived(effectiveRole(auth.currentUser));
 
   let classes = $state<Class[]>([]);
   let subjects = $state<Subject[]>([]);
@@ -126,6 +133,8 @@
       {saving ? "Saving..." : "Save All"}
     </Button>
   </div>
+
+  <PageTabs tabs={HPC_TABS} role={role} />
 
   <div class="bg-white rounded-xl border border-slate-200 p-4">
     <div class="flex flex-wrap gap-3 items-end">

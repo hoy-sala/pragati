@@ -3,7 +3,14 @@
 	import { onMount } from 'svelte';
 	import { Phone, MapPin, Users, AlertTriangle } from 'lucide-svelte';
 	import Select from '$lib/components/Select.svelte';
+	import PageTabs from '$lib/components/PageTabs.svelte';
+	import { MENTOR_TABS } from '$lib/utils/tabs';
+	import { getAuthState } from '$lib/stores/auth.svelte';
+	import { effectiveRole } from '$lib/utils/roles';
 	import type { AcademicYear } from '$lib/types';
+
+	const auth = getAuthState();
+	let role = $derived(effectiveRole(auth.currentUser));
 
 	let years = $state<AcademicYear[]>([]);
 	let selectedYear = $state('');
@@ -37,6 +44,7 @@
 		<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center"><Users size={20} class="text-white" /></div>
 		<div><h1 class="text-2xl font-bold text-slate-900">My Student Roster</h1><p class="text-sm text-slate-500">{roster.length} students assigned to you</p></div>
 	</div>
+	<PageTabs tabs={MENTOR_TABS} role={role} />
 	<div class="bg-white rounded-xl border border-slate-200 p-4 no-print w-56">
 		<Select bind:value={selectedYear} options={[{ id: '', name: 'Select year' }, ...years.map(y => ({ id: y.id, name: y.name }))]} />
 	</div>

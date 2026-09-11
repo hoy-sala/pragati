@@ -10,7 +10,14 @@
     LoaderCircle,
   } from "lucide-svelte";
   import { toast } from "$lib/stores/toast.svelte";
+  import PageTabs from "$lib/components/PageTabs.svelte";
+  import { MENTOR_TABS } from "$lib/utils/tabs";
+  import { getAuthState } from "$lib/stores/auth.svelte";
+  import { effectiveRole } from "$lib/utils/roles";
   import type { AcademicYear } from "$lib/types";
+
+  const auth = getAuthState();
+  let role = $derived(effectiveRole(auth.currentUser));
 
   let years = $state<AcademicYear[]>([]);
   let selectedYear = $state("");
@@ -107,6 +114,7 @@
       <p class="text-sm text-slate-500">{roster.length} students</p>
     </div>
   </div>
+  <PageTabs tabs={MENTOR_TABS} role={role} />
   <div
     class="bg-white rounded-xl border border-slate-200 p-4 no-print flex gap-3"
   >

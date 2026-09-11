@@ -4,6 +4,14 @@
   import { onMount } from "svelte";
   import Select from "$lib/components/Select.svelte";
   import Button from "$lib/components/Button.svelte";
+  import PageTabs from "$lib/components/PageTabs.svelte";
+  import { HPC_TABS } from "$lib/utils/tabs";
+  import { getAuthState } from "$lib/stores/auth.svelte";
+  import { effectiveRole, hasRole } from "$lib/utils/roles";
+
+  const auth = getAuthState();
+  let role = $derived(effectiveRole(auth.currentUser));
+  let isAdmin = $derived(hasRole(auth.currentUser, "admin"));
 
   let classes = $state<Class[]>([]);
   let selectedClass = $state("");
@@ -115,6 +123,9 @@
     </Button>
   </div>
 
+  <PageTabs tabs={HPC_TABS} role={role} />
+
+  {#if isAdmin}
   {#if statusMsg}
     <div
       class="text-sm px-4 py-2 rounded-lg border {statusType === 'error'
@@ -266,4 +277,10 @@
       {/each}
     </div>
   </div>
+
+  {:else}
+  <div class="bg-white rounded-xl border border-slate-200 p-12 text-center">
+    <p class="text-slate-500 text-sm">HPC configuration is restricted to administrators.</p>
+  </div>
+  {/if}
 </div>
