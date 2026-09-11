@@ -89,7 +89,7 @@
 		if (selectedCategory) params.set('category_id', selectedCategory);
 		if (selectedClass) params.set('class_id', selectedClass);
 		if (selectedSubject) params.set('subject_id', selectedSubject);
-		params.set('limit', '100');
+		params.set('limit', '500');
 		const res = await api<Assessment[]>('GET', '/assessments?' + params.toString());
 		if (res.data && seq === reqSeq) assessments = res.data;
 	}

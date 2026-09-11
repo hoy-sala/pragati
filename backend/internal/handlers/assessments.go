@@ -31,8 +31,8 @@ func (h *AssessmentHandler) List(w http.ResponseWriter, r *http.Request) {
 	if limit <= 0 {
 		limit = 50
 	}
-	if limit > 100 {
-		limit = 100
+	if limit > 500 {
+		limit = 500
 	}
 
 	baseWhere := "WHERE a.school_id = $1 AND a.deleted_at IS NULL"
