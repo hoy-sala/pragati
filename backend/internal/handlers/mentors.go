@@ -288,12 +288,19 @@ func (h *MentorHandler) ListLogs(w http.ResponseWriter, r *http.Request) {
 	claims := middleware.GetUserClaims(r.Context())
 	mentorID := r.URL.Query().Get("mentor_id")
 	if mentorID == "" { mentorID = claims.UserID }
-	rows, err := h.db.Query(r.Context(),
-		`SELECT ml.id, ml.student_id, s.first_name || ' ' || COALESCE(s.last_name,'') as student_name,
+	yearID := r.URL.Query().Get("academic_year_id")
+	query := `SELECT ml.id, ml.student_id, s.first_name || ' ' || COALESCE(s.last_name,'') as student_name,
 			ml.log_date, ml.category, ml.severity, ml.description, ml.action_taken, ml.parent_informed,
 			ml.reviewed_by_principal
 		 FROM mentor_logs ml JOIN students s ON s.id = ml.student_id
-		 WHERE ml.mentor_id = $1 ORDER BY ml.created_at DESC LIMIT 100`, mentorID)
+		 WHERE ml.mentor_id = $1`
+	args := []interface{}{mentorID}
+	if yearID != "" {
+		query += ` AND ml.academic_year_id = $2`
+		args = append(args, yearID)
+	}
+	query += ` ORDER BY ml.created_at DESC LIMIT 100`
+	rows, err := h.db.Query(r.Context(), query, args...)
 	if err != nil { renderJSON(w, http.StatusInternalServerError, apiErr("INTERNAL_ERROR", "failed to fetch logs")); return }
 	defer rows.Close()
 	var results []map[string]interface{}
@@ -321,9 +328,9 @@ func (h *MentorHandler) CreateLog(w http.ResponseWriter, r *http.Request) {
 	if req.StudentID == "" || req.Category == "" || req.Description == "" {
 		renderJSON(w, http.StatusBadRequest, apiErr("VALIDATION_ERROR", "student_id, category, description required")); return
 	}
-	var studentSchool string
+	var studentSchool, studentYear string
 	if err := h.db.QueryRow(r.Context(),
-		`SELECT school_id FROM students WHERE id = $1 AND deleted_at IS NULL`, req.StudentID).Scan(&studentSchool); err != nil {
+		`SELECT school_id, academic_year_id FROM students WHERE id = $1 AND deleted_at IS NULL`, req.StudentID).Scan(&studentSchool, &studentYear); err != nil {
 		renderJSON(w, http.StatusBadRequest, apiErr("NOT_FOUND", "student not found")); return
 	}
 	if studentSchool != claims.SchoolID {
@@ -331,9 +338,9 @@ func (h *MentorHandler) CreateLog(w http.ResponseWriter, r *http.Request) {
 	}
 	id := uuid.New().String()
 	_, err := h.db.Exec(r.Context(),
-		`INSERT INTO mentor_logs (id, mentor_id, student_id, category, severity, description, action_taken, parent_informed)
-		 VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
-		id, claims.UserID, req.StudentID, req.Category, req.Severity, req.Description, req.ActionTaken, req.ParentInformed)
+		`INSERT INTO mentor_logs (id, mentor_id, student_id, academic_year_id, category, severity, description, action_taken, parent_informed)
+		 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+		id, claims.UserID, req.StudentID, studentYear, req.Category, req.Severity, req.Description, req.ActionTaken, req.ParentInformed)
 	if err != nil { renderJSON(w, http.StatusInternalServerError, apiErr("INTERNAL_ERROR", "failed to create log")); return }
 	renderJSON(w, http.StatusCreated, apiOK(map[string]string{"id": id}))
 }
