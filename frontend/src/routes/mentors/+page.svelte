@@ -2,6 +2,7 @@
   import { api } from "$lib/api/client.svelte";
   import { onMount } from "svelte";
   import { page } from "$app/stores";
+  import { goto } from "$app/navigation";
   import { Users } from "lucide-svelte";
   import PageHeader from "$lib/components/PageHeader.svelte";
   import PageTabs from "$lib/components/PageTabs.svelte";
@@ -33,6 +34,9 @@
   let selectedYear = $state("");
 
   onMount(async () => {
+    if (!$page.url.searchParams.get("tab")) {
+      goto("/mentors?tab=assignments", { replaceState: true });
+    }
     const yr = await api<AcademicYear[]>("GET", "/academic-years");
     if (yr.data) {
       years = yr.data;

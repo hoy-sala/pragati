@@ -1,5 +1,7 @@
 <script lang="ts">
   import { page } from "$app/stores";
+  import { goto } from "$app/navigation";
+  import { onMount } from "svelte";
   import PageHeader from "$lib/components/PageHeader.svelte";
   import PageTabs from "$lib/components/PageTabs.svelte";
   import { HPC_TABS } from "$lib/utils/tabs";
@@ -26,6 +28,12 @@
 
   let selectedClass = $state("");
   let selectedTerm = $state("Term 1");
+
+  onMount(() => {
+    if (!$page.url.searchParams.get("tab")) {
+      goto("/hpc?tab=grid", { replaceState: true });
+    }
+  });
 </script>
 
 <svelte:head><title>HPC — Pragati</title></svelte:head>
