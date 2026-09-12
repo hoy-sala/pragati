@@ -46,7 +46,7 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'house-crow',
 		ebird: 'houcro1',
-		photo_url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Corvus_splendens.jpg?width=800',
+		photo_url: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c9/Corvus_splendens.jpg/960px-Corvus_splendens.jpg',
 		photo_credit: 'Pkspks · CC BY 4.0',
 		name_en: 'House Crow',
 		name_kn: 'ಕಾಗೆ',
@@ -64,7 +64,7 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'common-myna',
 		ebird: 'commyn',
-		photo_url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Acridotheres_tristis00.jpg?width=800',
+		photo_url: 'https://upload.wikimedia.org/wikipedia/commons/3/3c/Acridotheres_tristis00.jpg',
 		photo_credit: 'Gerrie van Vuuren · CC BY-SA 4.0',
 		name_en: 'Common Myna',
 		name_kn: 'ಮೈನಾ',
@@ -82,7 +82,7 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'house-sparrow',
 		ebird: 'houspa',
-		photo_url: 'https://commons.wikimedia.org/wiki/Special:FilePath/House_sparrow_male_in_Prospect_Park_(53532).jpg?width=800',
+		photo_url: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9b/House_sparrow_male_in_Prospect_Park_%2853532%29.jpg/960px-House_sparrow_male_in_Prospect_Park_%2853532%29.jpg',
 		photo_credit: 'Rhododendrites · CC BY-SA 4.0',
 		name_en: 'House Sparrow',
 		name_kn: 'ಗುಬ್ಬಚ್ಚಿ',
@@ -100,7 +100,7 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'rose-ringed-parakeet',
 		ebird: 'rorpar',
-		photo_url: 'https://commons.wikimedia.org/wiki/Special:FilePath/African_Rose-ringed_Parakeet,_Tendaba,_Gambia_1.jpg?width=800',
+		photo_url: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/African_Rose-ringed_Parakeet%2C_Tendaba%2C_Gambia_1.jpg/960px-African_Rose-ringed_Parakeet%2C_Tendaba%2C_Gambia_1.jpg',
 		photo_credit: 'danielskatz · CC BY 4.0',
 		name_en: 'Rose-ringed Parakeet',
 		name_kn: 'ಗಿಳಿ',
@@ -118,7 +118,7 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'rock-pigeon',
 		ebird: 'rocpig',
-		photo_url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Columba_livia_(Rock_Dove,_wild),_Duncansby_Head,_Caithness,_Scotland_1.jpg?width=800',
+		photo_url: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/1/10/Columba_livia_%28Rock_Dove%2C_wild%29%2C_Duncansby_Head%2C_Caithness%2C_Scotland_1.jpg/960px-Columba_livia_%28Rock_Dove%2C_wild%29%2C_Duncansby_Head%2C_Caithness%2C_Scotland_1.jpg',
 		photo_credit: 'william_stephens · CC BY 4.0',
 		name_en: 'Rock Pigeon',
 		name_kn: 'ಪಾರಿವಾಳ',
@@ -136,7 +136,7 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'spotted-dove',
 		ebird: 'spodov',
-		photo_url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Spilopelia_chinensis_Zhengzhou_20220915,_crop.jpg?width=800',
+		photo_url: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Spilopelia_chinensis_Zhengzhou_20220915%2C_crop.jpg/960px-Spilopelia_chinensis_Zhengzhou_20220915%2C_crop.jpg',
 		photo_credit: 'zinogre · CC BY-SA 4.0',
 		name_en: 'Spotted Dove',
 		scientific: 'Spilopelia chinensis',
@@ -153,7 +153,7 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'asian-koel',
 		ebird: 'asikoe2',
-		photo_url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Asian_koel.jpg?width=800',
+		photo_url: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/Asian_koel.jpg/960px-Asian_koel.jpg',
 		photo_credit: 'Challiyan · CC BY-SA 4.0',
 		name_en: 'Asian Koel',
 		name_kn: 'ಕೋಗಿಲೆ',
@@ -171,7 +171,7 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'greater-coucal',
 		ebird: 'grecou1',
-		photo_url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Greater_coucal_crop.jpg?width=800',
+		photo_url: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/Greater_coucal_crop.jpg/960px-Greater_coucal_crop.jpg',
 		photo_credit: 'Davidvraju · CC BY-SA 4.0',
 		name_en: 'Greater Coucal',
 		name_kn: 'ಕೆಂಭೂತ',
@@ -189,7 +189,7 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'common-hoopoe',
 		ebird: 'hoopoe',
-		photo_url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Upupa_epops_Madrid_01.jpg?width=800',
+		photo_url: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/Upupa_epops_Madrid_01.jpg/960px-Upupa_epops_Madrid_01.jpg',
 		photo_credit: 'Keta · CC BY-SA 2.5',
 		name_en: 'Common Hoopoe',
 		scientific: 'Upupa epops',
@@ -206,7 +206,7 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'coppersmith-barbet',
 		ebird: 'copbar1',
-		photo_url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Coppersmith_Barbet_(Megalaima_haemacephala)_by_Shantanu_Kuveskar.jpg?width=800',
+		photo_url: 'https://upload.wikimedia.org/wikipedia/commons/f/fd/Coppersmith_Barbet_%28Megalaima_haemacephala%29_by_Shantanu_Kuveskar.jpg',
 		photo_credit: 'Shantanu Kuveskar · CC BY-SA 4.0',
 		name_en: 'Coppersmith Barbet',
 		scientific: 'Psilopogon haemacephalus',
@@ -223,7 +223,7 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'black-drongo',
 		ebird: 'bladro1',
-		photo_url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Bdrongo-Sandeep1.jpg?width=800',
+		photo_url: 'https://upload.wikimedia.org/wikipedia/commons/f/f9/Bdrongo-Sandeep1.jpg',
 		photo_credit: 'Swardeepak · CC BY-SA 4.0',
 		name_en: 'Black Drongo',
 		scientific: 'Dicrurus macrocercus',
@@ -240,7 +240,7 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'red-whiskered-bulbul',
 		ebird: 'rewbul',
-		photo_url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Pycnonotus_jocosus_jocosus,_Nanning,_Guangxi,_China.jpg?width=800',
+		photo_url: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/4/41/Pycnonotus_jocosus_jocosus%2C_Nanning%2C_Guangxi%2C_China.jpg/960px-Pycnonotus_jocosus_jocosus%2C_Nanning%2C_Guangxi%2C_China.jpg',
 		photo_credit: 'myjkccd · Public domain',
 		name_en: 'Red-whiskered Bulbul',
 		name_kn: 'ಜುಟ್ಟಿನ ಹಕ್ಕಿ',
@@ -258,7 +258,7 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'red-vented-bulbul',
 		ebird: 'revbul',
-		photo_url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Red-vented_bulbul_-_Jamnagar_2023-11-13.jpg?width=800',
+		photo_url: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/Red-vented_bulbul_-_Jamnagar_2023-11-13.jpg/960px-Red-vented_bulbul_-_Jamnagar_2023-11-13.jpg',
 		photo_credit: 'Mahmadanesh · CC BY 4.0',
 		name_en: 'Red-vented Bulbul',
 		scientific: 'Pycnonotus cafer',
@@ -275,7 +275,7 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'purple-sunbird',
 		ebird: 'pursun4',
-		photo_url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Purple_Sunbird_Male,_Bangalore,_India.jpeg?width=800',
+		photo_url: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/7/72/Purple_Sunbird_Male%2C_Bangalore%2C_India.jpeg/960px-Purple_Sunbird_Male%2C_Bangalore%2C_India.jpeg',
 		photo_credit: 'Nicholas Iyadurai · CC BY-SA 4.0',
 		name_en: 'Purple Sunbird',
 		scientific: 'Cinnyris asiaticus',
@@ -292,7 +292,7 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'common-tailorbird',
 		ebird: 'comtai1',
-		photo_url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Common_tailorbird_(Orthotomus_sutorius_guzuratus)_male_Kerala.jpg?width=800',
+		photo_url: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/1/19/Common_tailorbird_%28Orthotomus_sutorius_guzuratus%29_male_Kerala.jpg/960px-Common_tailorbird_%28Orthotomus_sutorius_guzuratus%29_male_Kerala.jpg',
 		photo_credit: 'Charles J. Sharp · CC BY-SA 4.0',
 		name_en: 'Common Tailorbird',
 		scientific: 'Orthotomus sutorius',
@@ -309,7 +309,7 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'oriental-magpie-robin',
 		ebird: 'magrob',
-		photo_url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Oriental_magpie-robin_(Copsychus_saularis_ceylonensis)_male.jpg?width=800',
+		photo_url: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/Oriental_magpie-robin_%28Copsychus_saularis_ceylonensis%29_male.jpg/960px-Oriental_magpie-robin_%28Copsychus_saularis_ceylonensis%29_male.jpg',
 		photo_credit: 'Charles J. Sharp · CC BY-SA 4.0',
 		name_en: 'Oriental Magpie-Robin',
 		scientific: 'Copsychus saularis',
@@ -326,7 +326,7 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'black-kite',
 		ebird: 'blakit1',
-		photo_url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Schwarzmilan.jpg?width=800',
+		photo_url: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5a/Schwarzmilan.jpg/960px-Schwarzmilan.jpg',
 		photo_credit: 'Andreas Trepte · CC BY-SA 4.0',
 		name_en: 'Black Kite',
 		name_kn: 'ಗಿಡುಗ',
@@ -344,7 +344,7 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'spotted-owlet',
 		ebird: 'spoowl1',
-		photo_url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Spotted_Owlet_Bokkapuram_Nilgiris_Sep22_A7C_02968.jpg?width=800',
+		photo_url: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Spotted_Owlet_Bokkapuram_Nilgiris_Sep22_A7C_02968.jpg/960px-Spotted_Owlet_Bokkapuram_Nilgiris_Sep22_A7C_02968.jpg',
 		photo_credit: 'Timothy A. Gonsalves · CC BY-SA 4.0',
 		name_en: 'Spotted Owlet',
 		name_kn: 'ಗೂಬೆ',
@@ -362,7 +362,7 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'indian-peafowl',
 		ebird: 'compea',
-		photo_url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Peacock_on_tree_(52077240794).jpg?width=800',
+		photo_url: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Peacock_on_tree_%2852077240794%29.jpg/960px-Peacock_on_tree_%2852077240794%29.jpg',
 		photo_credit: 'Kandukuru Nagarjun · CC BY 2.0',
 		name_en: 'Indian Peafowl',
 		name_kn: 'ನವಿಲು',
@@ -380,7 +380,7 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'red-wattled-lapwing',
 		ebird: 'rewlap1',
-		photo_url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Red-wattled_lapwing_(Vanellus_indicus)_Photograph_by_Shantanu_Kuveskar.jpg?width=800',
+		photo_url: 'https://upload.wikimedia.org/wikipedia/commons/4/4e/Red-wattled_lapwing_%28Vanellus_indicus%29_Photograph_by_Shantanu_Kuveskar.jpg',
 		photo_credit: 'Shantanu Kuveskar · CC BY 4.0',
 		name_en: 'Red-wattled Lapwing',
 		name_kn: 'ಟಿಟ್ಟಿಬ',
@@ -399,7 +399,7 @@ export const BIRDS: Bird[] = [
 		id: 'green-bee-eater',
 		name_en: 'Asian Green Bee-eater',
 		ebird: 'grnbee3',
-		photo_url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Asian Green Bee-eater at Vizag.jpg?width=800',
+		photo_url: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/Asian_Green_Bee-eater_at_Vizag.jpg/960px-Asian_Green_Bee-eater_at_Vizag.jpg',
 		photo_credit: 'Drashokk · CC BY-SA 4.0',
 		scientific: 'Merops orientalis',
 		size: 'S',
@@ -415,7 +415,7 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'white-throated-kingfisher',
 		ebird: 'whtkin2',
-		photo_url: 'https://commons.wikimedia.org/wiki/Special:FilePath/White-throated_kingfisher_(Halcyon_smyrnensis)_Galle.jpg?width=800',
+		photo_url: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c8/White-throated_kingfisher_%28Halcyon_smyrnensis%29_Galle.jpg/960px-White-throated_kingfisher_%28Halcyon_smyrnensis%29_Galle.jpg',
 		photo_credit: 'Charles J. Sharp · CC BY-SA 4.0',
 		name_en: 'White-throated Kingfisher',
 		scientific: 'Halcyon smyrnensis',
@@ -432,7 +432,7 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'indian-roller',
 		ebird: 'indrol2',
-		photo_url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Indian_roller_-_Timbi_Lake,_Vadodara_2023-12-03.jpg?width=800',
+		photo_url: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/0/06/Indian_roller_-_Timbi_Lake%2C_Vadodara_2023-12-03.jpg/960px-Indian_roller_-_Timbi_Lake%2C_Vadodara_2023-12-03.jpg',
 		photo_credit: 'Mahmadanesh · CC BY 4.0',
 		name_en: 'Indian Roller',
 		name_kn: 'ನೀಲಕಂಠ',
@@ -450,7 +450,7 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'yellow-billed-babbler',
 		ebird: 'yebbab1',
-		photo_url: 'https://commons.wikimedia.org/wiki/Special:FilePath/Yellow-billed_babbler_(Argya_affinis_taprobanus).jpg?width=800',
+		photo_url: 'https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0e/Yellow-billed_babbler_%28Argya_affinis_taprobanus%29.jpg/960px-Yellow-billed_babbler_%28Argya_affinis_taprobanus%29.jpg',
 		photo_credit: 'Charles J. Sharp · CC BY-SA 4.0',
 		name_en: 'Yellow-billed Babbler',
 		scientific: 'Argya affinis',
