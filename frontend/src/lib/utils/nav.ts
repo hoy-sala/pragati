@@ -2,7 +2,7 @@ import type { ComponentType } from 'svelte';
 import {
 	GraduationCap, CalendarDays, House,
 	ClipboardCheck, ClipboardList, Table, FileSpreadsheet,
-	FileText, Settings, Heart, HelpCircle, User, Award
+	FileText, Settings, Heart, HelpCircle, User, Award, Bird
 } from 'lucide-svelte';
 import type { User as UserType, Student } from '$lib/types';
 import { effectiveRole } from '$lib/utils/roles';
@@ -53,6 +53,12 @@ export const NAV_SECTIONS: NavSection[] = [
 		items: [
 			{ href: '/reports', label: 'Reports', icon: FileText, roles: ['admin', 'principal', 'teacher', 'student', 'parent'] },
 			{ href: '/certificates', label: 'Certificates', icon: Award, roles: ['admin'] },
+		]
+	},
+	{
+		label: 'Explore',
+		items: [
+			{ href: '/birds', label: 'Bird Catalog', icon: Bird, roles: ['admin', 'principal', 'teacher', 'special_educator', 'student', 'parent'] },
 		]
 	},
 	{
@@ -112,7 +118,7 @@ export function roleTitle(role: string): string {
 /** Bottom-tab priority for the mobile app bar. First 4 visible to the role win. */
 const BOTTOM_TAB_ORDER = [
 	'/home', '/marks', '/students', '/reports', '/mentors', '/assessments',
-	'/timetable', '/quizzes', '/questions', '/hpc', '/certificates', '/settings',
+	'/timetable', '/quizzes', '/questions', '/hpc', '/certificates', '/settings', '/birds',
 ];
 
 export function bottomTabs(role: string): NavItem[] {

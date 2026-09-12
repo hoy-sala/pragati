@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { staffLogin, studentLogin } from '$lib/stores/auth.svelte';
 	import { goto } from '$app/navigation';
-	import { Key, Hash, Calendar, Shield, ArrowLeft, Gamepad2, CalendarDays, LogIn, Building2, Users, GraduationCap, Info } from 'lucide-svelte';
+	import { Key, Hash, Calendar, Shield, ArrowLeft, Gamepad2, CalendarDays, LogIn, Building2, Users, GraduationCap, Info, Bird } from 'lucide-svelte';
 
 	type View = 'home' | 'login';
 	let view = $state<View>('home');
@@ -57,9 +57,9 @@
 
 	{#if view === 'home'}
 		<div class="intro intro-kids">
-			<div class="kids-art" aria-hidden="true"><span class="ka ka1">🎮</span><span class="ka ka2">⭐</span><span class="ka ka3">📚</span></div>
+			<div class="kids-art" aria-hidden="true"><span class="ka ka1">🎮</span><span class="ka ka2">⭐</span><span class="ka ka3">📚</span><span class="ka ka4">🐦</span></div>
 			<h1 class="intro-title"><em>Let's play</em> & learn!</h1>
-			<p class="intro-sub">Pick a quiz, check your timetable, or sign in — all yours.</p>
+			<p class="intro-sub">Pick a quiz, spot a bird, check your timetable, or sign in — all yours.</p>
 		</div>
 
 		<div class="card-grid">
@@ -83,6 +83,17 @@
 				<h2 class="card-title">Timetable</h2>
 				<p class="card-desc">Your week at a glance — simple and clear.</p>
 				<span class="card-cta cta-ghost">View week <span aria-hidden="true">→</span></span>
+			</a>
+
+			<!-- Bird Catalog -->
+			<a href="/birds" class="card card-birds">
+				<div class="card-head">
+					<span class="eyebrow">Campus · 24 birds</span>
+					<span class="icon-badge badge-sky"><Bird size={20} /></span>
+				</div>
+				<h2 class="card-title">Bird Catalog</h2>
+				<p class="card-desc">Know every feathered neighbour — spot, identify, and tick them off.</p>
+				<span class="card-cta">Start spotting <span aria-hidden="true">→</span></span>
 			</a>
 
 			<!-- Sign in -->
@@ -262,6 +273,7 @@
 	.ka1 { background: var(--amber); --r: -6deg; transform: rotate(var(--r)); animation-delay: 0s; }
 	.ka2 { background: var(--mint); --r: 5deg; transform: rotate(var(--r)); animation-delay: 0.4s; }
 	.ka3 { background: var(--paper); --r: -3deg; transform: rotate(var(--r)); animation-delay: 0.8s; }
+	.ka4 { background: #D8EDFA; --r: 4deg; transform: rotate(var(--r)); animation-delay: 1.2s; }
 	@keyframes kaFloat { 0%,100% { transform: translateY(0) rotate(var(--r)); } 50% { transform: translateY(-4px) rotate(var(--r)); } }
 	.intro-title {
 		font-family: var(--font-display);
@@ -281,10 +293,11 @@
 	}
 	.card-grid {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(4, 1fr);
 		gap: 1rem;
 		align-items: stretch;
 	}
+	@media (max-width: 1100px) { .card-grid { grid-template-columns: repeat(2, 1fr); } }
 	@media (max-width: 860px) { .card-grid { grid-template-columns: 1fr; } .site-header { flex-wrap: wrap; } }
 	.card {
 		background: var(--paper);
@@ -319,6 +332,7 @@
 	.badge-amber { background: var(--amber); }
 	.badge-mint { background: var(--mint); }
 	.badge-plum { background: #EDE9FE; }
+	.badge-sky { background: #D8EDFA; }
 	.card-quiz { background: var(--paper); }
 	.card-tt { background: var(--paper); }
 	.card-title {

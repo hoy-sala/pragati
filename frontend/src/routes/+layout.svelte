@@ -18,7 +18,7 @@
   const auth = getAuthState();
   let navOpen = $state(false);
 
-  const publicRoutes = ["/login", "/timetable", "/play"];
+  const publicRoutes = ["/login", "/timetable", "/play", "/birds"];
 
   function isFullscreenRoute(path: string): boolean {
     return (
