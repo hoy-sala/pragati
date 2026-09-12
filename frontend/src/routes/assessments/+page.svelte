@@ -154,7 +154,7 @@
 			</EmptyState>
 		{:else}
 			<div class="overflow-x-auto">
-				<table class="w-full text-sm">
+				<table class="w-full text-sm min-w-[760px]">
 					<thead>
 						<tr class="bg-slate-50 border-b border-slate-200">
 							<th class="px-4 py-2.5 text-left font-semibold text-slate-600">Assessment</th>

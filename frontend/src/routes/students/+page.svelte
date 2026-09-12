@@ -832,7 +832,7 @@
       </div>
     </div>
     <div class="overflow-x-auto">
-      <table class="w-full text-sm">
+      <table class="w-full text-sm min-w-[620px]">
         <thead>
           <tr class="bg-slate-50 text-slate-600">
             <th

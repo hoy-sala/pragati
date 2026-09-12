@@ -14,7 +14,7 @@
 	} = $props();
 </script>
 
-<div class="flex items-center justify-between gap-3">
+<div class="flex flex-wrap items-center justify-between gap-3">
 	<div class="flex items-center gap-3 min-w-0">
 		{#if icon}
 			{@render icon()}

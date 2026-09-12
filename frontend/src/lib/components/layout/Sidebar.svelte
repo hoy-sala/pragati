@@ -1,124 +1,33 @@
 <script lang="ts">
 	import { getAuthState, logout } from '$lib/stores/auth.svelte';
 	import { page } from '$app/stores';
+	import { LogOut, GraduationCap } from 'lucide-svelte';
 	import {
-		LogOut, GraduationCap, CalendarDays, House,
-		ClipboardCheck, ClipboardList, Table, FileSpreadsheet,
-		FileText, Settings, Heart, HelpCircle, User, Award
-	} from 'lucide-svelte';
-	import type { ComponentType } from 'svelte';
-	import type { User as UserType, Student } from '$lib/types';
+		NAV_SECTIONS, visibleSections, isNavActive, allHrefs,
+		userDisplayName, userInitials, roleTitle, effectiveRole,
+		type NavItem
+	} from '$lib/utils/nav';
 
 	const auth = getAuthState();
 
-	const roleLabels: Record<string, string> = {
-		admin: 'Administrator', principal: 'Principal', teacher: 'Teacher',
-		special_educator: 'Special Educator', student: 'Student', parent: 'Parent',
-	};
-
-	let displayName = $derived(
-		auth.currentUser
-			? (auth.currentUser as Student).first_name
-				? `${(auth.currentUser as Student).first_name} ${(auth.currentUser as Student).last_name || ''}`.trim()
-				: (auth.currentUser as UserType).name
-			: ''
-	);
-
-	let effectiveRole = $derived(
-		auth.currentUser
-			? (auth.currentUser as Student).first_name
-				? 'student'
-				: (auth.currentUser as UserType).role
-			: ''
-	);
-
-	let initials = $derived(
-		displayName.split(' ').map(w => w[0]).filter(Boolean).slice(0, 2).join('').toUpperCase()
-	);
-
-	let displayTitle = $derived(roleLabels[effectiveRole] ?? effectiveRole.replace(/_/g, ' '));
+	let role = $derived(effectiveRole(auth.currentUser));
+	let displayName = $derived(userDisplayName(auth.currentUser));
+	let initials = $derived(userInitials(displayName));
+	let displayTitle = $derived(roleTitle(role));
 
 	let roleBadgeColor = $derived(
-		effectiveRole === 'admin' ? 'bg-purple-100 text-purple-700' :
-		effectiveRole === 'principal' ? 'bg-blue-100 text-blue-700' :
-		effectiveRole === 'teacher' ? 'bg-amber-100 text-amber-700' :
-		effectiveRole === 'student' ? 'bg-emerald-100 text-emerald-700' :
+		role === 'admin' ? 'bg-purple-100 text-purple-700' :
+		role === 'principal' ? 'bg-blue-100 text-blue-700' :
+		role === 'teacher' ? 'bg-amber-100 text-amber-700' :
+		role === 'student' ? 'bg-emerald-100 text-emerald-700' :
 		'bg-slate-100 text-slate-600'
 	);
 
-	type NavItem = {
-		href: string;
-		label: string;
-		icon: ComponentType;
-		roles: string[];
-	};
-
-	type NavSection = {
-		label?: string;
-		items: NavItem[];
-	};
-
-	const navSections: NavSection[] = [
-		{
-			items: [
-				{ href: '/home', label: 'Home', icon: House, roles: ['admin', 'principal', 'teacher', 'special_educator'] },
-			]
-		},
-		{
-			label: 'Academic',
-			items: [
-				{ href: '/timetable', label: 'Time Table', icon: CalendarDays, roles: ['admin', 'principal', 'teacher', 'special_educator', 'student', 'parent'] },
-				{ href: '/students', label: 'Students', icon: User, roles: ['admin', 'principal', 'teacher'] },
-			]
-		},
-		{
-			label: 'Assessment',
-			items: [
-				{ href: '/assessments', label: 'Assessments', icon: ClipboardCheck, roles: ['admin', 'principal', 'teacher'] },
-				{ href: '/marks', label: 'Marks Entry', icon: Table, roles: ['admin', 'principal', 'teacher'] },
-				{ href: '/questions', label: 'Question Bank', icon: HelpCircle, roles: ['admin', 'principal', 'teacher'] },
-				{ href: '/quizzes', label: 'Quizzes', icon: ClipboardList, roles: ['admin', 'principal', 'teacher'] },
-			]
-		},
-		{
-			label: 'Student Welfare',
-			items: [
-				{ href: '/mentors', label: 'Mentors', icon: Heart, roles: ['admin', 'principal', 'teacher', 'special_educator'] },
-				{ href: '/hpc', label: 'HPC Cards', icon: FileSpreadsheet, roles: ['admin', 'principal', 'teacher'] },
-			]
-		},
-		{
-			label: 'Reports',
-			items: [
-				{ href: '/reports', label: 'Reports', icon: FileText, roles: ['admin', 'principal', 'teacher', 'student', 'parent'] },
-				{ href: '/certificates', label: 'Certificates', icon: Award, roles: ['admin'] },
-			]
-		},
-		{
-			label: 'System',
-			items: [
-				{ href: '/settings', label: 'Settings', icon: Settings, roles: ['admin'] },
-			]
-		},
-	];
-
-	let visibleSections = $derived(
-		navSections
-			.map(section => ({
-				label: section.label,
-				items: section.items.filter(item => item.roles.includes(effectiveRole)),
-			}))
-			.filter(section => section.items.length > 0)
-	);
+	let sections = $derived(visibleSections(role));
+	let hrefs = $derived(allHrefs(NAV_SECTIONS));
 
 	function isActive(href: string): boolean {
-		const path = $page.url.pathname;
-		if (path === href) return true;
-		if (!path.startsWith(href + '/')) return false;
-		const longer = navSections
-			.flatMap(s => s.items.map(i => i.href))
-			.some(h => h !== href && h.length > href.length && (path === h || path.startsWith(h + '/')));
-		return !longer;
+		return isNavActive(href, $page.url.pathname, $page.url.search, hrefs);
 	}
 
 	function isSectionActive(items: NavItem[]): boolean {
@@ -126,7 +35,7 @@
 	}
 </script>
 
-<aside class="w-60 bg-white border-r border-slate-200 flex flex-col h-full no-print">
+<aside class="w-60 bg-white border-r border-slate-200 hidden md:flex flex-col h-full no-print">
 	<div class="px-4 py-4 border-b border-slate-200">
 		<div class="flex items-center gap-3">
 			<div class="w-9 h-9 rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center shrink-0">
@@ -140,7 +49,7 @@
 	</div>
 
 	<nav class="flex-1 overflow-y-auto px-2 py-3 space-y-5 scrollbar-none">
-		{#each visibleSections as section}
+		{#each sections as section}
 			<div>
 				{#if section.label}
 					<div class="px-2 mb-1.5 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">

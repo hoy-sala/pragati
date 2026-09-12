@@ -417,7 +417,8 @@
         placeholder="Search events by name, venue, or category..."
       />
     </div>
-    <table class="w-full text-sm">
+    <div class="overflow-x-auto">
+    <table class="w-full text-sm min-w-[560px]">
       <thead>
         <tr class="bg-slate-50 text-slate-600">
           <th class="text-left px-4 py-3 font-medium">Event</th>
@@ -587,7 +588,7 @@
                         <div
                           class="overflow-x-auto bg-white border border-slate-200 rounded-lg"
                         >
-                          <table class="w-full text-sm">
+                          <table class="w-full text-sm min-w-[520px]">
                             <thead>
                               <tr class="bg-slate-50 text-slate-600">
                                 <th class="text-left px-3 py-2 font-medium"
@@ -706,5 +707,6 @@
         {/if}
       </tbody>
     </table>
+    </div>
   </div>
 </div>

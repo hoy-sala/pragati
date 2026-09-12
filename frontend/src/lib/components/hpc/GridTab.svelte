@@ -224,7 +224,7 @@
         placeholder="Search by name or SATS..."
       />
     </div>
-    <table class="w-full text-sm">
+    <table class="w-full text-sm min-w-[560px]">
       <thead>
         <tr class="bg-slate-50 text-slate-600">
           <th class="text-left px-4 py-3 font-medium">#</th>
