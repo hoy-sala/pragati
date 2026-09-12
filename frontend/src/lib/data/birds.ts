@@ -16,6 +16,10 @@ export interface Bird {
 	name_kn_note?: string;
 	scientific: string;
 	ebird: string;
+	photo_url?: string;
+	photo_credit?: string;
+	audio_url?: string;
+	audio_credit?: string;
 	size: BirdSize;
 	colors: string[];
 	shape: BirdShapeKind;
@@ -384,6 +388,10 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'indian-roller',
 		ebird: 'indrol2',
+		photo_url: 'https://picsum.photos/seed/roller/800/450',
+		photo_credit: 'TEST — will be removed',
+		audio_url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+		audio_credit: 'TEST — will be removed',
 		name_en: 'Indian Roller',
 		name_kn: 'ನೀಲಕಂಠ',
 		scientific: 'Coracias benghalensis',

@@ -227,10 +227,24 @@
   <Modal bind:open={detailOpen} title={selected.name_en} maxWidth="max-w-lg">
     <div class="space-y-4">
       <div
-        class="rounded-2xl h-44 flex items-center justify-center relative"
+        class="rounded-2xl h-44 flex items-center justify-center relative overflow-hidden"
         style="background: linear-gradient(135deg, {selected.tile[0]}, {selected.tile[1]})"
       >
-        <BirdShape shape={selected.shape} {...shapeProps(selected)} class="w-32 h-32 text-slate-800/90" />
+        {#if selected.photo_url}
+          <img
+            src={selected.photo_url}
+            alt={selected.name_en}
+            class="absolute inset-0 w-full h-full object-cover"
+            loading="lazy"
+          />
+        {:else}
+          <BirdShape shape={selected.shape} {...shapeProps(selected)} class="w-32 h-32 text-slate-800/90" />
+        {/if}
+        {#if selected.photo_credit}
+          <span class="absolute bottom-2 right-2 text-[10px] px-1.5 py-0.5 rounded bg-black/55 text-white">
+            © {selected.photo_credit}
+          </span>
+        {/if}
       {#if selected && spotted.includes(selected.id)}
           <span class="absolute top-3 right-3 flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500 text-white">
             <Check size={13} strokeWidth={3} /> Spotted
@@ -267,7 +281,15 @@
         </ul>
       </div>
 
-      {#if selected.call}
+      {#if selected.audio_url}
+        <div class="bg-slate-900 rounded-xl px-3 py-2.5 space-y-1">
+          <div class="flex items-center gap-2 text-xs text-slate-300">
+            <Volume2 size={14} />
+            <span>Hear it{#if selected.audio_credit} · © {selected.audio_credit}{/if}</span>
+          </div>
+          <audio controls preload="none" src={selected.audio_url} class="w-full h-8"></audio>
+        </div>
+      {:else if selected.call}
         <div class="flex items-start gap-2 text-sm bg-amber-50 border border-amber-200 rounded-xl px-3 py-2.5">
           <Volume2 size={16} class="text-amber-600 shrink-0 mt-0.5" />
           <span class="text-slate-700"><strong>Listen for:</strong> {selected.call}</span>
