@@ -2,7 +2,11 @@
 	import { api } from '$lib/api/client.svelte';
 	import type { QuizResultData } from '$lib/types';
 	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import { ListChecks } from 'lucide-svelte';
+	import Button from '$lib/components/Button.svelte';
+	import EmptyState from '$lib/components/EmptyState.svelte';
 	import MathText from '$lib/components/MathText.svelte';
 
 	const attemptId = $page.params.attemptId;
@@ -20,21 +24,21 @@
 	let scorePct = $derived(result ? Math.round((result.total_awarded / result.total_marks) * 100) : 0);
 </script>
 
-<div class="max-w-3xl mx-auto space-y-6">
+<div class="max-w-2xl mx-auto space-y-6 px-4 md:px-0 pb-4">
 	{#if loading}
 		<div class="p-8 text-center text-sm text-slate-400">Loading...</div>
 	{:else if !result}
-		<div class="p-8 text-center text-sm text-slate-400">Result not found.</div>
+		<EmptyState title="Result not found." />
 	{:else}
-		<div class="bg-white rounded-xl border border-slate-200 p-6 text-center space-y-3">
-			<div class="inline-flex items-center justify-center w-20 h-20 rounded-full {passed ? 'bg-green-100' : 'bg-danger-100'}">
-				<span class="text-3xl font-bold {passed ? 'text-green-700' : 'text-danger-700'}">{scorePct}%</span>
+		<div class="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 text-center space-y-3 shadow-sm">
+			<div class="inline-flex items-center justify-center w-24 h-24 rounded-full {passed ? 'bg-green-100' : 'bg-danger-100'}">
+				<span class="text-4xl font-bold {passed ? 'text-green-700' : 'text-danger-700'}">{scorePct}%</span>
 			</div>
-			<h1 class="text-2xl font-bold text-slate-900">{result.quiz.title}</h1>
-			<div class="flex justify-center gap-6 text-sm text-slate-500">
+			<h1 class="text-xl sm:text-2xl font-bold text-slate-900">{result.quiz.title}</h1>
+			<div class="flex flex-wrap justify-center gap-x-6 gap-y-1 text-sm text-slate-500">
 				<span>Score: {result.total_awarded}/{result.total_marks}</span>
 				<span>Pass: {result.quiz.pass_pct}%</span>
-				<span>{passed ? 'Passed' : 'Failed'}</span>
+				<span class="font-semibold {passed ? 'text-green-700' : 'text-danger-600'}">{passed ? 'Passed' : 'Failed'}</span>
 			</div>
 		</div>
 
@@ -79,10 +83,10 @@
 			{/each}
 		</div>
 
-		<div class="flex gap-3">
-			<a href="/quizzes/available" class="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50">
+		<div class="flex flex-col sm:flex-row gap-3">
+			<Button variant="secondary" icon={ListChecks} onclick={() => goto('/quizzes/available')}>
 				Back to Quizzes
-			</a>
+			</Button>
 		</div>
 	{/if}
 </div>
