@@ -22,14 +22,12 @@
 		open = false;
 	}
 
+	let lastUrl = $state('');
 	$effect(() => {
-		// Close the sheet whenever navigation happens.
-		void $page.url.pathname;
-		void $page.url.search;
-		if (open) {
-			const t = setTimeout(() => { open = false; }, 50);
-			return () => clearTimeout(t);
-		}
+		// Close the sheet whenever navigation happens (backstop; links close it directly).
+		const url = $page.url.pathname + $page.url.search;
+		if (lastUrl !== '' && url !== lastUrl) open = false;
+		lastUrl = url;
 	});
 </script>
 
@@ -66,6 +64,7 @@
 						{#each section.items as item (item.href)}
 							<a
 								href={item.href}
+								onclick={close}
 								class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-[15px] transition-colors {isActive(item.href)
 									? 'bg-primary-50 text-primary-700 font-medium'
 									: 'text-slate-700 active:bg-slate-100'}"
