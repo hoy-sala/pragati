@@ -15,6 +15,7 @@ export interface Bird {
 	name_kn?: string;
 	name_kn_note?: string;
 	scientific: string;
+	ebird: string;
 	size: BirdSize;
 	colors: string[];
 	shape: BirdShapeKind;
@@ -40,6 +41,7 @@ export const BIRD_COLORS = [
 export const BIRDS: Bird[] = [
 	{
 		id: 'house-crow',
+		ebird: 'houcro1',
 		name_en: 'House Crow',
 		name_kn: 'ಕಾಗೆ',
 		scientific: 'Corvus splendens',
@@ -55,6 +57,7 @@ export const BIRDS: Bird[] = [
 	},
 	{
 		id: 'common-myna',
+		ebird: 'commyn',
 		name_en: 'Common Myna',
 		name_kn: 'ಮೈನಾ',
 		scientific: 'Acridotheres tristis',
@@ -70,6 +73,7 @@ export const BIRDS: Bird[] = [
 	},
 	{
 		id: 'house-sparrow',
+		ebird: 'houspa',
 		name_en: 'House Sparrow',
 		name_kn: 'ಗುಬ್ಬಚ್ಚಿ',
 		scientific: 'Passer domesticus',
@@ -85,6 +89,7 @@ export const BIRDS: Bird[] = [
 	},
 	{
 		id: 'rose-ringed-parakeet',
+		ebird: 'rorpar',
 		name_en: 'Rose-ringed Parakeet',
 		name_kn: 'ಗಿಳಿ',
 		scientific: 'Psittacula krameri',
@@ -100,6 +105,7 @@ export const BIRDS: Bird[] = [
 	},
 	{
 		id: 'rock-pigeon',
+		ebird: 'rocpig',
 		name_en: 'Rock Pigeon',
 		name_kn: 'ಪಾರಿವಾಳ',
 		scientific: 'Columba livia',
@@ -115,6 +121,7 @@ export const BIRDS: Bird[] = [
 	},
 	{
 		id: 'spotted-dove',
+		ebird: 'spodov',
 		name_en: 'Spotted Dove',
 		scientific: 'Spilopelia chinensis',
 		size: 'M',
@@ -129,6 +136,7 @@ export const BIRDS: Bird[] = [
 	},
 	{
 		id: 'asian-koel',
+		ebird: 'asikoe2',
 		name_en: 'Asian Koel',
 		name_kn: 'ಕೋಗಿಲೆ',
 		scientific: 'Eudynamys scolopaceus',
@@ -144,6 +152,7 @@ export const BIRDS: Bird[] = [
 	},
 	{
 		id: 'greater-coucal',
+		ebird: 'grecou1',
 		name_en: 'Greater Coucal',
 		name_kn: 'ಕೆಂಭೂತ',
 		scientific: 'Centropus sinensis',
@@ -159,6 +168,7 @@ export const BIRDS: Bird[] = [
 	},
 	{
 		id: 'common-hoopoe',
+		ebird: 'hoopoe',
 		name_en: 'Common Hoopoe',
 		scientific: 'Upupa epops',
 		size: 'M',
@@ -173,6 +183,7 @@ export const BIRDS: Bird[] = [
 	},
 	{
 		id: 'coppersmith-barbet',
+		ebird: 'copbar1',
 		name_en: 'Coppersmith Barbet',
 		scientific: 'Psilopogon haemacephalus',
 		size: 'S',
@@ -187,6 +198,7 @@ export const BIRDS: Bird[] = [
 	},
 	{
 		id: 'black-drongo',
+		ebird: 'bladro1',
 		name_en: 'Black Drongo',
 		scientific: 'Dicrurus macrocercus',
 		size: 'M',
@@ -201,6 +213,7 @@ export const BIRDS: Bird[] = [
 	},
 	{
 		id: 'red-whiskered-bulbul',
+		ebird: 'rewbul',
 		name_en: 'Red-whiskered Bulbul',
 		name_kn: 'ಜುಟ್ಟಿನ ಹಕ್ಕಿ',
 		scientific: 'Pycnonotus jocosus',
@@ -216,6 +229,7 @@ export const BIRDS: Bird[] = [
 	},
 	{
 		id: 'red-vented-bulbul',
+		ebird: 'revbul',
 		name_en: 'Red-vented Bulbul',
 		scientific: 'Pycnonotus cafer',
 		size: 'M',
@@ -230,6 +244,7 @@ export const BIRDS: Bird[] = [
 	},
 	{
 		id: 'purple-sunbird',
+		ebird: 'pursun4',
 		name_en: 'Purple Sunbird',
 		scientific: 'Cinnyris asiaticus',
 		size: 'S',
@@ -244,6 +259,7 @@ export const BIRDS: Bird[] = [
 	},
 	{
 		id: 'common-tailorbird',
+		ebird: 'comtai1',
 		name_en: 'Common Tailorbird',
 		scientific: 'Orthotomus sutorius',
 		size: 'S',
@@ -258,6 +274,7 @@ export const BIRDS: Bird[] = [
 	},
 	{
 		id: 'oriental-magpie-robin',
+		ebird: 'magrob',
 		name_en: 'Oriental Magpie-Robin',
 		scientific: 'Copsychus saularis',
 		size: 'M',
@@ -272,6 +289,7 @@ export const BIRDS: Bird[] = [
 	},
 	{
 		id: 'black-kite',
+		ebird: 'blakit1',
 		name_en: 'Black Kite',
 		name_kn: 'ಗಿಡುಗ',
 		scientific: 'Milvus migrans',
@@ -287,6 +305,7 @@ export const BIRDS: Bird[] = [
 	},
 	{
 		id: 'spotted-owlet',
+		ebird: 'spoowl1',
 		name_en: 'Spotted Owlet',
 		name_kn: 'ಗೂಬೆ',
 		scientific: 'Athene brama',
@@ -302,6 +321,7 @@ export const BIRDS: Bird[] = [
 	},
 	{
 		id: 'indian-peafowl',
+		ebird: 'compea',
 		name_en: 'Indian Peafowl',
 		name_kn: 'ನವಿಲು',
 		scientific: 'Pavo cristatus',
@@ -317,6 +337,7 @@ export const BIRDS: Bird[] = [
 	},
 	{
 		id: 'red-wattled-lapwing',
+		ebird: 'rewlap1',
 		name_en: 'Red-wattled Lapwing',
 		name_kn: 'ಟಿಟ್ಟಿಬ',
 		scientific: 'Vanellus indicus',
@@ -332,7 +353,8 @@ export const BIRDS: Bird[] = [
 	},
 	{
 		id: 'green-bee-eater',
-		name_en: 'Green Bee-eater',
+		name_en: 'Asian Green Bee-eater',
+		ebird: 'grnbee3',
 		scientific: 'Merops orientalis',
 		size: 'S',
 		colors: ['green'],
@@ -346,6 +368,7 @@ export const BIRDS: Bird[] = [
 	},
 	{
 		id: 'white-throated-kingfisher',
+		ebird: 'whtkin2',
 		name_en: 'White-throated Kingfisher',
 		scientific: 'Halcyon smyrnensis',
 		size: 'M',
@@ -360,6 +383,7 @@ export const BIRDS: Bird[] = [
 	},
 	{
 		id: 'indian-roller',
+		ebird: 'indrol2',
 		name_en: 'Indian Roller',
 		name_kn: 'ನೀಲಕಂಠ',
 		scientific: 'Coracias benghalensis',
@@ -375,6 +399,7 @@ export const BIRDS: Bird[] = [
 	},
 	{
 		id: 'yellow-billed-babbler',
+		ebird: 'yebbab1',
 		name_en: 'Yellow-billed Babbler',
 		scientific: 'Argya affinis',
 		size: 'M',

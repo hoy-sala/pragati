@@ -6,7 +6,7 @@
   import SearchFilter from "$lib/components/SearchFilter.svelte";
   import Modal from "$lib/components/Modal.svelte";
   import EmptyState from "$lib/components/EmptyState.svelte";
-  import { Check, Eye, Sparkles, Volume2, MapPin, ListChecks, Bird } from "lucide-svelte";
+  import { Check, Eye, Sparkles, Volume2, MapPin, ListChecks, Bird, ExternalLink, Telescope, Smartphone, Camera } from "lucide-svelte";
   import { onMount } from "svelte";
 
   const SPOTTED_KEY = "pragati:birds:spotted";
@@ -163,6 +163,64 @@
       {/each}
     </div>
   {/if}
+
+  <div>
+    <h2 class="text-sm font-semibold text-slate-800 mb-3">Go further with Cornell Lab</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col gap-2">
+        <Telescope size={20} class="text-primary-600" />
+        <div class="text-sm font-semibold text-slate-800">eBird Karnataka</div>
+        <p class="text-xs text-slate-500 flex-1">See what birders across Karnataka report — real sightings near you, updated daily.</p>
+        <a
+          href="https://ebird.org/region/IN-KA"
+          target="_blank"
+          rel="noreferrer"
+          class="inline-flex items-center gap-1.5 text-xs font-semibold text-primary-700 hover:text-primary-800"
+        >
+          Explore sightings <ExternalLink size={13} />
+        </a>
+      </div>
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col gap-2">
+        <Smartphone size={20} class="text-primary-600" />
+        <div class="text-sm font-semibold text-slate-800">Merlin Bird ID — free app</div>
+        <p class="text-xs text-slate-500 flex-1">Point your phone at a bird or record its song — Merlin identifies it. Made by Cornell Lab.</p>
+        <div class="flex flex-wrap gap-2">
+          <a
+            href="https://play.google.com/store/apps/details?id=com.labs.merlinbirdid.app"
+            target="_blank"
+            rel="noreferrer"
+            class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-900 text-white hover:bg-slate-700 transition-colors"
+          >
+            Android <ExternalLink size={13} />
+          </a>
+          <a
+            href="https://apps.apple.com/us/app/merlin-bird-id-by-cornell-lab/id773457673"
+            target="_blank"
+            rel="noreferrer"
+            class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 transition-colors"
+          >
+            iPhone <ExternalLink size={13} />
+          </a>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 flex flex-col gap-2">
+        <Camera size={20} class="text-primary-600" />
+        <div class="text-sm font-semibold text-slate-800">Macaulay Library</div>
+        <p class="text-xs text-slate-500 flex-1">The world's largest archive of bird photos, calls and videos — every eBird photo lives here.</p>
+        <a
+          href="https://www.macaulaylibrary.org"
+          target="_blank"
+          rel="noreferrer"
+          class="inline-flex items-center gap-1.5 text-xs font-semibold text-primary-700 hover:text-primary-800"
+        >
+          Browse the archive <ExternalLink size={13} />
+        </a>
+      </div>
+    </div>
+    <p class="text-[11px] text-slate-400 mt-3 text-center">
+      Species pages cross-checked with eBird · Cornell Lab of Ornithology
+    </p>
+  </div>
 </div>
 
 {#if selected}
@@ -229,6 +287,17 @@
       <p class="text-sm text-slate-600 border-l-4 border-emerald-400 pl-3">
         <strong>Spotter tip:</strong> {selected.tip}
       </p>
+
+      <a
+        href="https://ebird.org/species/{selected.ebird}"
+        target="_blank"
+        rel="noreferrer"
+        class="flex items-center justify-center gap-2 w-full px-3.5 py-2 text-sm font-medium rounded-lg bg-slate-900 text-white hover:bg-slate-700 active:bg-slate-800 transition-colors"
+      >
+        <ExternalLink size={16} />
+        Photos, calls & range map on eBird
+      </a>
+      <p class="text-[11px] text-slate-400 text-center -mt-2">Species data: eBird · Cornell Lab of Ornithology</p>
     </div>
     {#snippet footer()}
       <Button variant="ghost" onclick={() => (detailOpen = false)}>Close</Button>
