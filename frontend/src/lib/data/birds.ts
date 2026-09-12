@@ -388,10 +388,6 @@ export const BIRDS: Bird[] = [
 	{
 		id: 'indian-roller',
 		ebird: 'indrol2',
-		photo_url: 'https://picsum.photos/seed/roller/800/450',
-		photo_credit: 'TEST — will be removed',
-		audio_url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-		audio_credit: 'TEST — will be removed',
 		name_en: 'Indian Roller',
 		name_kn: 'ನೀಲಕಂಠ',
 		scientific: 'Coracias benghalensis',
