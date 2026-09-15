@@ -105,7 +105,7 @@
                 src={KA_PHOTOS[b.code].photo}
                 alt={b.com}
                 loading="lazy"
-                class="w-full h-full object-cover transition-transform group-hover:scale-105"
+                class="w-full h-full object-contain p-1 transition-transform group-hover:scale-105"
               />
             {:else}
               <BirdShape shape={b.shape} class="w-16 h-16 sm:w-20 sm:h-20 text-slate-700/80 transition-transform group-hover:scale-105" />
@@ -187,11 +187,11 @@
   <Modal bind:open={kaOpen} title={kaSelected.com} maxWidth="max-w-lg">
     <div class="space-y-4">
       {#if KA_PHOTOS[kaSelected.code]}
-        <div class="relative rounded-2xl h-44 overflow-hidden">
+        <div class="relative rounded-2xl h-48 sm:h-60 bg-gradient-to-br from-emerald-50 to-teal-100 overflow-hidden">
           <img
             src={KA_PHOTOS[kaSelected.code].photo}
             alt={kaSelected.com}
-            class="absolute inset-0 w-full h-full object-cover"
+            class="absolute inset-0 w-full h-full object-contain p-2"
           />
           <span class="absolute bottom-2 right-2 text-[10px] px-1.5 py-0.5 rounded bg-black/60 text-white truncate max-w-[80%]">
             © {KA_PHOTOS[kaSelected.code].credit}
