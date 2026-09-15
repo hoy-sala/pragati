@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { BirdShapeKind } from '$lib/data/birds';
+	import type { BirdShapeKind } from '$lib/data/kaBirds';
 
 	let {
 		shape,

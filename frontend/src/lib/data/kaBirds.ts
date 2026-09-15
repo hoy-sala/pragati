@@ -2,7 +2,10 @@
 // + ref/taxonomy/ebird). Local static snapshot; runtime never calls eBird.
 // Photos intentionally omitted (Macaulay media is bot-protected) — silhouettes only.
 
-import type { BirdShapeKind } from './birds';
+export type BirdShapeKind =
+	| 'songbird' | 'crow' | 'parrot' | 'dove' | 'longtail' | 'hoopoe'
+	| 'barbet' | 'drongo' | 'sunbird' | 'owl' | 'raptor' | 'wader'
+	| 'kingfisher' | 'slim' | 'peafowl';
 
 export interface KaBird {
 	code: string;
