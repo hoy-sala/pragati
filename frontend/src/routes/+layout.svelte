@@ -20,6 +20,10 @@
 
   const publicRoutes = ["/login", "/timetable", "/play", "/birds"];
 
+  function isPublicRoute(path: string): boolean {
+    return publicRoutes.includes(path) || path.startsWith("/birds/");
+  }
+
   function isFullscreenRoute(path: string): boolean {
     return (
       path.startsWith("/quizzes/take") ||
@@ -38,7 +42,7 @@
   $effect(() => {
     if (!auth.isLoading && !auth.isAuthenticated) {
       const path = $page.url.pathname;
-      if (!publicRoutes.includes(path) && path !== "/") {
+      if (!isPublicRoute(path) && path !== "/") {
         goto("/login");
       }
     }
