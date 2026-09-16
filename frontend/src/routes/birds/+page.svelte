@@ -1,6 +1,6 @@
 <script lang="ts">
   import { KA_BIRDS, KA_FAMILIES, KA_REGION, type KaBird } from "$lib/data/kaBirds";
-  import { KA_PHOTOS } from "$lib/data/kaPhotos";
+  import { KA_PHOTOS, KA_PHOTO_COUNT } from "$lib/data/kaPhotos";
   import BirdShape from "$lib/components/BirdShape.svelte";
   import Button from "$lib/components/Button.svelte";
   import Select from "$lib/components/Select.svelte";
@@ -8,9 +8,10 @@
   import Modal from "$lib/components/Modal.svelte";
   import EmptyState from "$lib/components/EmptyState.svelte";
   import Pagination from "$lib/components/Pagination.svelte";
-  import { Bird, ExternalLink, BarChart3 } from "lucide-svelte";
+  import { Bird, Layers, Camera, ExternalLink } from "lucide-svelte";
 
   const KA_PAGE_SIZE = 40;
+  const kaFamilyCount = new Set(KA_BIRDS.map((b) => b.family)).size;
   let kaSearch = $state("");
   let kaFamily = $state("");
   let kaPage = $state(1);
@@ -25,14 +26,6 @@
       return b.com.toLowerCase().includes(q) || b.sci.toLowerCase().includes(q) || b.family.toLowerCase().includes(q);
     }).sort((a, b) => a.com.localeCompare(b.com))
   );
-  let kaFamilyStats = $derived(
-    (() => {
-      const m = new Map<string, number>();
-      for (const b of KA_BIRDS) m.set(b.family, (m.get(b.family) || 0) + 1);
-      return [...m.entries()].sort((a, b) => b[1] - a[1]).slice(0, 12);
-    })()
-  );
-  let kaMax = $derived(kaFamilyStats.reduce((mx, [, v]) => Math.max(mx, v), 1));
   let kaPaged = $derived(kaFiltered.slice((kaPage - 1) * KA_PAGE_SIZE, kaPage * KA_PAGE_SIZE));
   $effect(() => {
     void kaSearch;
@@ -43,36 +36,27 @@
 
 <svelte:head><title>Bird Catalog — Pragati</title></svelte:head>
 
-<div class="max-w-6xl mx-auto space-y-6">
-  <div>
-    <p class="text-xs font-semibold tracking-widest text-primary-600 uppercase">Karnataka checklist</p>
-    <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">Birds of Karnataka</h1>
-    <p class="text-sm text-slate-500 mt-1">
+<div class="max-w-6xl mx-auto space-y-8">
+  <section class="bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-600 text-white rounded-3xl px-6 py-8 sm:px-10 sm:py-12 shadow-lg">
+    <p class="text-xs font-semibold tracking-widest text-emerald-100 uppercase">Karnataka checklist</p>
+    <h1 class="text-3xl sm:text-4xl font-bold mt-2">Birds of Karnataka</h1>
+    <p class="text-sm sm:text-base text-emerald-50 mt-3 max-w-2xl leading-relaxed">
       {KA_BIRDS.length} species recorded for {KA_REGION} — mirrored once from the eBird API into this app. Nothing is sent back to eBird. Photographs by Wikimedia Commons contributors.
     </p>
-  </div>
-
-  <div class="bg-white rounded-xl border border-slate-200 p-4">
-    <h2 class="text-sm font-semibold text-slate-800 flex items-center gap-1.5 mb-3">
-      <BarChart3 size={15} class="text-primary-600" /> Species per family — top 12
-    </h2>
-    <div class="space-y-2">
-      {#each kaFamilyStats as [fam, n]}
-        <div class="flex items-center gap-3">
-          <div class="w-44 sm:w-56 shrink-0 text-xs text-slate-600 truncate" title={fam}>{fam}</div>
-          <div class="flex-1 h-4 bg-slate-100 rounded overflow-hidden">
-            <div
-              class="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded"
-              style="width:{(n / kaMax) * 100}%"
-            ></div>
-          </div>
-          <div class="w-8 shrink-0 text-xs font-semibold text-slate-600 text-right">{n}</div>
-        </div>
-      {/each}
+    <div class="flex flex-wrap gap-2.5 mt-6">
+      <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-white/15">
+        <Bird size={13} /> {KA_BIRDS.length} species
+      </span>
+      <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-white/15">
+        <Layers size={13} /> {kaFamilyCount} families
+      </span>
+      <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-white/15">
+        <Camera size={13} /> {KA_PHOTO_COUNT} photos
+      </span>
     </div>
-  </div>
+  </section>
 
-  <div class="bg-white rounded-xl border border-slate-200 p-4 no-print">
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 no-print">
     <div class="flex flex-wrap gap-3 items-end">
       <div class="flex-1 min-w-48">
         <SearchFilter bind:value={kaSearch} placeholder="Search name, scientific name, family..." />
@@ -83,21 +67,23 @@
     </div>
   </div>
 
-  <p class="text-xs font-medium text-slate-500">{kaFiltered.length} species</p>
+  <p class="text-xs font-medium text-slate-500">
+    Showing {KA_PAGE_SIZE >= kaFiltered.length ? kaFiltered.length : KA_PAGE_SIZE} of {kaFiltered.length} species
+  </p>
 
   {#if kaFiltered.length === 0}
-    <div class="bg-white rounded-xl border border-slate-200">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm">
       <EmptyState icon={Bird} title="No species match." hint="Try a different name or family." />
     </div>
   {:else}
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
       {#each kaPaged as b (b.code)}
         <button
           onclick={() => {
             kaSelected = b;
             kaOpen = true;
           }}
-          class="group text-left bg-white rounded-2xl border border-slate-200 overflow-hidden hover:border-primary-300 hover:shadow-md active:scale-[0.99] transition-all"
+          class="group text-left bg-white rounded-2xl border border-slate-200 overflow-hidden transition-all hover:border-primary-300 hover:shadow-md active:scale-[0.99] flex flex-col"
         >
           <div class="h-28 sm:h-32 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-teal-100 overflow-hidden">
             {#if KA_PHOTOS[b.code]}
@@ -111,7 +97,7 @@
               <BirdShape shape={b.shape} class="w-16 h-16 sm:w-20 sm:h-20 text-slate-700/80 transition-transform group-hover:scale-105" />
             {/if}
           </div>
-          <div class="p-3">
+          <div class="p-3 flex flex-col gap-0.5">
             <div class="text-sm font-semibold text-slate-800 leading-tight">{b.com}</div>
             <div class="text-[11px] text-slate-400 italic truncate">{b.sci}</div>
             <div class="text-[10px] text-slate-500 mt-0.5 truncate">{b.family}</div>
@@ -119,9 +105,10 @@
         </button>
       {/each}
     </div>
-    <div class="bg-white rounded-xl border border-slate-200 no-print">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm no-print">
       <Pagination page={kaPage} total={kaFiltered.length} pageSize={KA_PAGE_SIZE} onChange={(p) => (kaPage = p)} />
     </div>
+    <p class="text-[11px] text-slate-400 text-center">Photos by Wikimedia Commons contributors · click any bird for credit and species links</p>
   {/if}
 </div>
 
