@@ -1,6 +1,7 @@
 <script lang="ts">
   import { KA_BIRDS, KA_FAMILIES, KA_REGION, type KaBird } from "$lib/data/kaBirds";
   import { KA_PHOTOS, KA_PHOTO_COUNT } from "$lib/data/kaPhotos";
+  import { KA_KANNADA } from "$lib/data/kaKannada";
   import BirdShape from "$lib/components/BirdShape.svelte";
   import Button from "$lib/components/Button.svelte";
   import Select from "$lib/components/Select.svelte";
@@ -99,6 +100,9 @@
           </div>
           <div class="p-3 flex flex-col gap-0.5">
             <div class="text-sm font-semibold text-slate-800 leading-tight">{b.com}</div>
+            {#if KA_KANNADA[b.code]}
+              <div class="text-xs font-medium text-emerald-700">{KA_KANNADA[b.code]}</div>
+            {/if}
             <div class="text-[11px] text-slate-400 italic truncate">{b.sci}</div>
             <div class="text-[10px] text-slate-500 mt-0.5 truncate">{b.family}</div>
           </div>
@@ -133,6 +137,9 @@
       {/if}
 
       <div>
+        {#if KA_KANNADA[kaSelected.code]}
+          <p class="text-base font-semibold text-emerald-700">{KA_KANNADA[kaSelected.code]}</p>
+        {/if}
         <p class="text-xs text-slate-400 italic">{kaSelected.sci}</p>
         <div class="flex flex-wrap gap-1.5 mt-2">
           <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">{kaSelected.family}</span>
