@@ -137,7 +137,7 @@
 
         <div class="mt-4">
           <p class="blabel mb-1.5">Search</p>
-          <SearchFilter bind:value={kaSearch} placeholder="English, Kannada, family..." />
+          <SearchFilter bind:value={kaSearch} placeholder="Name, Kannada, family…" />
         </div>
 
         <div class="mt-4">
@@ -206,7 +206,7 @@
               href="/birds/{b.code}"
               class="bcard group flex flex-col"
             >
-              <div class="bphoto relative flex h-28 sm:h-32 items-center justify-center overflow-hidden">
+              <div class="bphoto relative flex h-32 sm:h-36 items-center justify-center overflow-hidden">
                 {#if KA_DETAILS[b.code]?.iucn && kaThreatened[KA_DETAILS[b.code].iucn]}
                   <span
                     title="IUCN: {kaThreatened[KA_DETAILS[b.code].iucn]}"
@@ -344,4 +344,32 @@
     color: var(--ink); text-decoration: underline; text-underline-offset: 2px;
   }
   .blink:hover { opacity: 0.7; }
+  /* theme-match the shared search + select controls inside the filter panel */
+  aside :global(input) {
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    background: var(--cream);
+    color: var(--ink);
+    font-weight: 600;
+  }
+  aside :global(input::placeholder) { color: var(--ink-soft); opacity: 0.55; font-weight: 500; }
+  aside :global(input:focus) {
+    background: var(--paper);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(31, 26, 46, 0.16);
+  }
+  aside :global(div[role="combobox"] > button) {
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    background: var(--cream);
+    color: var(--ink);
+    font-weight: 600;
+  }
+  aside :global(div[role="combobox"] > button:hover) { background: var(--paper); }
+  /* visible keyboard focus for custom controls */
+  .bbtn:focus-visible, .bcard:focus-visible, .bsw:focus-visible,
+  .bpolaroid:focus-visible, .blink:focus-visible {
+    outline: 3px solid var(--ink);
+    outline-offset: 2px;
+  }
 </style>

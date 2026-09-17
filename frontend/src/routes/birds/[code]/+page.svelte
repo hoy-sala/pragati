@@ -280,4 +280,9 @@
     width: 1rem; height: 1rem; border-radius: 999px;
     border: 1.5px solid var(--ink); display: inline-block;
   }
+  .bbtn:focus-visible, .bcard:focus-visible, .btab:focus-visible,
+  .bback:focus-visible {
+    outline: 3px solid var(--ink);
+    outline-offset: 2px;
+  }
 </style>
