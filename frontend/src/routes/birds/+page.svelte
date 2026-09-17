@@ -75,18 +75,34 @@
 
 <div class="mx-auto max-w-6xl space-y-6">
   <section class="bhero px-6 py-8 sm:px-10 sm:py-10">
-    <div class="flex items-center gap-3">
-      <span class="blogo"><Bird size={22} /></span>
-      <p class="text-xs font-bold tracking-widest uppercase opacity-70">Karnataka checklist</p>
-    </div>
-    <h1 class="btitle mt-3 text-3xl sm:text-4xl">Birds of Karnataka</h1>
-    <p class="mt-3 max-w-2xl text-sm sm:text-base leading-relaxed opacity-80">
-      {KA_BIRDS.length} species recorded for {KA_REGION} — mirrored once from the eBird API into this app. Nothing is sent back to eBird. Photographs by Wikimedia Commons contributors.
-    </p>
-    <div class="mt-6 flex flex-wrap gap-2.5">
-      <span class="bstat"><Bird size={13} /> {KA_BIRDS.length} species</span>
-      <span class="bstat"><Layers size={13} /> {kaFamilyCount} families</span>
-      <span class="bstat"><Camera size={13} /> {KA_PHOTO_COUNT} photos</span>
+    <div class="flex items-start gap-8">
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-3">
+          <span class="blogo"><Bird size={22} /></span>
+          <p class="text-xs font-bold tracking-widest uppercase opacity-70">Karnataka checklist</p>
+        </div>
+        <h1 class="btitle mt-3 text-3xl sm:text-4xl">Birds of Karnataka</h1>
+        <p class="mt-3 max-w-2xl text-sm sm:text-base leading-relaxed opacity-80">
+          {KA_BIRDS.length} species recorded for {KA_REGION} — mirrored once from the eBird API into this app. Nothing is sent back to eBird. Photographs by Wikimedia Commons contributors.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-2.5">
+          <span class="bstat"><Bird size={13} /> {KA_BIRDS.length} species</span>
+          <span class="bstat"><Layers size={13} /> {kaFamilyCount} families</span>
+          <span class="bstat"><Camera size={13} /> {KA_PHOTO_COUNT} photos</span>
+        </div>
+      </div>
+      {#if KA_PHOTOS["indrol2"]}
+        <a href="/birds/indrol2" class="bpolaroid hidden md:block w-52 lg:w-60 shrink-0" title="Indian Roller — open details">
+          <span class="bpolimg">
+            <img src={KA_PHOTOS["indrol2"].photo} alt="Indian Roller" loading="lazy" class="h-40 lg:h-48 w-full object-contain" />
+          </span>
+          <span class="mt-1.5 block text-center text-sm font-bold">Indian Roller</span>
+          {#if KA_KANNADA["indrol2"]}
+            <span class="block text-center text-xs font-bold text-emerald-700">{KA_KANNADA["indrol2"]}</span>
+          {/if}
+          <span class="mt-0.5 block truncate text-center text-[10px] font-semibold opacity-50" title={KA_PHOTOS["indrol2"].credit}>© {KA_PHOTOS["indrol2"].credit}</span>
+        </a>
+      {/if}
     </div>
   </section>
 
@@ -94,7 +110,7 @@
     <aside class="w-full lg:w-64 lg:shrink-0 lg:sticky lg:top-3 lg:max-h-[calc(100dvh-2rem)] lg:overflow-y-auto no-print">
       <button
         onclick={() => (kaFiltersOpen = !kaFiltersOpen)}
-        class="bbtn lg:hidden w-full"
+        class="bbtn btoggle lg:hidden w-full"
         aria-expanded={kaFiltersOpen}
       >
         <SlidersHorizontal size={15} />
@@ -254,6 +270,23 @@
     padding: 0.375rem 0.75rem; border-radius: 999px;
     border: 1.5px solid var(--ink); background: var(--cream); color: var(--ink);
   }
+  .bpolaroid {
+    display: block;
+    background: var(--cream);
+    border: 2px solid var(--ink);
+    box-shadow: 5px 5px 0 var(--ink);
+    border-radius: 12px;
+    padding: 0.5rem 0.5rem 0.4rem;
+    color: var(--ink);
+    transform: rotate(2deg);
+    transition: transform 150ms, box-shadow 150ms;
+  }
+  .bpolaroid:hover { transform: rotate(0deg) scale(1.02); box-shadow: 3px 3px 0 var(--ink); }
+  .bpolimg {
+    display: block; overflow: hidden;
+    background: var(--paper);
+    border: 2px solid var(--ink); border-radius: 8px;
+  }
   .bpanel {
     background: var(--paper);
     border: 2px solid var(--ink);
@@ -281,6 +314,10 @@
     font-size: 0.7rem; font-weight: 800;
     padding: 0.15rem 0.45rem; border-radius: 999px;
     background: var(--ink); color: var(--paper);
+  }
+  /* unlayered .bbtn display beats Tailwind's layered lg:hidden — hide explicitly */
+  @media (min-width: 1024px) {
+    .btoggle { display: none; }
   }
   .bsw {
     width: 2rem; height: 2rem; border-radius: 999px;
