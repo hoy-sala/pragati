@@ -25,8 +25,7 @@
   let kaColors = $state<string[]>([]);
   let kaPage = $state(1);
   let kaFiltersOpen = $state(false);
-  const kaFamilyOptions = [{ id: "", name: "All families" }, ...KA_FAMILIES.map((f) => ({ id: f, name: f }))];
-  let kaFiltered = $derived(
+  const kaFamilyOptions = [{ id: "", name: "All families" }, ...KA_FAMILIES.map((f) => ({ id: f, name: f }))];  let kaFiltered = $derived(
     KA_BIRDS.filter((b) => {
       if (kaFamily && b.family !== kaFamily) return false;
       if (kaShape && b.shape !== kaShape) return false;
@@ -58,6 +57,10 @@
       return [...m.entries()].sort((a, b) => b[1] - a[1]);
     })()
   );
+  let kaShapeOptions = $derived([
+    { id: "", name: "All shapes" },
+    ...kaShapes.map(([shape, n]) => ({ id: shape, name: `${kaShapeLabels[shape] ?? shape} · ${n}` }))
+  ]);
   let kaPaged = $derived(kaFiltered.slice((kaPage - 1) * KA_PAGE_SIZE, kaPage * KA_PAGE_SIZE));
   $effect(() => {
     void kaSearch;
@@ -128,25 +131,7 @@
 
         <div class="mt-4">
           <p class="blabel mb-1.5">Shape</p>
-          <div class="space-y-1">
-            <button
-              onclick={() => (kaShape = "")}
-              class="brow {kaShape === '' ? 'brow-on' : ''}"
-            >
-              All shapes
-              <span class="opacity-60">{KA_BIRDS.length}</span>
-            </button>
-            {#each kaShapes as [shape, n]}
-              <button
-                onclick={() => (kaShape = kaShape === shape ? "" : shape)}
-                class="brow {kaShape === shape ? 'brow-on' : ''}"
-              >
-                <BirdShape shape={shape} class="w-5 h-5 shrink-0" />
-                <span class="flex-1 text-left truncate">{kaShapeLabels[shape] ?? shape}</span>
-                <span class="opacity-60">{n}</span>
-              </button>
-            {/each}
-          </div>
+          <Select bind:value={kaShape} options={kaShapeOptions} placeholder="All shapes" />
         </div>
 
         <div class="mt-4">
@@ -297,15 +282,6 @@
     padding: 0.15rem 0.45rem; border-radius: 999px;
     background: var(--ink); color: var(--paper);
   }
-  .brow {
-    width: 100%; display: flex; align-items: center; gap: 0.5rem;
-    font-size: 0.78rem; font-weight: 700;
-    padding: 0.4rem 0.65rem; border-radius: 10px;
-    border: 1.5px solid transparent; background: transparent; color: var(--ink);
-    cursor: pointer; transition: background 120ms, border-color 120ms;
-  }
-  .brow:hover { background: var(--cream); border-color: var(--ink); }
-  .brow-on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
   .bsw {
     width: 2rem; height: 2rem; border-radius: 999px;
     border: 2px solid var(--ink); cursor: pointer; flex: none;
