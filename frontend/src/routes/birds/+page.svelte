@@ -293,10 +293,11 @@
     border: 2px solid var(--ink);
     border-radius: 18px;
     color: var(--ink);
-    isolation: isolate;
   }
   /* shadow on its own layer with a larger radius so the corner curves
-     stay parallel — a plain offset box-shadow leaves a wedge artefact */
+     stay parallel — a plain offset box-shadow leaves a wedge artefact.
+     (No isolation here: the negative z-index must escape to the page
+     stacking context, otherwise it paints over the panel itself.) */
   .bpanel::after {
     content: "";
     position: absolute; inset: 0;

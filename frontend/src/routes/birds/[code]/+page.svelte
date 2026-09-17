@@ -223,7 +223,6 @@
     border: 2px solid var(--ink);
     border-radius: 16px;
     color: var(--ink);
-    isolation: isolate;
   }
   .bpanel::after {
     content: "";
