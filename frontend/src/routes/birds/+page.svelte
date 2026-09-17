@@ -288,23 +288,11 @@
     border: 2px solid var(--ink); border-radius: 8px;
   }
   .bpanel {
-    position: relative;
     background: var(--paper);
     border: 2px solid var(--ink);
-    border-radius: 18px;
+    box-shadow: 3px 3px 0 var(--ink);
+    border-radius: 14px;
     color: var(--ink);
-  }
-  /* shadow on its own layer with a larger radius so the corner curves
-     stay parallel — a plain offset box-shadow leaves a wedge artefact.
-     (No isolation here: the negative z-index must escape to the page
-     stacking context, otherwise it paints over the panel itself.) */
-  .bpanel::after {
-    content: "";
-    position: absolute; inset: 0;
-    border-radius: 22px;
-    background: var(--ink);
-    transform: translate(4px, 4px);
-    z-index: -1;
   }
   .blabel {
     font-size: 0.7rem; font-weight: 800;
