@@ -70,23 +70,20 @@
 
 <svelte:head><title>Bird Catalog — Pragati</title></svelte:head>
 
-<div class="max-w-6xl mx-auto space-y-6">
-  <section class="bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-600 text-white rounded-3xl px-6 py-8 sm:px-10 sm:py-10 shadow-lg">
-    <p class="text-xs font-semibold tracking-widest text-emerald-100 uppercase">Karnataka checklist</p>
-    <h1 class="text-3xl sm:text-4xl font-bold mt-2">Birds of Karnataka</h1>
-    <p class="text-sm sm:text-base text-emerald-50 mt-3 max-w-2xl leading-relaxed">
+<div class="mx-auto max-w-6xl space-y-6">
+  <section class="bhero px-6 py-8 sm:px-10 sm:py-10">
+    <div class="flex items-center gap-3">
+      <span class="blogo"><Bird size={22} /></span>
+      <p class="text-xs font-bold tracking-widest uppercase opacity-70">Karnataka checklist</p>
+    </div>
+    <h1 class="btitle mt-3 text-3xl sm:text-4xl">Birds of Karnataka</h1>
+    <p class="mt-3 max-w-2xl text-sm sm:text-base leading-relaxed opacity-80">
       {KA_BIRDS.length} species recorded for {KA_REGION} — mirrored once from the eBird API into this app. Nothing is sent back to eBird. Photographs by Wikimedia Commons contributors.
     </p>
-    <div class="flex flex-wrap gap-2.5 mt-6">
-      <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-white/15">
-        <Bird size={13} /> {KA_BIRDS.length} species
-      </span>
-      <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-white/15">
-        <Layers size={13} /> {kaFamilyCount} families
-      </span>
-      <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-white/15">
-        <Camera size={13} /> {KA_PHOTO_COUNT} photos
-      </span>
+    <div class="mt-6 flex flex-wrap gap-2.5">
+      <span class="bstat"><Bird size={13} /> {KA_BIRDS.length} species</span>
+      <span class="bstat"><Layers size={13} /> {kaFamilyCount} families</span>
+      <span class="bstat"><Camera size={13} /> {KA_PHOTO_COUNT} photos</span>
     </div>
   </section>
 
@@ -94,71 +91,67 @@
     <aside class="w-full lg:w-64 lg:shrink-0 lg:sticky lg:top-3 lg:max-h-[calc(100dvh-2rem)] lg:overflow-y-auto no-print">
       <button
         onclick={() => (kaFiltersOpen = !kaFiltersOpen)}
-        class="lg:hidden w-full inline-flex items-center justify-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl bg-white border border-slate-200 shadow-sm text-slate-700"
+        class="bbtn lg:hidden w-full"
         aria-expanded={kaFiltersOpen}
       >
         <SlidersHorizontal size={15} />
         Filters
         {#if kaActiveCount > 0}
-          <span class="text-[11px] font-bold px-1.5 py-0.5 rounded-full bg-slate-900 text-white">{kaActiveCount}</span>
+          <span class="bcount">{kaActiveCount}</span>
         {/if}
       </button>
 
-      <div class="{kaFiltersOpen ? 'block' : 'hidden'} lg:block bg-white rounded-2xl border border-slate-200 shadow-sm p-4 space-y-5 mt-3 lg:mt-0">
+      <div class="{kaFiltersOpen ? 'block' : 'hidden'} lg:block bpanel p-4 mt-3 lg:mt-0">
         <div class="flex items-center justify-between">
-          <p class="text-xs font-bold text-slate-500 uppercase tracking-wide inline-flex items-center gap-1.5">
+          <p class="blabel inline-flex items-center gap-1.5">
             <SlidersHorizontal size={13} /> Filters
           </p>
           {#if kaActiveCount > 0}
             <button
               onclick={kaClearFilters}
-              class="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-500 hover:text-slate-800"
+              class="inline-flex items-center gap-1 text-[11px] font-bold opacity-60 hover:opacity-100"
             >
               <X size={12} /> Clear all
             </button>
           {/if}
         </div>
 
-        <div>
-          <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Search</p>
+        <div class="mt-4">
+          <p class="blabel mb-1.5">Search</p>
           <SearchFilter bind:value={kaSearch} placeholder="English, Kannada, family..." />
         </div>
 
-        <div>
-          <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Family</p>
+        <div class="mt-4">
+          <p class="blabel mb-1.5">Family</p>
           <Select bind:value={kaFamily} options={kaFamilyOptions} placeholder="All families" />
         </div>
 
-        <div>
-          <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mb-1.5">Shape</p>
+        <div class="mt-4">
+          <p class="blabel mb-1.5">Shape</p>
           <div class="space-y-1">
             <button
               onclick={() => (kaShape = "")}
-              class="w-full flex items-center justify-between text-xs font-semibold px-2.5 py-1.5 rounded-lg transition-colors {kaShape === ''
-                ? 'bg-slate-900 text-white'
-                : 'text-slate-600 hover:bg-slate-100'}"
+              class="brow {kaShape === '' ? 'brow-on' : ''}"
             >
               All shapes
-              <span class="{kaShape === '' ? 'text-slate-300' : 'text-slate-400'}">{KA_BIRDS.length}</span>
+              <span class="opacity-60">{KA_BIRDS.length}</span>
             </button>
             {#each kaShapes as [shape, n]}
               <button
                 onclick={() => (kaShape = kaShape === shape ? "" : shape)}
-                class="w-full flex items-center gap-2 text-xs font-semibold px-2.5 py-1.5 rounded-lg transition-colors {kaShape === shape
-                  ? 'bg-slate-900 text-white'
-                  : 'text-slate-600 hover:bg-slate-100'}"
+                class="brow {kaShape === shape ? 'brow-on' : ''}"
               >
                 <BirdShape shape={shape} class="w-5 h-5 shrink-0" />
                 <span class="flex-1 text-left truncate">{kaShapeLabels[shape] ?? shape}</span>
-                <span class="{kaShape === shape ? 'text-slate-300' : 'text-slate-400'}">{n}</span>
+                <span class="opacity-60">{n}</span>
               </button>
             {/each}
           </div>
         </div>
 
-        <div>
+        <div class="mt-4">
           <p
-            class="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mb-1.5"
+            class="blabel mb-1.5"
             title="Approximate plumage colours (breeding male where sexes differ)"
           >
             Colour
@@ -171,15 +164,13 @@
                 title={sw.label}
                 aria-label="Filter by {sw.label}"
                 aria-pressed={active}
-                class="w-8 h-8 rounded-full border transition-all {active
-                  ? 'border-slate-900 ring-2 ring-slate-900 ring-offset-2 scale-110'
-                  : 'border-slate-300 hover:scale-110 hover:border-slate-500'}"
+                class="bsw {active ? 'bsw-on' : ''}"
                 style="background-color:{sw.hex}"
               ></button>
             {/each}
           </div>
           {#if kaColors.length > 0}
-            <p class="text-[11px] text-slate-500 mt-1.5">
+            <p class="mt-1.5 text-[11px] font-semibold opacity-60">
               {kaColors.map((c) => KA_SWATCHES.find((s) => s.id === c)?.label).join(", ")}
             </p>
           {/if}
@@ -188,21 +179,21 @@
     </aside>
 
     <div class="flex-1 min-w-0 w-full space-y-4">
-      <p class="text-xs font-medium text-slate-500">
+      <p class="bcount-line">
         Showing {KA_PAGE_SIZE >= kaFiltered.length ? kaFiltered.length : KA_PAGE_SIZE} of {kaFiltered.length} species
         {#if kaActiveCount > 0}
-          <button onclick={kaClearFilters} class="ml-2 font-semibold text-primary-700 hover:text-primary-800">
+          <button onclick={kaClearFilters} class="blink">
             Clear filters ✕
           </button>
         {/if}
       </p>
 
       {#if kaFiltered.length === 0}
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 text-center">
+        <div class="bpanel p-6 text-center">
           <EmptyState icon={Bird} title="No species match." hint="Try a different name, colour, shape or family." />
           <button
             onclick={kaClearFilters}
-            class="mt-2 text-xs font-semibold px-4 py-2 rounded-lg bg-slate-900 text-white hover:bg-slate-700 transition-colors"
+            class="bbtn bbtn-ink mt-2"
           >
             Clear all filters
           </button>
@@ -212,9 +203,9 @@
           {#each kaPaged as b (b.code)}
             <a
               href="/birds/{b.code}"
-              class="group text-left bg-white rounded-2xl border border-slate-200 overflow-hidden transition-all hover:border-primary-300 hover:shadow-md active:scale-[0.99] flex flex-col"
+              class="bcard group flex flex-col"
             >
-              <div class="relative h-28 sm:h-32 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-teal-100 overflow-hidden">
+              <div class="bphoto relative flex h-28 sm:h-32 items-center justify-center overflow-hidden">
                 {#if KA_DETAILS[b.code]?.iucn && kaThreatened[KA_DETAILS[b.code].iucn]}
                   <span
                     title="IUCN: {kaThreatened[KA_DETAILS[b.code].iucn]}"
@@ -231,25 +222,113 @@
                     class="w-full h-full object-contain p-1 transition-transform group-hover:scale-105"
                   />
                 {:else}
-                  <BirdShape shape={b.shape} class="w-16 h-16 sm:w-20 sm:h-20 text-slate-700/80 transition-transform group-hover:scale-105" />
+                  <BirdShape shape={b.shape} class="w-16 h-16 sm:w-20 sm:h-20 opacity-80 transition-transform group-hover:scale-105" />
                 {/if}
               </div>
-              <div class="p-3 flex flex-col gap-0.5">
-                <div class="text-sm font-semibold text-slate-800 leading-tight">{b.com}</div>
+              <div class="flex flex-col gap-0.5 p-3">
+                <div class="bname text-sm leading-tight">{b.com}</div>
                 {#if KA_KANNADA[b.code]}
-                  <div class="text-xs font-medium text-emerald-700">{KA_KANNADA[b.code]}</div>
+                  <div class="text-xs font-bold text-emerald-700">{KA_KANNADA[b.code]}</div>
                 {/if}
-                <div class="text-[11px] text-slate-400 italic truncate">{b.sci}</div>
-                <div class="text-[10px] text-slate-500 mt-0.5 truncate">{b.family}</div>
+                <div class="truncate text-[11px] italic opacity-60">{b.sci}</div>
+                <div class="mt-0.5 truncate text-[10px] font-semibold opacity-60">{b.family}</div>
               </div>
             </a>
           {/each}
         </div>
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm no-print">
+        <div class="bpanel no-print">
           <Pagination page={kaPage} total={kaFiltered.length} pageSize={KA_PAGE_SIZE} onChange={(p) => (kaPage = p)} />
         </div>
-        <p class="text-[11px] text-slate-400 text-center">Photos by Wikimedia Commons contributors · open any bird for details, photos and links</p>
+        <p class="text-center text-[11px] font-semibold opacity-50">Photos by Wikimedia Commons contributors · open any bird for details, photos and links</p>
       {/if}
     </div>
   </div>
 </div>
+
+<style>
+  .bhero {
+    background: var(--paper);
+    border: 2.5px solid var(--ink);
+    box-shadow: 6px 6px 0 var(--ink);
+    border-radius: 18px;
+    color: var(--ink);
+  }
+  .blogo {
+    width: 40px; height: 40px; border-radius: 12px;
+    border: 2.5px solid var(--ink); background: var(--cream);
+    box-shadow: 3px 3px 0 var(--ink);
+    display: grid; place-items: center; color: var(--ink); flex: none;
+  }
+  .btitle {
+    font-family: var(--font-display);
+    font-weight: 800; letter-spacing: -0.02em; line-height: 1.05;
+  }
+  .bstat {
+    display: inline-flex; align-items: center; gap: 0.375rem;
+    font-size: 0.75rem; font-weight: 700;
+    padding: 0.375rem 0.75rem; border-radius: 999px;
+    border: 1.5px solid var(--ink); background: var(--cream); color: var(--ink);
+  }
+  .bpanel {
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+    border-radius: 16px;
+    color: var(--ink);
+  }
+  .blabel {
+    font-size: 0.7rem; font-weight: 800;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .bbtn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    font-family: var(--font-display); font-weight: 700; font-size: 0.9rem;
+    padding: 0.6rem 1rem; border-radius: 12px;
+    border: 2.5px solid var(--ink); background: var(--paper); color: var(--ink);
+    box-shadow: 3px 3px 0 var(--ink); cursor: pointer;
+    transition: box-shadow 120ms, transform 120ms, background 120ms;
+  }
+  .bbtn:hover { transform: translate(1px, 1px); box-shadow: 2px 2px 0 var(--ink); background: var(--cream); }
+  .bbtn:active { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--ink); }
+  .bbtn-ink { background: var(--ink); color: var(--paper); }
+  .bbtn-ink:hover { background: var(--ink); }
+  .bcount {
+    font-size: 0.7rem; font-weight: 800;
+    padding: 0.15rem 0.45rem; border-radius: 999px;
+    background: var(--ink); color: var(--paper);
+  }
+  .brow {
+    width: 100%; display: flex; align-items: center; gap: 0.5rem;
+    font-size: 0.78rem; font-weight: 700;
+    padding: 0.4rem 0.65rem; border-radius: 10px;
+    border: 1.5px solid transparent; background: transparent; color: var(--ink);
+    cursor: pointer; transition: background 120ms, border-color 120ms;
+  }
+  .brow:hover { background: var(--cream); border-color: var(--ink); }
+  .brow-on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .bsw {
+    width: 2rem; height: 2rem; border-radius: 999px;
+    border: 2px solid var(--ink); cursor: pointer; flex: none;
+    transition: transform 120ms, box-shadow 120ms;
+  }
+  .bsw:hover { transform: scale(1.12); }
+  .bsw-on { transform: scale(1.12); box-shadow: 0 0 0 2px var(--paper), 0 0 0 4px var(--ink); }
+  .bcard {
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    box-shadow: 3px 3px 0 var(--ink);
+    border-radius: 14px; overflow: hidden;
+    color: var(--ink);
+    transition: box-shadow 120ms, transform 120ms;
+  }
+  .bcard:hover { transform: translate(1px, 1px); box-shadow: 2px 2px 0 var(--ink); }
+  .bcard:active { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--ink); }
+  .bphoto { background: var(--cream); border-bottom: 2px solid var(--ink); }
+  .bname { font-family: var(--font-display); font-weight: 700; }
+  .bcount-line { font-size: 0.75rem; font-weight: 600; color: var(--ink-soft); }
+  .blink {
+    margin-left: 0.5rem; font-weight: 800;
+    color: var(--ink); text-decoration: underline; text-underline-offset: 2px;
+  }
+  .blink:hover { opacity: 0.7; }
+</style>
