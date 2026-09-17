@@ -4,6 +4,7 @@
   import { KA_PHOTOS } from "$lib/data/kaPhotos";
   import { KA_KANNADA } from "$lib/data/kaKannada";
   import { KA_DETAILS } from "$lib/data/kaDetails";
+  import { KA_COLORS, KA_SWATCHES } from "$lib/data/kaColors";
   import BirdShape from "$lib/components/BirdShape.svelte";
   import EmptyState from "$lib/components/EmptyState.svelte";
   import IucnBadge from "$lib/components/IucnBadge.svelte";
@@ -153,6 +154,23 @@
             <dt class="w-32 shrink-0 text-slate-400 font-medium">Order</dt>
             <dd class="text-slate-700">{bird.order}</dd>
           </div>
+          {#if KA_COLORS[bird.code]}
+            <div class="flex items-start gap-3">
+              <dt class="w-32 shrink-0 text-slate-400 font-medium">Colours</dt>
+              <dd class="flex flex-wrap items-center gap-2">
+                {#each KA_COLORS[bird.code] as cid}
+                  {@const sw = KA_SWATCHES.find((s) => s.id === cid)}
+                  {#if sw}
+                    <span class="inline-flex items-center gap-1.5 text-xs text-slate-600">
+                      <span class="w-4 h-4 rounded-full border border-slate-300" style="background-color:{sw.hex}"></span>
+                      {sw.label}
+                    </span>
+                  {/if}
+                {/each}
+                <span class="text-[11px] text-slate-400">(approximate plumage)</span>
+              </dd>
+            </div>
+          {/if}
           <div class="flex items-start gap-3">
             <dt class="w-32 shrink-0 text-slate-400 font-medium">eBird code</dt>
             <dd class="text-slate-700 font-mono text-xs pt-0.5">{bird.code}</dd>

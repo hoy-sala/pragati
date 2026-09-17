@@ -2,6 +2,8 @@
   import { KA_BIRDS, KA_FAMILIES, KA_REGION, type BirdShapeKind } from "$lib/data/kaBirds";
   import { KA_PHOTOS, KA_PHOTO_COUNT } from "$lib/data/kaPhotos";
   import { KA_KANNADA } from "$lib/data/kaKannada";
+  import { KA_COLORS, KA_SWATCHES } from "$lib/data/kaColors";
+  import { KA_DETAILS } from "$lib/data/kaDetails";
   import BirdShape from "$lib/components/BirdShape.svelte";
   import Select from "$lib/components/Select.svelte";
   import SearchFilter from "$lib/components/SearchFilter.svelte";
@@ -20,18 +22,32 @@
   let kaSearch = $state("");
   let kaFamily = $state("");
   let kaShape = $state("");
+  let kaColors = $state<string[]>([]);
   let kaPage = $state(1);
   const kaFamilyOptions = [{ id: "", name: "All families" }, ...KA_FAMILIES.map((f) => ({ id: f, name: f }))];
   let kaFiltered = $derived(
     KA_BIRDS.filter((b) => {
       if (kaFamily && b.family !== kaFamily) return false;
       if (kaShape && b.shape !== kaShape) return false;
+      if (kaColors.length > 0) {
+        const cols = KA_COLORS[b.code] || [];
+        if (!cols.some((c) => kaColors.includes(c))) return false;
+      }
       if (!kaSearch.trim()) return true;
       const q = kaSearch.trim().toLowerCase();
       const kn = KA_KANNADA[b.code] || "";
       return b.com.toLowerCase().includes(q) || b.sci.toLowerCase().includes(q) || b.family.toLowerCase().includes(q) || kn.includes(kaSearch.trim());
     }).sort((a, b) => a.com.localeCompare(b.com))
   );
+  const kaThreatened: Record<string, string> = { VU: "Vulnerable", EN: "Endangered", CR: "Critically Endangered" };
+  const kaThreatStyle: Record<string, string> = { VU: "bg-orange-500", EN: "bg-red-500", CR: "bg-rose-700" };
+  let kaHasFilters = $derived(kaSearch.trim() !== "" || kaFamily !== "" || kaShape !== "" || kaColors.length > 0);
+  function kaClearFilters() {
+    kaSearch = "";
+    kaFamily = "";
+    kaShape = "";
+    kaColors = [];
+  }
   let kaShapes = $derived(
     (() => {
       const m = new Map<BirdShapeKind, number>();
@@ -44,6 +60,7 @@
     void kaSearch;
     void kaFamily;
     void kaShape;
+    void kaColors;
     kaPage = 1;
   });
 </script>
@@ -70,7 +87,7 @@
     </div>
   </section>
 
-  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 no-print">
+  <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 no-print sticky top-3 z-10">
     <div class="flex flex-wrap gap-3 items-end">
       <div class="flex-1 min-w-48">
         <SearchFilter bind:value={kaSearch} placeholder="Search English, Kannada, scientific name, family..." />
@@ -100,6 +117,30 @@
         </button>
       {/each}
     </div>
+    <div class="flex items-center gap-2 overflow-x-auto pt-2">
+      <span class="shrink-0 text-[11px] font-semibold text-slate-500 uppercase tracking-wide" title="Filter by approximate plumage colours (breeding male where sexes differ)">Colour</span>
+      {#each KA_SWATCHES as sw}
+        {@const active = kaColors.includes(sw.id)}
+        <button
+          onclick={() => (kaColors = active ? kaColors.filter((c) => c !== sw.id) : [...kaColors, sw.id])}
+          title={sw.label}
+          aria-label="Filter by {sw.label}"
+          aria-pressed={active}
+          class="shrink-0 w-7 h-7 rounded-full border transition-all {active
+            ? 'border-slate-900 ring-2 ring-slate-900 ring-offset-2 scale-110'
+            : 'border-slate-300 hover:scale-110 hover:border-slate-500'}"
+          style="background-color:{sw.hex}"
+        ></button>
+      {/each}
+      {#if kaColors.length > 0}
+        <button
+          onclick={() => (kaColors = [])}
+          class="shrink-0 text-[11px] font-semibold text-slate-500 hover:text-slate-800 px-2 py-1"
+        >
+          Clear ✕
+        </button>
+      {/if}
+    </div>
   </div>
 
   <p class="text-xs font-medium text-slate-500">
@@ -107,8 +148,16 @@
   </p>
 
   {#if kaFiltered.length === 0}
-    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm">
-      <EmptyState icon={Bird} title="No species match." hint="Try a different name or family." />
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 text-center">
+      <EmptyState icon={Bird} title="No species match." hint="Try a different name, colour, shape or family." />
+      {#if kaHasFilters}
+        <button
+          onclick={kaClearFilters}
+          class="mt-2 text-xs font-semibold px-4 py-2 rounded-lg bg-slate-900 text-white hover:bg-slate-700 transition-colors"
+        >
+          Clear all filters
+        </button>
+      {/if}
     </div>
   {:else}
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -117,7 +166,15 @@
           href="/birds/{b.code}"
           class="group text-left bg-white rounded-2xl border border-slate-200 overflow-hidden transition-all hover:border-primary-300 hover:shadow-md active:scale-[0.99] flex flex-col"
         >
-          <div class="h-28 sm:h-32 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-teal-100 overflow-hidden">
+          <div class="relative h-28 sm:h-32 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-teal-100 overflow-hidden">
+            {#if KA_DETAILS[b.code]?.iucn && kaThreatened[KA_DETAILS[b.code].iucn]}
+              <span
+                title="IUCN: {kaThreatened[KA_DETAILS[b.code].iucn]}"
+                class="absolute top-2 left-2 z-10 text-[10px] font-bold px-1.5 py-0.5 rounded text-white {kaThreatStyle[KA_DETAILS[b.code].iucn]}"
+              >
+                {KA_DETAILS[b.code].iucn}
+              </span>
+            {/if}
             {#if KA_PHOTOS[b.code]}
               <img
                 src={KA_PHOTOS[b.code].photo}
