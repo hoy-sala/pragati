@@ -218,11 +218,20 @@
     color: var(--ink);
   }
   .bpanel {
+    position: relative;
     background: var(--paper);
     border: 2px solid var(--ink);
-    box-shadow: 4px 4px 0 var(--ink);
     border-radius: 16px;
     color: var(--ink);
+    isolation: isolate;
+  }
+  .bpanel::after {
+    content: "";
+    position: absolute; inset: 0;
+    border-radius: 20px;
+    background: var(--ink);
+    transform: translate(4px, 4px);
+    z-index: -1;
   }
   .btitle {
     font-family: var(--font-display);
