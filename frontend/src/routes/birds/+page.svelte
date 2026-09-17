@@ -290,8 +290,8 @@
   .bpanel {
     background: var(--paper);
     border: 2px solid var(--ink);
-    box-shadow: 4px 4px 0 var(--ink);
-    border-radius: 16px;
+    box-shadow: 3px 3px 0 var(--ink);
+    border-radius: 18px;
     color: var(--ink);
   }
   .blabel {
