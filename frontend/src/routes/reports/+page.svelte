@@ -311,31 +311,10 @@
 				</table>
 			</div>
 
-			<div class="px-6 py-4 border-t border-slate-200 space-y-4">
+		<div class="px-6 py-4 border-t border-slate-200 space-y-4">
 			{#if ms.students[0]?.subjects}
-			{@const curSubs = ms.students[0].subjects.filter(s => s.subject_type === 'curricular')}
 			{@const coSubs = ms.students[0].subjects.filter(s => s.subject_type !== 'curricular')}
-			{#if curSubs.length > 0}
-				<div>
-					<div class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Curricular</div>
-					<div class="flex flex-wrap gap-3">
-						{#each curSubs as sg}
-							<div class="border border-slate-200 rounded-lg p-3 min-w-40">
-								<div class="flex items-center justify-between mb-2">
-									<span class="text-xs font-semibold text-slate-700">{sg.subject_name}</span>
-									<span class="text-[10px] text-slate-400">{sg.subject_code}</span>
-								</div>
-								<div class="text-lg font-bold text-slate-800">{sg.total}<span class="text-xs text-slate-400 font-normal">/{sg.max_total}</span></div>
-								<div class="flex items-center justify-between mt-1">
-									<span class="text-xs text-slate-500">{sg.percentage.toFixed(1)}%</span>
-									<span class="text-xs font-bold px-1.5 py-0.5 rounded {gradeClass(sg.grade)}">{sg.grade}</span>
-								</div>
-							</div>
-						{/each}
-					</div>
-				</div>
-				{/if}
-				{#if coSubs.length > 0}
+			{#if coSubs.length > 0}
 				<div>
 					<div class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Co-curricular</div>
 					<div class="flex flex-wrap gap-3">
