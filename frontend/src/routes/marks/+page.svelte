@@ -38,7 +38,7 @@
 
 	let filteredClasses = $derived(
 		isTeacher && teacherScopeLoaded
-			? myClassId ? classes.filter(c => c.id === myClassId) : []
+			? myClassId ? classes.filter(c => c.id === myClassId) : classes
 			: selectedCategory && categories.find(c => c.id === selectedCategory)?.code === 'KREIS'
 				? classes.filter(c => c.name === 'Class 10')
 				: classes
