@@ -147,6 +147,39 @@ func (h *UserHandler) ResetPassword(w http.ResponseWriter, r *http.Request) {
 	renderJSON(w, http.StatusOK, apiOK(map[string]bool{"success": true}))
 }
 
+// GET /api/v1/users/me/teacher-detail — own subject/class assignments (teacher self-service)
+func (h *UserHandler) MyTeacherDetail(w http.ResponseWriter, r *http.Request) {
+	claims := middleware.GetUserClaims(r.Context())
+	userID := claims.UserID
+
+	rows, err := h.db.Query(r.Context(), `SELECT subject_id FROM teacher_subjects WHERE teacher_id = $1`, userID)
+	if err != nil {
+		renderJSON(w, http.StatusInternalServerError, apiErr("INTERNAL_ERROR", "failed to fetch teacher subjects"))
+		return
+	}
+	defer rows.Close()
+	type subj struct {
+		ID   string `json:"id"`
+		Name string `json:"name"`
+	}
+	var subjects []subj
+	for rows.Next() {
+		var sid string
+		if err := rows.Scan(&sid); err != nil { continue }
+		var sname string
+		h.db.QueryRow(r.Context(), `SELECT name FROM subjects WHERE id = $1 AND deleted_at IS NULL`, sid).Scan(&sname)
+		subjects = append(subjects, subj{ID: sid, Name: sname})
+	}
+	if subjects == nil {
+		subjects = []subj{}
+	}
+
+	var classID string
+	h.db.QueryRow(r.Context(), `SELECT class_id FROM teacher_classes WHERE teacher_id = $1 LIMIT 1`, userID).Scan(&classID)
+
+	renderJSON(w, http.StatusOK, apiOK(map[string]interface{}{"subjects": subjects, "class_id": classID}))
+}
+
 // GET /api/v1/users/{id}/teacher-detail — teacher's subjects and class
 func (h *UserHandler) TeacherDetail(w http.ResponseWriter, r *http.Request) {
 	userID := chi.URLParam(r, "id")

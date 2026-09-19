@@ -574,10 +574,10 @@ func (h *HPCHandler) GetLOAssessmentGrid(w http.ResponseWriter, r *http.Request)
 	}
 
 	rows, err := h.db.Query(r.Context(),
-		`SELECT s.id, s.sats_number, s.first_name, COALESCE(s.last_name, ''), s.roll_no
+		`SELECT s.id, s.sats_number, s.first_name, COALESCE(s.last_name, ''), COALESCE(s.roll_no, 0)
 		 FROM students s
 		 WHERE s.class_id = $1 AND s.school_id = $2 AND s.deleted_at IS NULL AND s.is_active = true
-		 ORDER BY s.first_name ASC, COALESCE(s.last_name, '') ASC, s.roll_no ASC`,
+		 ORDER BY s.first_name ASC, COALESCE(s.last_name, '') ASC, COALESCE(s.roll_no, 0) ASC`,
 		classID, claims.SchoolID,
 	)
 	if err != nil {

@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { api } from '$lib/api/client.svelte';
+	import { getAuthState } from '$lib/stores/auth.svelte';
+	import { effectiveRole } from '$lib/utils/roles';
 	import { Save, X, BookOpen, Users, ClipboardCheck, Table } from 'lucide-svelte';
 	import Button from '$lib/components/Button.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
@@ -27,15 +29,26 @@
 	let selectedSubject = $state('');
 	let selectedAssessment = $state('');
 
+	const auth = getAuthState();
+	let isTeacher = $derived(effectiveRole(auth.currentUser) === 'teacher');
+	let mySubjects = $state<{ id: string; name: string }[]>([]);
+	let myClassId = $state('');
+	let teacherScopeLoaded = $state(false);
+	let teacherNotice = $state('');
+
 	let filteredClasses = $derived(
-		selectedCategory && categories.find(c => c.id === selectedCategory)?.code === 'KREIS'
-			? classes.filter(c => c.name === 'Class 10')
-			: classes
+		isTeacher && teacherScopeLoaded
+			? myClassId ? classes.filter(c => c.id === myClassId) : []
+			: selectedCategory && categories.find(c => c.id === selectedCategory)?.code === 'KREIS'
+				? classes.filter(c => c.name === 'Class 10')
+				: classes
 	);
 	let filteredSubjects = $derived(
-		selectedCategory && categories.find(c => c.id === selectedCategory)?.code === 'KREIS'
-			? subjects.filter(s => s.code && ['KAN', 'ENG', 'HIN', 'MAT', 'SCI', 'SOC'].includes(s.code))
-			: subjects
+		isTeacher && teacherScopeLoaded
+			? subjects.filter(s => mySubjects.some(ms => ms.id === s.id))
+			: selectedCategory && categories.find(c => c.id === selectedCategory)?.code === 'KREIS'
+				? subjects.filter(s => s.code && ['KAN', 'ENG', 'HIN', 'MAT', 'SCI', 'SOC'].includes(s.code))
+				: subjects
 	);
 
 	let students = $state<MarkGridRow[]>([]);
@@ -62,7 +75,27 @@
 		if (classRes.data) classes = classRes.data;
 		if (subRes.data) subjects = subRes.data;
 
-		selectedSubject = sp.get('subject') ?? '';
+		if (isTeacher) {
+			const myRes = await api<{ subjects: { id: string; name: string }[]; class_id: string }>('GET', '/users/me/teacher-detail');
+			if (myRes.data) {
+				mySubjects = myRes.data.subjects ?? [];
+				myClassId = myRes.data.class_id ?? '';
+			}
+			teacherScopeLoaded = true;
+			if (mySubjects.length === 0) {
+				teacherNotice = 'No subjects assigned to you yet — please contact your admin.';
+			} else if (mySubjects.length === 1) {
+				selectedSubject = mySubjects[0].id;
+			}
+		} else {
+			teacherScopeLoaded = true;
+		}
+
+		selectedSubject = sp.get('subject') ?? selectedSubject;
+		if (isTeacher && selectedSubject && !mySubjects.some(s => s.id === selectedSubject)) {
+			selectedSubject = mySubjects.length === 1 ? mySubjects[0].id : '';
+		}
+		if (isTeacher && myClassId) selectedClass = myClassId;
 		selectedAssessment = sp.get('assessment') ?? '';
 		loadAssessments();
 		filtersReady = true;
@@ -341,6 +374,12 @@
 			<Button onclick={resetForm} variant="secondary">Clear</Button>
 		</div>
 	</div>
+
+	{#if teacherNotice}
+		<div class="flex items-center gap-2 text-sm px-4 py-2.5 rounded-lg border bg-amber-50 text-amber-700 border-amber-200">
+			<span>{teacherNotice}</span>
+		</div>
+	{/if}
 
 	{#if statusMsg}
 		<div class="flex items-center gap-2 text-sm px-4 py-2.5 rounded-lg border {statusStyles[statusType]}">

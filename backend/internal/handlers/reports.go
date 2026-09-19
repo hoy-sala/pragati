@@ -314,7 +314,7 @@ func (h *ReportsHandler) MarkSheet(w http.ResponseWriter, r *http.Request) {
 	}
 	sortAssessments(assessments)
 
-	studQuery := `SELECT id, sats_number, first_name, COALESCE(last_name,''), roll_no
+	studQuery := `SELECT id, sats_number, first_name, COALESCE(last_name,''), COALESCE(roll_no, 0)
 		FROM students WHERE class_id = $1 AND deleted_at IS NULL AND is_active = true
 		ORDER BY first_name ASC, last_name ASC, roll_no NULLS LAST`
 	studRows, err := h.db.Query(r.Context(), studQuery, classID)
@@ -573,7 +573,7 @@ func (h *ReportsHandler) StudentReport(w http.ResponseWriter, r *http.Request) {
 	var classID, dob, gender string
 	err := h.db.QueryRow(r.Context(),
 		`SELECT s.first_name || ' ' || COALESCE(s.last_name,''),
-			c.name, COALESCE(s.section_id::text,''), s.roll_no, s.sats_number,
+			c.name, COALESCE(s.section_id::text,''), COALESCE(s.roll_no, 0), s.sats_number,
 			COALESCE(s.gender,''), COALESCE(s.date_of_birth::text,''), s.class_id
 		 FROM students s JOIN classes c ON c.id = s.class_id
 		 WHERE s.id = $1 AND s.school_id = $2 AND s.deleted_at IS NULL`,
@@ -758,7 +758,7 @@ func (h *ReportsHandler) StudentSelf(w http.ResponseWriter, r *http.Request) {
 	var classID, dob, gender string
 	err := h.db.QueryRow(r.Context(),
 		`SELECT s.first_name || ' ' || COALESCE(s.last_name,''),
-			c.name, COALESCE(s.section_id::text,''), s.roll_no, s.sats_number,
+			c.name, COALESCE(s.section_id::text,''), COALESCE(s.roll_no, 0), s.sats_number,
 			COALESCE(s.gender,''), COALESCE(s.date_of_birth::text,''), s.class_id
 		 FROM students s JOIN classes c ON c.id = s.class_id
 		 WHERE s.id = $1 AND s.school_id = $2 AND s.deleted_at IS NULL`,
