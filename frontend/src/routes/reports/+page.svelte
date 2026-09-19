@@ -59,6 +59,14 @@
 		reportStudents.map(s => ({ id: s.id, name: `${s.name} (Roll ${s.roll_no})` }))
 	);
 
+	// Size each filter box to its longest value so text is never cut off
+	function boxWidth(names: string[], placeholder: string): number {
+		return Math.max(placeholder.length, 0, ...names.map(n => n.length)) + 5;
+	}
+	let classBoxWidth = $derived(boxWidth(classes.map(c => c.name), 'Select class'));
+	let termBoxWidth = $derived(boxWidth(termOptions.map(t => t.name), 'All Terms'));
+	let studentBoxWidth = $derived(boxWidth(studentOptions.map(s => s.name), 'Select student'));
+
 	function pctClass(pct: number): string {
 		if (pct >= 90) return 'text-emerald-700 bg-emerald-50';
 		if (pct >= 70) return 'text-green-700 bg-green-50';
@@ -190,10 +198,10 @@
 
 	<div class="bg-white rounded-xl border border-slate-200 p-4 no-print">
 		<div class="flex flex-wrap gap-3 items-end">
-			<div class="w-44">
+			<div class="max-w-full" style="min-width:{classBoxWidth}ch">
 				<Select bind:value={selectedClass} options={classes.map(c => ({ id: c.id, name: c.name }))} placeholder="Select class" />
 			</div>
-			<div class="w-48">
+			<div class="max-w-full" style="min-width:{termBoxWidth}ch">
 				<Select bind:value={selectedTerm} options={termOptions} placeholder="All Terms" />
 			</div>
 
@@ -202,7 +210,7 @@
 			</div>
 
 			{#if activeTab === 'report'}
-				<div class="w-56">
+				<div class="max-w-full" style="min-width:{studentBoxWidth}ch">
 					<Select bind:value={selectedStudent} options={studentOptions} placeholder="Select student" />
 				</div>
 				<Button onclick={loadStudentReport} disabled={!selectedStudent || loading}>

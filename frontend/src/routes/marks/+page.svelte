@@ -24,6 +24,12 @@
 		}))
 	);
 
+	// Size each filter box to its longest value so text is never cut off
+	function boxWidth(names: string[], placeholder: string): number {
+		return Math.max(placeholder.length, 0, ...names.map(n => n.length)) + 5;
+	}
+	let categoryWidth = $derived(boxWidth(categories.map(c => c.name ?? ''), 'All categories'));
+
 	let selectedCategory = $state('');
 	let selectedClass = $state('');
 	let selectedSubject = $state('');
@@ -50,6 +56,9 @@
 				? subjects.filter(s => s.code && ['KAN', 'ENG', 'HIN', 'MAT', 'SCI', 'SOC'].includes(s.code))
 				: subjects
 	);
+	let classWidth = $derived(boxWidth(filteredClasses.map(c => c.name), 'All classes'));
+	let subjectWidth = $derived(boxWidth(filteredSubjects.map(s => s.name), 'All subjects'));
+	let assessmentWidth = $derived(boxWidth(assessmentOptions.map(a => a.name), 'Select assessment'));
 
 	let students = $state<MarkGridRow[]>([]);
 	let maxMarks = $state(100);
@@ -359,16 +368,16 @@
 
 	<div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
 		<div class="flex flex-wrap gap-3 items-end">
-			<div class="w-44">
+			<div class="max-w-full" style="min-width:{categoryWidth}ch">
 				<Select bind:value={selectedCategory} options={categories} label="Category" icon={ClipboardCheck} placeholder="All categories" />
 			</div>
-			<div class="w-44">
+			<div class="max-w-full" style="min-width:{classWidth}ch">
 				<Select bind:value={selectedClass} options={filteredClasses} label="Class" icon={Users} placeholder="All classes" />
 			</div>
-			<div class="w-44">
+			<div class="max-w-full" style="min-width:{subjectWidth}ch">
 				<Select bind:value={selectedSubject} options={filteredSubjects} label="Subject" icon={BookOpen} placeholder="All subjects" />
 			</div>
-			<div class="w-48">
+			<div class="max-w-full" style="min-width:{assessmentWidth}ch">
 				<Select bind:value={selectedAssessment} options={assessmentOptions} label="Assessment" icon={ClipboardCheck} placeholder="Select assessment" searchable />
 			</div>
 			<Button onclick={resetForm} variant="secondary">Clear</Button>
