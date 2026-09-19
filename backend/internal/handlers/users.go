@@ -230,8 +230,12 @@ func (h *UserHandler) UpdateTeacherDetail(w http.ResponseWriter, r *http.Request
 	defer tx.Rollback(r.Context())
 
 	tx.Exec(r.Context(), `DELETE FROM teacher_subjects WHERE teacher_id = $1`, userID)
+	var classVal interface{}
+	if req.ClassID != "" {
+		classVal = req.ClassID
+	}
 	for _, sid := range req.SubjectIDs {
-		tx.Exec(r.Context(), `INSERT INTO teacher_subjects (teacher_id, subject_id) VALUES ($1, $2) ON CONFLICT DO NOTHING`, userID, sid)
+		tx.Exec(r.Context(), `INSERT INTO teacher_subjects (teacher_id, subject_id, class_id) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING`, userID, sid, classVal)
 	}
 
 	tx.Exec(r.Context(), `DELETE FROM teacher_classes WHERE teacher_id = $1`, userID)
