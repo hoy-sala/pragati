@@ -41,7 +41,7 @@
 	type StudentReport = { student: ReportStudent; academic_year: string; term?: string; subjects: ReportSubject[]; grand_total: number; grand_max: number; percentage: number; grade: string; attendance?: { present: number; total: number; percentage: number }; remarks?: string };
 
 	let studentReport = $state<StudentReport | null>(null);
-	let reportStudents = $state<{ id: string; name: string; roll_no: number }[]>([]);
+	let reportStudents = $state<{ id: string; first_name: string; last_name?: string; roll_no?: number }[]>([]);
 
 	type MentorReportStudent = { student_id: string; sats_number: string; name: string; roll_no: number; gender: string; class_name: string; cognitive_pct: number; tier: number };
 	type MentorReportGroup = { mentor_id: string; mentor_name: string; student_count: number; avg_cognitive_pct: number; students: MentorReportStudent[] };
@@ -56,7 +56,10 @@
 	let selectedTerm = $state('');
 
 	let studentOptions = $derived(
-		reportStudents.map(s => ({ id: s.id, name: `${s.name} (Roll ${s.roll_no})` }))
+		reportStudents.map(s => {
+			const nm = `${s.first_name ?? ''} ${s.last_name ?? ''}`.trim();
+			return { id: s.id, name: s.roll_no ? `${nm} (Roll ${s.roll_no})` : nm };
+		})
 	);
 
 	// Size each filter box to its longest value so text is never cut off
@@ -127,7 +130,7 @@
 	async function loadReportStudents() {
 		if (!selectedClass) return;
 		const params = new URLSearchParams({ class_id: selectedClass });
-		const res = await api<{ id: string; name: string; roll_no: number; sats_number: string }[]>('GET', `/students?${params}`);
+		const res = await api<{ id: string; first_name: string; last_name?: string; roll_no?: number }[]>('GET', `/students?${params}`);
 		reportStudents = res.data || [];
 	}
 
