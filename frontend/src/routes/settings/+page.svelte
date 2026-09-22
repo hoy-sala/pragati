@@ -123,6 +123,29 @@
     if (res.data) users = res.data;
   }
 
+  type TeacherAssignment = {
+    teacher_id: string;
+    subject_id: string;
+    subject_name: string;
+    class_id: string | null;
+    class_name: string | null;
+  };
+  let teacherAssignments = $state<TeacherAssignment[]>([]);
+
+  async function loadAssignments() {
+    const res = await api<TeacherAssignment[]>("GET", "/users/teacher-assignments");
+    if (res.data) teacherAssignments = res.data;
+  }
+
+  function assignmentsFor(teacherId: string): TeacherAssignment[] {
+    return teacherAssignments.filter((a) => a.teacher_id === teacherId);
+  }
+
+  function loginDisplay(u: { email: string; phone: string }): string {
+    if (u.phone && u.email.toLowerCase().startsWith(u.phone.toLowerCase() + "@")) return u.email;
+    return u.phone ? `${u.email} · ${u.phone}` : u.email || "—";
+  }
+
   async function createUser() {
     if (!userForm.name || !userForm.role) {
       msg("Name and role are required", "error");
@@ -212,6 +235,7 @@
       toast("Teacher assignments updated", "success");
       closeEdit();
       loadUsers();
+      loadAssignments();
     } else if (res.error) toast(res.error.message, "error");
   }
 
@@ -241,6 +265,7 @@
     if (sub.data) subjects = sub.data;
     if (cat.data) categories = cat.data;
     if (uR.data) users = uR.data;
+    await loadAssignments();
     loading = false;
   }
 
@@ -490,10 +515,24 @@
               <div>
                 <div class="text-sm font-medium text-slate-800">{u.name}</div>
                 <div class="text-xs text-slate-400">
-                  {u.email || "—"}
-                  {#if u.phone}
-                    · {u.phone}{/if}
+                  {loginDisplay(u)}
                 </div>
+                {#if u.role === "teacher"}
+                  {@const ta = assignmentsFor(u.id)}
+                  <div class="flex flex-wrap gap-1 mt-1">
+                    {#each ta as a (a.subject_id)}
+                      <span
+                        class="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-primary-50 text-primary-700"
+                        title={a.class_name ? `${a.subject_name} · ${a.class_name}` : a.subject_name}
+                      >
+                        {a.subject_name}{a.class_name ? ` · ${a.class_name}` : ""}
+                      </span>
+                    {/each}
+                    {#if ta.length === 0}
+                      <span class="text-[10px] text-slate-400">No subjects assigned</span>
+                    {/if}
+                  </div>
+                {/if}
               </div>
             </div>
             <div class="flex items-center gap-2">

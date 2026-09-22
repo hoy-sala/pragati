@@ -23,7 +23,7 @@
   const auth = getAuthState();
   let role = $derived(effectiveRole(auth.currentUser));
   let displayName = $derived(
-    auth.currentUser ? (auth.currentUser as User).name?.split(" ")[0] || "there" : "there",
+    auth.currentUser ? (auth.currentUser as User).name?.trim() || "there" : "there",
   );
 
   type PendingAssessment = {

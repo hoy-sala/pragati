@@ -147,6 +147,46 @@ func (h *UserHandler) ResetPassword(w http.ResponseWriter, r *http.Request) {
 	renderJSON(w, http.StatusOK, apiOK(map[string]bool{"success": true}))
 }
 
+// GET /api/v1/users/teacher-assignments — all teachers' subject/class assignments (admin only)
+func (h *UserHandler) TeacherAssignments(w http.ResponseWriter, r *http.Request) {
+	claims := middleware.GetUserClaims(r.Context())
+
+	rows, err := h.db.Query(r.Context(),
+		`SELECT ts.teacher_id, ts.subject_id, s.name,
+			(SELECT tc.class_id FROM teacher_classes tc WHERE tc.teacher_id = ts.teacher_id LIMIT 1),
+			(SELECT c.name FROM teacher_classes tc JOIN classes c ON c.id = tc.class_id WHERE tc.teacher_id = ts.teacher_id LIMIT 1)
+		 FROM teacher_subjects ts
+		 JOIN subjects s ON s.id = ts.subject_id AND s.deleted_at IS NULL
+		 JOIN users u ON u.id = ts.teacher_id AND u.school_id = $1 AND u.deleted_at IS NULL
+		 ORDER BY u.name, s.name`,
+		claims.SchoolID,
+	)
+	if err != nil {
+		renderJSON(w, http.StatusInternalServerError, apiErr("INTERNAL_ERROR", "failed to fetch assignments"))
+		return
+	}
+	defer rows.Close()
+	type assignment struct {
+		TeacherID   string  `json:"teacher_id"`
+		SubjectID   string  `json:"subject_id"`
+		SubjectName string  `json:"subject_name"`
+		ClassID     *string `json:"class_id"`
+		ClassName   *string `json:"class_name"`
+	}
+	assignments := []assignment{}
+	for rows.Next() {
+		var a assignment
+		if err := rows.Scan(&a.TeacherID, &a.SubjectID, &a.SubjectName, &a.ClassID, &a.ClassName); err != nil {
+			continue
+		}
+		assignments = append(assignments, a)
+	}
+	if assignments == nil {
+		assignments = []assignment{}
+	}
+	renderJSON(w, http.StatusOK, apiOK(assignments))
+}
+
 // GET /api/v1/users/me/teacher-detail — own subject/class assignments (teacher self-service)
 func (h *UserHandler) MyTeacherDetail(w http.ResponseWriter, r *http.Request) {
 	claims := middleware.GetUserClaims(r.Context())

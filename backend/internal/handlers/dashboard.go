@@ -143,7 +143,7 @@ func (h *DashboardHandler) StaffDashboard(w http.ResponseWriter, r *http.Request
 	var pendingAssessments []pending
 	pendingRows, err := h.db.Query(r.Context(),
 		`SELECT a.id, COALESCE(a.name, ''), cl.name, s.name, a.max_marks::double precision,
-			(SELECT COUNT(*) FROM marks m WHERE m.assessment_id = a.id),
+			(SELECT COUNT(*) FROM marks m JOIN students st ON st.id = m.student_id WHERE m.assessment_id = a.id AND st.deleted_at IS NULL AND st.is_active = true),
 			(SELECT COUNT(*) FROM students st WHERE st.class_id = a.class_id AND st.deleted_at IS NULL AND st.is_active = true),
 			COALESCE(a.date::text, '')
 		 FROM assessments a
