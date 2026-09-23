@@ -17,8 +17,22 @@
 	let assessments = $state<Assessment[]>([]);
 
 	let assessmentOptions = $derived(
-		assessments.map(a => ({ id: a.id, name: a.name }))
+		assessments
+			.map(a => ({ id: a.id, name: a.name ?? '' }))
+			.sort((x, y) => {
+				const [ox, nx] = assessmentRank(x.name);
+				const [oy, ny] = assessmentRank(y.name);
+				return ox - oy || nx - ny || x.name.localeCompare(y.name);
+			})
 	);
+
+	// Canonical display order: FA-1..FA-4, then SA-1/SA-2, then KCT/KPE, then anything else
+	function assessmentRank(name: string): [number, number] {
+		const m = /^([A-Za-z]+)[-_ ]?(\d+)/.exec((name ?? '').trim());
+		if (!m) return [9, 0];
+		const order: Record<string, number> = { FA: 0, SA: 1, KCT: 2, KPE: 3 };
+		return [order[m[1].toUpperCase()] ?? 9, parseInt(m[2], 10)];
+	}
 
 	// Size each filter box to its longest value so text is never cut off
 	function boxWidth(names: string[], placeholder: string): number {
