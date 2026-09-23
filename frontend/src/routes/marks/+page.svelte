@@ -6,31 +6,25 @@
 	import Button from '$lib/components/Button.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import Select from '$lib/components/Select.svelte';
-	import type { Assessment, AssessmentCategory, Class, Subject, MarkGridRow, MarkInput } from '$lib/types';
+	import type { Assessment, Class, Subject, MarkGridRow, MarkInput } from '$lib/types';
 	import { onMount } from 'svelte';
 	import { TabulatorFull as Tabulator } from 'tabulator-tables';
 	import 'tabulator-tables/dist/css/tabulator.min.css';
 	import { toast } from '$lib/stores/toast.svelte';
 
-	let categories = $state<AssessmentCategory[]>([]);
 	let classes = $state<Class[]>([]);
 	let subjects = $state<Subject[]>([]);
 	let assessments = $state<Assessment[]>([]);
 
 	let assessmentOptions = $derived(
-		assessments.map(a => ({
-			id: a.id,
-			name: `${a.name}${a.class_name || a.subject_name ? ' — ' + [a.class_name, a.subject_name].filter(Boolean).join(' · ') : ''}`
-		}))
+		assessments.map(a => ({ id: a.id, name: a.name }))
 	);
 
 	// Size each filter box to its longest value so text is never cut off
 	function boxWidth(names: string[], placeholder: string): number {
 		return Math.max(placeholder.length, 0, ...names.map(n => n.length)) + 5;
 	}
-	let categoryWidth = $derived(boxWidth(categories.map(c => c.name ?? ''), 'All categories'));
 
-	let selectedCategory = $state('');
 	let selectedClass = $state('');
 	let selectedSubject = $state('');
 	let selectedAssessment = $state('');
@@ -43,22 +37,18 @@
 	let teacherNotice = $state('');
 
 	let filteredClasses = $derived(
-		isTeacher && teacherScopeLoaded
-			? myClassId ? classes.filter(c => c.id === myClassId) : classes
-			: selectedCategory && categories.find(c => c.id === selectedCategory)?.code === 'KREIS'
-				? classes.filter(c => c.name === 'Class 10')
-				: classes
+		isTeacher && teacherScopeLoaded && myClassId
+			? classes.filter(c => c.id === myClassId)
+			: classes
 	);
 	let filteredSubjects = $derived(
 		isTeacher && teacherScopeLoaded
 			? subjects.filter(s => mySubjects.some(ms => ms.id === s.id))
-			: selectedCategory && categories.find(c => c.id === selectedCategory)?.code === 'KREIS'
-				? subjects.filter(s => s.code && ['KAN', 'ENG', 'HIN', 'MAT', 'SCI', 'SOC'].includes(s.code))
-				: subjects
+			: subjects
 	);
 	let classWidth = $derived(boxWidth(filteredClasses.map(c => c.name), 'All classes'));
-	let subjectWidth = $derived(boxWidth(filteredSubjects.map(s => s.name), 'All subjects'));
-	let assessmentWidth = $derived(boxWidth(assessmentOptions.map(a => a.name), 'Select assessment'));
+	let subjectWidth = $derived(boxWidth(filteredSubjects.map(s => s.name ?? ''), 'All subjects'));
+	let assessmentWidth = $derived(boxWidth(assessmentOptions.map(a => a.name ?? ''), 'Select assessment'));
 
 	let students = $state<MarkGridRow[]>([]);
 	let maxMarks = $state(100);
@@ -72,15 +62,12 @@
 
 	onMount(async () => {
 		const sp = new URLSearchParams(window.location.search);
-		selectedCategory = sp.get('category') ?? '';
 		selectedClass = sp.get('class') ?? '';
 
-		const [catRes, classRes, subRes] = await Promise.all([
-			api<AssessmentCategory[]>('GET', '/assessment-categories'),
+		const [classRes, subRes] = await Promise.all([
 			api<Class[]>('GET', '/classes'),
 			api<Subject[]>('GET', '/subjects'),
 		]);
-		if (catRes.data) categories = catRes.data;
 		if (classRes.data) classes = classRes.data;
 		if (subRes.data) subjects = subRes.data;
 
@@ -128,7 +115,6 @@
 	async function loadAssessments() {
 		const seq = ++reqSeq;
 		const params = new URLSearchParams();
-		if (selectedCategory) params.set('category_id', selectedCategory);
 		if (selectedClass) params.set('class_id', selectedClass);
 		if (selectedSubject) params.set('subject_id', selectedSubject);
 		params.set('limit', '500');
@@ -138,16 +124,12 @@
 
 	let filtersReady = $state(false);
 	let prevSearch = $state('');
-	let prevCat = $state('');
 	let prevCls = $state('');
 	let prevSub = $state('');
 	$effect(() => {
-		const filtersChanged = selectedCategory !== prevCat || selectedClass !== prevCls || selectedSubject !== prevSub;
-		if (selectedCategory !== prevCat) {
-			if (!filteredClasses.find(c => c.id === selectedClass)) selectedClass = '';
-			if (!filteredSubjects.find(s => s.id === selectedSubject)) selectedSubject = '';
-		}
-		prevCat = selectedCategory;
+		const filtersChanged = selectedClass !== prevCls || selectedSubject !== prevSub;
+		if (filteredClasses.length && !filteredClasses.find(c => c.id === selectedClass)) selectedClass = '';
+		if (filteredSubjects.length && !filteredSubjects.find(s => s.id === selectedSubject)) selectedSubject = '';
 		prevCls = selectedClass;
 		prevSub = selectedSubject;
 		if (filtersChanged && filtersReady) {
@@ -162,7 +144,6 @@
 
 	$effect(() => {
 		const qs = new URLSearchParams();
-		if (selectedCategory) qs.set('category', selectedCategory);
 		if (selectedClass) qs.set('class', selectedClass);
 		if (selectedSubject) qs.set('subject', selectedSubject);
 		if (selectedAssessment) qs.set('assessment', selectedAssessment);
@@ -368,9 +349,6 @@
 
 	<div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
 		<div class="flex flex-wrap gap-3 items-end">
-			<div class="max-w-full" style="min-width:{categoryWidth}ch">
-				<Select bind:value={selectedCategory} options={categories} label="Category" icon={ClipboardCheck} placeholder="All categories" />
-			</div>
 			<div class="max-w-full" style="min-width:{classWidth}ch">
 				<Select bind:value={selectedClass} options={filteredClasses} label="Class" icon={Users} placeholder="All classes" />
 			</div>
