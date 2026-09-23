@@ -61,6 +61,12 @@
 			return { id: s.id, name: s.roll_no ? `${nm} (Roll ${s.roll_no})` : nm };
 		})
 	);
+	let msAvg = $derived(
+		markSheetData && markSheetData.students.length
+			? markSheetData.students.reduce((a, s) => a + s.percentage, 0) / markSheetData.students.length
+			: 0
+	);
+	let msTopper = $derived(markSheetData?.students.find(s => s.rank === 1));
 
 	// Size each filter box to its longest value so text is never cut off
 	function boxWidth(names: string[], placeholder: string): number {
@@ -231,7 +237,7 @@
 	{:else if activeTab === 'marksheet' && markSheetData}
 		{@const ms = markSheetData}
 		<div class="bg-white rounded-xl border border-slate-200 overflow-hidden print-area">
-			<div class="px-6 py-4 border-b border-slate-200 print-header">
+			<div class="px-6 py-4 border-b border-slate-200 print-header print:hidden">
 				<div class="flex items-center justify-between">
 					<div class="flex items-center gap-3">
 						<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
@@ -245,7 +251,7 @@
 				</div>
 			</div>
 
-			<div class="overflow-x-auto">
+			<div class="overflow-x-auto print:hidden">
 				<table class="w-full text-sm">
 					<thead>
 						<tr class="bg-slate-50 border-b border-slate-200">
@@ -322,7 +328,66 @@
 				</table>
 			</div>
 
-		<div class="px-6 py-4 border-t border-slate-200 space-y-4">
+		<div class="hidden print:block ms-print">
+			<div class="ms-head">
+				<div class="ms-school">Morarji Desai Residential School, Kogunde</div>
+				<div class="ms-title">{ms.class_name} — Consolidated Mark Sheet</div>
+				<div class="ms-meta">
+					Academic Year {ms.academic_year} · Term {ms.term || 'All'} · Students {ms.students.length} · Generated {new Date().toLocaleDateString('en-IN')}
+				</div>
+			</div>
+			<table class="ms-table">
+				<thead>
+					<tr>
+						<th class="ms-c">#</th>
+						<th>Student</th>
+						<th>SATS No.</th>
+						{#each ms.subjects as sg}
+							<th>{sg.subject_code}<span class="ms-sub">{sg.subject_name}</span></th>
+						{/each}
+						<th>Total</th>
+						<th>%</th>
+						<th>Grade</th>
+						<th>Rank</th>
+					</tr>
+				</thead>
+				<tbody>
+					{#each ms.students as s, i}
+						<tr>
+							<td class="ms-c">{i + 1}</td>
+							<td class="ms-name">{s.name}</td>
+							<td class="ms-c">{s.sats_number || '—'}</td>
+							{#each ms.subjects as sg}
+								{@const cell = (s.subjects || []).find(x => x.subject_id === sg.subject_id)}
+								<td class="ms-c">
+									{#if cell}
+										<b>{cell.total}</b><span class="ms-max">/{cell.max_total}</span><br />
+										<span class="ms-pct">{cell.percentage.toFixed(1)}% · {cell.grade}</span>
+									{:else}
+										<span class="ms-na">—</span>
+									{/if}
+								</td>
+							{/each}
+							<td class="ms-c"><b>{s.total}</b><span class="ms-max">/{s.max_total}</span></td>
+							<td class="ms-c">{s.percentage.toFixed(1)}</td>
+							<td class="ms-c"><b>{s.grade}</b></td>
+							<td class="ms-c">{s.rank}</td>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+			<div class="ms-foot">
+				<span>Class average: <b>{msAvg.toFixed(1)}%</b></span>
+				{#if msTopper}<span>Topper: <b>{msTopper.name}</b> ({msTopper.percentage.toFixed(1)}%)</span>{/if}
+				<span>Total students: <b>{ms.students.length}</b></span>
+			</div>
+			<div class="ms-sign">
+				<div>Class Teacher</div>
+				<div>Principal</div>
+			</div>
+		</div>
+
+		<div class="px-6 py-4 border-t border-slate-200 space-y-4 print:hidden">
 			{#if ms.students[0]?.subjects}
 			{@const coSubs = ms.students[0].subjects.filter(s => s.subject_type !== 'curricular')}
 			{#if coSubs.length > 0}
@@ -642,7 +707,43 @@
 		.mentor-report {
 			width: 100%;
 		}
-		.mentor-page {
+	@media print {
+		@page marksheet {
+			size: A4 landscape;
+			margin: 10mm;
+		}
+		.ms-print {
+			page: marksheet;
+			color: #000;
+		}
+		.ms-head { text-align: center; margin-bottom: 8px; }
+		.ms-school { font-size: 15pt; font-weight: 800; letter-spacing: 0.02em; }
+		.ms-title { font-size: 12pt; font-weight: 700; margin-top: 2px; }
+		.ms-meta { font-size: 8pt; color: #333; margin-top: 3px; }
+		.ms-table { width: 100%; border-collapse: collapse; font-size: 8pt; }
+		.ms-table th, .ms-table td { border: 1px solid #333; padding: 3px 4px; vertical-align: middle; }
+		.ms-table thead { display: table-header-group; }
+		.ms-table thead th { background: #e8e8e8 !important; font-weight: 700; }
+		.ms-table tbody tr { break-inside: avoid; }
+		.ms-table tbody tr:nth-child(even) { background: #f4f4f4 !important; }
+		.ms-table .ms-c { text-align: center; white-space: nowrap; }
+		.ms-table .ms-name { font-weight: 600; min-width: 110px; }
+		.ms-table .ms-sub { display: block; font-weight: 400; font-size: 6.5pt; color: #333; }
+		.ms-table .ms-max { font-weight: 400; font-size: 7pt; color: #333; }
+		.ms-table .ms-pct { font-size: 7pt; }
+		.ms-table .ms-na { color: #777; }
+		.ms-foot {
+			margin-top: 10px; font-size: 8.5pt;
+			display: flex; justify-content: space-between; gap: 12px;
+		}
+		.ms-sign { margin-top: 30px; display: flex; justify-content: space-between; }
+		.ms-sign > div {
+			width: 190px; text-align: center; font-size: 8.5pt;
+			border-top: 1px solid #000; padding-top: 3px;
+		}
+	}
+
+	.mentor-page {
 			min-height: 0;
 			page-break-after: always;
 			break-after: page;
