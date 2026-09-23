@@ -73,6 +73,22 @@
 		assessments.forEach((a, i) => { if (a.subject_id === subjectId) idx.push(i); });
 		return idx;
 	}
+	function msRank(name: string): [number, number] {
+		const m = /^([A-Za-z]+)[-_ ]?(\d+)/.exec((name ?? '').trim());
+		if (!m) return [9, 0];
+		const order: Record<string, number> = { FA: 0, SA: 1, KCT: 2, KPE: 3 };
+		return [order[m[1].toUpperCase()] ?? 9, parseInt(m[2], 10)];
+	}
+	function msSubjectCols(assessments: MarkSheetAssessment[], sg: SubjectGroup): { list: MarkSheetAssessment[]; idx: number[] } {
+		const orderOf = (a: MarkSheetAssessment) => {
+			const [o, n] = msRank(a.name);
+			return o * 1000 + n;
+		};
+		const pairs = msColIndexes(assessments, sg.subject_id)
+			.map(i => ({ a: assessments[i], i }))
+			.sort((x, y) => orderOf(x.a) - orderOf(y.a) || x.a.name.localeCompare(y.a.name));
+		return { list: pairs.map(p => p.a), idx: pairs.map(p => p.i) };
+	}
 	function msSubjAgg(s: MarkSheetStudent, subjectId: string) {
 		return (s.subjects || []).find(x => x.subject_id === subjectId);
 	}
@@ -339,7 +355,7 @@
 
 		<div class="hidden print:block ms-print">
 			{#each ms.subjects as sg}
-				{@const colIdx = msColIndexes(ms.assessments, sg.subject_id)}
+				{@const cols = msSubjectCols(ms.assessments, sg)}
 				<section class="ms-subject">
 					<div class="ms-head">
 						<div class="ms-school">Morarji Desai Residential School, Kogunde</div>
@@ -354,7 +370,7 @@
 								<th rowspan="2" class="ms-c">#</th>
 								<th rowspan="2">Student</th>
 								<th rowspan="2">SATS No.</th>
-								{#each sg.assessments as a}
+								{#each cols.list as a}
 									<th colspan="2">{a.name}<span class="ms-sub">max {a.max_marks}</span></th>
 								{/each}
 								<th rowspan="2">Total</th>
@@ -363,7 +379,7 @@
 								<th rowspan="2">Rank</th>
 							</tr>
 							<tr>
-								{#each sg.assessments as a}
+								{#each cols.list as a}
 									<th class="ms-subh">M</th><th class="ms-subh">Gr</th>
 								{/each}
 							</tr>
@@ -375,7 +391,7 @@
 									<td class="ms-c">{i + 1}</td>
 									<td class="ms-name">{s.name}</td>
 									<td class="ms-c">{s.sats_number || '—'}</td>
-									{#each colIdx as ai}
+									{#each cols.idx as ai}
 										{@const m = s.marks[ai]}
 										<td class="ms-c">
 											{#if m && m.has_mark}
