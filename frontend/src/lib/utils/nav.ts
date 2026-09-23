@@ -58,7 +58,7 @@ export const NAV_SECTIONS: NavSection[] = [
 	{
 		label: 'Explore',
 		items: [
-			{ href: '/birds', label: 'Bird Catalog', icon: Bird, roles: ['admin', 'principal', 'teacher', 'special_educator', 'student', 'parent'] },
+			{ href: '/birds', label: 'Bird Catalog', icon: Bird, roles: ['student', 'parent'] },
 		]
 	},
 	{
