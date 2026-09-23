@@ -68,6 +68,15 @@
 	);
 	let msTopper = $derived(markSheetData?.students.find(s => s.rank === 1));
 
+	function msColIndexes(assessments: MarkSheetAssessment[], subjectId: string): number[] {
+		const idx: number[] = [];
+		assessments.forEach((a, i) => { if (a.subject_id === subjectId) idx.push(i); });
+		return idx;
+	}
+	function msSubjAgg(s: MarkSheetStudent, subjectId: string) {
+		return (s.subjects || []).find(x => x.subject_id === subjectId);
+	}
+
 	// Size each filter box to its longest value so text is never cut off
 	function boxWidth(names: string[], placeholder: string): number {
 		return Math.max(placeholder.length, 0, ...names.map(n => n.length)) + 5;
@@ -329,53 +338,64 @@
 			</div>
 
 		<div class="hidden print:block ms-print">
-			<div class="ms-head">
-				<div class="ms-school">Morarji Desai Residential School, Kogunde</div>
-				<div class="ms-title">{ms.class_name} — Consolidated Mark Sheet</div>
-				<div class="ms-meta">
-					Academic Year {ms.academic_year} · Term {ms.term || 'All'} · Students {ms.students.length} · Generated {new Date().toLocaleDateString('en-IN')}
-				</div>
-			</div>
-			<table class="ms-table">
-				<thead>
-					<tr>
-						<th class="ms-c">#</th>
-						<th>Student</th>
-						<th>SATS No.</th>
-						{#each ms.subjects as sg}
-							<th>{sg.subject_code}<span class="ms-sub">{sg.subject_name}</span></th>
-						{/each}
-						<th>Total</th>
-						<th>%</th>
-						<th>Grade</th>
-						<th>Rank</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each ms.students as s, i}
-						<tr>
-							<td class="ms-c">{i + 1}</td>
-							<td class="ms-name">{s.name}</td>
-							<td class="ms-c">{s.sats_number || '—'}</td>
-							{#each ms.subjects as sg}
-								{@const cell = (s.subjects || []).find(x => x.subject_id === sg.subject_id)}
-								<td class="ms-c">
-									{#if cell}
-										<b>{cell.total}</b><span class="ms-max">/{cell.max_total}</span><br />
-										<span class="ms-pct">{cell.percentage.toFixed(1)}% · {cell.grade}</span>
-									{:else}
-										<span class="ms-na">—</span>
-									{/if}
-								</td>
+			{#each ms.subjects as sg}
+				{@const colIdx = msColIndexes(ms.assessments, sg.subject_id)}
+				<section class="ms-subject">
+					<div class="ms-head">
+						<div class="ms-school">Morarji Desai Residential School, Kogunde</div>
+						<div class="ms-title">{ms.class_name} — {sg.subject_name} ({sg.subject_code}) Mark Sheet</div>
+						<div class="ms-meta">
+							Academic Year {ms.academic_year} · Term {ms.term || 'All'} · Students {ms.students.length} · Generated {new Date().toLocaleDateString('en-IN')}
+						</div>
+					</div>
+					<table class="ms-table">
+						<thead>
+							<tr>
+								<th rowspan="2" class="ms-c">#</th>
+								<th rowspan="2">Student</th>
+								<th rowspan="2">SATS No.</th>
+								{#each sg.assessments as a}
+									<th colspan="2">{a.name}<span class="ms-sub">max {a.max_marks}</span></th>
+								{/each}
+								<th rowspan="2">Total</th>
+								<th rowspan="2">%</th>
+								<th rowspan="2">Grade</th>
+								<th rowspan="2">Rank</th>
+							</tr>
+							<tr>
+								{#each sg.assessments as a}
+									<th class="ms-subh">M</th><th class="ms-subh">Gr</th>
+								{/each}
+							</tr>
+						</thead>
+						<tbody>
+							{#each ms.students as s, i}
+								{@const agg = msSubjAgg(s, sg.subject_id)}
+								<tr>
+									<td class="ms-c">{i + 1}</td>
+									<td class="ms-name">{s.name}</td>
+									<td class="ms-c">{s.sats_number || '—'}</td>
+									{#each colIdx as ai}
+										{@const m = s.marks[ai]}
+										<td class="ms-c">
+											{#if m && m.has_mark}
+												{#if m.is_absent}<span class="ms-abs">AB</span>{:else}{m.value}{/if}
+											{:else}<span class="ms-na">—</span>{/if}
+										</td>
+										<td class="ms-c ms-gr">
+											{#if m && m.has_mark && !m.is_absent && m.grade}{m.grade}{:else}<span class="ms-na">—</span>{/if}
+										</td>
+									{/each}
+									<td class="ms-c"><b>{agg ? agg.total : '—'}</b></td>
+									<td class="ms-c">{agg ? agg.percentage.toFixed(1) : '—'}</td>
+									<td class="ms-c"><b>{agg ? agg.grade : '—'}</b></td>
+									<td class="ms-c">{s.rank}</td>
+								</tr>
 							{/each}
-							<td class="ms-c"><b>{s.total}</b><span class="ms-max">/{s.max_total}</span></td>
-							<td class="ms-c">{s.percentage.toFixed(1)}</td>
-							<td class="ms-c"><b>{s.grade}</b></td>
-							<td class="ms-c">{s.rank}</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
+						</tbody>
+					</table>
+				</section>
+			{/each}
 			<div class="ms-foot">
 				<span>Class average: <b>{msAvg.toFixed(1)}%</b></span>
 				{#if msTopper}<span>Topper: <b>{msTopper.name}</b> ({msTopper.percentage.toFixed(1)}%)</span>{/if}
@@ -716,6 +736,8 @@
 			page: marksheet;
 			color: #000;
 		}
+		.ms-subject { break-after: page; }
+		.ms-subject:last-child { break-after: auto; }
 		.ms-head { text-align: center; margin-bottom: 8px; }
 		.ms-school { font-size: 15pt; font-weight: 800; letter-spacing: 0.02em; }
 		.ms-title { font-size: 12pt; font-weight: 700; margin-top: 2px; }
@@ -729,8 +751,9 @@
 		.ms-table .ms-c { text-align: center; white-space: nowrap; }
 		.ms-table .ms-name { font-weight: 600; min-width: 110px; }
 		.ms-table .ms-sub { display: block; font-weight: 400; font-size: 6.5pt; color: #333; }
-		.ms-table .ms-max { font-weight: 400; font-size: 7pt; color: #333; }
-		.ms-table .ms-pct { font-size: 7pt; }
+		.ms-table .ms-subh { font-size: 7pt; }
+		.ms-table .ms-gr { font-weight: 700; }
+		.ms-table .ms-abs { font-weight: 700; }
 		.ms-table .ms-na { color: #777; }
 		.ms-foot {
 			margin-top: 10px; font-size: 8.5pt;
