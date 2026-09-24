@@ -597,8 +597,14 @@
 		{@const mr = mentorReport}
 		<div class="mentor-report">
 			{#each mr.mentors as g, gi}
+				{@const topper = g.students[0]}
 				<div class="mentor-page print-area">
-					<div class="mentor-header">
+					<div class="hidden print:block text-center pb-3 mb-1" style="border-bottom: 2px solid #14b8a6;">
+						<div style="font-size: 14pt; font-weight: 800;">Morarji Desai Residential School, Kogunde</div>
+						<div style="font-size: 11pt; font-weight: 700; margin-top: 2px;">Mentor-Wise Progress Report — {g.mentor_name}</div>
+						<div style="font-size: 8pt; color: #333; margin-top: 2px;">Academic Year {mr.academic_year_name} · Group {gi + 1} of {mr.mentors.length} · Generated {new Date().toLocaleDateString('en-IN')}</div>
+					</div>
+					<div class="mentor-header print:hidden">
 						<div class="flex items-center gap-4">
 							<div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-700 flex items-center justify-center shadow-md">
 								<HeartHandshake size={24} class="text-white" />
@@ -614,6 +620,11 @@
 							<div class="text-xs text-slate-400">Generated on {new Date().toLocaleDateString()}</div>
 						</div>
 					</div>
+					<div class="px-6 py-2.5 border-b border-slate-200 bg-slate-50/60 text-xs text-slate-600 flex flex-wrap gap-x-5 gap-y-1 print:hidden">
+						<span>Group average: <b class="text-slate-800">{g.avg_cognitive_pct.toFixed(1)}%</b></span>
+						{#if topper}<span>Top performer: <b class="text-slate-800">{topper.name}</b> ({topper.cognitive_pct.toFixed(1)}%)</span>{/if}
+						<span>{g.student_count} student{g.student_count !== 1 ? 's' : ''}</span>
+					</div>
 
 					<table class="w-full text-sm">
 						<thead>
@@ -622,7 +633,6 @@
 								<th class="px-3 py-2 text-left font-semibold text-slate-600">Student</th>
 								<th class="px-3 py-2 text-left font-semibold text-slate-600 w-24">SATS No</th>
 								<th class="px-3 py-2 text-center font-semibold text-slate-600 w-16">Class</th>
-								<th class="px-3 py-2 text-center font-semibold text-slate-600 w-16">Gender</th>
 								<th class="px-3 py-2 text-center font-semibold text-slate-600 w-20">Cognitive %</th>
 								<th class="px-3 py-2 text-center font-semibold text-slate-600 w-20">Tier</th>
 							</tr>
@@ -636,7 +646,6 @@
 									</td>
 									<td class="px-3 py-2 text-slate-500 text-xs">{st.sats_number}</td>
 									<td class="px-3 py-2 text-center text-slate-600 text-xs">{st.class_name.replace('Class ', '')}</td>
-									<td class="px-3 py-2 text-center text-slate-600 text-xs capitalize">{st.gender || '—'}</td>
 									<td class="px-3 py-2 text-center">
 										<span class="text-xs font-medium px-1.5 py-0.5 rounded {pctClass(st.cognitive_pct)}">{st.cognitive_pct.toFixed(1)}</span>
 									</td>

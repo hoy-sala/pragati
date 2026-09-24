@@ -942,7 +942,7 @@ func (h *ReportsHandler) MentorReport(w http.ResponseWriter, r *http.Request) {
 			s.id AS student_id, s.sats_number,
 			s.first_name || ' ' || COALESCE(s.last_name,'') AS student_name,
 			COALESCE(s.roll_no, 0), COALESCE(s.gender, ''),
-			c.name AS class_name, t.cognitive_pct, t.tier
+			c.name AS class_name, COALESCE(t.cognitive_pct, 0), COALESCE(t.tier, 0)
 		FROM mentor_assignments ma
 		JOIN users u ON u.id = ma.mentor_id
 		JOIN students s ON s.id = ma.student_id
