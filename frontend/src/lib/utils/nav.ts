@@ -37,8 +37,8 @@ export const NAV_SECTIONS: NavSection[] = [
 		items: [
 			{ href: '/assessments', label: 'Assessments', icon: ClipboardCheck, roles: ['admin', 'principal', 'teacher'] },
 			{ href: '/marks', label: 'Marks Entry', icon: Table, roles: ['admin', 'principal', 'teacher'] },
-			{ href: '/questions', label: 'Question Bank', icon: HelpCircle, roles: ['admin', 'principal', 'teacher'] },
-			{ href: '/quizzes', label: 'Quizzes', icon: ClipboardList, roles: ['admin', 'principal', 'teacher'] },
+			{ href: '/questions', label: 'Question Bank', icon: HelpCircle, roles: ['admin'] },
+			{ href: '/quizzes', label: 'Quizzes', icon: ClipboardList, roles: ['admin'] },
 		]
 	},
 	{

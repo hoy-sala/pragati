@@ -140,10 +140,10 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
 
 		r.Route("/questions", func(r chi.Router) {
 			r.Use(roleMw.Authenticate)
-			r.Get("/", questionH.List)
-			r.Post("/", roleMw.RequireRole("admin", "principal", "teacher")(http.HandlerFunc(questionH.Create)))
-			r.Post("/import/gift", roleMw.RequireRole("admin", "teacher")(http.HandlerFunc(questionH.ImportGIFT)))
-			r.Post("/import/csv", roleMw.RequireRole("admin", "teacher")(http.HandlerFunc(questionH.ImportCSV)))
+			r.Get("/", roleMw.RequireRole("admin")(http.HandlerFunc(questionH.List)))
+			r.Post("/", roleMw.RequireRole("admin")(http.HandlerFunc(questionH.Create)))
+			r.Post("/import/gift", roleMw.RequireRole("admin")(http.HandlerFunc(questionH.ImportGIFT)))
+			r.Post("/import/csv", roleMw.RequireRole("admin")(http.HandlerFunc(questionH.ImportCSV)))
 		})
 
 		r.Route("/marks", func(r chi.Router) {
@@ -181,21 +181,21 @@ func NewRouter(db *pgxpool.Pool, jwtService *auth.JWTService, cfg *config.Config
 		r.Route("/quizzes", func(r chi.Router) {
 			r.Use(roleMw.Authenticate)
 			r.Get("/available", quizH.GetAvailable)
-			r.Post("/", roleMw.RequireRole("admin", "principal", "teacher")(http.HandlerFunc(quizH.Create)))
-			r.Get("/", quizH.List)
+			r.Post("/", roleMw.RequireRole("admin")(http.HandlerFunc(quizH.Create)))
+			r.Get("/", roleMw.RequireRole("admin")(http.HandlerFunc(quizH.List)))
 			r.Get("/{id}", quizH.Get)
-			r.Put("/{id}", roleMw.RequireRole("admin", "principal", "teacher")(http.HandlerFunc(quizH.Update)))
-			r.Delete("/{id}", roleMw.RequireRole("admin", "principal", "teacher")(http.HandlerFunc(quizH.Delete)))
-			r.Post("/{id}/publish", roleMw.RequireRole("admin", "principal", "teacher")(http.HandlerFunc(quizH.Publish)))
+			r.Put("/{id}", roleMw.RequireRole("admin")(http.HandlerFunc(quizH.Update)))
+			r.Delete("/{id}", roleMw.RequireRole("admin")(http.HandlerFunc(quizH.Delete)))
+			r.Post("/{id}/publish", roleMw.RequireRole("admin")(http.HandlerFunc(quizH.Publish)))
 			r.Post("/{id}/attempts", quizH.StartAttempt)
-			r.Post("/{id}/questions", roleMw.RequireRole("admin", "principal", "teacher")(http.HandlerFunc(quizH.AddQuestions)))
+			r.Post("/{id}/questions", roleMw.RequireRole("admin")(http.HandlerFunc(quizH.AddQuestions)))
 			r.Get("/{id}/questions", quizH.ListQuestions)
-			r.Delete("/{id}/questions/{questionId}", roleMw.RequireRole("admin", "principal", "teacher")(http.HandlerFunc(quizH.RemoveQuestion)))
+			r.Delete("/{id}/questions/{questionId}", roleMw.RequireRole("admin")(http.HandlerFunc(quizH.RemoveQuestion)))
 			r.Get("/attempts/{attemptId}", quizH.GetAttempt)
 			r.Put("/attempts/{attemptId}/answers", quizH.SaveAnswer)
 			r.Post("/attempts/{attemptId}/submit", quizH.SubmitAttempt)
 			r.Get("/attempts/{attemptId}/result", quizH.GetResult)
-			r.Post("/attempts/{attemptId}/grade", roleMw.RequireRole("admin", "principal", "teacher")(http.HandlerFunc(quizH.GradeShortAnswer)))
+			r.Post("/attempts/{attemptId}/grade", roleMw.RequireRole("admin")(http.HandlerFunc(quizH.GradeShortAnswer)))
 		})
 
 		r.Route("/team-quizzes", func(r chi.Router) {
