@@ -597,19 +597,14 @@
 		{@const mr = mentorReport}
 		<div class="mentor-report">
 			{#each mr.mentors as g, gi}
-				{@const topper = g.students[0]}
 				<div class="mentor-page print-area">
 					<div class="mentor-letterhead">
-						<img src="/logos/karnataka-emblem.png" alt="Emblem of Karnataka" class="mentor-emblem" />
-						<div class="mentor-school">Morarji Desai Residential School, Kogunde</div>
-						<div class="mentor-doctitle">Mentor-Wise Progress Report</div>
-						<div class="mentor-meta">Academic Year {mr.academic_year_name} &middot; Mentor {g.mentor_name} &middot; Group {gi + 1} of {mr.mentors.length} &middot; Generated {new Date().toLocaleDateString('en-IN')}</div>
+						<img src="/logos/kreis-logo.png" alt="KREIS logo" class="mentor-emblem" />
+						<div class="mentor-school">Morarji Desai Residential School (SC-32) Bahaddurghatta (Kogunde), Chitradurga Tq &amp; Dt 577519</div>
+						<div class="mentor-doctitle">Mentor cum Parent Teacher Report 2026-27</div>
+						<div class="mentor-meta">Mentor {g.mentor_name}</div>
 					</div>
-					<div class="mentor-stats">
-						<div><span>Students</span><b>{g.student_count}</b></div>
-						<div><span>Group average</span><b>{g.avg_cognitive_pct.toFixed(1)}%</b></div>
-						<div><span>Top performer</span><b>{topper ? topper.name + ' (' + topper.cognitive_pct.toFixed(1) + '%)' : '—'}</b></div>
-					</div>
+
 
 					<table class="w-full text-sm">
 						<thead>
@@ -618,8 +613,8 @@
 								<th class="px-3 py-2 text-left font-semibold text-slate-600">Student</th>
 								<th class="px-3 py-2 text-left font-semibold text-slate-600 w-24">SATS No</th>
 								<th class="px-3 py-2 text-center font-semibold text-slate-600 w-16">Class</th>
-								<th class="px-3 py-2 text-center font-semibold text-slate-600 w-20">Cognitive %</th>
-								<th class="px-3 py-2 text-center font-semibold text-slate-600 w-20">Tier</th>
+								<th class="px-3 py-2 text-center font-semibold text-slate-600 w-20 print:hidden">Cognitive %</th>
+								<th class="px-3 py-2 text-center font-semibold text-slate-600 w-20 print:hidden">Tier</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -631,10 +626,10 @@
 									</td>
 									<td class="px-3 py-2 text-slate-500 text-xs">{st.sats_number}</td>
 									<td class="px-3 py-2 text-center text-slate-600 text-xs">{st.class_name.replace('Class ', '')}</td>
-									<td class="px-3 py-2 text-center">
+									<td class="px-3 py-2 text-center print:hidden">
 										<span class="text-xs font-medium px-1.5 py-0.5 rounded {pctClass(st.cognitive_pct)}">{st.cognitive_pct.toFixed(1)}</span>
 									</td>
-									<td class="px-3 py-2 text-center">
+									<td class="px-3 py-2 text-center print:hidden">
 										<span class="text-xs font-semibold px-2 py-0.5 rounded {tierClass(st.tier)}">{st.tier || '—'}</span>
 									</td>
 								</tr>
@@ -642,7 +637,6 @@
 						</tbody>
 					</table>
 					<div class="mentor-footer">
-						<div class="text-xs text-slate-400">Mentor's signature</div>
 						<div class="text-xs text-slate-400">Principal's signature</div>
 					</div>
 				</div>
@@ -714,13 +708,9 @@
 	.mentor-school { font-weight: 800; font-size: 1.05rem; letter-spacing: 0.01em; color: #0f172a; }
 	.mentor-doctitle { font-weight: 700; font-size: 0.95rem; color: #0f766e; margin-top: 2px; }
 	.mentor-meta { font-size: 0.72rem; color: #64748b; margin-top: 4px; }
-	.mentor-stats { display: flex; gap: 12px; padding: 12px 24px; border-bottom: 1px solid #e2e8f0; background: #f8fafc; }
-	.mentor-stats > div { flex: 1; background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 8px 12px; min-width: 0; }
-	.mentor-stats span { display: block; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #94a3b8; }
-	.mentor-stats b { font-size: 0.95rem; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
 	.mentor-footer {
 		display: none;
-		justify-content: space-between;
+		justify-content: center;
 		padding: 24px;
 		margin-top: auto;
 	}
