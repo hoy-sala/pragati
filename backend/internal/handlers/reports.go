@@ -894,9 +894,27 @@ type MentorReportStudent struct {
 type MentorReportGroup struct {
 	MentorID        string                `json:"mentor_id"`
 	MentorName      string                `json:"mentor_name"`
+	Designation     string                `json:"designation"`
 	StudentCount    int                   `json:"student_count"`
 	AvgCognitivePct float64               `json:"avg_cognitive_pct"`
 	Students        []MentorReportStudent `json:"students"`
+}
+
+// mentorDesignation renders a display designation, e.g. "Principal" or "Kannada Teacher".
+func mentorDesignation(role, subjects string) string {
+	switch role {
+	case "principal":
+		return "Principal"
+	case "admin":
+		return "Administrator"
+	case "special_educator":
+		return "Special Educator"
+	default:
+		if subjects != "" {
+			return subjects + " Teacher"
+		}
+		return "Teacher"
+	}
 }
 
 // GET /api/v1/reports/mentors?academic_year_id=
@@ -938,7 +956,8 @@ func (h *ReportsHandler) MentorReport(w http.ResponseWriter, r *http.Request) {
 				LEAST(4, CEIL(rank_in_class * 4.0 / n_in_class)) AS tier
 			FROM ranked
 		)
-		SELECT u.id AS mentor_id, u.name AS mentor_name,
+		SELECT u.id AS mentor_id, u.name AS mentor_name, u.role AS mentor_role,
+			COALESCE((SELECT string_agg(s.name, ', ' ORDER BY s.name) FROM teacher_subjects ts JOIN subjects s ON s.id = ts.subject_id AND s.deleted_at IS NULL WHERE ts.teacher_id = u.id), '') AS mentor_subjects,
 			s.id AS student_id, s.sats_number,
 			s.first_name || ' ' || COALESCE(s.last_name,'') AS student_name,
 			COALESCE(s.roll_no, 0), COALESCE(s.gender, ''),
@@ -963,16 +982,16 @@ func (h *ReportsHandler) MentorReport(w http.ResponseWriter, r *http.Request) {
 	groups := map[string]*MentorReportGroup{}
 	var order []string
 	for rows.Next() {
-		var mid, mname, sid, sats, sname, gender, cname string
+		var mid, mname, mrole, msubjects, sid, sats, sname, gender, cname string
 		var roll int
 		var cog float64
 		var tier int
-		if err := rows.Scan(&mid, &mname, &sid, &sats, &sname, &roll, &gender, &cname, &cog, &tier); err != nil {
+		if err := rows.Scan(&mid, &mname, &mrole, &msubjects, &sid, &sats, &sname, &roll, &gender, &cname, &cog, &tier); err != nil {
 			continue
 		}
 		g, ok := groups[mid]
 		if !ok {
-			g = &MentorReportGroup{MentorID: mid, MentorName: mname}
+			g = &MentorReportGroup{MentorID: mid, MentorName: mname, Designation: mentorDesignation(mrole, msubjects)}
 			groups[mid] = g
 			order = append(order, mid)
 		}

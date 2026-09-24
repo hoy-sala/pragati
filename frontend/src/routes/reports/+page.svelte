@@ -44,7 +44,7 @@
 	let reportStudents = $state<{ id: string; first_name: string; last_name?: string; roll_no?: number }[]>([]);
 
 	type MentorReportStudent = { student_id: string; sats_number: string; name: string; roll_no: number; gender: string; class_name: string; cognitive_pct: number; tier: number };
-	type MentorReportGroup = { mentor_id: string; mentor_name: string; student_count: number; avg_cognitive_pct: number; students: MentorReportStudent[] };
+	type MentorReportGroup = { mentor_id: string; mentor_name: string; designation: string; student_count: number; avg_cognitive_pct: number; students: MentorReportStudent[] };
 	let mentorReport = $state<{ academic_year_id: string; academic_year_name: string; mentors: MentorReportGroup[] } | null>(null);
 
 	const termOptions = [
@@ -602,7 +602,7 @@
 						<img src="/logos/kreis-logo.png" alt="KREIS logo" class="mentor-emblem" />
 						<div class="mentor-school">Morarji Desai Residential School (SC-32) Bahaddurghatta (Kogunde), Chitradurga Tq &amp; Dt 577519</div>
 						<div class="mentor-doctitle">Mentor cum Parent Teacher Report 2026-27</div>
-						<div class="mentor-meta">Mentor {g.mentor_name}</div>
+						<div class="mentor-id"><span>Mentor cum Parent Teacher Name: <b>{g.mentor_name}</b></span><span>Designation: <b>{g.designation || '—'}</b></span></div>
 					</div>
 
 
@@ -620,9 +620,9 @@
 						<tbody>
 							{#each g.students as st, i}
 								<tr class="border-b border-slate-100">
-									<td class="px-3 py-2 text-center text-slate-400">{i + 1}</td>
+									<td class="px-2 py-1 text-center text-slate-400">{i + 1}</td>
 									<td class="px-3 py-2">
-										<div class="font-medium text-slate-800 text-xs whitespace-nowrap">{st.name}</div>
+										<div class="font-medium text-slate-800 text-[11px] whitespace-nowrap">{st.name}</div>
 									</td>
 									<td class="px-3 py-2 text-slate-500 text-xs">{st.sats_number}</td>
 									<td class="px-3 py-2 text-center text-slate-600 text-xs">{st.class_name.replace('Class ', '')}</td>
@@ -704,10 +704,20 @@
 		break-after: auto;
 	}
 	.mentor-letterhead { text-align: center; padding: 20px 24px 12px; border-bottom: 3px double #14b8a6; }
-	.mentor-emblem { width: 56px; height: 56px; object-fit: contain; margin: 0 auto 6px; display: block; }
+	.mentor-emblem { width: 48px; height: 48px; object-fit: contain; margin: 0 auto 4px; display: block; }
 	.mentor-school { font-weight: 800; font-size: 1.05rem; letter-spacing: 0.01em; color: #0f172a; }
 	.mentor-doctitle { font-weight: 700; font-size: 0.95rem; color: #0f766e; margin-top: 2px; }
 	.mentor-meta { font-size: 0.72rem; color: #64748b; margin-top: 4px; }
+	.mentor-id {
+		display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+		margin: 8px 24px 0; padding: 6px 12px;
+		border: 1.5px solid var(--ink, #1F1A2E); border-radius: 10px;
+		background: #f8fafc; font-size: 0.78rem; color: #334155;
+	}
+	.mentor-id b { color: #0f172a; }
+	.mentor-letterhead { padding-bottom: 12px; }
+	.mentor-page table th, .mentor-page table td { padding: 4px 8px; }
+	.mentor-page table { font-size: 0.78rem; }
 	.mentor-footer {
 		display: none;
 		justify-content: center;
