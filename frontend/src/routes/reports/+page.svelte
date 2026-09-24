@@ -599,31 +599,16 @@
 			{#each mr.mentors as g, gi}
 				{@const topper = g.students[0]}
 				<div class="mentor-page print-area">
-					<div class="hidden print:block text-center pb-3 mb-1" style="border-bottom: 2px solid #14b8a6;">
-						<div style="font-size: 14pt; font-weight: 800;">Morarji Desai Residential School, Kogunde</div>
-						<div style="font-size: 11pt; font-weight: 700; margin-top: 2px;">Mentor-Wise Progress Report — {g.mentor_name}</div>
-						<div style="font-size: 8pt; color: #333; margin-top: 2px;">Academic Year {mr.academic_year_name} · Group {gi + 1} of {mr.mentors.length} · Generated {new Date().toLocaleDateString('en-IN')}</div>
+					<div class="mentor-letterhead">
+						<img src="/logos/karnataka-emblem.png" alt="Emblem of Karnataka" class="mentor-emblem" />
+						<div class="mentor-school">Morarji Desai Residential School, Kogunde</div>
+						<div class="mentor-doctitle">Mentor-Wise Progress Report</div>
+						<div class="mentor-meta">Academic Year {mr.academic_year_name} &middot; Mentor {g.mentor_name} &middot; Group {gi + 1} of {mr.mentors.length} &middot; Generated {new Date().toLocaleDateString('en-IN')}</div>
 					</div>
-					<div class="mentor-header print:hidden">
-						<div class="flex items-center gap-4">
-							<div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-700 flex items-center justify-center shadow-md">
-								<HeartHandshake size={24} class="text-white" />
-							</div>
-							<div>
-								<div class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Mentor Group {gi + 1} of {mr.mentors.length}</div>
-								<h2 class="text-lg font-bold text-slate-900">{g.mentor_name}</h2>
-								<p class="text-xs text-slate-500">Students: {g.student_count} &middot; Avg cognitive: {g.avg_cognitive_pct.toFixed(1)}%</p>
-							</div>
-						</div>
-						<div class="text-right">
-							<div class="text-xs text-slate-500">Academic Year: {mr.academic_year_name}</div>
-							<div class="text-xs text-slate-400">Generated on {new Date().toLocaleDateString()}</div>
-						</div>
-					</div>
-					<div class="px-6 py-2.5 border-b border-slate-200 bg-slate-50/60 text-xs text-slate-600 flex flex-wrap gap-x-5 gap-y-1 print:hidden">
-						<span>Group average: <b class="text-slate-800">{g.avg_cognitive_pct.toFixed(1)}%</b></span>
-						{#if topper}<span>Top performer: <b class="text-slate-800">{topper.name}</b> ({topper.cognitive_pct.toFixed(1)}%)</span>{/if}
-						<span>{g.student_count} student{g.student_count !== 1 ? 's' : ''}</span>
+					<div class="mentor-stats">
+						<div><span>Students</span><b>{g.student_count}</b></div>
+						<div><span>Group average</span><b>{g.avg_cognitive_pct.toFixed(1)}%</b></div>
+						<div><span>Top performer</span><b>{topper ? topper.name + ' (' + topper.cognitive_pct.toFixed(1) + '%)' : '—'}</b></div>
 					</div>
 
 					<table class="w-full text-sm">
@@ -724,15 +709,17 @@
 		page-break-after: auto;
 		break-after: auto;
 	}
-	.mentor-header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		padding: 16px 24px;
-		border-bottom: 2px solid #14b8a6;
-	}
+	.mentor-letterhead { text-align: center; padding: 20px 24px 12px; border-bottom: 3px double #14b8a6; }
+	.mentor-emblem { width: 56px; height: 56px; object-fit: contain; margin: 0 auto 6px; display: block; }
+	.mentor-school { font-weight: 800; font-size: 1.05rem; letter-spacing: 0.01em; color: #0f172a; }
+	.mentor-doctitle { font-weight: 700; font-size: 0.95rem; color: #0f766e; margin-top: 2px; }
+	.mentor-meta { font-size: 0.72rem; color: #64748b; margin-top: 4px; }
+	.mentor-stats { display: flex; gap: 12px; padding: 12px 24px; border-bottom: 1px solid #e2e8f0; background: #f8fafc; }
+	.mentor-stats > div { flex: 1; background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 8px 12px; min-width: 0; }
+	.mentor-stats span { display: block; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #94a3b8; }
+	.mentor-stats b { font-size: 0.95rem; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
 	.mentor-footer {
-		display: flex;
+		display: none;
 		justify-content: space-between;
 		padding: 24px;
 		margin-top: auto;
@@ -751,6 +738,17 @@
 		}
 		.mentor-report {
 			width: 100%;
+		}
+		.mentor-page {
+			min-height: 100%;
+			width: 100%;
+		}
+		.mentor-footer {
+			display: flex;
+		}
+		.mentor-emblem {
+			width: 60px;
+			height: 60px;
 		}
 	@media print {
 		@page marksheet {
@@ -791,11 +789,5 @@
 		}
 	}
 
-	.mentor-page {
-			min-height: 0;
-			page-break-after: always;
-			break-after: page;
-			width: 100%;
-		}
 	}
 </style>
