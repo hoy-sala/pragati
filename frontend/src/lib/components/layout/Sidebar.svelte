@@ -13,7 +13,12 @@
 	let role = $derived(effectiveRole(auth.currentUser));
 	let displayName = $derived(userDisplayName(auth.currentUser));
 	let initials = $derived(userInitials(displayName));
-	let displayTitle = $derived(roleTitle(role));
+	let storedDesignation = $derived(
+		auth.currentUser && 'designation' in auth.currentUser
+			? ((auth.currentUser as { designation?: string }).designation || '')
+			: ''
+	);
+	let displayTitle = $derived(storedDesignation || roleTitle(role));
 
 	let roleBadgeColor = $derived(
 		role === 'admin' ? 'bg-purple-100 text-purple-700' :

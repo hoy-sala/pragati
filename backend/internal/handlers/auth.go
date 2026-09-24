@@ -311,12 +311,12 @@ func (h *AuthHandler) Me(w http.ResponseWriter, r *http.Request) {
 
 	var user models.User
 	err := h.db.QueryRow(r.Context(),
-		`SELECT id, school_id, email, name, role,
+		`SELECT id, school_id, email, name, role, COALESCE(designation, ''),
 		        COALESCE(phone, ''), COALESCE(avatar_url, ''), is_active,
 		        created_at, updated_at
 		 FROM users WHERE id = $1 AND deleted_at IS NULL`,
 		claims.UserID,
-	).Scan(&user.ID, &user.SchoolID, &user.Email, &user.Name, &user.Role,
+	).Scan(&user.ID, &user.SchoolID, &user.Email, &user.Name, &user.Role, &user.Designation,
 		&user.Phone, &user.AvatarURL, &user.IsActive, &user.CreatedAt, &user.UpdatedAt)
 	if err != nil {
 		renderJSON(w, http.StatusNotFound, models.APIResponse{

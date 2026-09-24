@@ -26,7 +26,7 @@ func (h *UserHandler) List(w http.ResponseWriter, r *http.Request) {
 	claims := middleware.GetUserClaims(r.Context())
 
 	rows, err := h.db.Query(r.Context(),
-		`SELECT id, school_id, email, name, role, phone, is_active, created_at
+		`SELECT id, school_id, email, name, role, COALESCE(designation, ''), phone, is_active, created_at
 		 FROM users WHERE school_id = $1 AND deleted_at IS NULL
 		 ORDER BY role, name`,
 		claims.SchoolID,
@@ -39,20 +39,21 @@ func (h *UserHandler) List(w http.ResponseWriter, r *http.Request) {
 	defer rows.Close()
 
 	type userInfo struct {
-		ID        string    `json:"id"`
-		Email     *string   `json:"email,omitempty"`
-		Name      string    `json:"name"`
-		Role      string    `json:"role"`
-		Phone     *string   `json:"phone,omitempty"`
-		IsActive  bool      `json:"is_active"`
-		CreatedAt time.Time `json:"created_at"`
+		ID          string    `json:"id"`
+		Email       *string   `json:"email,omitempty"`
+		Name        string    `json:"name"`
+		Role        string    `json:"role"`
+		Designation string    `json:"designation,omitempty"`
+		Phone       *string   `json:"phone,omitempty"`
+		IsActive    bool      `json:"is_active"`
+		CreatedAt   time.Time `json:"created_at"`
 	}
 
 	users := []userInfo{}
 	for rows.Next() {
 		var u userInfo
 		var schoolID string
-		if err := rows.Scan(&u.ID, &schoolID, &u.Email, &u.Name, &u.Role, &u.Phone, &u.IsActive, &u.CreatedAt); err != nil {
+		if err := rows.Scan(&u.ID, &schoolID, &u.Email, &u.Name, &u.Role, &u.Designation, &u.Phone, &u.IsActive, &u.CreatedAt); err != nil {
 			log.Error().Err(err).Msg("scan user row failed")
 			continue
 		}

@@ -13,6 +13,7 @@ type User struct {
 	PasswordHash  string     `json:"-" db:"password_hash"`
 	Name          string     `json:"name" db:"name"`
 	Role          string     `json:"role" db:"role"`
+	Designation   string     `json:"designation,omitempty" db:"designation"`
 	Phone         string     `json:"phone" db:"phone"`
 	AvatarURL     string     `json:"avatar_url,omitempty" db:"avatar_url"`
 	IsActive      bool       `json:"is_active" db:"is_active"`

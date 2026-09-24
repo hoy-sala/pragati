@@ -901,7 +901,11 @@ type MentorReportGroup struct {
 }
 
 // mentorDesignation renders a display designation, e.g. "Principal" or "Kannada Teacher".
-func mentorDesignation(role, subjects string) string {
+// An explicitly stored designation always wins.
+func mentorDesignation(role, subjects, stored string) string {
+	if stored != "" {
+		return stored
+	}
 	switch role {
 	case "principal":
 		return "Principal"
@@ -956,7 +960,7 @@ func (h *ReportsHandler) MentorReport(w http.ResponseWriter, r *http.Request) {
 				LEAST(4, CEIL(rank_in_class * 4.0 / n_in_class)) AS tier
 			FROM ranked
 		)
-		SELECT u.id AS mentor_id, u.name AS mentor_name, u.role AS mentor_role,
+		SELECT u.id AS mentor_id, u.name AS mentor_name, u.role AS mentor_role, COALESCE(u.designation, '') AS mentor_designation,
 			COALESCE((SELECT string_agg(s.name, ', ' ORDER BY s.name) FROM teacher_subjects ts JOIN subjects s ON s.id = ts.subject_id AND s.deleted_at IS NULL WHERE ts.teacher_id = u.id), '') AS mentor_subjects,
 			s.id AS student_id, s.sats_number,
 			s.first_name || ' ' || COALESCE(s.last_name,'') AS student_name,
@@ -982,16 +986,16 @@ func (h *ReportsHandler) MentorReport(w http.ResponseWriter, r *http.Request) {
 	groups := map[string]*MentorReportGroup{}
 	var order []string
 	for rows.Next() {
-		var mid, mname, mrole, msubjects, sid, sats, sname, gender, cname string
+		var mid, mname, mrole, mdesig, msubjects, sid, sats, sname, gender, cname string
 		var roll int
 		var cog float64
 		var tier int
-		if err := rows.Scan(&mid, &mname, &mrole, &msubjects, &sid, &sats, &sname, &roll, &gender, &cname, &cog, &tier); err != nil {
+		if err := rows.Scan(&mid, &mname, &mrole, &mdesig, &msubjects, &sid, &sats, &sname, &roll, &gender, &cname, &cog, &tier); err != nil {
 			continue
 		}
 		g, ok := groups[mid]
 		if !ok {
-			g = &MentorReportGroup{MentorID: mid, MentorName: mname, Designation: mentorDesignation(mrole, msubjects)}
+			g = &MentorReportGroup{MentorID: mid, MentorName: mname, Designation: mentorDesignation(mrole, msubjects, mdesig)}
 			groups[mid] = g
 			order = append(order, mid)
 		}
