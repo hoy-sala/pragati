@@ -341,6 +341,80 @@
 				</div>
 			</div>
 
+		{#if msIsCCE}
+			<div class="space-y-6 print:hidden">
+				{#each ms.subjects as sg}
+					{@const cce = ms.students.map(s => cceRow(s, sg, ms.assessments))}
+					<div class="border border-slate-200 rounded-lg overflow-hidden">
+						<div class="px-4 py-2 bg-slate-50 border-b border-slate-200">
+							<h3 class="text-sm font-bold text-slate-800 uppercase tracking-wide">{sg.subject_name}</h3>
+							<p class="text-[10px] text-slate-400">{sg.subject_code} · {sg.subject_type === 'curricular' ? 'Curricular' : 'Co-curricular'}</p>
+						</div>
+						<div class="overflow-x-auto">
+							<table class="w-full text-xs cce-screen">
+								<colgroup>
+									<col style="width: 34px" />
+									<col style="width: 150px" />
+									{#each Array(CCE_COLS) as _}<col style="width: 34px" />{/each}
+								</colgroup>
+								<thead>
+									<tr>
+										<th rowspan="3" class="cce-sid">#</th>
+										<th rowspan="3" class="cce-sid">Student</th>
+										{#each CCE_HEADER as g}
+											<th colspan={g.sub.length} class="cce-grp">{g.label}</th>
+										{/each}
+									</tr>
+									<tr>
+										{#each CCE_HEADER as g}
+											{#each g.sub as sh, k}
+												<th class="cce-sub" class:cce-oral={g.label === 'SA1' && k === 1 || g.label === 'SA2' && k === 1}>{sh}</th>
+											{/each}
+										{/each}
+									</tr>
+								</thead>
+								<tbody>
+									{#each ms.students as s, i}
+										{@const r = cce[i]}
+										<tr class="border-t border-slate-100 hover:bg-slate-50/60">
+											<td class="cce-tc text-slate-400">{i + 1}</td>
+											<td class="cce-tl">
+												<div class="font-medium text-slate-800">{s.name}</div>
+												<div class="text-[10px] text-slate-400">SATS {s.sats_number || '—'}</div>
+											</td>
+											<td class="cce-tc">{cceFmt(r.fa1)}</td>
+											<td class="cce-tc cce-g">{cceGradeOf(r.fa1, 10)}</td>
+											<td class="cce-tc">{cceFmt(r.fa2)}</td>
+											<td class="cce-tc cce-g">{cceGradeOf(r.fa2, 10)}</td>
+											<td class="cce-tc">{cceFmt(r.sa1?.exam ?? null)}</td>
+											<td class="cce-tc cce-oral"></td>
+											<td class="cce-tc">{cceFmt(r.sa1?.out50 ?? null)}</td>
+											<td class="cce-tc">{cceFmt(r.sa1?.out30 ?? null)}</td>
+											<td class="cce-tc cce-g">{cceGradeOf(r.sa1?.out30 ?? null, 30)}</td>
+											<td class="cce-tc font-semibold text-slate-800">{cceFmt(r.t1)}</td>
+											<td class="cce-tc cce-g">{cceGradeOf(r.t1, 50)}</td>
+											<td class="cce-tc">{cceFmt(r.fa3)}</td>
+											<td class="cce-tc cce-g">{cceGradeOf(r.fa3, 10)}</td>
+											<td class="cce-tc">{cceFmt(r.fa4)}</td>
+											<td class="cce-tc cce-g">{cceGradeOf(r.fa4, 10)}</td>
+											<td class="cce-tc">{cceFmt(r.sa2?.exam ?? null)}</td>
+											<td class="cce-tc cce-oral"></td>
+											<td class="cce-tc">{cceFmt(r.sa2?.out50 ?? null)}</td>
+											<td class="cce-tc">{cceFmt(r.sa2?.out30 ?? null)}</td>
+											<td class="cce-tc cce-g">{cceGradeOf(r.sa2?.out30 ?? null, 30)}</td>
+											<td class="cce-tc font-semibold text-slate-800">{cceFmt(r.t2)}</td>
+											<td class="cce-tc cce-g">{cceGradeOf(r.t2, 50)}</td>
+											<td class="cce-tc font-semibold text-slate-800">{cceFmt(r.total)}</td>
+											<td class="cce-tc cce-g">{cceGradeOf(r.total, 100)}</td>
+										</tr>
+									{/each}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				{/each}
+			</div>
+		{:else}
 			<div class="overflow-x-auto print:hidden">
 				<table class="w-full text-sm">
 					<thead>
@@ -417,6 +491,7 @@
 					</tbody>
 				</table>
 			</div>
+		{/if}
 
 		{#if msIsCCE}
 		<div class="hidden print:block ms-print">
@@ -912,13 +987,25 @@
 			width: 190px; text-align: center; font-size: 8.5pt;
 			border-top: 1px solid #000; padding-top: 3px;
 		}
-		.cce-table { font-size: 6.5pt; table-layout: fixed; }
-		.cce-table th, .cce-table td { padding: 2px 1px; }
-		.cce-table .cce-subject { font-size: 10pt; letter-spacing: 0.04em; text-transform: uppercase; }
-		.cce-table .cce-oral { background: #fffdf0; }
-		.cce-table col.cce-id { width: 26px; }
-		.cce-table col.cce-name { width: 116px; }
-		.cce-table col.cce-mark { width: 22px; }
+	.cce-table { font-size: 6.5pt; table-layout: fixed; }
+	.cce-table th, .cce-table td { padding: 2px 1px; }
+	.cce-table .cce-subject { font-size: 10pt; letter-spacing: 0.04em; text-transform: uppercase; }
+	.cce-table .cce-oral { background: #fffdf0; }
+	.cce-table col.cce-id { width: 26px; }
+	.cce-table col.cce-name { width: 116px; }
+	.cce-table col.cce-mark { width: 22px; }
+
+	.cce-screen { border-collapse: collapse; table-layout: fixed; }
+	.cce-screen th, .cce-screen td { border: 1px solid #e2e8f0; }
+	.cce-screen thead th { background: #f8fafc; color: #334155; font-weight: 600; text-align: center; }
+	.cce-screen .cce-sid { padding: 4px 6px; text-align: left; vertical-align: middle; font-size: 0.7rem; }
+	.cce-screen .cce-grp { padding: 4px 2px; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.03em; border-bottom: 1px solid #e2e8f0; }
+	.cce-screen .cce-sub { padding: 3px 1px; font-size: 0.6rem; color: #64748b; }
+	.cce-screen .cce-tc { padding: 4px 1px; text-align: center; }
+	.cce-screen .cce-tl { padding: 4px 6px; }
+	.cce-screen .cce-g { font-weight: 700; color: #475569; }
+	.cce-screen .cce-oral { background: #fffdf0; }
+	.cce-screen th.cce-oral, .cce-screen td.cce-oral { background: #fffdf0; }
 	}
 
 	}
