@@ -149,11 +149,11 @@
 			return v === null ? null : cceRound(v / 2);
 		};
 		const sa = (n: string, oralName: string) => {
-			const v = raw(n);
-			if (v === null) return null;
+			const exam = raw(n);
 			const oral = raw(oralName);
-			const out50 = cceRound(v + (oral ?? 0));
-			return { exam: v, oral, out50, out30: cceRound(out50 * 0.6) };
+			if (exam === null && oral === null) return null;
+			const out50 = exam === null ? null : cceRound(exam + (oral ?? 0));
+			return { exam, oral, out50, out30: out50 === null ? null : cceRound(out50 * 0.6) };
 		};
 		const fa1 = fa('FA1'), fa2 = fa('FA2'), sa1 = sa('SA1', 'SA1 Oral');
 		const fa3 = fa('FA3'), fa4 = fa('FA4'), sa2 = sa('SA2', 'SA2 Oral');
