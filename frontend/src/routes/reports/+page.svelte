@@ -157,6 +157,30 @@
 		const t2 = cceAdd(fa3, fa4, sa2?.out30 ?? null);
 		return { fa1, fa2, sa1, t1, fa3, fa4, sa2, t2, total: cceAdd(t1, t2) };
 	}
+	// Flatten one register row into styled cells so the markup stays a single loop.
+	function cceCells(r: ReturnType<typeof cceRow>) {
+		const m = (v: number | null) => cceFmt(v);
+		const g = (v: number | null, outOf: number) => cceGradeOf(v, outOf);
+		return [
+			{ t: m(r.fa1), gr: g(r.fa1, 10) },
+			{ t: m(r.fa2), gr: g(r.fa2, 10) },
+			{ t: m(r.sa1?.exam ?? null) },
+			{ t: '', oral: true },
+			{ t: m(r.sa1?.out50 ?? null) },
+			{ t: m(r.sa1?.out30 ?? null), gr: g(r.sa1?.out30 ?? null, 30) },
+			{ t: m(r.t1), gr: g(r.t1, 50), bold: true },
+			{ t: m(r.fa3), gr: g(r.fa3, 10) },
+			{ t: m(r.fa4), gr: g(r.fa4, 10) },
+			{ t: m(r.sa2?.exam ?? null) },
+			{ t: '', oral: true },
+			{ t: m(r.sa2?.out50 ?? null) },
+			{ t: m(r.sa2?.out30 ?? null), gr: g(r.sa2?.out30 ?? null, 30) },
+			{ t: m(r.t2), gr: g(r.t2, 50), bold: true },
+			{ t: m(r.total), gr: g(r.total, 100), bold: true },
+		].map(c => ({ ...c, gr: c.gr ?? '' })) as {
+			t: string; gr: string; bold?: boolean; oral?: boolean;
+		}[];
+	}
 
 	// Size each filter box to its longest value so text is never cut off
 	function boxWidth(names: string[], placeholder: string): number {
@@ -342,70 +366,62 @@
 			</div>
 
 		{#if msIsCCE}
-			<div class="space-y-6 print:hidden">
+			<div class="space-y-4 print:hidden">
 				{#each ms.subjects as sg}
-					{@const cce = ms.students.map(s => cceRow(s, sg, ms.assessments))}
-					<div class="border border-slate-200 rounded-lg overflow-hidden">
-						<div class="px-4 py-2 bg-slate-50 border-b border-slate-200">
-							<h3 class="text-sm font-bold text-slate-800 uppercase tracking-wide">{sg.subject_name}</h3>
-							<p class="text-[10px] text-slate-400">{sg.subject_code} · {sg.subject_type === 'curricular' ? 'Curricular' : 'Co-curricular'}</p>
+					{@const cce = ms.students.map(s => cceCells(cceRow(s, sg, ms.assessments)))}
+					<div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
+						<div class="px-4 py-2.5 border-b border-slate-200 flex items-center gap-2">
+							<span class="text-xs font-bold text-slate-800 uppercase tracking-wide">{sg.subject_name}</span>
+							<span class="text-[10px] text-slate-400">{sg.subject_code}</span>
+							<span class="text-[10px] text-slate-400">· {sg.subject_type === 'curricular' ? 'Curricular' : 'Co-curricular'}</span>
 						</div>
 						<div class="overflow-x-auto">
-							<table class="w-full text-xs cce-screen">
-								<colgroup>
-									<col style="width: 34px" />
-									<col style="width: 150px" />
-									{#each Array(CCE_COLS) as _}<col style="width: 34px" />{/each}
-								</colgroup>
+							<table class="w-full text-sm">
 								<thead>
-									<tr>
-										<th rowspan="3" class="cce-sid">#</th>
-										<th rowspan="3" class="cce-sid">Student</th>
+									<tr class="bg-slate-50 border-b border-slate-200">
+										<th rowspan="2" class="px-3 py-2 text-left font-semibold text-slate-600 border-r border-slate-200 sticky left-0 bg-slate-50 z-10 w-8">#</th>
+										<th rowspan="2" class="px-3 py-2 text-left font-semibold text-slate-600 border-r border-slate-200 sticky left-8 bg-slate-50 z-10">Student</th>
 										{#each CCE_HEADER as g}
-											<th colspan={g.sub.length} class="cce-grp">{g.label}</th>
+											<th colspan={g.sub.length} class="px-2 py-1.5 text-center font-semibold text-slate-700 border-r border-slate-200 border-b border-slate-100 text-[11px]">
+												{g.label}
+											</th>
 										{/each}
 									</tr>
-									<tr>
+									<tr class="bg-slate-50 border-b border-slate-200">
 										{#each CCE_HEADER as g}
 											{#each g.sub as sh, k}
-												<th class="cce-sub" class:cce-oral={g.label === 'SA1' && k === 1 || g.label === 'SA2' && k === 1}>{sh}</th>
+												<th class="px-1.5 py-1 text-center font-semibold text-[9px] text-slate-500 border-r border-slate-100 {g.label.startsWith('FA') && g.label.length <= 3 ? 'text-blue-600' : g.label.startsWith('SA') ? 'text-purple-600' : 'text-slate-600'} {g.label === 'SA1' && k === 1 || g.label === 'SA2' && k === 1 ? 'bg-amber-50/70' : ''}">
+													{sh}
+												</th>
 											{/each}
 										{/each}
 									</tr>
 								</thead>
 								<tbody>
 									{#each ms.students as s, i}
-										{@const r = cce[i]}
-										<tr class="border-t border-slate-100 hover:bg-slate-50/60">
-											<td class="cce-tc text-slate-400">{i + 1}</td>
-											<td class="cce-tl">
-												<div class="font-medium text-slate-800">{s.name}</div>
+										{@const cells = cce[i]}
+										<tr class="border-b border-slate-100 hover:bg-slate-50/50">
+											<td class="px-3 py-2 text-center text-slate-400 border-r border-slate-100 sticky left-0 bg-white z-10">{i + 1}</td>
+											<td class="px-3 py-2 border-r border-slate-100 sticky left-8 bg-white z-10">
+												<div class="font-medium text-slate-800 text-xs whitespace-nowrap">{s.name}</div>
 												<div class="text-[10px] text-slate-400">SATS {s.sats_number || '—'}</div>
 											</td>
-											<td class="cce-tc">{cceFmt(r.fa1)}</td>
-											<td class="cce-tc cce-g">{cceGradeOf(r.fa1, 10)}</td>
-											<td class="cce-tc">{cceFmt(r.fa2)}</td>
-											<td class="cce-tc cce-g">{cceGradeOf(r.fa2, 10)}</td>
-											<td class="cce-tc">{cceFmt(r.sa1?.exam ?? null)}</td>
-											<td class="cce-tc cce-oral"></td>
-											<td class="cce-tc">{cceFmt(r.sa1?.out50 ?? null)}</td>
-											<td class="cce-tc">{cceFmt(r.sa1?.out30 ?? null)}</td>
-											<td class="cce-tc cce-g">{cceGradeOf(r.sa1?.out30 ?? null, 30)}</td>
-											<td class="cce-tc font-semibold text-slate-800">{cceFmt(r.t1)}</td>
-											<td class="cce-tc cce-g">{cceGradeOf(r.t1, 50)}</td>
-											<td class="cce-tc">{cceFmt(r.fa3)}</td>
-											<td class="cce-tc cce-g">{cceGradeOf(r.fa3, 10)}</td>
-											<td class="cce-tc">{cceFmt(r.fa4)}</td>
-											<td class="cce-tc cce-g">{cceGradeOf(r.fa4, 10)}</td>
-											<td class="cce-tc">{cceFmt(r.sa2?.exam ?? null)}</td>
-											<td class="cce-tc cce-oral"></td>
-											<td class="cce-tc">{cceFmt(r.sa2?.out50 ?? null)}</td>
-											<td class="cce-tc">{cceFmt(r.sa2?.out30 ?? null)}</td>
-											<td class="cce-tc cce-g">{cceGradeOf(r.sa2?.out30 ?? null, 30)}</td>
-											<td class="cce-tc font-semibold text-slate-800">{cceFmt(r.t2)}</td>
-											<td class="cce-tc cce-g">{cceGradeOf(r.t2, 50)}</td>
-											<td class="cce-tc font-semibold text-slate-800">{cceFmt(r.total)}</td>
-											<td class="cce-tc cce-g">{cceGradeOf(r.total, 100)}</td>
+											{#each cells as c}
+												<td class="px-2 py-2 text-center border-r border-slate-100 {c.oral ? 'bg-amber-50/70' : ''}">
+													{#if c.t === '—'}
+														<span class="text-xs text-slate-300">—</span>
+													{:else if c.t !== ''}
+														<span class="text-xs {c.bold ? 'font-semibold text-slate-800' : 'font-medium text-slate-700'}">{c.t}</span>
+													{/if}
+												</td>
+												<td class="px-1.5 py-2 text-center border-r border-slate-100">
+													{#if c.gr && c.gr !== '—'}
+														<span class="text-[10px] font-bold px-1.5 py-0.5 rounded {gradeClass(c.gr)}">{c.gr}</span>
+													{:else}
+														<span class="text-[10px] text-slate-300">—</span>
+													{/if}
+												</td>
+											{/each}
 										</tr>
 									{/each}
 								</tbody>
@@ -994,18 +1010,6 @@
 	.cce-table col.cce-id { width: 26px; }
 	.cce-table col.cce-name { width: 116px; }
 	.cce-table col.cce-mark { width: 22px; }
-
-	.cce-screen { border-collapse: collapse; table-layout: fixed; }
-	.cce-screen th, .cce-screen td { border: 1px solid #e2e8f0; }
-	.cce-screen thead th { background: #f8fafc; color: #334155; font-weight: 600; text-align: center; }
-	.cce-screen .cce-sid { padding: 4px 6px; text-align: left; vertical-align: middle; font-size: 0.7rem; }
-	.cce-screen .cce-grp { padding: 4px 2px; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.03em; border-bottom: 1px solid #e2e8f0; }
-	.cce-screen .cce-sub { padding: 3px 1px; font-size: 0.6rem; color: #64748b; }
-	.cce-screen .cce-tc { padding: 4px 1px; text-align: center; }
-	.cce-screen .cce-tl { padding: 4px 6px; }
-	.cce-screen .cce-g { font-weight: 700; color: #475569; }
-	.cce-screen .cce-oral { background: #fffdf0; }
-	.cce-screen th.cce-oral, .cce-screen td.cce-oral { background: #fffdf0; }
 	}
 
 	}
