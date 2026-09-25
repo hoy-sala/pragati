@@ -286,6 +286,15 @@ func (h *ReportsHandler) MarkSheet(w http.ResponseWriter, r *http.Request) {
 		assyArgs = append(assyArgs, academicYearID)
 		n++
 	}
+	// Teachers only ever see the subjects assigned to them.
+	if claims.Role == "teacher" {
+		assyQuery += fmt.Sprintf(` AND EXISTS (
+			SELECT 1 FROM teacher_subjects ts
+			WHERE ts.teacher_id = $%d AND ts.subject_id = a.subject_id
+		)`, n)
+		assyArgs = append(assyArgs, claims.UserID)
+		n++
+	}
 	assyQuery += " ORDER BY s.name, c.sort_order NULLS LAST, a.created_at"
 
 	rows, err := h.db.Query(r.Context(), assyQuery, assyArgs...)

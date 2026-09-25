@@ -9,6 +9,8 @@
 	import { page } from '$app/stores';
 	import type { Class } from '$lib/types';
 	import { onMount } from 'svelte';
+	import { getAuthState } from '$lib/stores/auth.svelte';
+	import { effectiveRole } from '$lib/utils/roles';
 
 	type Tab = 'marksheet' | 'report' | 'mentors';
 	const REPORT_VIEWS: Tab[] = ['marksheet', 'report', 'mentors'];
@@ -232,10 +234,27 @@
 
 	const curricularOrder = ['KAN', 'ENG', 'HIN', 'MAT', 'SCI', 'SOC'];
 
+	const auth = getAuthState();
+	let isTeacher = $derived(effectiveRole(auth.currentUser) === 'teacher');
+	let teacherSubjects = $state<{ id: string; name: string }[]>([]);
+	let teacherScopeLoaded = $state(false);
+	let teacherNotice = $state('');
+
 	onMount(async () => {
 		document.documentElement.classList.add('report-print');
 		const cr = await api<Class[]>('GET', '/classes');
 		if (cr.data) classes = cr.data;
+
+		if (isTeacher) {
+			const myRes = await api<{ subjects: { id: string; name: string }[] }>('GET', '/users/me/teacher-detail');
+			teacherSubjects = myRes.data?.subjects ?? [];
+			teacherScopeLoaded = true;
+			if (teacherSubjects.length === 0) {
+				teacherNotice = 'No subjects are assigned to you yet, so there is no mark sheet to show. Please contact your admin.';
+			}
+		} else {
+			teacherScopeLoaded = true;
+		}
 	});
 
 	async function loadMarkSheet(term = selectedTerm) {
@@ -350,6 +369,15 @@
 		</div>
 		{#if err}
 			<p class="text-sm text-danger-600 mt-2">{err}</p>
+		{/if}
+		{#if activeTab === 'marksheet' && teacherScopeLoaded && teacherNotice}
+			<p class="text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mt-3">
+				{teacherNotice}
+			</p>
+		{:else if activeTab === 'marksheet' && isTeacher && teacherSubjects.length > 0}
+			<p class="text-xs text-slate-500 mt-2">
+				Showing your subject{teacherSubjects.length > 1 ? 's' : ''} only: {teacherSubjects.map(s => s.name).join(', ')}.
+			</p>
 		{/if}
 	</div>
 
