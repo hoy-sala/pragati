@@ -45,7 +45,7 @@
 	let studentReport = $state<StudentReport | null>(null);
 	let reportStudents = $state<{ id: string; first_name: string; last_name?: string; roll_no?: number }[]>([]);
 
-	type MentorReportStudent = { student_id: string; sats_number: string; name: string; roll_no: number; gender: string; father_name: string; class_name: string; cognitive_pct: number; tier: number };
+	type MentorReportStudent = { student_id: string; sats_number: string; name: string; roll_no: number; gender: string; father_name: string; mother_name: string; class_name: string; cognitive_pct: number; tier: number };
 	type MentorReportGroup = { mentor_id: string; mentor_name: string; designation: string; student_count: number; avg_cognitive_pct: number; students: MentorReportStudent[] };
 	let mentorReport = $state<{ academic_year_id: string; academic_year_name: string; mentors: MentorReportGroup[] } | null>(null);
 
@@ -235,13 +235,17 @@
 	}
 
 	// "NAME S/o FATHER" for male, "NAME D/o FATHER" for female.
-	// Placeholder values such as "00000" or "-" are treated as missing.
+	// Placeholder values such as "00000" or "-" are treated as missing, in which
+	// case the mother's name is used instead.
 	function withParent(st: MentorReportStudent): string {
-		const father = (st.father_name ?? '').trim();
-		const usable = father && !/^[-0]+$/.test(father) ? father : '';
-		if (!usable) return st.name;
+		const usable = (v: string | undefined) => {
+			const t = (v ?? '').trim();
+			return t && !/^[-0]+$/.test(t) ? t : '';
+		};
+		const parent = usable(st.father_name) || usable(st.mother_name);
+		if (!parent) return st.name;
 		const relation = (st.gender ?? '').trim().toLowerCase() === 'female' ? 'D/o' : 'S/o';
-		return `${st.name} ${relation} ${usable}`;
+		return `${st.name} ${relation} ${parent}`;
 	}
 
 	const curricularOrder = ['KAN', 'ENG', 'HIN', 'MAT', 'SCI', 'SOC'];
