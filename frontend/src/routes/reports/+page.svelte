@@ -93,6 +93,71 @@
 		return (s.subjects || []).find(x => x.subject_id === subjectId);
 	}
 
+	let msIsCCE = $derived(/(^|\D)(6|7)(\D|$)/.test(markSheetData?.class_name ?? ''));
+
+	const CCE_HEADER = [
+		{ label: 'FA1', sub: ['10', 'Gr'] },
+		{ label: 'FA2', sub: ['10', 'Gr'] },
+		{ label: 'SA1', sub: ['40', '10', '50', '30', 'Gr'] },
+		{ label: 'FA1+FA2+SA1', sub: ['50', 'Gr'] },
+		{ label: 'FA3', sub: ['10', 'Gr'] },
+		{ label: 'FA4', sub: ['10', 'Gr'] },
+		{ label: 'SA2', sub: ['40', '10', '50', '30', 'Gr'] },
+		{ label: 'FA3+FA4+SA2', sub: ['50', 'Gr'] },
+		{ label: 'TOTAL', sub: ['100', 'Gr'] },
+	];
+	const CCE_COLS = CCE_HEADER.reduce((n, g) => n + g.sub.length, 0);
+
+	function cceRound(v: number): number {
+		return Math.round(v * 100) / 100;
+	}
+	function cceFmt(v: number | null): string {
+		return v === null ? '—' : String(cceRound(v));
+	}
+	function cceGrade(pct: number): string {
+		if (pct >= 90) return 'A+';
+		if (pct >= 70) return 'A';
+		if (pct >= 50) return 'B+';
+		if (pct >= 30) return 'B';
+		return 'C';
+	}
+	function cceGradeOf(v: number | null, outOf: number): string {
+		return v === null ? '—' : cceGrade((v / outOf) * 100);
+	}
+	function cceMark(
+		s: MarkSheetStudent, assessments: MarkSheetAssessment[], subjectId: string, name: string
+	): number | null {
+		const i = assessments.findIndex(
+			a => a.subject_id === subjectId && a.name.trim().toUpperCase() === name.toUpperCase()
+		);
+		if (i < 0) return null;
+		const m = s.marks[i];
+		if (!m || !m.has_mark || m.is_absent) return null;
+		return m.value;
+	}
+	function cceAdd(...vals: (number | null)[]): number | null {
+		if (vals.some(v => v === null)) return null;
+		return cceRound(vals.reduce<number>((a, b) => a + (b ?? 0), 0));
+	}
+	// CCE register: FA stored out of 20 -> 10; SA exam out of 40, oral 10 left blank for the teacher.
+	function cceRow(s: MarkSheetStudent, sg: SubjectGroup, assessments: MarkSheetAssessment[]) {
+		const raw = (n: string) => cceMark(s, assessments, sg.subject_id, n);
+		const fa = (n: string) => {
+			const v = raw(n);
+			return v === null ? null : cceRound(v / 2);
+		};
+		const sa = (n: string) => {
+			const v = raw(n);
+			if (v === null) return null;
+			return { exam: v, out50: cceRound(v), out30: cceRound(v * 0.6) };
+		};
+		const fa1 = fa('FA1'), fa2 = fa('FA2'), sa1 = sa('SA1');
+		const fa3 = fa('FA3'), fa4 = fa('FA4'), sa2 = sa('SA2');
+		const t1 = cceAdd(fa1, fa2, sa1?.out30 ?? null);
+		const t2 = cceAdd(fa3, fa4, sa2?.out30 ?? null);
+		return { fa1, fa2, sa1, t1, fa3, fa4, sa2, t2, total: cceAdd(t1, t2) };
+	}
+
 	// Size each filter box to its longest value so text is never cut off
 	function boxWidth(names: string[], placeholder: string): number {
 		return Math.max(placeholder.length, 0, ...names.map(n => n.length)) + 5;
@@ -353,6 +418,93 @@
 				</table>
 			</div>
 
+		{#if msIsCCE}
+		<div class="hidden print:block ms-print">
+			{#each ms.subjects as sg}
+				{@const cce = ms.students.map(s => cceRow(s, sg, ms.assessments))}
+				<section class="ms-subject">
+					<div class="ms-head">
+						<div class="ms-school">Morarji Desai Residential School, Kogunde</div>
+						<div class="ms-title">{ms.class_name} — {sg.subject_name} ({sg.subject_code}) Mark Sheet</div>
+						<div class="ms-meta">
+							Academic Year {ms.academic_year} · Term {ms.term || 'All'} · Students {ms.students.length} · Generated {new Date().toLocaleDateString('en-IN')}
+						</div>
+					</div>
+					<table class="ms-table cce-table">
+						<colgroup>
+							<col class="cce-id" />
+							<col class="cce-name" />
+							<col class="cce-id" />
+							{#each Array(CCE_COLS) as _}<col class="cce-mark" />{/each}
+						</colgroup>
+						<thead>
+							<tr>
+								<th rowspan="3" class="ms-c">#</th>
+								<th rowspan="3">Student</th>
+								<th rowspan="3">SATS No.</th>
+								<th colspan={CCE_COLS} class="cce-subject">{sg.subject_name}</th>
+							</tr>
+							<tr>
+								{#each CCE_HEADER as g}
+									<th colspan={g.sub.length}>{g.label}</th>
+								{/each}
+							</tr>
+							<tr>
+								{#each CCE_HEADER as g}
+									{#each g.sub as sh, k}
+										<th class="ms-subh" class:cce-oral={g.label === 'SA1' && k === 1 || g.label === 'SA2' && k === 1}>{sh}</th>
+									{/each}
+								{/each}
+							</tr>
+						</thead>
+						<tbody>
+							{#each ms.students as s, i}
+								{@const r = cce[i]}
+								<tr>
+									<td class="ms-c">{i + 1}</td>
+									<td class="ms-name">{s.name}</td>
+									<td class="ms-c">{s.sats_number || '—'}</td>
+									<td class="ms-c">{cceFmt(r.fa1)}</td>
+									<td class="ms-c ms-gr">{cceGradeOf(r.fa1, 10)}</td>
+									<td class="ms-c">{cceFmt(r.fa2)}</td>
+									<td class="ms-c ms-gr">{cceGradeOf(r.fa2, 10)}</td>
+									<td class="ms-c">{cceFmt(r.sa1?.exam ?? null)}</td>
+									<td class="ms-c cce-oral"></td>
+									<td class="ms-c">{cceFmt(r.sa1?.out50 ?? null)}</td>
+									<td class="ms-c">{cceFmt(r.sa1?.out30 ?? null)}</td>
+									<td class="ms-c ms-gr">{cceGradeOf(r.sa1?.out30 ?? null, 30)}</td>
+									<td class="ms-c"><b>{cceFmt(r.t1)}</b></td>
+									<td class="ms-c ms-gr">{cceGradeOf(r.t1, 50)}</td>
+									<td class="ms-c">{cceFmt(r.fa3)}</td>
+									<td class="ms-c ms-gr">{cceGradeOf(r.fa3, 10)}</td>
+									<td class="ms-c">{cceFmt(r.fa4)}</td>
+									<td class="ms-c ms-gr">{cceGradeOf(r.fa4, 10)}</td>
+									<td class="ms-c">{cceFmt(r.sa2?.exam ?? null)}</td>
+									<td class="ms-c cce-oral"></td>
+									<td class="ms-c">{cceFmt(r.sa2?.out50 ?? null)}</td>
+									<td class="ms-c">{cceFmt(r.sa2?.out30 ?? null)}</td>
+									<td class="ms-c ms-gr">{cceGradeOf(r.sa2?.out30 ?? null, 30)}</td>
+									<td class="ms-c"><b>{cceFmt(r.t2)}</b></td>
+									<td class="ms-c ms-gr">{cceGradeOf(r.t2, 50)}</td>
+									<td class="ms-c"><b>{cceFmt(r.total)}</b></td>
+									<td class="ms-c ms-gr">{cceGradeOf(r.total, 100)}</td>
+								</tr>
+							{/each}
+						</tbody>
+					</table>
+					<div class="ms-foot">
+						<span>Class average: <b>{msAvg.toFixed(1)}%</b></span>
+						{#if msTopper}<span>Topper: <b>{msTopper.name}</b> ({msTopper.percentage.toFixed(1)}%)</span>{/if}
+						<span>Total students: <b>{ms.students.length}</b></span>
+					</div>
+					<div class="ms-sign">
+						<div>Class Teacher</div>
+						<div>Principal</div>
+					</div>
+				</section>
+			{/each}
+		</div>
+		{:else}
 		<div class="hidden print:block ms-print">
 			{#each ms.subjects as sg}
 				{@const cols = msSubjectCols(ms.assessments, sg)}
@@ -422,6 +574,7 @@
 				<div>Principal</div>
 			</div>
 		</div>
+		{/if}
 
 	</div>
 
@@ -759,6 +912,13 @@
 			width: 190px; text-align: center; font-size: 8.5pt;
 			border-top: 1px solid #000; padding-top: 3px;
 		}
+		.cce-table { font-size: 6.5pt; table-layout: fixed; }
+		.cce-table th, .cce-table td { padding: 2px 1px; }
+		.cce-table .cce-subject { font-size: 10pt; letter-spacing: 0.04em; text-transform: uppercase; }
+		.cce-table .cce-oral { background: #fffdf0; }
+		.cce-table col.cce-id { width: 26px; }
+		.cce-table col.cce-name { width: 116px; }
+		.cce-table col.cce-mark { width: 22px; }
 	}
 
 	}
