@@ -863,7 +863,8 @@
 		{@const mr = mentorReport}
 		<div class="mentor-report">
 			{#each mr.mentors as g, gi}
-				{@const classList = [...new Set(g.students.map(s => s.class_name.replace('Class ', '')))]}
+				{@const classList = [...new Set(g.students.map(s => s.class_name.replace('Class ', '')))]
+					.map(Number).filter(n => !isNaN(n)).sort((a, b) => a - b)}
 				<div class="mentor-page print-area">
 					<header class="mentor-letterhead">
 						<img src="/logos/karnataka-emblem.png" alt="" class="mentor-emblem mentor-emblem-l" />

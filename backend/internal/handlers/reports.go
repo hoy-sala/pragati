@@ -983,7 +983,7 @@ func (h *ReportsHandler) MentorReport(w http.ResponseWriter, r *http.Request) {
 		WHERE ma.academic_year_id = $1
 		  AND u.school_id = $2 AND u.deleted_at IS NULL AND u.is_active = true
 		  AND s.deleted_at IS NULL AND s.is_active = true
-		ORDER BY u.name ASC, t.cognitive_pct DESC NULLS LAST, s.first_name ASC`,
+		ORDER BY u.name ASC, c.sort_order ASC, COALESCE(s.roll_no, 0) ASC, s.first_name ASC, s.last_name ASC`,
 		academicYearID, claims.SchoolID)
 	if err != nil {
 		log.Error().Err(err).Msg("mentor report query failed")
