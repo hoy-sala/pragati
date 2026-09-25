@@ -27,7 +27,11 @@
   let tab = $derived(VALID_TABS.includes(tabParam) ? tabParam : "assignments");
   // Don't downgrade the dashboard tab before auth finishes loading.
   let activeTab = $derived(
-    tab === "dashboard" && !auth.isLoading && !canReview ? "assignments" : tab,
+    tab === "dashboard" && !auth.isLoading && !canReview
+      ? "assignments"
+      : tab === "assignments" && !auth.isLoading && !isAdmin
+        ? "roster"
+        : tab,
   );
 
   let years = $state<AcademicYear[]>([]);

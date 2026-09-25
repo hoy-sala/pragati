@@ -6,7 +6,7 @@ export interface PageTab {
 }
 
 export const MENTOR_TABS: PageTab[] = [
-	{ href: '/mentors?tab=assignments', label: 'Assignments' },
+	{ href: '/mentors?tab=assignments', label: 'Assignments', roles: ['admin'] },
 	{ href: '/mentors?tab=roster', label: 'Roster' },
 	{ href: '/mentors?tab=attendance', label: 'Attendance' },
 	{ href: '/mentors?tab=logs', label: 'Logs' },
