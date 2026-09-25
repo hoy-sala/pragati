@@ -162,27 +162,31 @@
 		const m = (v: number | null) => cceFmt(v);
 		const g = (v: number | null, outOf: number) => cceGradeOf(v, outOf);
 		return [
-			{ t: m(r.fa1), gr: g(r.fa1, 10) },
-			{ t: m(r.fa2), gr: g(r.fa2, 10) },
+			{ t: m(r.fa1) },
+			{ gr: g(r.fa1, 10) },
+			{ t: m(r.fa2) },
+			{ gr: g(r.fa2, 10) },
 			{ t: m(r.sa1?.exam ?? null) },
 			{ t: '', oral: true },
 			{ t: m(r.sa1?.out50 ?? null) },
 			{ t: m(r.sa1?.out30 ?? null) },
-			{ t: '', gr: g(r.sa1?.out30 ?? null, 30) },
+			{ gr: g(r.sa1?.out30 ?? null, 30) },
 			{ t: m(r.t1), bold: true },
-			{ t: '', gr: g(r.t1, 50) },
-			{ t: m(r.fa3), gr: g(r.fa3, 10) },
-			{ t: m(r.fa4), gr: g(r.fa4, 10) },
+			{ gr: g(r.t1, 50) },
+			{ t: m(r.fa3) },
+			{ gr: g(r.fa3, 10) },
+			{ t: m(r.fa4) },
+			{ gr: g(r.fa4, 10) },
 			{ t: m(r.sa2?.exam ?? null) },
 			{ t: '', oral: true },
 			{ t: m(r.sa2?.out50 ?? null) },
 			{ t: m(r.sa2?.out30 ?? null) },
-			{ t: '', gr: g(r.sa2?.out30 ?? null, 30) },
+			{ gr: g(r.sa2?.out30 ?? null, 30) },
 			{ t: m(r.t2), bold: true },
-			{ t: '', gr: g(r.t2, 50) },
+			{ gr: g(r.t2, 50) },
 			{ t: m(r.total), bold: true },
-			{ t: '', gr: g(r.total, 100) },
-		] as { t: string; gr?: string; bold?: boolean; oral?: boolean }[];
+			{ gr: g(r.total, 100) },
+		] as { t?: string; gr?: string; bold?: boolean; oral?: boolean }[];
 	}
 
 	// Size each filter box to its longest value so text is never cut off
