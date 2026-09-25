@@ -58,11 +58,12 @@
   ];
 
   async function loadStudents() {
+    if (!year) return;
     const roster = await api<{ id: string; name: string }[]>(
       "GET",
-      "/mentors/roster?academic_year_id=current",
+      `/mentors/roster?academic_year_id=${year}`,
     );
-    if (roster.data) students = roster.data;
+    students = roster.data ?? [];
   }
 
   async function loadLogs() {
@@ -77,8 +78,10 @@
   }
 
   $effect(() => {
-    loadStudents();
-    if (year) loadLogs();
+    if (year) {
+      loadStudents();
+      loadLogs();
+    }
   });
 
   async function submitLog() {
