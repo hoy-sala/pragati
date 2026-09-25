@@ -863,47 +863,85 @@
 		{@const mr = mentorReport}
 		<div class="mentor-report">
 			{#each mr.mentors as g, gi}
+				{@const classList = [...new Set(g.students.map(s => s.class_name.replace('Class ', '')))]}
 				<div class="mentor-page print-area">
-					<div class="mentor-letterhead">
-						<img src="/logos/kreis-logo.png" alt="KREIS logo" class="mentor-emblem" />
-						<div class="mentor-school">Morarji Desai Residential School (SC-32) Bahaddurghatta (Kogunde), Chitradurga Tq &amp; Dt 577519</div>
-						<div class="mentor-doctitle">Mentor cum Parent Teacher Report 2026-27</div>
-						<div class="mentor-id"><span>Mentor cum Parent Teacher Name: <b>{g.mentor_name}</b></span><span>Designation: <b>{g.designation || '—'}</b></span></div>
+					<header class="mentor-letterhead">
+						<img src="/logos/karnataka-emblem.png" alt="" class="mentor-emblem mentor-emblem-l" />
+						<div class="mentor-lhead-mid">
+							<div class="mentor-school">Morarji Desai Residential School (SC-32)</div>
+							<div class="mentor-addr">Bahaddurghatta (Kogunde), Chitradurga Tq &amp; Dt &ndash; 577519</div>
+							<div class="mentor-addr-sub">Karnataka &ndash; 577519 &nbsp;|&nbsp; Affiliation: KREIS</div>
+						</div>
+						<img src="/logos/kreis-logo.png" alt="" class="mentor-emblem mentor-emblem-r" />
+					</header>
+
+					<div class="mentor-titleblock">
+						<h1 class="mentor-doctitle">Mentor cum Parent Teacher Report</h1>
+						<div class="mentor-year">Academic Year {mr.academic_year_name}</div>
 					</div>
 
+					<table class="mentor-particulars">
+						<tbody>
+							<tr>
+								<th>Mentor cum Parent Teacher</th>
+								<td>{g.mentor_name}</td>
+								<th>No. of Students</th>
+								<td class="num">{g.student_count}</td>
+							</tr>
+							<tr>
+								<th>Designation</th>
+								<td>{g.designation || '—'}</td>
+								<th>Classes</th>
+								<td>{classList.length ? classList.join(', ') : '—'}</td>
+							</tr>
+						</tbody>
+					</table>
 
-					<table class="w-full text-sm">
+					<table class="mentor-table">
 						<thead>
-							<tr class="bg-slate-50 border-b border-slate-200">
-								<th class="px-3 py-2 text-left font-semibold text-slate-600 w-10">#</th>
-								<th class="px-3 py-2 text-left font-semibold text-slate-600">Student</th>
-								<th class="px-3 py-2 text-left font-semibold text-slate-600 w-24">SATS No</th>
-								<th class="px-3 py-2 text-center font-semibold text-slate-600 w-16">Class</th>
-								<th class="px-3 py-2 text-center font-semibold text-slate-600 w-20 print:hidden">Cognitive %</th>
-								<th class="px-3 py-2 text-center font-semibold text-slate-600 w-20 print:hidden">Tier</th>
+							<tr>
+								<th class="c-sno">Sl. No.</th>
+								<th class="c-name">Student Name</th>
+								<th class="c-sats">SATS No.</th>
+								<th class="c-cls">Class</th>
+								<th class="c-gen">Gender</th>
+								<th class="c-cog print:hidden">Cognitive %</th>
+								<th class="c-tier print:hidden">Tier</th>
 							</tr>
 						</thead>
 						<tbody>
 							{#each g.students as st, i}
-								<tr class="border-b border-slate-100">
-									<td class="px-2 py-1 text-center text-slate-400">{i + 1}</td>
-									<td class="px-3 py-2">
-										<div class="font-medium text-slate-800 text-[11px] whitespace-nowrap">{st.name}</div>
-									</td>
-									<td class="px-3 py-2 text-slate-500 text-xs">{st.sats_number}</td>
-									<td class="px-3 py-2 text-center text-slate-600 text-xs">{st.class_name.replace('Class ', '')}</td>
-									<td class="px-3 py-2 text-center print:hidden">
+								<tr>
+									<td class="c-sno">{i + 1}</td>
+									<td class="c-name">{st.name}</td>
+									<td class="c-sats">{st.sats_number || '—'}</td>
+									<td class="c-cls">{st.class_name.replace('Class ', '')}</td>
+									<td class="c-gen">{st.gender ? st.gender.charAt(0).toUpperCase() + st.gender.slice(1) : '—'}</td>
+									<td class="c-cog print:hidden">
 										<span class="text-xs font-medium px-1.5 py-0.5 rounded {pctClass(st.cognitive_pct)}">{st.cognitive_pct.toFixed(1)}</span>
 									</td>
-									<td class="px-3 py-2 text-center print:hidden">
+									<td class="c-tier print:hidden">
 										<span class="text-xs font-semibold px-2 py-0.5 rounded {tierClass(st.tier)}">{st.tier || '—'}</span>
 									</td>
 								</tr>
 							{/each}
 						</tbody>
 					</table>
-					<div class="mentor-footer">
-						<div class="text-xs text-slate-400">Principal's signature</div>
+
+					<div class="mentor-signrow">
+						<div class="mentor-sign">
+							<div class="mentor-signline"></div>
+							<div class="mentor-signlabel">Mentor cum Parent Teacher</div>
+						</div>
+						<div class="mentor-sign">
+							<div class="mentor-signline"></div>
+							<div class="mentor-signlabel">Principal</div>
+						</div>
+					</div>
+
+					<div class="mentor-footline">
+						<span>Morarji Desai Residential School (SC-32), Bahaddurghatta (Kogunde)</span>
+						<span class="mentor-pageno"></span>
 					</div>
 				</div>
 			{/each}
@@ -953,7 +991,15 @@
 		}
 	}
 
+	/* ---- Mentor cum Parent Teacher Report: formal document styling ---- */
+	.mentor-report {
+		counter-reset: mpage;
+		display: flex;
+		flex-direction: column;
+		gap: 24px;
+	}
 	.mentor-page {
+		counter-increment: mpage;
 		page-break-after: always;
 		break-after: page;
 		display: flex;
@@ -961,61 +1007,124 @@
 		min-height: 100%;
 		background: white;
 		border: 1px solid #e2e8f0;
-		border-radius: 16px;
+		border-radius: 6px;
 		overflow: hidden;
-		margin-bottom: 24px;
+		padding-bottom: 8px;
 	}
 	.mentor-page:last-child {
 		page-break-after: auto;
 		break-after: auto;
 	}
-	.mentor-letterhead { text-align: center; padding: 20px 24px 12px; border-bottom: 3px double #14b8a6; }
-	.mentor-emblem { width: 48px; height: 48px; object-fit: contain; margin: 0 auto 4px; display: block; }
-	.mentor-school { font-weight: 800; font-size: 1.05rem; letter-spacing: 0.01em; color: #0f172a; }
-	.mentor-doctitle { font-weight: 700; font-size: 0.95rem; color: #0f766e; margin-top: 2px; }
-	.mentor-meta { font-size: 0.72rem; color: #64748b; margin-top: 4px; }
-	.mentor-id {
-		display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
-		margin: 8px 24px 0; padding: 6px 12px;
-		border: 1.5px solid var(--ink, #1F1A2E); border-radius: 10px;
-		background: #f8fafc; font-size: 0.78rem; color: #334155;
+
+	.mentor-letterhead {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		padding: 14px 22px 10px;
+		border-bottom: 3px double #0f172a;
 	}
-	.mentor-id b { color: #0f172a; }
-	.mentor-letterhead { padding-bottom: 12px; }
-	.mentor-page table th, .mentor-page table td { padding: 4px 8px; }
-	.mentor-page table { font-size: 0.78rem; }
-	.mentor-footer {
-		display: none;
-		justify-content: center;
-		padding: 24px;
-		margin-top: auto;
+	.mentor-lhead-mid { flex: 1; text-align: center; }
+	.mentor-emblem { width: 46px; height: 46px; object-fit: contain; flex-shrink: 0; }
+	.mentor-emblem-l { margin-left: 4px; }
+	.mentor-emblem-r { margin-right: 4px; }
+	.mentor-school {
+		font-weight: 800; font-size: 1.02rem; letter-spacing: 0.01em;
+		color: #0f172a; line-height: 1.25;
 	}
-	.mentor-footer > div {
-		width: 160px;
-		text-align: center;
-		border-top: 1px solid #cbd5e1;
-		padding-top: 8px;
+	.mentor-addr { font-size: 0.72rem; color: #475569; margin-top: 2px; }
+	.mentor-addr-sub { font-size: 0.66rem; color: #64748b; margin-top: 1px; }
+
+	.mentor-titleblock { text-align: center; padding: 14px 0 10px; }
+	.mentor-doctitle {
+		display: inline-block;
+		font-weight: 800; font-size: 1rem; color: #0f172a;
+		letter-spacing: 0.06em; text-transform: uppercase;
+		padding: 0 10px 3px;
+		border-bottom: 1.5px solid #0f172a;
 	}
+	.mentor-year { font-size: 0.78rem; color: #475569; margin-top: 6px; font-weight: 600; }
+
+	.mentor-particulars {
+		width: calc(100% - 44px);
+		margin: 0 22px 14px;
+		border-collapse: collapse;
+		font-size: 0.76rem;
+	}
+	.mentor-particulars th, .mentor-particulars td {
+		border: 1px solid #cbd5e1;
+		padding: 5px 9px;
+		vertical-align: middle;
+	}
+	.mentor-particulars th {
+		background: #f1f5f9; text-align: left; font-weight: 600;
+		color: #334155; white-space: nowrap; width: 22%;
+	}
+	.mentor-particulars td { color: #0f172a; font-weight: 600; }
+	.mentor-particulars td.num { text-align: center; }
+
+	.mentor-table {
+		width: calc(100% - 44px);
+		margin: 0 22px;
+		border-collapse: collapse;
+		font-size: 0.76rem;
+	}
+	.mentor-table th, .mentor-table td {
+		border: 1px solid #cbd5e1;
+		padding: 4px 8px;
+		vertical-align: middle;
+	}
+	.mentor-table thead th {
+		background: #e2e8f0; color: #0f172a; font-weight: 700;
+		text-transform: uppercase; font-size: 0.68rem; letter-spacing: 0.04em;
+	}
+	.mentor-table tbody tr:nth-child(even) { background: #f8fafc; }
+	.mentor-table .c-sno { width: 52px; text-align: center; color: #64748b; }
+	.mentor-table .c-name { text-align: left; font-weight: 600; color: #0f172a; }
+	.mentor-table .c-sats { width: 104px; text-align: left; color: #475569; }
+	.mentor-table .c-cls { width: 60px; text-align: center; }
+	.mentor-table .c-gen { width: 66px; text-align: center; }
+	.mentor-table .c-cog { width: 88px; text-align: center; }
+	.mentor-table .c-tier { width: 68px; text-align: center; }
+
+	.mentor-signrow {
+		display: flex;
+		justify-content: space-between;
+		gap: 40px;
+		margin: auto 22px 0;
+		padding-top: 34px;
+	}
+	.mentor-sign { flex: 1; text-align: center; max-width: 230px; }
+	.mentor-signline { border-top: 1px solid #0f172a; }
+	.mentor-signlabel { font-size: 0.7rem; color: #475569; margin-top: 4px; font-weight: 600; }
+
+	.mentor-footline {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin: 18px 22px 0;
+		padding-top: 6px;
+		border-top: 1px solid #e2e8f0;
+		font-size: 0.62rem;
+		color: #94a3b8;
+	}
+	.mentor-pageno::after { content: 'Page ' counter(mpage); }
 
 	@media print {
 		@page {
 			size: A4 portrait;
 			margin: 10mm;
 		}
-		.mentor-report {
-			width: 100%;
-		}
+		.mentor-report { width: 100%; gap: 0; }
 		.mentor-page {
 			min-height: 100%;
 			width: 100%;
+			border: none;
+			border-radius: 0;
+			padding-bottom: 0;
 		}
-		.mentor-footer {
-			display: flex;
-		}
-		.mentor-emblem {
-			width: 60px;
-			height: 60px;
-		}
+		.mentor-emblem { width: 54px; height: 54px; }
+		.mentor-signrow { padding-top: 44px; }
+	}
 	@media print {
 		@page marksheet {
 			size: A4 landscape;
@@ -1061,5 +1170,4 @@
 	.cce-table col.cce-mark { width: 22px; }
 	}
 
-	}
 </style>
