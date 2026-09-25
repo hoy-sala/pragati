@@ -403,7 +403,7 @@
 							{#each ms.subjects as sg}
 								{#each CCE_HEADER as g}
 									{#each g.sub as sh, k}
-										<th class="px-1 py-1 text-center font-semibold text-[9px] text-slate-500 border-r {k === g.sub.length - 1 ? 'border-slate-200' : 'border-slate-100'} {g.label === 'SA1' && k === 1 || g.label === 'SA2' && k === 1 ? 'bg-amber-50/70' : ''}">{sh}</th>
+										<th class="px-1 py-1 text-center font-semibold text-[9px] text-slate-500 border-r {k === g.sub.length - 1 ? 'border-slate-200' : 'border-slate-100'}">{sh}</th>
 									{/each}
 								{/each}
 							{/each}
@@ -420,7 +420,7 @@
 								{#each ms.subjects as sg}
 									{@const cells = cceCells(cceRow(s, sg, ms.assessments))}
 									{#each cells as c}
-										<td class="px-1.5 py-2 text-center border-r border-slate-100 {c.oral ? 'bg-amber-50/70' : ''}">
+										<td class="px-1.5 py-2 text-center border-r border-slate-100">
 											{#if c.gr !== undefined}
 												{#if c.gr && c.gr !== '—'}
 													<span class="text-[10px] font-bold text-slate-500">{c.gr}</span>
@@ -562,8 +562,8 @@
 							</tr>
 							<tr>
 								{#each CCE_HEADER as g}
-									{#each g.sub as sh, k}
-										<th class="ms-subh" class:cce-oral={g.label === 'SA1' && k === 1 || g.label === 'SA2' && k === 1}>{sh}</th>
+									{#each g.sub as sh}
+										<th class="ms-subh">{sh}</th>
 									{/each}
 								{/each}
 							</tr>
@@ -580,7 +580,7 @@
 									<td class="ms-c">{cceFmt(r.fa2)}</td>
 									<td class="ms-c ms-gr">{cceGradeOf(r.fa2, 10)}</td>
 									<td class="ms-c">{cceFmt(r.sa1?.exam ?? null)}</td>
-									<td class="ms-c cce-oral"></td>
+									<td class="ms-c"></td>
 									<td class="ms-c">{cceFmt(r.sa1?.out50 ?? null)}</td>
 									<td class="ms-c">{cceFmt(r.sa1?.out30 ?? null)}</td>
 									<td class="ms-c ms-gr">{cceGradeOf(r.sa1?.out30 ?? null, 30)}</td>
@@ -591,7 +591,7 @@
 									<td class="ms-c">{cceFmt(r.fa4)}</td>
 									<td class="ms-c ms-gr">{cceGradeOf(r.fa4, 10)}</td>
 									<td class="ms-c">{cceFmt(r.sa2?.exam ?? null)}</td>
-									<td class="ms-c cce-oral"></td>
+									<td class="ms-c"></td>
 									<td class="ms-c">{cceFmt(r.sa2?.out50 ?? null)}</td>
 									<td class="ms-c">{cceFmt(r.sa2?.out30 ?? null)}</td>
 									<td class="ms-c ms-gr">{cceGradeOf(r.sa2?.out30 ?? null, 30)}</td>
@@ -1025,8 +1025,7 @@
 		}
 	.cce-table { font-size: 6.5pt; table-layout: fixed; }
 	.cce-table th, .cce-table td { padding: 2px 1px; }
-	.cce-table .cce-subject { font-size: 10pt; letter-spacing: 0.04em; text-transform: uppercase; }
-	.cce-table .cce-oral { background: #fffdf0; }
+		.cce-table .cce-subject { font-size: 10pt; letter-spacing: 0.04em; text-transform: uppercase; }
 	.cce-table col.cce-id { width: 26px; }
 	.cce-table col.cce-name { width: 116px; }
 	.cce-table col.cce-mark { width: 22px; }
