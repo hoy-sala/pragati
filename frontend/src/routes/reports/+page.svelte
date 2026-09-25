@@ -45,7 +45,7 @@
 	let studentReport = $state<StudentReport | null>(null);
 	let reportStudents = $state<{ id: string; first_name: string; last_name?: string; roll_no?: number }[]>([]);
 
-	type MentorReportStudent = { student_id: string; sats_number: string; name: string; roll_no: number; gender: string; class_name: string; cognitive_pct: number; tier: number };
+	type MentorReportStudent = { student_id: string; sats_number: string; name: string; roll_no: number; gender: string; father_name: string; class_name: string; cognitive_pct: number; tier: number };
 	type MentorReportGroup = { mentor_id: string; mentor_name: string; designation: string; student_count: number; avg_cognitive_pct: number; students: MentorReportStudent[] };
 	let mentorReport = $state<{ academic_year_id: string; academic_year_name: string; mentors: MentorReportGroup[] } | null>(null);
 
@@ -232,6 +232,16 @@
 
 	function subjectTypeLabel(t: string): string {
 		return t === 'curricular' ? 'Curricular' : 'Co-curricular';
+	}
+
+	// "NAME S/o FATHER" for male, "NAME D/o FATHER" for female.
+	// Placeholder values such as "00000" or "-" are treated as missing.
+	function withParent(st: MentorReportStudent): string {
+		const father = (st.father_name ?? '').trim();
+		const usable = father && !/^[-0]+$/.test(father) ? father : '';
+		if (!usable) return st.name;
+		const relation = (st.gender ?? '').trim().toLowerCase() === 'female' ? 'D/o' : 'S/o';
+		return `${st.name} ${relation} ${usable}`;
 	}
 
 	const curricularOrder = ['KAN', 'ENG', 'HIN', 'MAT', 'SCI', 'SOC'];
@@ -914,7 +924,7 @@
 							{#each g.students as st, i}
 								<tr>
 									<td class="c-sno">{i + 1}</td>
-									<td class="c-name">{st.name}</td>
+									<td class="c-name">{withParent(st)}</td>
 									<td class="c-sats">{st.sats_number || '—'}</td>
 									<td class="c-cls">{st.class_name.replace('Class ', '')}</td>
 									<td class="c-gen">{st.gender ? st.gender.charAt(0).toUpperCase() + st.gender.slice(1) : '—'}</td>
