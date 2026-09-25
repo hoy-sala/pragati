@@ -43,7 +43,6 @@
   const quickLinks = $derived(
     [
       { href: "/students", label: "Students", desc: "Enrolment & import", icon: Users, roles: ["admin", "principal", "teacher"] },
-      { href: "/assessments", label: "Assessments", desc: "Create & publish", icon: ClipboardCheck, roles: ["admin", "principal", "teacher"] },
       { href: "/marks", label: "Marks Entry", desc: "Enter marks", icon: Table, roles: ["admin", "principal", "teacher"] },
       { href: "/questions", label: "Question Bank", desc: "Browse & import", icon: HelpCircle, roles: ["admin"] },
       { href: "/quizzes", label: "Quizzes", desc: "Create & publish", icon: ClipboardList, roles: ["admin"] },
@@ -79,7 +78,7 @@
   <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
     <div class="px-5 py-3 border-b border-slate-200 flex items-center justify-between">
       <h2 class="text-sm font-semibold text-slate-800">Pending assessments</h2>
-      <a href="/assessments" class="text-xs text-primary-600 hover:text-primary-700 font-medium">View all</a>
+      <a href="/marks" class="text-xs text-primary-600 hover:text-primary-700 font-medium">View all</a>
     </div>
     {#if loading}
       <div class="p-8 text-center text-sm text-slate-400">Loading...</div>

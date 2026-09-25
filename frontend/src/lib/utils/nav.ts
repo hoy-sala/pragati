@@ -1,7 +1,7 @@
 import type { ComponentType } from 'svelte';
 import {
 	GraduationCap, CalendarDays, House,
-	ClipboardCheck, ClipboardList, Table, FileSpreadsheet,
+	ClipboardList, Table, FileSpreadsheet,
 	FileText, Settings, Heart, HelpCircle, User, Award, Bird
 } from 'lucide-svelte';
 import type { User as UserType, Student } from '$lib/types';
@@ -35,7 +35,6 @@ export const NAV_SECTIONS: NavSection[] = [
 	{
 		label: 'Assessment',
 		items: [
-			{ href: '/assessments', label: 'Assessments', icon: ClipboardCheck, roles: ['admin', 'principal', 'teacher'] },
 			{ href: '/marks', label: 'Marks Entry', icon: Table, roles: ['admin', 'principal', 'teacher'] },
 			{ href: '/questions', label: 'Question Bank', icon: HelpCircle, roles: ['admin'] },
 			{ href: '/quizzes', label: 'Quizzes', icon: ClipboardList, roles: ['admin'] },
@@ -117,7 +116,7 @@ export function roleTitle(role: string): string {
 
 /** Bottom-tab priority for the mobile app bar. First 4 visible to the role win. */
 const BOTTOM_TAB_ORDER = [
-	'/home', '/marks', '/students', '/reports', '/mentors', '/assessments',
+	'/home', '/marks', '/students', '/reports', '/mentors',
 	'/timetable', '/quizzes', '/questions', '/hpc', '/certificates', '/settings', '/birds',
 ];
 
