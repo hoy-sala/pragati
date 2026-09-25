@@ -974,7 +974,7 @@ func (h *ReportsHandler) MentorReport(w http.ResponseWriter, r *http.Request) {
 		SELECT u.id AS mentor_id, u.name AS mentor_name, u.role AS mentor_role, COALESCE(u.designation, '') AS mentor_designation,
 			COALESCE((SELECT string_agg(s.name, ', ' ORDER BY s.name) FROM teacher_subjects ts JOIN subjects s ON s.id = ts.subject_id AND s.deleted_at IS NULL WHERE ts.teacher_id = u.id), '') AS mentor_subjects,
 			s.id AS student_id, s.sats_number,
-			s.first_name || ' ' || COALESCE(s.last_name,'') AS student_name,
+			btrim(s.first_name || ' ' || COALESCE(s.last_name,'')) AS student_name,
 			COALESCE(s.roll_no, 0), COALESCE(s.gender, ''), COALESCE(s.father_name, ''), COALESCE(s.mother_name, ''),
 			c.name AS class_name, COALESCE(t.cognitive_pct, 0), COALESCE(t.tier, 0)
 		FROM mentor_assignments ma
