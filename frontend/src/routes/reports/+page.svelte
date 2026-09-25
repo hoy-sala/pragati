@@ -141,20 +141,22 @@
 		if (vals.some(v => v === null)) return null;
 		return cceRound(vals.reduce<number>((a, b) => a + (b ?? 0), 0));
 	}
-	// CCE register: FA stored out of 20 -> 10; SA exam out of 40, oral 10 left blank for the teacher.
+	// CCE register: FA stored out of 20 -> 10; SA exam out of 40 plus oral out of 10.
 	function cceRow(s: MarkSheetStudent, sg: SubjectGroup, assessments: MarkSheetAssessment[]) {
 		const raw = (n: string) => cceMark(s, assessments, sg.subject_id, n);
 		const fa = (n: string) => {
 			const v = raw(n);
 			return v === null ? null : cceRound(v / 2);
 		};
-		const sa = (n: string) => {
+		const sa = (n: string, oralName: string) => {
 			const v = raw(n);
 			if (v === null) return null;
-			return { exam: v, out50: cceRound(v), out30: cceRound(v * 0.6) };
+			const oral = raw(oralName);
+			const out50 = cceRound(v + (oral ?? 0));
+			return { exam: v, oral, out50, out30: cceRound(out50 * 0.6) };
 		};
-		const fa1 = fa('FA1'), fa2 = fa('FA2'), sa1 = sa('SA1');
-		const fa3 = fa('FA3'), fa4 = fa('FA4'), sa2 = sa('SA2');
+		const fa1 = fa('FA1'), fa2 = fa('FA2'), sa1 = sa('SA1', 'SA1 Oral');
+		const fa3 = fa('FA3'), fa4 = fa('FA4'), sa2 = sa('SA2', 'SA2 Oral');
 		const t1 = cceAdd(fa1, fa2, sa1?.out30 ?? null);
 		const t2 = cceAdd(fa3, fa4, sa2?.out30 ?? null);
 		return { fa1, fa2, sa1, t1, fa3, fa4, sa2, t2, total: cceAdd(t1, t2) };
@@ -169,7 +171,7 @@
 			{ t: m(r.fa2) },
 			{ gr: g(r.fa2, 10) },
 			{ t: m(r.sa1?.exam ?? null) },
-			{ t: '', oral: true },
+			{ t: r.sa1?.oral != null ? String(r.sa1.oral) : '', oral: true },
 			{ t: m(r.sa1?.out50 ?? null) },
 			{ t: m(r.sa1?.out30 ?? null) },
 			{ gr: g(r.sa1?.out30 ?? null, 30) },
@@ -180,7 +182,7 @@
 			{ t: m(r.fa4) },
 			{ gr: g(r.fa4, 10) },
 			{ t: m(r.sa2?.exam ?? null) },
-			{ t: '', oral: true },
+			{ t: r.sa2?.oral != null ? String(r.sa2.oral) : '', oral: true },
 			{ t: m(r.sa2?.out50 ?? null) },
 			{ t: m(r.sa2?.out30 ?? null) },
 			{ gr: g(r.sa2?.out30 ?? null, 30) },
@@ -608,7 +610,7 @@
 									<td class="ms-c">{cceFmt(r.fa2)}</td>
 									<td class="ms-c ms-gr">{cceGradeOf(r.fa2, 10)}</td>
 									<td class="ms-c">{cceFmt(r.sa1?.exam ?? null)}</td>
-									<td class="ms-c"></td>
+									<td class="ms-c">{r.sa1?.oral != null ? r.sa1.oral : ''}</td>
 									<td class="ms-c">{cceFmt(r.sa1?.out50 ?? null)}</td>
 									<td class="ms-c">{cceFmt(r.sa1?.out30 ?? null)}</td>
 									<td class="ms-c ms-gr">{cceGradeOf(r.sa1?.out30 ?? null, 30)}</td>
@@ -619,7 +621,7 @@
 									<td class="ms-c">{cceFmt(r.fa4)}</td>
 									<td class="ms-c ms-gr">{cceGradeOf(r.fa4, 10)}</td>
 									<td class="ms-c">{cceFmt(r.sa2?.exam ?? null)}</td>
-									<td class="ms-c"></td>
+									<td class="ms-c">{r.sa2?.oral != null ? r.sa2.oral : ''}</td>
 									<td class="ms-c">{cceFmt(r.sa2?.out50 ?? null)}</td>
 									<td class="ms-c">{cceFmt(r.sa2?.out30 ?? null)}</td>
 									<td class="ms-c ms-gr">{cceGradeOf(r.sa2?.out30 ?? null, 30)}</td>

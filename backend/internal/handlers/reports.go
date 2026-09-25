@@ -137,12 +137,12 @@ func splitFASA(assessments []ReportAssessment) (fa []float64, sa []float64) {
 	return
 }
 
-// assessmentTerm maps an assessment name (FA1, SA1, etc.) to its term.
+// assessmentTerm maps an assessment name (FA1, SA1, SA1 Oral, etc.) to its term.
 func assessmentTerm(assessmentName string) string {
 	switch strings.ToUpper(strings.TrimSpace(assessmentName)) {
-	case "FA1", "FA2", "SA1":
+	case "FA1", "FA2", "SA1", "SA1 ORAL":
 		return "Term 1"
-	case "FA3", "FA4", "SA2":
+	case "FA3", "FA4", "SA2", "SA2 ORAL":
 		return "Term 2"
 	}
 	return ""
