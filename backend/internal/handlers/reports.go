@@ -228,14 +228,15 @@ type SubjectAggregate struct {
 
 // MarkSheetResponse is the full class mark sheet.
 type MarkSheetResponse struct {
-	ClassID      string              `json:"class_id"`
-	ClassName    string              `json:"class_name"`
-	AcademicYear string              `json:"academic_year_id"`
-	Term         string              `json:"term,omitempty"`
-	Subjects     []SubjectGroup      `json:"subjects"`
-	Terms        []TermGroup         `json:"terms"`
+	ClassID      string               `json:"class_id"`
+	ClassName    string               `json:"class_name"`
+	AcademicYear string               `json:"academic_year_id"`
+	YearName     string               `json:"academic_year_name"`
+	Term         string               `json:"term,omitempty"`
+	Subjects     []SubjectGroup       `json:"subjects"`
+	Terms        []TermGroup          `json:"terms"`
 	Assessments  []MarkSheetAssessment `json:"assessments"`
-	Students     []MarkSheetStudent  `json:"students"`
+	Students     []MarkSheetStudent   `json:"students"`
 }
 
 // TermGroup collects assessments by term then subject.
@@ -472,9 +473,16 @@ func (h *ReportsHandler) MarkSheet(w http.ResponseWriter, r *http.Request) {
 
 	termGroups := buildTermGroups(assessments)
 
+	yearName := ""
+	if academicYearID != "" {
+		_ = h.db.QueryRow(r.Context(),
+			`SELECT name FROM academic_years WHERE id = $1 AND deleted_at IS NULL`,
+			academicYearID).Scan(&yearName)
+	}
+
 	renderJSON(w, http.StatusOK, apiOK(MarkSheetResponse{
-		ClassID: classID, ClassName: className, AcademicYear: academicYearID, Term: term,
-		Subjects: groups, Terms: termGroups, Assessments: assessments, Students: students,
+		ClassID: classID, ClassName: className, AcademicYear: academicYearID, YearName: yearName,
+		Term: term, Subjects: groups, Terms: termGroups, Assessments: assessments, Students: students,
 	}))
 }
 

@@ -33,7 +33,7 @@
 	type TermGroup = { term: string; subjects: SubjectGroup[] };
 
 	let markSheetData = $state<{
-		class_id: string; class_name: string; academic_year: string; term?: string;
+		class_id: string; class_name: string; academic_year: string; academic_year_name: string; term?: string;
 		subjects: SubjectGroup[]; terms: TermGroup[]; assessments: MarkSheetAssessment[]; students: MarkSheetStudent[];
 	} | null>(null);
 
@@ -579,11 +579,35 @@
 				{@const cce = ms.students.map(s => cceRow(s, sg, ms.assessments))}
 				<section class="ms-subject">
 					<div class="ms-head">
-						<div class="ms-school">Morarji Desai Residential School, Kogunde</div>
-						<div class="ms-title">{ms.class_name} — {sg.subject_name} ({sg.subject_code}) Mark Sheet</div>
-						<div class="ms-meta">
-							Academic Year {ms.academic_year} · Term {ms.term || 'All'} · Students {ms.students.length} · Generated {new Date().toLocaleDateString('en-IN')}
+						<header class="ms-letterhead">
+							<img src="/logos/karnataka-emblem.png" alt="" class="ms-emblem ms-emblem-l" />
+							<div class="ms-lhead-mid">
+								<div class="ms-school">Morarji Desai Residential School (SC-32)</div>
+								<div class="ms-addr">Bahaddurghatta (Kogunde), Chitradurga Tq &amp; Dt &ndash; 577519</div>
+								<div class="ms-addr-sub">Karnataka &ndash; 577519 &nbsp;|&nbsp; Affiliation: KREIS</div>
+							</div>
+							<img src="/logos/kreis-logo.png" alt="" class="ms-emblem ms-emblem-r" />
+						</header>
+						<div class="ms-titleblock">
+							<h1 class="ms-doctitle">Mark Sheet</h1>
+							<div class="ms-subjectline">{sg.subject_name} ({sg.subject_code}) &ndash; {ms.class_name}</div>
 						</div>
+						<table class="ms-particulars">
+							<tbody>
+								<tr>
+									<th>Academic Year</th>
+									<td>{ms.academic_year_name || '—'}</td>
+									<th>Term</th>
+									<td>{ms.term || 'All Terms'}</td>
+								</tr>
+								<tr>
+									<th>Subject</th>
+									<td>{sg.subject_name} ({sg.subject_code})</td>
+									<th>No. of Students</th>
+									<td class="num">{ms.students.length}</td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 					<table class="ms-table cce-table">
 						<colgroup>
@@ -653,8 +677,18 @@
 						<span>Total students: <b>{ms.students.length}</b></span>
 					</div>
 					<div class="ms-sign">
-						<div>Class Teacher</div>
-						<div>Principal</div>
+						<div>
+							<div class="ms-signline"></div>
+							<div class="ms-signlabel">Class Teacher</div>
+						</div>
+						<div>
+							<div class="ms-signline"></div>
+							<div class="ms-signlabel">Principal</div>
+						</div>
+					</div>
+					<div class="ms-pagefoot">
+						<span>Morarji Desai Residential School (SC-32), Bahaddurghatta (Kogunde)</span>
+						<span class="ms-pageno"></span>
 					</div>
 				</section>
 			{/each}
@@ -665,11 +699,35 @@
 				{@const cols = msSubjectCols(ms.assessments, sg)}
 				<section class="ms-subject">
 					<div class="ms-head">
-						<div class="ms-school">Morarji Desai Residential School, Kogunde</div>
-						<div class="ms-title">{ms.class_name} — {sg.subject_name} ({sg.subject_code}) Mark Sheet</div>
-						<div class="ms-meta">
-							Academic Year {ms.academic_year} · Term {ms.term || 'All'} · Students {ms.students.length} · Generated {new Date().toLocaleDateString('en-IN')}
+						<header class="ms-letterhead">
+							<img src="/logos/karnataka-emblem.png" alt="" class="ms-emblem ms-emblem-l" />
+							<div class="ms-lhead-mid">
+								<div class="ms-school">Morarji Desai Residential School (SC-32)</div>
+								<div class="ms-addr">Bahaddurghatta (Kogunde), Chitradurga Tq &amp; Dt &ndash; 577519</div>
+								<div class="ms-addr-sub">Karnataka &ndash; 577519 &nbsp;|&nbsp; Affiliation: KREIS</div>
+							</div>
+							<img src="/logos/kreis-logo.png" alt="" class="ms-emblem ms-emblem-r" />
+						</header>
+						<div class="ms-titleblock">
+							<h1 class="ms-doctitle">Mark Sheet</h1>
+							<div class="ms-subjectline">{sg.subject_name} ({sg.subject_code}) &ndash; {ms.class_name}</div>
 						</div>
+						<table class="ms-particulars">
+							<tbody>
+								<tr>
+									<th>Academic Year</th>
+									<td>{ms.academic_year_name || '—'}</td>
+									<th>Term</th>
+									<td>{ms.term || 'All Terms'}</td>
+								</tr>
+								<tr>
+									<th>Subject</th>
+									<td>{sg.subject_name} ({sg.subject_code})</td>
+									<th>No. of Students</th>
+									<td class="num">{ms.students.length}</td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 					<table class="ms-table">
 						<thead>
@@ -717,17 +775,21 @@
 							{/each}
 						</tbody>
 					</table>
+							<div class="ms-foot">
+								<span>Class average: <b>{msAvg.toFixed(1)}%</b></span>
+								{#if msTopper}<span>Topper: <b>{msTopper.name}</b> ({msTopper.percentage.toFixed(1)}%)</span>{/if}
+								<span>Total students: <b>{ms.students.length}</b></span>
+							</div>
+							<div class="ms-sign">
+								<div>Class Teacher</div>
+								<div>Principal</div>
+							</div>
+				<div class="ms-pagefoot">
+					<span>Morarji Desai Residential School (SC-32), Bahaddurghatta (Kogunde)</span>
+					<span class="ms-pageno"></span>
+				</div>
 				</section>
 			{/each}
-			<div class="ms-foot">
-				<span>Class average: <b>{msAvg.toFixed(1)}%</b></span>
-				{#if msTopper}<span>Topper: <b>{msTopper.name}</b> ({msTopper.percentage.toFixed(1)}%)</span>{/if}
-				<span>Total students: <b>{ms.students.length}</b></span>
-			</div>
-			<div class="ms-sign">
-				<div>Class Teacher</div>
-				<div>Principal</div>
-			</div>
 		</div>
 		{/if}
 
@@ -1148,13 +1210,44 @@
 		.ms-print {
 			page: marksheet;
 			color: #000;
+			counter-reset: mspage;
 		}
-		.ms-subject { break-after: page; }
+		.ms-subject { break-after: page; counter-increment: mspage; }
 		.ms-subject:last-child { break-after: auto; }
 		.ms-head { text-align: center; margin-bottom: 8px; }
-		.ms-school { font-size: 15pt; font-weight: 800; letter-spacing: 0.02em; }
+		.ms-school { font-size: 13pt; font-weight: 800; letter-spacing: 0.01em; color: #0f172a; }
 		.ms-title { font-size: 12pt; font-weight: 700; margin-top: 2px; }
 		.ms-meta { font-size: 8pt; color: #333; margin-top: 3px; }
+
+		/* Formal letterhead + title block, matching the mentor report */
+		.ms-letterhead {
+			display: flex; align-items: center; gap: 12px;
+			padding: 0 4px 8px; border-bottom: 3px double #0f172a;
+		}
+		.ms-lhead-mid { flex: 1; text-align: center; }
+		.ms-emblem { width: 44px; height: 44px; object-fit: contain; flex-shrink: 0; }
+		.ms-addr { font-size: 8pt; color: #475569; margin-top: 1px; }
+		.ms-addr-sub { font-size: 7pt; color: #64748b; }
+		.ms-titleblock { text-align: center; padding: 10px 0 8px; }
+		.ms-doctitle {
+			display: inline-block; font-weight: 800; font-size: 11.5pt; color: #0f172a;
+			letter-spacing: 0.08em; text-transform: uppercase;
+			padding: 0 10px 2px; border-bottom: 1.5px solid #0f172a;
+		}
+		.ms-subjectline { font-size: 9.5pt; color: #334155; margin-top: 5px; font-weight: 600; }
+		.ms-particulars {
+			width: 100%; border-collapse: collapse; font-size: 8pt; margin-bottom: 8px;
+		}
+		.ms-particulars th, .ms-particulars td {
+			border: 1px solid #cbd5e1; padding: 3px 6px; vertical-align: middle;
+		}
+		.ms-particulars th {
+			background: #f1f5f9; text-align: left; font-weight: 600;
+			color: #334155; white-space: nowrap; width: 18%;
+		}
+		.ms-particulars td { color: #0f172a; font-weight: 600; }
+		.ms-particulars td.num { text-align: center; }
+
 		.ms-table { width: 100%; border-collapse: collapse; font-size: 8pt; }
 		.ms-table th, .ms-table td { border: 1px solid #333; padding: 3px 4px; vertical-align: middle; }
 		.ms-table thead { display: table-header-group; }
@@ -1172,11 +1265,16 @@
 			margin-top: 10px; font-size: 8.5pt;
 			display: flex; justify-content: space-between; gap: 12px;
 		}
-		.ms-sign { margin-top: 30px; display: flex; justify-content: space-between; }
-		.ms-sign > div {
-			width: 190px; text-align: center; font-size: 8.5pt;
-			border-top: 1px solid #000; padding-top: 3px;
+		.ms-sign { margin-top: 22px; display: flex; justify-content: space-between; gap: 40px; }
+		.ms-sign > div { width: 200px; text-align: center; }
+		.ms-signline { border-top: 1px solid #0f172a; }
+		.ms-signlabel { font-size: 8.5pt; color: #475569; margin-top: 3px; font-weight: 600; }
+		.ms-pagefoot {
+			display: flex; justify-content: space-between; align-items: center;
+			margin-top: 14px; padding-top: 4px; border-top: 1px solid #e2e8f0;
+			font-size: 6.5pt; color: #94a3b8;
 		}
+		.ms-pageno::after { content: 'Page ' counter(mspage); }
 	.cce-table { font-size: 6.5pt; table-layout: fixed; }
 	.cce-table th, .cce-table td { padding: 2px 1px; }
 		.cce-table .cce-subject { font-size: 10pt; letter-spacing: 0.04em; text-transform: uppercase; }
