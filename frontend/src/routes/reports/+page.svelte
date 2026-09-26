@@ -781,8 +781,14 @@
 								<span>Total students: <b>{ms.students.length}</b></span>
 							</div>
 							<div class="ms-sign">
-								<div>Class Teacher</div>
-								<div>Principal</div>
+								<div>
+									<div class="ms-signline"></div>
+									<div class="ms-signlabel">Class Teacher</div>
+								</div>
+								<div>
+									<div class="ms-signline"></div>
+									<div class="ms-signlabel">Principal</div>
+								</div>
 							</div>
 				<div class="ms-pagefoot">
 					<span>Morarji Desai Residential School (SC-32), Bahaddurghatta (Kogunde)</span>
