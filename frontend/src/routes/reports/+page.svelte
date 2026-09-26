@@ -611,9 +611,9 @@
 					</div>
 					<table class="ms-table cce-table">
 						<colgroup>
-							<col class="cce-id" />
-							<col class="cce-name" />
-							<col class="cce-id" />
+		<col class="cce-id" />
+		<col class="cce-name" />
+		<col class="cce-sats" />
 							{#each Array(CCE_COLS) as _}<col class="cce-mark" />{/each}
 						</colgroup>
 						<thead>
@@ -671,11 +671,6 @@
 							{/each}
 						</tbody>
 					</table>
-					<div class="ms-foot">
-						<span>Class average: <b>{msAvg.toFixed(1)}%</b></span>
-						{#if msTopper}<span>Topper: <b>{msTopper.name}</b> ({msTopper.percentage.toFixed(1)}%)</span>{/if}
-						<span>Total students: <b>{ms.students.length}</b></span>
-					</div>
 					<div class="ms-sign">
 						<div>
 							<div class="ms-signline"></div>
@@ -734,8 +729,7 @@
 							<tr>
 								<th rowspan="2" class="ms-c">#</th>
 								<th rowspan="2">Student</th>
-								<th rowspan="2">SATS No.</th>
-								{#each cols.list as a}
+								<th rowspan="2" class="ms-sats">SATS No.</th>								{#each cols.list as a}
 									<th colspan="2">{a.name}<span class="ms-sub">max {a.max_marks}</span></th>
 								{/each}
 								<th rowspan="2">Total</th>
@@ -755,7 +749,7 @@
 								<tr>
 									<td class="ms-c">{i + 1}</td>
 									<td class="ms-name">{s.name}</td>
-									<td class="ms-c">{s.sats_number || '—'}</td>
+									<td class="ms-c ms-sats">{s.sats_number || '—'}</td>
 									{#each cols.idx as ai}
 										{@const m = s.marks[ai]}
 										<td class="ms-c">
@@ -775,11 +769,6 @@
 							{/each}
 						</tbody>
 					</table>
-							<div class="ms-foot">
-								<span>Class average: <b>{msAvg.toFixed(1)}%</b></span>
-								{#if msTopper}<span>Topper: <b>{msTopper.name}</b> ({msTopper.percentage.toFixed(1)}%)</span>{/if}
-								<span>Total students: <b>{ms.students.length}</b></span>
-							</div>
 							<div class="ms-sign">
 								<div>
 									<div class="ms-signline"></div>
@@ -1267,10 +1256,7 @@
 		.ms-table .ms-gr { font-weight: 700; }
 		.ms-table .ms-abs { font-weight: 700; }
 		.ms-table .ms-na { color: #777; }
-		.ms-foot {
-			margin-top: 10px; font-size: 8.5pt;
-			display: flex; justify-content: space-between; gap: 12px;
-		}
+		.ms-table .ms-sats { width: 62px; white-space: nowrap; text-align: left; }
 		.ms-sign { margin-top: 22px; display: flex; justify-content: space-between; gap: 40px; }
 		.ms-sign > div { width: 200px; text-align: center; }
 		.ms-signline { border-top: 1px solid #0f172a; }
@@ -1286,6 +1272,7 @@
 		.cce-table .cce-subject { font-size: 10pt; letter-spacing: 0.04em; text-transform: uppercase; }
 	.cce-table col.cce-id { width: 26px; }
 	.cce-table col.cce-name { width: 116px; }
+	.cce-table col.cce-sats { width: 58px; }
 	.cce-table col.cce-mark { width: 22px; }
 	}
 
